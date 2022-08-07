@@ -1,0 +1,12 @@
+*.o
+*.s
+*.S
+
+/ll2x
+/.dep
+
+/include/parser/yyparse*
+/include/parser/yylex*
+/include/yyparse.h
+/src/parser/yyparse*
+/src/parser/yylex*
