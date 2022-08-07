@@ -7,6 +7,5 @@ namespace LL2X {
 
 	std::string PushInstruction::toString() const {
 		return std::string("push") + suffix() + ' ' + source.toString();
-
 	}
 }

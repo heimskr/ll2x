@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 #include "compiler/ExtractionResult.h"
 #include "instruction/InstructionMeta.h"
@@ -38,6 +39,12 @@ namespace LL2X {
 			std::unordered_set<InstructionMeta> meta;
 
 			virtual ~Instruction();
+
+			/** Returns a vector of all registers that the instruction inherently messes with. Useful for instructions like mul,
+			 *  which always overwrites rax. */
+			virtual std::vector<int> clobbers() const { return {}; }
+
+			virtual bool altersFlags() const { return false; }
 
 			virtual bool isTerminal() const = 0;
 
