@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <variant>
 
+#include "compiler/Variable.h"
 #include "parser/ASTNode.h"
 #include "parser/Enums.h"
 #include "parser/Types.h"
@@ -284,7 +285,7 @@ namespace LL2X {
 	struct GetelementptrNode: public InstructionNode, public Writer, public Reader, public CachedConstantValue {
 		struct Index {
 			long width;
-			std::variant<long, const std::string *> value;
+			std::variant<long, Variable::ID> value;
 			bool hasMinrange;
 			bool isPvar;
 			Index(long width_, const decltype(value) &value_, bool has_minrange, bool is_pvar):
