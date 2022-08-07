@@ -1,15 +1,11 @@
 #pragma once
 
-#include "instruction/Sized.h"
-#include "instruction/SourceToDest.h"
+#include "instruction/SizedSourceToDest.h"
 
 namespace LL2X {
-	class MovInstruction: public SourceToDest, public Sized {
-		public:
-			MovInstruction(Operand source_, Operand destination_, int width_):
-				SourceToDest(std::move(source_), std::move(destination_)),
-				Sized(width_) {}
-
-			
+	struct MovInstruction: SizedSourceToDest {
+		using SizedSourceToDest::SizedSourceToDest;
+		std::string debugExtra() override     { return makeDebug("mov");  }
+		std::string toString() const override { return makeString("mov"); }
 	};
 }

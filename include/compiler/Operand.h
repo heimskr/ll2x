@@ -21,6 +21,10 @@ namespace LL2X {
 			return *this;
 		}
 
+		operator std::string() const;
+
+		std::string toString() const;
+
 		VariablePtr copyVariable() const {
 			return isVariable()? getVariable() : nullptr;
 		}
