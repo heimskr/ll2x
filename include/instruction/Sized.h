@@ -7,6 +7,6 @@ namespace LL2X {
 		/** The size of the instruction in bytes. */
 		int size;
 		Sized(int size_);
-		std::string suffix() const;
+		char suffix() const;
 	};
 }
