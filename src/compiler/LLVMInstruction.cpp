@@ -219,7 +219,8 @@ namespace LL2X {
 		return "\e[41;37;1mUntranslated node:\e[0m " + node->debugExtra();
 	}
 
-	bool LLVMInstruction::replaceRead(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var) {
+	bool LLVMInstruction::replaceRead(const std::shared_ptr<Variable> &to_replace,
+	                                  const std::shared_ptr<Variable> &new_var) {
 		if (Reader *reader = dynamic_cast<Reader *>(node)) {
 			reader->replaceRead(to_replace, new_var);
 			return true;
@@ -228,11 +229,12 @@ namespace LL2X {
 		return false;
 	}
 
-	bool LLVMInstruction::canReplaceRead(std::shared_ptr<Variable>) const {
+	bool LLVMInstruction::canReplaceRead(const std::shared_ptr<Variable> &) const {
 		return dynamic_cast<Reader *>(node) != nullptr;
 	}
 
-	bool LLVMInstruction::replaceWritten(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var) {
+	bool LLVMInstruction::replaceWritten(const std::shared_ptr<Variable> &to_replace,
+	                                     const std::shared_ptr<Variable> &new_var) {
 		if (Writer *writer = dynamic_cast<Writer *>(node)) {
 			writer->replaceWritten(to_replace, new_var);
 			return true;
@@ -241,7 +243,7 @@ namespace LL2X {
 		return false;
 	}
 
-	bool LLVMInstruction::canReplaceWritten(std::shared_ptr<Variable>) const {
+	bool LLVMInstruction::canReplaceWritten(const std::shared_ptr<Variable> &) const {
 		return dynamic_cast<Writer *>(node) != nullptr;
 	}
 

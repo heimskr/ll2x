@@ -19,10 +19,10 @@ namespace LL2X {
 			std::string debugExtra() override;
 			std::string toString() const override;
 
-			bool replaceRead(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var) override;
-			bool canReplaceRead(std::shared_ptr<Variable>) const override;
-			bool replaceWritten(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var) override;
-			bool canReplaceWritten(std::shared_ptr<Variable>) const override;
+			bool replaceRead(const std::shared_ptr<Variable> &, const std::shared_ptr<Variable> &) override;
+			bool canReplaceRead(const std::shared_ptr<Variable> &) const override;
+			bool replaceWritten(const std::shared_ptr<Variable> &, const std::shared_ptr<Variable> &) override;
+			bool canReplaceWritten(const std::shared_ptr<Variable> &) const override;
 
 			bool isPhi() const override;
 	};

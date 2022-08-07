@@ -7,6 +7,7 @@
 #include "compiler/ExtractionResult.h"
 #include "instruction/InstructionMeta.h"
 #include "util/Makeable.h"
+#include "Declarations.h"
 
 namespace LL2X {
 	class ASTNode;
@@ -16,12 +17,12 @@ namespace LL2X {
 	class Instruction {
 		protected:
 			bool extracted = false;
-			Instruction(int index_): index(index_) {}
+			Instruction(int index_ = -1): index(index_) {}
 
 		public:
 			std::weak_ptr<BasicBlock> parent;
 
-			std::unordered_set<std::shared_ptr<Variable>> read, written;
+			std::unordered_set<VariablePtr> read, written;
 
 			/** The order of the instruction within the entire function in its linearized representation. */
 			int index;
@@ -54,21 +55,21 @@ namespace LL2X {
 
 			/** Attempts to replace a variable read by the instruction with another variable. Should be overridden by
 			 *  any instruction that reads from a variable. */
-			virtual bool replaceRead(std::shared_ptr<Variable>, std::shared_ptr<Variable>) {
+			virtual bool replaceRead(const VariablePtr &, const VariablePtr &) {
 				return false;
 			}
 
-			virtual bool canReplaceRead(std::shared_ptr<Variable>) const {
+			virtual bool canReplaceRead(const VariablePtr &) const {
 				return false;
 			}
 
 			/** Attempts to replace a variable written by the instruction with another variable. Should be overridden by
 			 *  any instruction that writes to a variable. */
-			virtual bool replaceWritten(std::shared_ptr<Variable>, std::shared_ptr<Variable>) {
+			virtual bool replaceWritten(const VariablePtr &, const VariablePtr &) {
 				return false;
 			}
 
-			virtual bool canReplaceWritten(std::shared_ptr<Variable>) const {
+			virtual bool canReplaceWritten(const VariablePtr &) const {
 				return false;
 			}
 
@@ -79,8 +80,8 @@ namespace LL2X {
 			/** Whether it's valid for this instruction to have a debug intbang inserted after it. */
 			virtual bool showDebug() const { return true; }
 
-			virtual std::shared_ptr<Variable> doesRead(std::shared_ptr<Variable>) const;
-			virtual std::shared_ptr<Variable> doesWrite(std::shared_ptr<Variable>) const;
+			virtual VariablePtr doesRead(const VariablePtr &) const;
+			virtual VariablePtr doesWrite(const VariablePtr &) const;
 
 			Instruction * setDebug(int debug_index, bool do_extract = false) {
 				debugIndex = debug_index;
