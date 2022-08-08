@@ -880,8 +880,8 @@ namespace LL2X {
 		Passes::trimBlocks(*this);
 		Passes::splitBlocks(*this);
 		// Passes::copyArguments(*this);
-// 		for (BasicBlockPtr &block: blocks)
-// 			block->extract(true);
+		for (BasicBlockPtr &block: blocks)
+			block->extract(true);
 // 		Passes::replaceConstants(*this);
 // 		Passes::lowerAlloca(*this);
 // 		Passes::loadArguments(*this);
@@ -907,11 +907,13 @@ namespace LL2X {
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract(true);
 // 		Passes::movePhi(*this);
-// 		for (BasicBlockPtr &block: blocks)
-// 			block->extract(true);
+		for (BasicBlockPtr &block: blocks)
+			block->extract(true);
 // 		Passes::lowerSwitch(*this);
-		extractVariables(true);
 		Passes::minimizeBlocks(*this);
+		for (BasicBlockPtr &block: blocks)
+			block->extract(true);
+		extractVariables(true);
 		computeLiveness();
 		updateInstructionNodes();
 		reindexBlocks();
