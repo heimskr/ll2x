@@ -7,6 +7,22 @@ namespace LL2X::x86_64 {
 	/** Contains constants and functions pertaining to x86_64. */
 	enum class Width {Low, High, Two, Four, Eight};
 
+	enum class Condition {
+		Unconditional,
+		IfEqual,
+		IfNotEqual,
+		IfNegative,
+		IfNonnegative,
+		IfGreaterSigned,
+		IfGreaterOrEqualSigned,
+		IfLessSigned,
+		IfLessOrEqualSigned,
+		IfGreaterUnsigned,
+		IfGreaterOrEqualUnsigned,
+		IfLessUnsigned,
+		IfLessOrEqualUnsigned,
+	};
+
 	constexpr int floatWidth = 4, doubleWidth = 8, pointerWidth = 8; // in bytes
 
 	constexpr int totalRegisters = 16;

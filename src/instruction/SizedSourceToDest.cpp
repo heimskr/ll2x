@@ -6,6 +6,6 @@ namespace LL2X {
 	}
 
 	std::string SizedSourceToDest::makeString(const char *mnemonic) const {
-		return "mov" + std::string(mnemonic) + suffix() + " " + source.toString() + ", " + destination.toString();
+		return std::string(mnemonic) + suffix() + " " + source.toString() + ", " + destination.toString();
 	}
 }
