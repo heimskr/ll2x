@@ -83,7 +83,7 @@
 // #include "pass/SplitResultMoves.h"
 #include "pass/StackSkip.h"
 // #include "pass/TransformInstructions.h"
-// #include "pass/TrimBlocks.h"
+#include "pass/TrimBlocks.h"
 // #include "pass/UpdateArgumentLoads.h"
 #include "util/CompilerUtil.h"
 #include "util/strnatcmp.h"
@@ -874,9 +874,9 @@ namespace LL2X {
 		Passes::insertStackSkip(*this);
 		Passes::fillLocalValues(*this);
 		Passes::lowerStacksave(*this);
-// 		for (BasicBlockPtr &block: blocks)
-// 			block->extract();
-// 		Passes::trimBlocks(*this);
+		for (BasicBlockPtr &block: blocks)
+			block->extract();
+		Passes::trimBlocks(*this);
 // 		Passes::splitBlocks(*this);
 // 		Passes::copyArguments(*this);
 // 		for (BasicBlockPtr &block: blocks)
