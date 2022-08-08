@@ -375,5 +375,11 @@ namespace LL2X {
 			Graph makeDependencyGraph() const;
 
 			void makeInitialDebugIndex();
+
+			/** Convenience method for creating a precolored %rsp register. */
+			VariablePtr stackPointer(BasicBlockPtr);
+
+			/** Convenience method for creating a precolored %rsp register. */
+			VariablePtr stackPointer(InstructionPtr);
 	};
 }

@@ -8,12 +8,16 @@ namespace LL2X {
 				return "\e[32m$" + std::to_string(displacement) + "\e[39m";
 			case Mode::Direct:
 				return std::to_string(displacement);
-			case Mode::Indirect:
-				return '(' + std::string(*indirect) + ')';
+			case Mode::Register:
+				return std::string(*reg);
 			case Mode::Displaced:
-				return std::to_string(displacement) + '(' + std::string(*indirect) + ')';
+				if (displacement == 0)
+					return '(' + std::string(*reg) + ')';
+				return std::to_string(displacement) + '(' + std::string(*reg) + ')';
 			case Mode::Scaled:
-				return std::to_string(displacement) + '(' + std::string(*indirect) + ", " + std::string(*index) + ", " +
+				if (displacement == 0)
+					return '(' + std::string(*reg) + ", " + std::string(*index) + ", " + std::to_string(scale) + ')';
+				return std::to_string(displacement) + '(' + std::string(*reg) + ", " + std::string(*index) + ", " +
 				       std::to_string(scale) + ')';
 			default:
 				return "\e[31m???\e[39m";
@@ -26,12 +30,16 @@ namespace LL2X {
 				return '$' + std::to_string(displacement);
 			case Mode::Direct:
 				return std::to_string(displacement);
-			case Mode::Indirect:
-				return '(' + indirect->toString() + ')';
+			case Mode::Register:
+				return reg->toString();
 			case Mode::Displaced:
-				return std::to_string(displacement) + '(' + indirect->toString() + ')';
+				if (displacement == 0)
+					return '(' + reg->toString() + ')';
+				return std::to_string(displacement) + '(' + reg->toString() + ')';
 			case Mode::Scaled:
-				return std::to_string(displacement) + '(' + indirect->toString() + ", " + index->toString() + ", " +
+				if (displacement == 0)
+					return '(' + reg->toString() + ", " + index->toString() + ", " + std::to_string(scale) + ')';
+				return std::to_string(displacement) + '(' + reg->toString() + ", " + index->toString() + ", " +
 				       std::to_string(scale) + ')';
 			default:
 				return "???";

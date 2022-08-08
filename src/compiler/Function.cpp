@@ -45,7 +45,7 @@
 // #include "pass/CopyArguments.h"
 // #include "pass/FillLocalValues.h"
 // #include "pass/FinishMultireg.h"
-// #include "pass/IgnoreIntrinsics.h"
+#include "pass/IgnoreIntrinsics.h"
 // #include "pass/InsertLabels.h"
 // #include "pass/InsertPrologue.h"
 // #include "pass/LoadArguments.h"
@@ -81,7 +81,7 @@
 // #include "pass/SetupCalls.h"
 // #include "pass/SplitBlocks.h"
 // #include "pass/SplitResultMoves.h"
-// #include "pass/StackSkip.h"
+#include "pass/StackSkip.h"
 // #include "pass/TransformInstructions.h"
 // #include "pass/TrimBlocks.h"
 // #include "pass/UpdateArgumentLoads.h"
@@ -118,7 +118,7 @@ namespace LL2X {
 
 	Function::Type Function::analyze(ValuePtr *value_out, long *simple_index_out) {
 		extractBlocks();
-		// Passes::ignoreIntrinsics(*this);
+		Passes::ignoreIntrinsics(*this);
 		if (linearInstructions.size() == 1) {
 			const auto &only = linearInstructions.front();
 			if (const auto *llvm = dynamic_cast<const LLVMInstruction *>(only.get())) {
@@ -870,8 +870,8 @@ namespace LL2X {
 		Timer timer("InitialCompile");
 		extractBlocks();
 		makeInitialDebugIndex();
-// 		Passes::ignoreIntrinsics(*this);
-// 		Passes::insertStackSkip(*this);
+		Passes::ignoreIntrinsics(*this);
+		Passes::insertStackSkip(*this);
 // 		Passes::fillLocalValues(*this);
 // 		Passes::lowerStacksave(*this);
 // 		for (BasicBlockPtr &block: blocks)
@@ -928,7 +928,7 @@ namespace LL2X {
 	void Function::finalCompile() {
 		Timer timer("FinalCompile");
 		// Passes::lowerInsertvalue(*this);
-		// Passes::readjustStackSkip(*this);
+		Passes::readjustStackSkip(*this);
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
 		// Passes::replaceStoresAndLoads(*this);
 		// Passes::lowerStack(*this);
@@ -1799,5 +1799,13 @@ namespace LL2X {
 		Location location(subprogram.line, 1, debugIndex);
 		location.file = subprogram.file;
 		parent.locations.emplace(initialDebugIndex, location);
+	}
+
+	VariablePtr Function::stackPointer(BasicBlockPtr block) {
+		return makePrecoloredVariable(x86_64::rsp, block);
+	}
+
+	VariablePtr Function::stackPointer(InstructionPtr instruction) {
+		return stackPointer(instruction->parent.lock());
 	}
 }

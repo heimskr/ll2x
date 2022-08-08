@@ -10,8 +10,8 @@ namespace LL2X {
 		extracted = true;
 
 		if (!secretReads) {
-			if (source.indirect)
-				read.insert(source.indirect);
+			if (source.reg)
+				read.insert(source.reg);
 			if (source.index)
 				read.insert(source.index);
 		}
@@ -22,8 +22,8 @@ namespace LL2X {
 	bool SourceOnly::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
 		bool changed = false;
 
-		if (source.indirect && source.indirect->isAliasOf(*to_replace)) {
-			source.indirect = new_var;
+		if (source.reg && source.reg->isAliasOf(*to_replace)) {
+			source.reg = new_var;
 			changed = true;
 		}
 
@@ -36,7 +36,7 @@ namespace LL2X {
 	}
 
 	bool SourceOnly::canReplaceRead(const VariablePtr &to_replace) const {
-		return (source.indirect && source.indirect->isAliasOf(*to_replace))
-		    || (source.index    && source.index   ->isAliasOf(*to_replace));
+		return (source.reg   && source.reg  ->isAliasOf(*to_replace))
+		    || (source.index && source.index->isAliasOf(*to_replace));
 	}
 }
