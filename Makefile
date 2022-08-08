@@ -48,6 +48,9 @@ $(LLVMPARSECPP:.cpp=.o): $(LLVMPARSECPP) $(LLVMPARSEHDR)
 %.o: %.cpp include/yyparse.h
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
+test: $(OUTPUT)
+	./$(OUTPUT) -d ll/fibo.ll
+
 clean:
 	rm -f $(OUTPUT) src/*.o src/**/*.o graph_*.png \
 		$(LLVMPARSEHDR) $(LLVMPARSECPP) $(LLVMLEXCPP) $(LLVMPARSECPP:.c=.output) $(LLVMLEXCPP) $(LLVMPARSECPP) \
