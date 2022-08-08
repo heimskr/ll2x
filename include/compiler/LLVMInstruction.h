@@ -24,6 +24,9 @@ namespace LL2X {
 			bool replaceWritten(const std::shared_ptr<Variable> &, const std::shared_ptr<Variable> &) override;
 			bool canReplaceWritten(const std::shared_ptr<Variable> &) const override;
 
+			bool replaceLabel(const std::string *, const std::string *) override;
+			std::vector<const std::string *> getLabels() const override;
+
 			bool isPhi() const override;
 	};
 }
