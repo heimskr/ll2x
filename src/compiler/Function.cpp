@@ -43,7 +43,7 @@
 #include "parser/FunctionHeader.h"
 // #include "pass/BreakUpBigSets.h"
 // #include "pass/CopyArguments.h"
-// #include "pass/FillLocalValues.h"
+#include "pass/FillLocalValues.h"
 // #include "pass/FinishMultireg.h"
 #include "pass/IgnoreIntrinsics.h"
 // #include "pass/InsertLabels.h"
@@ -872,7 +872,7 @@ namespace LL2X {
 		makeInitialDebugIndex();
 		Passes::ignoreIntrinsics(*this);
 		Passes::insertStackSkip(*this);
-// 		Passes::fillLocalValues(*this);
+		Passes::fillLocalValues(*this);
 // 		Passes::lowerStacksave(*this);
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract();
