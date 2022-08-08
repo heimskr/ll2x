@@ -1,10 +1,10 @@
 #pragma once
 
-#include "instruction/SizedTwoSourcesToDest.h"
+#include "instruction/SizedOverlapping.h"
 
 namespace LL2X {
-	struct AddInstruction: SizedTwoSourcesToDest {
-		using SizedTwoSourcesToDest::SizedTwoSourcesToDest;
+	struct AddInstruction: SizedOverlapping {
+		using SizedOverlapping::SizedOverlapping;
 		std::string debugExtra() override     { return makeDebug("add");  }
 		std::string toString() const override { return makeString("add"); }
 	};

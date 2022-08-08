@@ -5,13 +5,13 @@
 #include "instruction/SourceOnly.h"
 
 namespace LL2X {
-	struct Jmp: SourceOnly, HasCondition {
-		Jmp(Operand source_, x86_64::Condition condition_):
+	struct JmpInstruction: SourceOnly, HasCondition {
+		JmpInstruction(Operand source_, x86_64::Condition condition_):
 			SourceOnly(std::move(source_)), HasCondition(condition_) {}
 
 		std::string debugExtra() override;
 		std::string toString() const override;
 
-		const char * getMnemonic();
+		std::string getMnemonic() const;
 	};
 }

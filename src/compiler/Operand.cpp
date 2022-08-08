@@ -2,23 +2,33 @@
 #include "compiler/Variable.h"
 
 namespace LL2X {
+	static std::string stringify(const Operand::Variant &variant) {
+		if (std::holds_alternative<Operand::Number>(variant))
+			return std::to_string(std::get<Operand::Number>(variant));
+		return std::get<std::string>(variant);
+	}
+
+	static bool isZero(const Operand::Variant &variant) {
+		return std::holds_alternative<Operand::Number>(variant) && std::get<Operand::Number>(variant) == 0;
+	}
+
 	std::string Operand::ansiString(x86_64::Width width) const {
 		switch (mode) {
 			case Mode::Constant:
-				return "\e[32m$" + std::to_string(displacement) + "\e[39m";
+				return "\e[32m$" + stringify(displacement) + "\e[39m";
 			case Mode::Direct:
-				return std::to_string(displacement);
+				return stringify(displacement);
 			case Mode::Register:
 				return reg->ansiString(width);
 			case Mode::Displaced:
-				if (displacement == 0)
+				if (isZero(displacement))
 					return '(' + reg->ansiString(width) + ')';
-				return std::to_string(displacement) + '(' + reg->ansiString(width) + ')';
+				return stringify(displacement) + '(' + reg->ansiString(width) + ')';
 			case Mode::Scaled:
-				if (displacement == 0)
+				if (isZero(displacement))
 					return '(' + reg->ansiString(width) + ", " + index->ansiString(width) + ", " + std::to_string(scale)
 						+ ')';
-				return std::to_string(displacement) + '(' + reg->ansiString(width) + ", " + index->ansiString(width)
+				return stringify(displacement) + '(' + reg->ansiString(width) + ", " + index->ansiString(width)
 					+ ", " + std::to_string(scale) + ')';
 			default:
 				return "\e[31m???\e[39m";
@@ -28,19 +38,19 @@ namespace LL2X {
 	std::string Operand::toString(x86_64::Width width) const {
 		switch (mode) {
 			case Mode::Constant:
-				return '$' + std::to_string(displacement);
+				return '$' + stringify(displacement);
 			case Mode::Direct:
-				return std::to_string(displacement);
+				return stringify(displacement);
 			case Mode::Register:
 				return reg->toString(width);
 			case Mode::Displaced:
-				if (displacement == 0)
+				if (isZero(displacement))
 					return '(' + reg->toString() + ')';
-				return std::to_string(displacement) + '(' + reg->toString(width) + ')';
+				return stringify(displacement) + '(' + reg->toString(width) + ')';
 			case Mode::Scaled:
-				if (displacement == 0)
+				if (isZero(displacement))
 					return '(' + reg->toString() + ", " + index->toString(width) + ", " + std::to_string(scale) + ')';
-				return std::to_string(displacement) + '(' + reg->toString(width) + ", " + index->toString(width) + ", "
+				return stringify(displacement) + '(' + reg->toString(width) + ", " + index->toString(width) + ", "
 					+ std::to_string(scale) + ')';
 			default:
 				return "???";

@@ -10,7 +10,7 @@ namespace LL2X {
 			Sized(size_) {}
 
 		protected:
-			std::string makeDebug(const char *mnemonic) const;
-			std::string makeString(const char *mnemonic) const;
+			std::string makeDebug(std::string_view mnemonic) const;
+			std::string makeString(std::string_view mnemonic) const;
 	};
 }

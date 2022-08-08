@@ -110,4 +110,47 @@ namespace LL2X::x86_64 {
 				throw std::runtime_error("Invalid width: " + std::to_string(static_cast<int>(width)));
 		}
 	}
+
+	std::string conditionSuffix(Condition condition) {
+		switch (condition) {
+			case Condition::IfEqual:
+				return "e";
+			case Condition::IfNotEqual:
+				return "ne";
+			case Condition::IfNegative:
+				return "s";
+			case Condition::IfNonnegative:
+				return "ns";
+			case Condition::IfGreaterSigned:
+				return "g";
+			case Condition::IfGreaterOrEqualSigned:
+				return "ge";
+			case Condition::IfLessSigned:
+				return "l";
+			case Condition::IfLessOrEqualSigned:
+				return "le";
+			case Condition::IfGreaterUnsigned:
+				return "a";
+			case Condition::IfGreaterOrEqualUnsigned:
+				return "ae";
+			case Condition::IfLessUnsigned:
+				return "b";
+			case Condition::IfLessOrEqualUnsigned:
+				return "be";
+			default:
+				return "???";
+		}
+	}
+
+	std::string widthSuffix(Width width) {
+		switch (width) {
+			case Width::Eight: return "q";
+			case Width::Four:  return "l";
+			case Width::Two:   return "w";
+			case Width::Low:
+			case Width::High:  return "b";
+			default:
+				return "???";
+		}
+	}
 }

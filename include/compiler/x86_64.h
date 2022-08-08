@@ -48,4 +48,6 @@ namespace LL2X::x86_64 {
 	std::set<int> makeRegisterPool();
 	bool isSpecialPurpose(int);
 	std::string registerName(int, Width = Width::Eight);
+	std::string conditionSuffix(Condition);
+	std::string widthSuffix(Width);
 }
