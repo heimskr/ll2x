@@ -7,7 +7,7 @@ namespace LL2X::Passes {
 	void minimizeBlocks(Function &function) {
 		Timer timer("MinimizeBlocks");
 
-		std::unordered_map<int, BasicBlockPtr> added_blocks;
+		std::map<int, BasicBlockPtr> added_blocks;
 
 		std::unordered_map<int, std::vector<int>> predecessors;
 		// std::map<int, std::vector<int>> successors;
@@ -39,6 +39,7 @@ namespace LL2X::Passes {
 			// Emplacing won't overwrite a preexisting key's value. This is important here.
 			label_replacements.emplace(instruction->parent.lock()->label, new_label);
 
+			new_block->instructions.emplace_back(instruction);
 			instruction->parent = new_block;
 
 			const auto labels = instruction->getLabels();
@@ -51,10 +52,18 @@ namespace LL2X::Passes {
 					predecessors[function.getBlock(label)->instructions.front()->index].emplace_back(index);
 		}
 
+		function.bbLabels.clear();
+		function.bbMap.clear();
+		function.blocks.clear();
+
 		for (const auto &[index, block]: added_blocks) {
+			function.bbLabels.insert(block->label);
+			function.bbMap.emplace(block->label, block);
 			for (const auto &predecessor: predecessors[index]) {
 				block->preds.emplace_back(added_blocks.at(predecessor)->label);
 			}
+
+			function.blocks.emplace_back(block);
 		}
 
 		function.relinearize();

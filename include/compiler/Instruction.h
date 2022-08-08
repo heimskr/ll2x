@@ -83,6 +83,8 @@ namespace LL2X {
 			/** Attempts to replace a label referenced by the instruction with another label. Should be overridden by
 			 *  any instruction that references labels. */
 			virtual bool replaceLabel(const std::string *to_replace, const std::string *replace_with) {
+				(void) to_replace;
+				(void) replace_with;
 				return false;
 			}
 

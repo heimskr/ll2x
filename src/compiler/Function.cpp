@@ -72,6 +72,7 @@
 // #include "pass/LowerVarargs.h"
 // #include "pass/MakeCFG.h"
 // #include "pass/MergeAllBlocks.h"
+#include "pass/MinimizeBlocks.h"
 // #include "pass/Phi.h"
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
@@ -905,24 +906,18 @@ namespace LL2X {
 // 		Passes::transformInstructions(*this);
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract(true);
-// #ifdef MOVE_PHI
 // 		Passes::movePhi(*this);
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract(true);
-// #else
-// 		Passes::cutPhi(*this);
-// 		Passes::coalescePhi(*this, true);
-// #endif
 // 		Passes::lowerSwitch(*this);
 		extractVariables(true);
+		Passes::minimizeBlocks(*this);
 		computeLiveness();
 		updateInstructionNodes();
 		reindexBlocks();
 		initialDone = true;
-#ifndef MOVE_PHI
-		// Coalesce ϕ-instructions a second time, removing them instead of only gently aliasing variables.
-		// Passes::coalescePhi(*this);
-#endif
+
+		debug();
 	}
 
 	void Function::finalCompile() {
