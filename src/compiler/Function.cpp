@@ -878,7 +878,7 @@ namespace LL2X {
 			block->extract();
 		Passes::trimBlocks(*this);
 		Passes::splitBlocks(*this);
-// 		Passes::copyArguments(*this);
+		// Passes::copyArguments(*this);
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract(true);
 // 		Passes::replaceConstants(*this);
@@ -992,13 +992,33 @@ namespace LL2X {
 #endif
 	}
 
+	// void Function::precolorArguments(std::list<Interval> &intervals) {
+	// 	if (getCallingConvention() == CallingConvention::Reg16) {
+	// 		const int max = std::min(16, getArity());
+	// 		int reg = WhyInfo::argumentOffset - 1;
+	// 		for (Interval &interval: intervals)
+	// 			// TODO: change to support non-numeric argument variables
+	// 			if (interval.variable.lock()->isLess(max))
+	// 				interval.setRegisters({++reg});
+	// 	}
+	// }
+
+	// void Function::precolorArguments() {
+	// 	if (getCallingConvention() == CallingConvention::Reg16) {
+	// 		const int max = std::min(16, getArity());
+	// 		int reg = WhyInfo::argumentOffset - 1;
+	// 		// TODO: change to support non-numeric argument variables
+	// 		for (int i = 0; i < max; ++i)
+	// 			variableStore.at(StringSet::intern(std::to_string(i)))->setRegisters({++reg});
+	// 	}
+	// }
+
 	VariablePtr Function::makePrecoloredVariable(unsigned char index, BasicBlockPtr definer) {
 		if (x86_64::totalRegisters <= index)
 			throw std::invalid_argument("Index too high: " + std::to_string(index));
 		VariablePtr new_var = newVariable(std::make_shared<IntType>(64), definer);
 		new_var->setRegisters({index});
 		return new_var;
-
 	}
 
 	StackLocation & Function::addToStack(VariablePtr variable, StackLocation::Purpose purpose, int width) {

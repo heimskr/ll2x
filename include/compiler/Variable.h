@@ -115,9 +115,10 @@ namespace LL2X {
 			 *  The string is of the form "$reg" or "($reg1 $reg2 ...)". */
 			std::string registersString() const;
 
-			std::string toString() const;
-			std::string plainString() const;
-			operator std::string() const;
+			std::string toString(x86_64::Width = x86_64::Width::Eight) const;
+			std::string plainString(x86_64::Width = x86_64::Width::Eight) const;
+			std::string ansiString(x86_64::Width = x86_64::Width::Eight) const;
+
 			bool operator==(const Variable &) const;
 
 			/** Returns whether the variables are same (with operator==) or whether they're both precolored with

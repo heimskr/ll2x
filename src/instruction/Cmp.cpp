@@ -2,10 +2,10 @@
 
 namespace LL2X {
 	std::string CmpInstruction::debugExtra() {
-		return std::string("\e[1mcmp") + suffix() + "\e[22m " + std::string(source);
+		return std::string("\e[1mcmp") + suffix() + "\e[22m " + source.ansiString(size);
 	}
 
 	std::string CmpInstruction::toString() const {
-		return std::string("cmp") + suffix() + ' ' + source.toString();
+		return std::string("cmp") + suffix() + ' ' + source.toString(size);
 	}
 }

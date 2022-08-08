@@ -84,7 +84,7 @@ namespace LL2X {
 			|| other.aliases.count(const_cast<Variable *>(this)) != 0;
 	}
 
-	Variable::operator std::string() const {
+	std::string Variable::ansiString(x86_64::Width width) const {
 		std::stringstream out;
 		const std::string base;
 		if (registers.empty())
@@ -92,17 +92,17 @@ namespace LL2X {
 		else {
 			out << "\e[92m";
 			if (1 < registers.size())
-				out << "(";
+				out << '(';
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
 					first = false;
 				else
-					out << " ";
-				out << "$" << x86_64::registerName(reg);
+					out << ' ';
+				out << '%' << x86_64::registerName(reg, width);
 			}
 			if (1 < registers.size())
-				out << ")";
+				out << ')';
 			out << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
 		}
 #ifdef VARIABLE_EXTRA
@@ -123,39 +123,41 @@ namespace LL2X {
 		return out.str();
 	}
 
-	std::string Variable::toString() const {
+	std::string Variable::toString(x86_64::Width width) const {
 		if (1 < registers.size()) {
-			std::string out("(");
+			std::string out('(', 1);
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
 					first = false;
 				else
-					out += " ";
-				out += "$" + x86_64::registerName(reg);
+					out += ' ';
+				out += '%' + x86_64::registerName(reg, width);
 			}
-			out += ")";
+			out += ')';
 			return out;
-		} else if (registers.size() == 1)
-			return "$" + x86_64::registerName(*registers.begin());
-		else
-			return *this;
+		}
+
+		if (registers.size() == 1)
+			return '%' + x86_64::registerName(*registers.begin());
+
+		return ansiString(width);
 	}
 
-	std::string Variable::plainString() const {
+	std::string Variable::plainString(x86_64::Width width) const {
 		if (registers.empty())
-			return "%" + *id;
+			return '^' + *id;
 		else if (registers.size() == 1)
-			return "$" + x86_64::registerName(*registers.begin()) + ":" + *id;
+			return '%' + x86_64::registerName(*registers.begin(), width) + ":" + *id;
 		else {
-			std::string out = "(";
+			std::string out('(', 1);
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
 					first = false;
 				else
-					out += " ";
-				out += "$" + x86_64::registerName(reg);
+					out += ' ';
+				out += '%' + x86_64::registerName(reg, width);
 			}
 			out += "):" + *id;
 			return out;
@@ -429,16 +431,16 @@ namespace LL2X {
 			if (first)
 				first = false;
 			else
-				out += " ";
-			out += "$" + x86_64::registerName(reg);
+				out += ' ';
+			out += '%' + x86_64::registerName(reg);
 		}
 		if (1 < registers.size())
-			out += ")";
+			out += ')';
 		return out;
 	}
 
 	std::ostream & operator<<(std::ostream &os, const LL2X::Variable &var) {
-		return os << std::string(var);
+		return os << var.ansiString();
 	}
 
 	bool Variable::isLess(long max) const {
@@ -485,7 +487,7 @@ namespace LL2X {
 		} else {
 			std::cerr << "   Aliases:";
 			for (const Variable *alias: aliases)
-				std::cerr << " " << *alias;
+				std::cerr << ' ' << *alias;
 			std::cerr << "\n";
 		}
 	}

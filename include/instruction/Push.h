@@ -6,7 +6,7 @@
 
 namespace LL2X {
 	struct PushInstruction: TargetInstruction, OneSource, Sized {
-		PushInstruction(Operand source_, int size_):
+		PushInstruction(Operand source_, x86_64::Width size_):
 			OneSource(std::move(source_)),
 			Sized(size_) {}
 

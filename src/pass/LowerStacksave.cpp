@@ -21,7 +21,7 @@ namespace LL2X::Passes {
 				continue;
 			if (*dynamic_cast<GlobalValue *>(call->name.get())->name == "llvm.stacksave") {
 				auto mov = std::make_shared<MovInstruction>(function.stackPointer(instruction),
-					function.getVariable(*call->result), 8);
+					function.getVariable(*call->result), x86_64::Width::Eight);
 				function.insertBefore(instruction, mov)->setDebug(llvm)->extract();
 				to_remove.push_back(instruction);
 			}

@@ -4,6 +4,7 @@
 #include <memory>
 #include <variant>
 
+#include "compiler/x86_64.h"
 #include "Declarations.h"
 
 namespace LL2X {
@@ -40,7 +41,9 @@ namespace LL2X {
 		Operand(Number displacement_, VariablePtr reg_, VariablePtr index_, Number scale_):
 			mode(Mode::Scaled), displacement(displacement_), scale(scale_), reg(reg_), index(index_) {}
 
-		operator std::string() const;
-		std::string toString() const;
+		std::string ansiString(x86_64::Width) const;
+		std::string toString(x86_64::Width) const;
+
+		bool replace(const Variable &to_replace, const VariablePtr &replace_with);
 	};
 }

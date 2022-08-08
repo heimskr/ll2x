@@ -15,7 +15,7 @@ namespace LL2X {
 	}
 
 	std::string StackLocation::getName() const {
-		return *variable;
+		return variable->ansiString();
 	}
 
 	bool StackLocation::operator==(const StackLocation &other) const {

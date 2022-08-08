@@ -1,13 +1,16 @@
 #pragma once
 
-#include "instruction/TwoSources.h"
 #include "instruction/OneDestination.h"
+#include "instruction/OneSource.h"
 #include "instruction/TargetInstruction.h"
 
 namespace LL2X {
-	struct TwoSourcesToDest: TargetInstruction, TwoSources, OneDestination {
-		TwoSourcesToDest(Operand first_source, Operand second_source, Operand destination_):
-			TwoSources(std::move(first_source), std::move(second_source)), OneDestination(std::move(destination_)) {}
+	struct Overlapping: TargetInstruction {
+		Operand multi;
+		Operand sourceOnly;
+
+		Overlapping(Operand multi_, Operand source_only):
+			multi(std::move(multi_)), sourceOnly(std::move(source_only)) {}
 
 		ExtractionResult extract(bool force = false) override;
 		bool replaceRead(const VariablePtr &, const VariablePtr &) override;

@@ -98,7 +98,7 @@ namespace LL2X {
 	}
 
 	LocalValue::operator std::string() {
-		return "\e[32m" + (variable? std::string(*variable) : "%" + *name) + "\e[39m";
+		return "\e[32m" + (variable? variable->ansiString() : "%" + *name) + "\e[39m";
 	}
 
 	std::shared_ptr<Variable> LocalValue::getVariable(Function &function) {

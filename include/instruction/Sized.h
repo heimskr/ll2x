@@ -2,11 +2,12 @@
 
 #include <string>
 
+#include "compiler/x86_64.h"
+
 namespace LL2X {
 	struct Sized {
-		/** The size of the instruction in bytes. */
-		int size;
-		Sized(int size_);
+		x86_64::Width size;
+		Sized(x86_64::Width);
 		char suffix() const;
 	};
 }

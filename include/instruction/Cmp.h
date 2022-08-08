@@ -6,7 +6,7 @@
 
 namespace LL2X {
 	struct CmpInstruction: TargetInstruction, OneSource, Sized  {
-		CmpInstruction(Operand source_, int size_):
+		CmpInstruction(Operand source_, x86_64::Width size_):
 			OneSource(std::move(source_)),
 			Sized(size_) {}
 
