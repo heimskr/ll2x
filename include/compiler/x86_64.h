@@ -26,6 +26,7 @@ namespace LL2X::x86_64 {
 	constexpr int floatWidth = 4, doubleWidth = 8, pointerWidth = 8; // in bytes
 
 	constexpr int totalRegisters = 16;
+	constexpr int generalPurposeRegisters = 14; // %rbp and %rsp aren't counted as general-purpose registers.
 
 	constexpr int rax =  0;
 	constexpr int rbx =  1;

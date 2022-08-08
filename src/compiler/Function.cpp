@@ -79,7 +79,7 @@
 // #include "pass/ReplaceConstants.h"
 // #include "pass/ReplaceStoresAndLoads.h"
 // #include "pass/SetupCalls.h"
-// #include "pass/SplitBlocks.h"
+#include "pass/SplitBlocks.h"
 // #include "pass/SplitResultMoves.h"
 #include "pass/StackSkip.h"
 // #include "pass/TransformInstructions.h"
@@ -877,7 +877,7 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract();
 		Passes::trimBlocks(*this);
-// 		Passes::splitBlocks(*this);
+		Passes::splitBlocks(*this);
 // 		Passes::copyArguments(*this);
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract(true);
