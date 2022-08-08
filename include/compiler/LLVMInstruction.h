@@ -26,6 +26,7 @@ namespace LL2X {
 
 			bool replaceLabel(const std::string *, const std::string *) override;
 			std::vector<const std::string *> getLabels() const override;
+			bool holdsLabels() const override;
 
 			bool isPhi() const override;
 	};

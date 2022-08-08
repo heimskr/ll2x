@@ -92,6 +92,10 @@ namespace LL2X {
 				return {};
 			}
 
+			virtual bool holdsLabels() const {
+				return false;
+			}
+
 			virtual bool maySpill() const { return true; }
 
 			virtual bool isPhi() const { return false; }

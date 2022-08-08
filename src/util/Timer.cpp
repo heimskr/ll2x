@@ -10,8 +10,19 @@ namespace LL2X {
 		start(std::chrono::system_clock::now()), name(name_) {}
 
 	Timer::~Timer() {
-		times[name] += std::chrono::system_clock::now() - start;
-		++counts[name];
+		stop();
+	}
+
+	std::chrono::nanoseconds Timer::difference() const {
+		return std::chrono::system_clock::now() - start;
+	}
+
+	void Timer::stop() {
+		if (!stopped) {
+			times[name] += difference();
+			++counts[name];
+			stopped = true;
+		}
 	}
 
 	void Timer::summary(double threshold) {
@@ -44,5 +55,10 @@ namespace LL2X {
 				std::cerr << '\n';
 			}
 		}
+	}
+
+	void Timer::clear() {
+		times.clear();
+		counts.clear();
 	}
 }

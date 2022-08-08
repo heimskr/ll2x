@@ -318,6 +318,17 @@ namespace LL2X {
 		}
 	}
 
+	bool LLVMInstruction::holdsLabels() const {
+		switch (node->nodeType()) {
+			case NodeType::BrCond:
+			case NodeType::BrUncond:
+			case NodeType::Switch:
+				return true;
+			default:
+				return false;
+		}
+	}
+
 	bool LLVMInstruction::isPhi() const {
 		return node && node->nodeType() == NodeType::Phi;
 	}
