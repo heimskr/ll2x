@@ -46,12 +46,12 @@ LLVM_FLOATING			("-"?[0-9]+"."[0-9]+("e"[+\-][0-9]+)?)
 LLVM_FLOATTYPE			("half"|"float"|"double"|"fp128"|"x86_fp80"|"ppc_fp128")
 LLVM_DLLPORT			("dllimport"|"dllexport")
 LLVM_THREAD_LOCAL_TYPE	("localdynamic"|"initialexec"|"localexec")
-LLVM_PARATTR			("nocapture"|"swiftself"|"swifterror"|"immarg"|"returned"|"nest"|"nofree"|"noundef")
+LLVM_PARATTR			("nocapture"|"swiftself"|"swifterror"|"immarg"|"returned"|"nest"|"nofree")
 LLVM_RETATTR			("zeroext"|"signext"|"inreg"|"noalias"|"nonnull")
 LLVM_DEREF				("dereferenceable"|"dereferenceable_or_null")
-LLVM_STRUCTVAR			(("%struct."{LLVM_IDENT})|("%\"struct."([^\\"\n]|\\[\\’"0nt])+\"))
-LLVM_CLASSVAR			(("%class."{LLVM_IDENT})|("%\"class."([^\\"\n]|\\[\\’"0nt])+\"))
-LLVM_UNIONVAR			(("%union."{LLVM_IDENT})|("%\"union."([^\\"\n]|\\[\\’"0nt])+\"))
+LLVM_STRUCTVAR			(("%struct."{LLVM_IDENT})|("%\"struct."([^\\"\n]|\\[\\'"0nt])+\"))
+LLVM_CLASSVAR			(("%class."{LLVM_IDENT})|("%\"class."([^\\"\n]|\\[\\'"0nt])+\"))
+LLVM_UNIONVAR			(("%union."{LLVM_IDENT})|("%\"union."([^\\"\n]|\\[\\'"0nt])+\"))
 LLVM_UNNAMED_ADDR_TYPE	("local_unnamed_addr"|"unnamed_addr")
 LLVM_LINKAGE			("private"|"appending"|"available_externally"|"weak"|"linkonce"|"extern_weak"|"linkonce_odr"|"weak_odr"|"external"|"common"|"internal")
 LLVM_VISIBILITY			("default"|"hidden"|"protected")
@@ -332,6 +332,7 @@ LLVM_TYPED_PARATTR		("byval"|"byref"|"preallocated"|"sret"|"elementtype")
 "value"						{ LLVMRTOKEN(VALUE) }
 "isUnsigned"				{ LLVMRTOKEN(ISUNSIGNED) }
 "defaulted"					{ LLVMRTOKEN(DEFAULTED) }
+"noundef"					{ LLVMRTOKEN(NOUNDEF) }
 
 {LLVM_IDENT}				{ LLVMRTOKEN(IDENT) }
 

@@ -263,6 +263,7 @@ using AN = LL2X::ASTNode;
 %token LLVMTOK_NOALIAS_SCOPE_DECL "@llvm.experimental.noalias.scope.decl"
 %token LLVMTOK_NOALIAS "!noalias"
 %token LLVMTOK_ALIAS_SCOPE "!alias.scope"
+%token LLVMTOK_NOUNDEF "noundef"
 
 %token LLVM_CONSTANT LLVM_CONVERSION_EXPR LLVM_INITIAL_VALUE_LIST LLVM_ARRAYTYPE LLVM_VECTORTYPE LLVM_POINTERTYPE
 %token LLVM_TYPE_LIST LLVM_FUNCTIONTYPE LLVM_GDEF_EXTRAS LLVM_STRUCTDEF LLVM_ATTRIBUTE_LIST LLVM_RETATTR_LIST
@@ -329,7 +330,7 @@ attribute: LLVMTOK_STRING "=" LLVMTOK_STRING { $$ = $2->adopt({$1, $3}); }
          | "readonly";
 
 basic_fnattr: LLVMTOK_FNATTR_BASIC | convertible_fnattr { $1->symbol = LLVMTOK_FNATTR_BASIC; };
-convertible_fnattr: LLVMTOK_WRITEONLY | LLVMTOK_READONLY | LLVMTOK_READNONE | LLVMTOK_PATCHABLE_PROLOGUE;
+convertible_fnattr: "writeonly" | "readonly" | "readnone" | LLVMTOK_PATCHABLE_PROLOGUE;
 
 attribute_basic_fnattr: LLVMTOK_FNATTR_BASIC | attribute_convertible_fnattr { $1->symbol = LLVMTOK_FNATTR_BASIC; };
 attribute_convertible_fnattr: LLVMTOK_PATCHABLE_PROLOGUE;
@@ -903,12 +904,13 @@ parattr: LLVMTOK_PARATTR
        | parattr_simple                 { $1->symbol = LLVMTOK_PARATTR;  }
        | LLVMTOK_TYPED_PARATTR "(" type_any ")" { $$ = $1->adopt($3); D($2, $4); }
        | "inalloca" "(" type_any ")" { $$ = $1->adopt($3); D($2, $4); }
-       | retattr | LLVMTOK_WRITEONLY;
-parattr_simple: LLVMTOK_INALLOCA | LLVMTOK_READONLY | LLVMTOK_READNONE;
+       | retattr | "writeonly";
+parattr_simple: "inalloca" | "readonly" | LLVMTOK_READNONE;
 retattr: LLVMTOK_RETATTR
        | LLVMTOK_DEREF "(" LLVMTOK_DECIMAL ")" { $$ = $1->adopt($3); D($2, $4); }
        | "align" "(" LLVMTOK_DECIMAL ")"       { $$ = $1->adopt($3); D($2, $4); }
-       | "align" LLVMTOK_DECIMAL               { $$ = $1->adopt($2); };
+       | "align" LLVMTOK_DECIMAL               { $$ = $1->adopt($2); }
+       | "noundef";
 operand: LLVMTOK_PVAR | LLVMTOK_DECIMAL | LLVMTOK_HEXADECIMAL | LLVMTOK_GVAR | LLVMTOK_BOOL | LLVMTOK_FLOATING | struct
        | bare_array   | LLVMTOK_CSTRING | getelementptr_expr  | "null" | "zeroinitializer"  | "undef";
 conversion_expr: LLVMTOK_CONV_OP constant "to" type_any         { $$ = (new AN(llvmParser, LLVM_CONVERSION_EXPR, $1->lexerInfo))->adopt({$2, $4})->locate($1); D($1, $3); }
