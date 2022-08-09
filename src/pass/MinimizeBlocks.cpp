@@ -68,8 +68,10 @@ namespace LL2X::Passes {
 				// There's definitely a faster way to do this.
 				// The use of syntactically invalid block names earlier prevents the sort of weirdness that occurs in,
 				// say, "abc".replace(a => b).replace(b => c) being different from "abc".replace(b => c / a => b).
-				for (const auto &[old_label, new_label]: label_replacements)
+				for (const auto &[old_label, new_label]: label_replacements) {
 					instruction->replaceLabel(old_label, new_label);
+					instruction->replaceLabel(StringSet::intern("%" + *old_label), StringSet::intern("%" + *new_label));
+				}
 		replacement_timer.stop();
 	}
 }
