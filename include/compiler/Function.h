@@ -154,7 +154,7 @@ namespace LL2X {
 			int debugIndex = -1;
 			int initialDebugIndex = -1;
 
-			ColoringAllocator *allocator = nullptr;
+			std::unique_ptr<ColoringAllocator> allocator;
 
 			bool initialDone = false, allocationDone = false, finalDone = false;
 
@@ -163,8 +163,6 @@ namespace LL2X {
 			Function(const Function &) = delete;
 			Function(Function &&) = delete;
 			Function(Program &, const ASTNode &);
-
-			~Function();
 
 			Allocator::Result attemptAllocation();
 

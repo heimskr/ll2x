@@ -102,13 +102,8 @@ namespace LL2X {
 		arguments = &argumentsNode->arguments;
 		astnode = &node;
 		returnType = header->returnType;
-		allocator = new ColoringAllocator(*this);
+		allocator = std::make_unique<ColoringAllocator>(*this);
 		debugIndex = header->debugIndex;
-	}
-
-	Function::~Function() {
-		if (allocator)
-			delete allocator;
 	}
 
 	Allocator::Result Function::attemptAllocation() {

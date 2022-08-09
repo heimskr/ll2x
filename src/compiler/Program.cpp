@@ -6,6 +6,7 @@
 // #define COMPILE_MULTITHREADED
 // #define HIDE_PRINTS
 
+#include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"
 #include "compiler/Getelementptr.h"
 #include "compiler/PaddedStructs.h"
