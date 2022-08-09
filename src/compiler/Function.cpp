@@ -70,7 +70,7 @@
 #include "pass/LowerStacksave.h"
 // #include "pass/LowerSwitch.h"
 // #include "pass/LowerVarargs.h"
-// #include "pass/MakeCFG.h"
+#include "pass/MakeCFG.h"
 // #include "pass/MergeAllBlocks.h"
 #include "pass/MinimizeBlocks.h"
 // #include "pass/Phi.h"
@@ -895,7 +895,7 @@ namespace LL2X {
 // 		initialStackSize = stackSize;
 // 		extractVariables();
 		// Passes::lowerStackrestore(*this);
-// 		Passes::makeCFG(*this);
+		Passes::makeCFG(*this);
 // 		Passes::lowerVarargsFirst(*this);
 // 		Passes::lowerMemcpy(*this);
 // 		Passes::lowerMemset(*this);
@@ -911,6 +911,7 @@ namespace LL2X {
 			block->extract(true);
 // 		Passes::lowerSwitch(*this);
 		Passes::minimizeBlocks(*this);
+		Passes::makeCFG(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		extractVariables(true);
