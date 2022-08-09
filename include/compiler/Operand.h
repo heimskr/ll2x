@@ -55,7 +55,29 @@ namespace LL2X {
 
 		std::string ansiString(x86_64::Width) const;
 		std::string toString(x86_64::Width) const;
+		std::string ansiString() const;
+		std::string toString() const;
 
 		bool replace(const Variable &to_replace, const VariablePtr &replace_with);
 	};
+
+	template <typename... Args>
+	Operand Operand8(Args &&...args) {
+		return Operand(x86_64::Width::Eight, std::forward<Args>(args)...);
+	}
+
+	template <typename... Args>
+	Operand Operand4(Args &&...args) {
+		return Operand(x86_64::Width::Four, std::forward<Args>(args)...);
+	}
+
+	template <typename... Args>
+	Operand Operand2(Args &&...args) {
+		return Operand(x86_64::Width::Two, std::forward<Args>(args)...);
+	}
+
+	template <typename... Args>
+	Operand Operand1(Args &&...args) {
+		return Operand(x86_64::Width::Low, std::forward<Args>(args)...);
+	}
 }

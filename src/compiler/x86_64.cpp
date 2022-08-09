@@ -9,7 +9,7 @@ namespace LL2X::x86_64 {
 	}
 
 	bool isSpecialPurpose(int reg) {
-		return reg == rsp || reg == rbp;
+		return reg == rsp || reg == rbp || reg == rip;
 	}
 
 	static std::string baseName(int reg) {
@@ -151,6 +151,34 @@ namespace LL2X::x86_64 {
 			case Width::High:  return "b";
 			default:
 				return "???";
+		}
+	}
+
+	Width getWidth(int bits) {
+		switch (bits) {
+			case 64: return Width::Eight;
+			case 32: return Width::Four;
+			case 16: return Width::Two;
+			case  8: return Width::Low;
+			default:
+				throw std::invalid_argument("No width corresponds to bit length " + std::to_string(bits));
+		}
+	}
+
+	Condition getCondition(IcmpCond icmp) {
+		switch (icmp) {
+			case IcmpCond::Eq:  return Condition::IfEqual;
+			case IcmpCond::Ne:  return Condition::IfNotEqual;
+			case IcmpCond::Ugt: return Condition::IfGreaterUnsigned;
+			case IcmpCond::Uge: return Condition::IfGreaterOrEqualUnsigned;
+			case IcmpCond::Ult: return Condition::IfLessUnsigned;
+			case IcmpCond::Ule: return Condition::IfLessOrEqualUnsigned;
+			case IcmpCond::Sgt: return Condition::IfGreaterSigned;
+			case IcmpCond::Sge: return Condition::IfGreaterOrEqualSigned;
+			case IcmpCond::Slt: return Condition::IfLessSigned;
+			case IcmpCond::Sle: return Condition::IfLessOrEqualSigned;
+			default:
+				throw std::runtime_error("Invalid IcmpCond: " + std::to_string(static_cast<int>(icmp)));
 		}
 	}
 }

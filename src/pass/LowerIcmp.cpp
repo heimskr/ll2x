@@ -62,68 +62,40 @@ namespace LL2X::Passes {
 		const ValueType type2 = value2->valueType();
 		if (type2 == ValueType::Local || type2 == ValueType::Global) {
 			VariablePtr rt;
+			const int size = node->getType()->width();
+			const auto width = x86_64::getWidth(size);
+
 			if (type2 == ValueType::Local) {
 				rt = dynamic_cast<LocalValue *>(value2.get())->variable;
 			} else {
 				rt = function.newVariable(node->getType(), instruction->parent.lock());
-				// Because gvars are pointers instead of the actual values, we use set instead of load here.
-				function.insertBefore(instruction, std::make_shared<SetInstruction>(rt,
-					dynamic_cast<GlobalValue *>(value2.get())->name));
+				VariablePtr rip = function.instructionPointer(instruction);
+				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand8(rt),
+					Operand(width, *dynamic_cast<GlobalValue *>(value2.get())->name, rip), x86_64::Width::Eight))
+					->setDebug(node)->extract();
+				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand8(rt),
+					Operand(width, 0, rt), width))->setDebug(node)->extract();
 			}
 
-			const int width = node->getType()->width();
-			if (isSigned(cond) && int_type && width < 64) {
-				if (width == 32) {
-					function.insertBefore(instruction, std::make_shared<Sext32RInstruction>(rs, rs))
-						->setDebug(node)->extract();
-					function.insertBefore(instruction, std::make_shared<Sext32RInstruction>(rt, rt))
-						->setDebug(node)->extract();
-				} else {
-					node->debug();
-					warn() << "Signed compare with width less than 64 but not equal to 32: not sign extending\n";
-				}
-			}
-
-			// Because Why lacks a not-equals comparison, we have to do an equals comparison and invert it.
-			if (cond == IcmpCond::Ne) {
-				VariablePtr m3 = function.mx(3, instruction->parent.lock());
-				function.insertBefore(instruction, std::make_shared<ComparisonRInstruction>(rs, rt, m3, IcmpCond::Eq))
-					->setDebug(node)->extract();
-				function.insertBefore(instruction, std::make_shared<LogicalNotRInstruction>(m3, rd))
-					->setDebug(node)->extract();
-			} else {
-				function.insertBefore(instruction, std::make_shared<ComparisonRInstruction>(rs, rt, rd, cond))
-					->setDebug(node)->extract();
-			}
+			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand(width, rs), Operand(width, rt),
+				width))->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand4(1), Operand(width, rd),
+				width, x86_64::getCondition(cond)))->setDebug(node)->extract();
 		} else {
-			int imm;
+			int64_t imm;
 			if (type2 == ValueType::Int) {
 				imm = dynamic_cast<IntValue *>(value2.get())->value;
 			} else if (type2 == ValueType::Null) {
 				imm = 0;
 			} else throw std::runtime_error("Unsupported value type in icmp instruction: " + value_map.at(type2));
 
-			const int width = node->getType()->width();
-			if ((isSigned(cond) || imm < 0) && int_type && width < 64) {
-				if (width == 32) {
-					function.insertBefore(instruction, std::make_shared<Sext32RInstruction>(rs, rs))
-						->setDebug(node)->extract();
-				} else {
-					node->debug();
-					warn() << "Signed compare with width less than 64 but not equal to 32: not sign extending\n";
-				}
-			}
+			const int size = node->getType()->width();
+			const auto width = x86_64::getWidth(size);
 
-			if (cond == IcmpCond::Ne) {
-				VariablePtr m3 = function.mx(3, instruction->parent.lock());
-				function.insertBefore(instruction, std::make_shared<ComparisonIInstruction>(rs, imm, m3, IcmpCond::Eq))
-					->setDebug(node)->extract();
-				function.insertBefore(instruction, std::make_shared<LogicalNotRInstruction>(m3, rd))
-					->setDebug(node)->extract();
-			} else {
-				function.insertBefore(instruction, std::make_shared<ComparisonIInstruction>(rs, imm, rd, cond))
-					->setDebug(node)->extract();
-			}
+			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand(width, rs), Operand(width, imm),
+				width))->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand4(1), Operand(width, rd),
+				width, x86_64::getCondition(cond)))->setDebug(node)->extract();
 		}
 	}
 }

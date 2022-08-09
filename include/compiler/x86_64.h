@@ -3,6 +3,8 @@
 #include <set>
 #include <string>
 
+#include "parser/Enums.h"
+
 namespace LL2X::x86_64 {
 	/** Contains constants and functions pertaining to x86_64. */
 	enum class Width {Low, High, Two, Four, Eight};
@@ -25,7 +27,7 @@ namespace LL2X::x86_64 {
 
 	constexpr int floatWidth = 4, doubleWidth = 8, pointerWidth = 8; // in bytes
 
-	constexpr int totalRegisters = 16;
+	constexpr int totalRegisters = 17;
 	constexpr int generalPurposeRegisters = 14; // %rbp and %rsp aren't counted as general-purpose registers.
 
 	constexpr int rax =  0;
@@ -44,10 +46,13 @@ namespace LL2X::x86_64 {
 	constexpr int r13 = 13;
 	constexpr int r14 = 14;
 	constexpr int r15 = 15;
+	constexpr int rip = 16;
 
 	std::set<int> makeRegisterPool();
 	bool isSpecialPurpose(int);
 	std::string registerName(int, Width = Width::Eight);
 	std::string conditionSuffix(Condition);
 	std::string widthSuffix(Width);
+	Width getWidth(int bits);
+	Condition getCondition(IcmpCond);
 }

@@ -6,10 +6,10 @@ namespace LL2X {
 		TargetInstruction(index_), name(name_) {}
 
 	std::string Label::debugExtra() {
-		return "\e[94m@" + name + "\e[39m";
+		return "\e[94m" + name + ":\e[39m";
 	}
 
 	std::string Label::toString() const {
-		return "@" + name;
+		return name + ':';
 	}
 }

@@ -1825,4 +1825,12 @@ namespace LL2X {
 	VariablePtr Function::stackPointer(InstructionPtr instruction) {
 		return stackPointer(instruction->parent.lock());
 	}
+
+	VariablePtr Function::instructionPointer(BasicBlockPtr block) {
+		return makePrecoloredVariable(x86_64::rip, block);
+	}
+
+	VariablePtr Function::instructionPointer(InstructionPtr instruction) {
+		return instructionPointer(instruction->parent.lock());
+	}
 }

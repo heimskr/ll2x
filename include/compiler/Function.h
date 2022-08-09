@@ -381,5 +381,8 @@ namespace LL2X {
 
 			/** Convenience method for creating a precolored %rsp register. */
 			VariablePtr stackPointer(InstructionPtr);
+
+			VariablePtr instructionPointer(BasicBlockPtr);
+			VariablePtr instructionPointer(InstructionPtr);
 	};
 }
