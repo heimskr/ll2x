@@ -50,12 +50,12 @@
 // #include "pass/InsertPrologue.h"
 // #include "pass/LoadArguments.h"
 // #include "pass/LowerAlloca.h"
-// #include "pass/LowerBranches.h"
+#include "pass/LowerBranches.h"
 // #include "pass/LowerConversions.h"
 // #include "pass/LowerExtractvalue.h"
 // #include "pass/LowerFreeze.h"
 // #include "pass/LowerGetelementptr.h"
-// #include "pass/LowerIcmp.h"
+#include "pass/LowerIcmp.h"
 // #include "pass/LowerInlineAsm.h"
 // #include "pass/LowerInsertvalue.h"
 // #include "pass/LowerMath.h"
@@ -71,13 +71,13 @@
 // #include "pass/LowerSwitch.h"
 // #include "pass/LowerVarargs.h"
 #include "pass/MakeCFG.h"
-// #include "pass/MergeAllBlocks.h"
+#include "pass/MergeAllBlocks.h"
 #include "pass/MinimizeBlocks.h"
-// #include "pass/Phi.h"
+#include "pass/Phi.h"
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
 // #include "pass/RemoveUselessBranches.h"
-// #include "pass/ReplaceConstants.h"
+#include "pass/ReplaceConstants.h"
 // #include "pass/ReplaceStoresAndLoads.h"
 // #include "pass/SetupCalls.h"
 #include "pass/SplitBlocks.h"
@@ -614,7 +614,7 @@ namespace LL2X {
 			std::cerr << "Index: " << block->index << '\n';
 			for (const auto &subblock: blocks)
 				std::cerr << *subblock->label << '[' << subblock->index << "] ";
-			std::cerr << '\n';
+			std::cerr << "\nInstruction list:\n";
 			for (const auto &block_instruction: block->instructions)
 				std::cerr << "    " << block_instruction->debugExtra() << '\n';
 			throw std::runtime_error("Instruction not found in block");
@@ -778,8 +778,10 @@ namespace LL2X {
 		}
 
 		// Move all instructions from the after-block to the before-block.
-		for (InstructionPtr &instruction: after->instructions)
+		for (InstructionPtr &instruction: after->instructions) {
 			before->instructions.push_back(instruction);
+			instruction->parent = before;
+		}
 		after->instructions.clear();
 
 		// Replace the after-block's label with the before-block's in all instructions.
@@ -826,8 +828,8 @@ namespace LL2X {
 		const std::string end = str.front() == '%'? str.substr(1) : str;
 		// Some lambdas will have names like "@\"_ZZ11kernel_mainENK3$_0clEm\""
 		if (1 < name->size() && (*name)[1] == '"')
-			return "\"__" + name->substr(2, name->size() - 3) + "_label" + end + "\"";
-		return "__" + name->substr(1) + "_label" + end;
+			return ".\"__" + name->substr(2, name->size() - 3) + "_label" + end + "\"";
+		return ".__" + name->substr(1) + "_label" + end;
 	}
 
 	void Function::updateInstructionNodes() {
@@ -882,11 +884,11 @@ namespace LL2X {
 		// Passes::copyArguments(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
-// 		Passes::replaceConstants(*this);
+		Passes::replaceConstants(*this);
 // 		Passes::lowerAlloca(*this);
 // 		Passes::loadArguments(*this);
 // 		Passes::lowerObjectsize(*this);
-// 		Passes::lowerIcmp(*this);
+		Passes::lowerIcmp(*this);
 // 		Passes::lowerMath(*this);
 // 		Passes::lowerConversions(*this);
 // 		Passes::lowerGetelementptr(*this);
@@ -906,7 +908,7 @@ namespace LL2X {
 // 		Passes::transformInstructions(*this);
 // 		for (BasicBlockPtr &block: blocks)
 // 			block->extract(true);
-// 		Passes::movePhi(*this);
+		Passes::movePhi(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 // 		Passes::lowerSwitch(*this);
@@ -920,7 +922,7 @@ namespace LL2X {
 		reindexBlocks();
 		initialDone = true;
 
-		debug();
+		// debug();
 	}
 
 	void Function::finalCompile() {
@@ -934,9 +936,9 @@ namespace LL2X {
 		// Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		// Passes::removeUselessBranches(*this);
-		// // Passes::mergeAllBlocks(*this);
+		Passes::mergeAllBlocks(*this);
 		// Passes::insertLabels(*this);
-		// Passes::lowerBranches(*this);
+		Passes::lowerBranches(*this);
 		// const bool naked = isNaked();
 		// if (!naked)
 		// 	Passes::insertPrologue(*this);

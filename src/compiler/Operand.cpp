@@ -18,6 +18,8 @@ namespace LL2X {
 				return "\e[32m$" + stringify(displacement) + "\e[39m";
 			case Mode::Direct:
 				return stringify(displacement);
+			case Mode::Label:
+				return label;
 			case Mode::Register:
 				return reg->ansiString(width_);
 			case Mode::Displaced:
@@ -41,6 +43,8 @@ namespace LL2X {
 				return '$' + stringify(displacement);
 			case Mode::Direct:
 				return stringify(displacement);
+			case Mode::Label:
+				return label;
 			case Mode::Register:
 				return reg->toString(width_);
 			case Mode::Displaced:

@@ -6,7 +6,7 @@
 
 namespace LL2X {
 	struct JmpInstruction: SourceOnly, HasCondition {
-		JmpInstruction(Operand source_, x86_64::Condition condition_):
+		JmpInstruction(Operand source_, x86_64::Condition condition_ = x86_64::Condition::Unconditional):
 			SourceOnly(std::move(source_)), HasCondition(condition_) {}
 
 		std::string debugExtra() override;

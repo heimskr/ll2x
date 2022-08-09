@@ -12,6 +12,7 @@ namespace LL2X {
 		enum class Mode {
 			Constant,  // mul $99
 			Direct,    // mov $0, 0xfff0
+			Label,     // jmp bb0
 			Register,  // mov $0, %rax
 			Displaced, // mov $0, 32(%rax) or mov foo(%rip), %rax
 			Scaled,    // mov $0, 32(%rax, %rbx, 8)
@@ -26,12 +27,16 @@ namespace LL2X {
 		Number scale = 1;
 		VariablePtr reg;
 		VariablePtr index;
+		std::string label;
 
 		Operand(x86_64::Width width_, Number number):
 			mode(Mode::Constant), width(width_), displacement(number) {}
 
 		Operand(x86_64::Width width_, Number number, bool):
 			mode(Mode::Direct), width(width_), displacement(number) {}
+
+		Operand(x86_64::Width width_, std::string label_):
+			mode(Mode::Label), width(width_), label(std::move(label_)) {}
 
 		Operand(x86_64::Width width_, VariablePtr reg_):
 			mode(Mode::Register), width(width_), reg(reg_) {}
