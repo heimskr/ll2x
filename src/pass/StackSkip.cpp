@@ -11,7 +11,7 @@ namespace LL2X::Passes {
 			return;
 		BasicBlockPtr entry = function.getEntry();
 		auto sp = function.stackPointer(entry);
-		auto sub = std::make_shared<SubInstruction>(Operand8(sp), Operand8(0), x86_64::Width::Eight);
+		auto sub = std::make_shared<SubInstruction>(Operand::make(64, sp), Operand::make(32, 0), x86_64::Width::Eight);
 		function.insertBefore(function.linearInstructions.front(), sub, "InsertStackSkip")
 			->setDebug(function.initialDebugIndex)->extract();
 		function.categories["StackSkip"].insert(sub);
@@ -28,6 +28,7 @@ namespace LL2X::Passes {
 			throw std::runtime_error("Expected size of StackSkip set to be exactly one, but it's " +
 				std::to_string(set.size()));
 		// We need to add an offset of 8 because spush subtracts and then writes to memory.
-		dynamic_cast<SubInstruction *>(set.begin()->get())->sourceOnly = Operand8(function.spillSize + 8);
+		// TODO: the above was ll2w-specific; does this still apply in x86_64?
+		dynamic_cast<SubInstruction *>(set.begin()->get())->sourceOnly = Operand::make(32, function.spillSize + 8);
 	}
 }

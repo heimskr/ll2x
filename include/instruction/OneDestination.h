@@ -4,8 +4,8 @@
 
 namespace LL2X {
 	struct OneDestination {
-		Operand destination;
-		OneDestination(Operand destination_):
+		OperandPtr destination;
+		OneDestination(OperandPtr destination_):
 			destination(std::move(destination_)) {}
 	};
 }

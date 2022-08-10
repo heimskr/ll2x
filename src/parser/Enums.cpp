@@ -15,7 +15,7 @@ namespace LL2X {
 		{ValueType::Global, "Global"}, {ValueType::Getelementptr,   "Getelementptr"  }, {ValueType::Void,    "Void"   },
 		{ValueType::Struct, "Struct"}, {ValueType::Array,           "Array"          }, {ValueType::CString, "CString"},
 		{ValueType::Undef,  "Undef" }, {ValueType::Zeroinitializer, "Zeroinitializer"}, {ValueType::Icmp,    "Icmp"   },
-		{ValueType::Logic,  "Logic" }};
+		{ValueType::Logic,  "Logic" }, {ValueType::Operand,         "Operand"}};
 
 	std::unordered_map<Linkage, std::string> linkage_map {
 		{Linkage::Private,     "private"},      {Linkage::Appending,  "appending"},   {Linkage::Weak,    "weak"},

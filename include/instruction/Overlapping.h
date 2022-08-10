@@ -6,10 +6,10 @@
 
 namespace LL2X {
 	struct Overlapping: TargetInstruction {
-		Operand multi;
-		Operand sourceOnly;
+		OperandPtr multi;
+		OperandPtr sourceOnly;
 
-		Overlapping(Operand multi_, Operand source_only):
+		Overlapping(OperandPtr multi_, OperandPtr source_only):
 			multi(std::move(multi_)), sourceOnly(std::move(source_only)) {}
 
 		ExtractionResult extract(bool force = false) override;

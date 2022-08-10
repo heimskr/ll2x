@@ -287,9 +287,10 @@ namespace LL2X {
 				return changed;
 			}
 
-			default:
-				return false;
+			default:;
 		}
+
+		return false;
 	}
 
 	std::vector<const std::string *> LLVMInstruction::getLabels() const {
@@ -313,9 +314,10 @@ namespace LL2X {
 				return out;
 			}
 
-			default:
-				return {};
+			default:;
 		}
+
+		return {};
 	}
 
 	bool LLVMInstruction::holdsLabels() const {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <stdexcept>
 #include <string>
 
 #include "parser/Enums.h"
@@ -53,6 +54,15 @@ namespace LL2X::x86_64 {
 	std::string registerName(int, Width = Width::Eight);
 	std::string conditionSuffix(Condition);
 	std::string widthSuffix(Width);
-	Width getWidth(int bits);
+	constexpr Width getWidth(int bits) {
+		switch (bits) {
+			case 64: return Width::Eight;
+			case 32: return Width::Four;
+			case 16: return Width::Two;
+			case  8: return Width::Low;
+			default:
+				throw std::invalid_argument("No width corresponds to bit length " + std::to_string(bits));
+		}
+	}
 	Condition getCondition(IcmpCond);
 }

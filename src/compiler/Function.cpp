@@ -325,8 +325,8 @@ namespace LL2X {
 			          << definition->index << ", OID: " << variable->originalID << ")\n";
 #endif
 			auto rbp = basePointer(definition);
-			auto store = std::make_shared<MovInstruction>(Operand8(variable),
-				Operand(x86_64::Width::Eight, -location.offset, rbp), x86_64::Width::Eight);
+			auto store = std::make_shared<MovInstruction>(Operand::make(64, variable),
+				Operand::make(64, -location.offset, rbp), x86_64::Width::Eight);
 			store->meta.insert(InstructionMeta::StackStore);
 
 			auto next = after(definition);
@@ -348,18 +348,19 @@ namespace LL2X {
 
 			if (should_insert) {
 				insertAfter(definition, store, false);
-				insertBefore(store, std::make_shared<Comment>("Spill: stack store for " + variable->plainString() +
-					" into location=" + std::to_string(location.offset)));
-				VariablePtr new_var = mx(6, definition);
-				definition->replaceWritten(variable, new_var);
-				store->variable = new_var;
-				store->extract();
+				insertBefore(store, std::make_shared<Comment>("Spill: stack store for " +
+					variable->plainString(x86_64::Width::Eight) + " into location=" + std::to_string(location.offset)));
+				//// VariablePtr new_var = mx(6, definition);
+				//// definition->replaceWritten(variable, new_var);
+				//// store->variable = new_var;
+				//// store->extract();
 				out = true;
 #ifdef DEBUG_SPILL
 				std::cerr << "    Inserting a stack store after definition: " << store->debugExtra() << "\n";
 #endif
 			} else {
-				comment(after(definition), "Spill: no store inserted here for " + variable->plainString());
+				comment(after(definition), "Spill: no store inserted here for " +
+					variable->plainString(x86_64::Width::Eight));
 #ifdef DEBUG_SPILL
 				std::cerr << "    \e[1mNot\e[22m inserting a stack store after definition: " << store->debugExtra()
 				          << "\n";
@@ -407,7 +408,9 @@ namespace LL2X {
 					instruction->read.erase(variable);
 #endif
 					instruction->read.insert(new_var);
-					auto load = std::make_shared<StackLoadInstruction>(new_var, location, -1);
+					auto rbp = basePointer(instruction);
+					auto load = std::make_shared<MovInstruction>(Operand::make(64, -location.offset, rbp),
+						Operand::make(64, variable), x86_64::Width::Eight);
 					insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
 					load->extract();
 					out = true;
@@ -455,7 +458,7 @@ namespace LL2X {
 		if (variable->definitions.size() == 1) {
 			InstructionPtr single_def = variable->definitions.begin()->lock();
 			auto *store = dynamic_cast<MovInstruction *>(single_def.get());
-			if (store && store->meta.contains(InstructionMeta::StackStore) && store->source.reg == variable)
+			if (store && store->meta.contains(InstructionMeta::StackStore) && store->source->reg == variable)
 				return false;
 		}
 
@@ -469,8 +472,8 @@ namespace LL2X {
 			bool created;
 			const StackLocation &location = getSpill(variable, true, &created);
 			auto rbp = basePointer(definition);
-			auto store = std::make_shared<MovInstruction>(Operand8(variable),
-				Operand(x86_64::Width::Eight, -location.offset, rbp), x86_64::Width::Eight);
+			auto store = std::make_shared<MovInstruction>(Operand::make(64, variable),
+				Operand::make(64, -location.offset, rbp), x86_64::Width::Eight);
 			store->meta.insert(InstructionMeta::StackStore);
 
 			auto next = after(definition);
@@ -854,8 +857,8 @@ namespace LL2X {
 			}
 
 			if (Writer *writer = dynamic_cast<Writer *>(node)) {
-				if (writer->variable)
-					writer->result = writer->variable->id;
+				if (writer->operand && writer->operand->isRegister())
+					writer->result = writer->operand->reg->id;
 			}
 		}
 	}
@@ -863,16 +866,11 @@ namespace LL2X {
 	void Function::resetRegisters(bool respectful) {
 		if (!respectful)
 			for (const auto &[id, var]: variableStore)
-				var->setRegisters({});
+				var->setRegister(-1);
 		else
-			for (const auto &[id, var]: variableStore) {
-				std::unordered_set<int> to_remove;
-				for (const int reg: var->registers)
-					if (!x86_64::isSpecialPurpose(reg))
-						to_remove.insert(reg);
-				for (const int reg: to_remove)
-					var->registers.erase(reg);
-			}
+			for (const auto &[id, var]: variableStore)
+				if (!var->isSpecialRegister())
+					var->setRegister(-1); // TODO: maybe just set reg directly?
 	}
 
 	void Function::initialCompile() {
@@ -1023,7 +1021,7 @@ namespace LL2X {
 		if (x86_64::totalRegisters <= index)
 			throw std::invalid_argument("Index too high: " + std::to_string(index));
 		VariablePtr new_var = newVariable(std::make_shared<IntType>(64), definer);
-		new_var->setRegisters({index});
+		new_var->setRegister(index);
 		return new_var;
 	}
 
@@ -1243,7 +1241,7 @@ namespace LL2X {
 		// This is obviously O(bv), where b is the number of basic blocks and v is the number of variables.
 		// I'm guessing that's around 45,000 for vsnprintf. That's absurd.
 		for (const auto &[name, var]: variableStore)
-			if (!var->hasSpecialRegister())
+			if (!var->isSpecialRegister())
 				for (const auto &block: blocks) {
 					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
 						block->liveIn.insert(var);
@@ -1251,7 +1249,7 @@ namespace LL2X {
 						block->liveOut.insert(var);
 				}
 		for (const auto &[name, var]: extraVariables)
-			if (!var->hasSpecialRegister())
+			if (!var->isSpecialRegister())
 				for (const auto &block: blocks) {
 					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
 						block->liveIn.insert(var);
@@ -1669,7 +1667,7 @@ namespace LL2X {
 				*created = true;
 			return addToStack(variable, StackLocation::Purpose::Spill);
 		}
-		throw std::out_of_range("Couldn't find a spill location for " + variable->plainString());
+		throw std::out_of_range("Couldn't find a spill location for " + variable->plainString(x86_64::Width::Eight));
 	}
 
 	std::shared_ptr<LocalValue> Function::replaceGetelementptrValue(std::shared_ptr<GetelementptrValue> gep,
@@ -1776,29 +1774,30 @@ namespace LL2X {
 			all_vars.push_back(pair.second);
 		for (VariablePtr &var: all_vars) {
 			auto var_parent = var->getParent().lock();
-			if (var->registers.empty() && var_parent)
-				var->registers = var_parent->registers;
-			if (var->registers.empty()) {
+			if (!var->hasRegister() && var_parent != nullptr)
+				var->reg = var_parent->reg;
+
+			if (!var->hasRegister()) {
 				for (Variable *alias: var->getAliases())
-					if (!alias->registers.empty()) {
-						var->registers = alias->registers;
+					if (alias->hasRegister()) {
+						var->reg = alias->reg;
 						break;
 					}
 				// As a last resort, if this variable *still* has no register assigned, check all other known variables
 				// for a variable with the same id and try to absorb its register assignment.
-				if (var->registers.empty()) {
+				if (!var->hasRegister()) {
 					for (VariablePtr &other: all_vars)
-						if (other != var && other->id == var->id && !other->registers.empty()) {
-							var->registers = other->registers;
+						if (other != var && other->id == var->id && other->hasRegister()) {
+							var->reg = other->reg;
 							break;
 						}
-					if (var->registers.empty())
+					if (!var->hasRegister())
 						warn() << "hackVariables: last resort failed\n";
 				}
 			} else
 				for (Variable *alias: var->getAliases())
-					if (alias->registers.empty())
-						alias->registers = var->registers;
+					if (!alias->hasRegister())
+						alias->reg = var->reg;
 		}
 	}
 

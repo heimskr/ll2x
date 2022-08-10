@@ -6,7 +6,7 @@
 
 namespace LL2X {
 	struct SourceToDest: TargetInstruction, OneSource, OneDestination {
-		SourceToDest(Operand source_, Operand destination_):
+		SourceToDest(OperandPtr source_, OperandPtr destination_):
 			OneSource(std::move(source_)), OneDestination(std::move(destination_)) {}
 
 		ExtractionResult extract(bool force = false) override;

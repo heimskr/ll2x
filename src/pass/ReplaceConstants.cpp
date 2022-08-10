@@ -44,13 +44,13 @@ namespace LL2X::Passes {
 						TypePtr ptr_type = std::make_shared<PointerType>(out_type);
 						VariablePtr new_var = function.newVariable(ptr_type, instruction->parent.lock());
 						VariablePtr rip = function.instructionPointer(instruction->parent.lock());
-						auto mov_addr = std::make_shared<MovInstruction>(Operand8(*gep_global->name, rip),
-							Operand8(new_var), x86_64::Width::Eight);
+						auto mov_addr = std::make_shared<MovInstruction>(Operand::make(64, *gep_global->name, rip),
+							Operand::make(new_var), x86_64::Width::Eight);
 						function.insertBefore(instruction, mov_addr)->setDebug(*llvm)->extract();
 
 						if (offset != 0) {
-							auto add = std::make_shared<AddInstruction>(Operand8(new_var), Operand8(offset),
-								x86_64::Width::Eight);
+							auto add = std::make_shared<AddInstruction>(Operand::make(new_var),
+								Operand::make(32, offset), x86_64::Width::Eight);
 							function.insertAfter(mov_addr, add)->setDebug(*llvm)->extract();
 						}
 
@@ -58,7 +58,8 @@ namespace LL2X::Passes {
 					}
 				} else if (IcmpValue *icmp = dynamic_cast<IcmpValue *>(value->get())) {
 					VariablePtr new_var = function.newVariable(IntType::make(1), instruction->parent.lock());
-					auto icmp_node = std::make_unique<IcmpNode>(new_var, icmp->cond, icmp->left, icmp->right);
+					auto icmp_node = std::make_unique<IcmpNode>(Operand::make(new_var), icmp->cond, icmp->left,
+						icmp->right);
 					lowerIcmp(function, instruction, icmp_node.get());
 					*value = LocalValue::make(new_var);
 				}

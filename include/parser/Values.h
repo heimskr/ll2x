@@ -14,15 +14,21 @@
 namespace LL2X {
 	class ASTNode;
 	class Type;
-	struct Constant;
-	class Variable;
 	class Function;
 	struct IcmpNode;
 	struct LogicNode;
 
+	class Variable;
+	using VariablePtr = std::shared_ptr<Variable>;
+
 	struct Value;
 	using ValuePtr = std::shared_ptr<Value>;
+
+	struct Constant;
 	using ConstantPtr = std::shared_ptr<Constant>;
+
+	struct Operand;
+	using OperandPtr = std::shared_ptr<Operand>;
 
 	struct Value {
 		virtual operator std::string() = 0;
@@ -114,16 +120,27 @@ namespace LL2X {
 	};
 
 	struct LocalValue: VariableValue, Makeable<LocalValue> {
-		std::shared_ptr<Variable> variable = nullptr;
+		VariablePtr variable = nullptr;
 		LocalValue(const std::string *name_): VariableValue(name_) {}
 		LocalValue(const std::string &name_): LocalValue(StringSet::intern(name_)) {}
-		LocalValue(std::shared_ptr<Variable>);
+		LocalValue(const VariablePtr &);
 		LocalValue(const ASTNode *node);
 		ValueType valueType() const override { return ValueType::Local; }
 		ValuePtr copy() const override { return std::make_shared<LocalValue>(name); }
 		operator std::string() override;
 		std::string compile() const override { return "UNSUPPORTED (Local)"; }
-		std::shared_ptr<Variable> getVariable(Function &);
+		VariablePtr getVariable(Function &);
+	};
+
+	/** Never produced by the parser. Instead, LocalValues are sometimes replaced with OperandValues during a compiler
+	 *  pass. */
+	struct OperandValue: Value, Makeable<OperandValue> {
+		OperandPtr operand = nullptr;
+		OperandValue(const OperandPtr &operand_): operand(operand_) {}
+		ValueType valueType() const override { return ValueType::Operand; }
+		ValuePtr copy() const override { return std::make_shared<OperandValue>(operand); }
+		operator std::string() override;
+		std::string compile() const override;
 	};
 
 	struct GlobalValue: VariableValue {
@@ -167,7 +184,7 @@ namespace LL2X {
 		ValuePtr copy() const override;
 		operator std::string() override;
 		std::string compile() const override { return "UNSUPPORTED (Icmp)"; }
-		std::shared_ptr<IcmpNode> makeNode(std::shared_ptr<Variable>) const;
+		std::shared_ptr<IcmpNode> makeNode(VariablePtr) const;
 	};
 
 	struct LogicValue: Value, Makeable<LogicValue> {
@@ -180,7 +197,7 @@ namespace LL2X {
 		ValuePtr copy() const override;
 		operator std::string() override;
 		std::string compile() const override { return "UNSUPPORTED (Logic)"; }
-		std::shared_ptr<LogicNode> makeNode(std::shared_ptr<Variable>) const;
+		std::shared_ptr<LogicNode> makeNode(VariablePtr) const;
 	};
 
 	struct VoidValue: Value {

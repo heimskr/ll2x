@@ -35,6 +35,8 @@ namespace LL2X::PaddedStructs {
 	}
 
 	VariablePtr extract(VariablePtr source, int index, Function &function, InstructionPtr instruction) {
+		throw std::runtime_error("PaddedStructs::extract is currently unimplemented.");
+		/*
 		std::list<int> source_regs(source->registers.begin(), source->registers.end());
 
 		TypePtr type = source->type;
@@ -78,8 +80,6 @@ namespace LL2X::PaddedStructs {
 		int target_reg_index = 0;
 
 		VariablePtr out_var = evnode->variable;
-
-		/*
 
 		while (0 < width_remaining) {
 			int to_take = std::min({64 - skip, target_remaining, width_remaining});
@@ -149,8 +149,9 @@ namespace LL2X::PaddedStructs {
 
 		function.reindexInstructions();
 
+		return out_var;
 		*/
 
-		return out_var;
+		return nullptr;
 	}
 }

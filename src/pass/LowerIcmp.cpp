@@ -57,7 +57,7 @@ namespace LL2X::Passes {
 		}
 
 		VariablePtr rs = dynamic_cast<LocalValue *>(value1.get())->variable;
-		VariablePtr rd = node->variable;
+		OperandPtr rd = node->operand;
 		
 		const ValueType type2 = value2->valueType();
 		if (type2 == ValueType::Local || type2 == ValueType::Global) {
@@ -70,17 +70,17 @@ namespace LL2X::Passes {
 			} else {
 				rt = function.newVariable(node->getType(), instruction->parent.lock());
 				VariablePtr rip = function.instructionPointer(instruction);
-				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand8(rt),
-					Operand(width, *dynamic_cast<GlobalValue *>(value2.get())->name, rip), x86_64::Width::Eight))
+				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(64, rt),
+					Operand::make(width, *dynamic_cast<GlobalValue *>(value2.get())->name, rip), x86_64::Width::Eight))
 					->setDebug(node)->extract();
-				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand8(rt),
-					Operand(width, 0, rt), width))->setDebug(node)->extract();
+				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(64, rt),
+					Operand::make(width, 0, rt), width))->setDebug(node)->extract();
 			}
 
-			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand(width, rs), Operand(width, rt),
-				width))->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand4(1), Operand(width, rd),
-				width, x86_64::getCondition(cond)))->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand::make(width, rs),
+				Operand::make(width, rt), width))->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32, 1), rd, width,
+				x86_64::getCondition(cond)))->setDebug(node)->extract();
 		} else {
 			int64_t imm;
 			if (type2 == ValueType::Int) {
@@ -92,10 +92,10 @@ namespace LL2X::Passes {
 			const int size = node->getType()->width();
 			const auto width = x86_64::getWidth(size);
 
-			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand(width, rs), Operand(width, imm),
-				width))->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand4(1), Operand(width, rd),
-				width, x86_64::getCondition(cond)))->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand::make(width, rs),
+				Operand::make(width, imm), width))->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32, 1), rd, width,
+				x86_64::getCondition(cond)))->setDebug(node)->extract();
 		}
 	}
 }

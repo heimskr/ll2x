@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "compiler/Function.h"
+#include "compiler/Operand.h"
 #include "compiler/Variable.h"
 #include "parser/ASTNode.h"
 #include "parser/Constant.h"
@@ -90,7 +91,7 @@ namespace LL2X {
 		return out.str();
 	}
 
-	LocalValue::LocalValue(std::shared_ptr<Variable> variable_):
+	LocalValue::LocalValue(const VariablePtr &variable_):
 		VariableValue(variable_->id), variable(variable_) {}
 
 	LocalValue::LocalValue(const ASTNode *node): VariableValue(nullptr) {
@@ -98,13 +99,22 @@ namespace LL2X {
 	}
 
 	LocalValue::operator std::string() {
-		return "\e[32m" + (variable? variable->ansiString() : "%" + *name) + "\e[39m";
+		return "\e[32m" + (variable? variable->ansiString(x86_64::getWidth(variable->type? variable->type->width()
+			: 64)) : "%" + *name) + "\e[39m";
 	}
 
-	std::shared_ptr<Variable> LocalValue::getVariable(Function &function) {
+	VariablePtr LocalValue::getVariable(Function &function) {
 		if (variable)
 			return variable;
 		return function.getVariable(*name);
+	}
+
+	OperandValue::operator std::string() {
+		return operand? operand->ansiString() : "\e[31mNULL\e[39m";
+	}
+
+	std::string OperandValue::compile() const {
+		return operand? operand->toString() : "NULL OPERAND";
 	}
 
 	GlobalValue::GlobalValue(const ASTNode *node): VariableValue(nullptr) {
@@ -189,7 +199,7 @@ namespace LL2X {
 	}
 
 	std::shared_ptr<IcmpNode> IcmpValue::makeNode(VariablePtr variable) const {
-		return IcmpNode::make(variable, cond, left, right);
+		return IcmpNode::make(Operand::make(variable), cond, left, right);
 	}
 
 // LogicValue
@@ -217,7 +227,7 @@ namespace LL2X {
 	}
 
 	std::shared_ptr<LogicNode> LogicValue::makeNode(VariablePtr variable) const {
-		return LogicNode::make(variable, type, left, right);
+		return LogicNode::make(Operand::make(variable), type, left, right);
 	}
 
 // StructValue

@@ -69,11 +69,7 @@ namespace LL2X {
 	}
 
 	bool Variable::equivalent(const Variable &other) const {
-		if (*this == other)
-			return true;
-		if (!allRegistersSpecial() || !other.allRegistersSpecial() || operand != other.operand)
-			return false;
-		return true;
+		return *this == other || reg == other.reg;
 	}
 
 	bool Variable::isAliasOf(const Variable &other) const {
@@ -81,13 +77,13 @@ namespace LL2X {
 			|| other.aliases.count(const_cast<Variable *>(this)) != 0;
 	}
 
-	std::string Variable::ansiString() const {
+	std::string Variable::ansiString(x86_64::Width width) const {
 		std::stringstream out;
 		const std::string base;
-		if (!operand)
+		if (reg < 0)
 			out << "\e[32m%" << *id << "\e[39m";
 		else
-			out << "\e[92m" << *operand << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
+			out << "\e[92m%" << x86_64::registerName(reg, width) << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
 #ifdef VARIABLE_EXTRA
 		auto sparent = parent.lock();
 		auto alias_set = sparent? sparent->aliases : aliases;
@@ -106,14 +102,16 @@ namespace LL2X {
 		return out.str();
 	}
 
-	std::string Variable::toString() const {
-		return operand? operand->toString() : ansiString();
+	std::string Variable::toString(x86_64::Width width) const {
+		if (reg < 0)
+			return '%' + x86_64::registerName(reg);
+		return ansiString(width);
 	}
 
-	std::string Variable::plainString() const {
-		if (!operand)
+	std::string Variable::plainString(x86_64::Width width) const {
+		if (reg < 0)
 			return '^' + *id;
-		return operand->toString();
+		return '%' + x86_64::registerName(reg, width) + ":" + *id;
 	}
 
 	Function * Variable::getFunction() const {
@@ -172,7 +170,7 @@ namespace LL2X {
 		usingBlocks = new_parent->usingBlocks;
 		definitions = new_parent->definitions;
 		uses = new_parent->uses;
-		operand = new_parent->operand; // ???
+		reg = new_parent->reg; // ???
 	}
 
 	void Variable::addDefiner(std::shared_ptr<BasicBlock> block) {
@@ -324,65 +322,22 @@ namespace LL2X {
 	VARSETTER(Uses, const decltype(Variable::uses) &, new_uses, uses)
 	VARSETTER(UsingBlocks, const decltype(Variable::usingBlocks) &, blocks, usingBlocks)
 	VARSETTER(LastUse, decltype(Variable::lastUse), use, lastUse);
-	VARSETTER(Operand, const decltype(Variable::operand) &, new_operand, operand);
+	VARSETTER(Register, decltype(Variable::reg), new_register, reg);
 
-	bool Variable::hasSpecialRegister() const {
-		return operand && operand->isSpecialPurpose();
-	}
-
-	bool Variable::hasNonSpecialRegister() const {
-		return operand && operand->isRegister() && !operand->isSpecialPurpose();
-	}
-
-	int Variable::nonSpecialCount() const {
-		return operand && operand->isSpecialPurpose()? 1 : 0;
-	}
-
-	bool Variable::allRegistersSpecial() const {
-		return operand && operand->isSpecialPurpose();
+	bool Variable::isSpecialRegister() const {
+		return 0 <= reg && x86_64::isSpecialPurpose(reg);
 	}
 
 	bool Variable::compareRegisters(const Variable &other) const {
-		if (registers.size() != other.registers.size())
-			return false;
-		auto this_iter = registers.begin(), that_iter = other.registers.begin();
-		for (; this_iter != registers.end(); ++this_iter, ++that_iter)
-			if (*this_iter != *that_iter)
-				return false;
-		return true;
+		return reg == other.reg;
 	}
 
-	int Variable::registersRequired(bool may_warn) const {
-		if (!type) {
-			if (may_warn)
-				warn() << "Variable::registersRequired: " << *this << " has no type in function " << functionName()
-				       << ".\n";
-			return 1;
-		}
-		return Util::updiv(type->width(), 64);
-	}
-
-	bool Variable::multireg() const {
-		return 1 < registers.size();
-	}
-
-	std::string Variable::registersString() const {
-		std::string out = 1 < registers.size()? "(" : "";
-		bool first = true;
-		for (const int reg: registers) {
-			if (first)
-				first = false;
-			else
-				out += ' ';
-			out += '%' + x86_64::registerName(reg);
-		}
-		if (1 < registers.size())
-			out += ')';
-		return out;
+	bool Variable::hasRegister() const {
+		return 0 <= reg;
 	}
 
 	std::ostream & operator<<(std::ostream &os, const LL2X::Variable &var) {
-		return os << var.ansiString();
+		return os << var.ansiString(x86_64::Width::Eight);
 	}
 
 	bool Variable::isLess(long max) const {

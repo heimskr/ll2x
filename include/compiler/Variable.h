@@ -37,7 +37,7 @@ namespace LL2X {
 			WeakSet<BasicBlock>  definingBlocks, usingBlocks;
 			WeakSet<Instruction> definitions, uses;
 			std::weak_ptr<Instruction> lastUse;
-			std::optional<Operand> operand;
+			int reg;
 			std::unordered_set<Variable *> phiParents, phiChildren;
 			/** Whether the variable was defined by a ϕ-instruction. */
 			bool fromPhi = false;
@@ -95,31 +95,18 @@ namespace LL2X {
 			void setUses(const decltype(uses) &);
 			void setUsingBlocks(const decltype(usingBlocks) &);
 			void setLastUse(decltype(lastUse));
-			void setOperand(const Operand &);
+			void setRegister(decltype(reg));
 
-			/** Returns true if the variable has at least one register that is special purpose. */
-			bool hasSpecialRegister() const;
-			/** Returns true if the variable has at least one register that isn't special purpose. */
-			bool hasNonSpecialRegister() const;
-			/** Returns the number of non-special-purpose registers. */
-			int nonSpecialCount() const;
-			/** Returns true if the variable has at least one register and all registers are special-purpose. */
-			[[deprecated]]
-			bool allRegistersSpecial() const;
+			/** Returns true if the variable's register is special purpose. */
+			bool isSpecialRegister() const;
 			/** Returns true if this variable has the same set of registers as the argument. */
 			bool compareRegisters(const Variable &) const;
-			/** Returns the number of registers required to contain all the variable's data. Not useful if the variable
-			 *  has no type information. */
-			int registersRequired(bool may_warn = true) const;
-			/** Returns true if the variable has been assigned more than one register. */
-			bool multireg() const;
-			/** Returns a string containing all the assigned registers.
-			 *  The string is of the form "$reg" or "($reg1 $reg2 ...)". */
-			std::string registersString() const;
+			/** Returns true if a register has been assigned to this variable. */
+			bool hasRegister() const;
 
-			std::string toString() const;
-			std::string plainString() const;
-			std::string ansiString() const;
+			std::string toString(x86_64::Width = x86_64::Width::Eight) const;
+			std::string plainString(x86_64::Width = x86_64::Width::Eight) const;
+			std::string ansiString(x86_64::Width = x86_64::Width::Eight) const;
 
 			bool operator==(const Variable &) const;
 

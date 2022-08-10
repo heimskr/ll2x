@@ -87,15 +87,15 @@ namespace LL2X {
 		virtual std::vector<ValuePtr> allValues() = 0;
 		virtual std::vector<ValuePtr *> allValuePointers() = 0;
 		std::vector<std::shared_ptr<LocalValue>> allLocals();
-		void replaceRead(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var);
+		void replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var);
 		virtual std::vector<ConstantPtr> allConstants() const { return {}; }
 		virtual std::vector<ConstantPtr *> allConstantPointers() { return {}; }
 	};
 
 	struct Writer {
 		const std::string *result = nullptr;
-		std::shared_ptr<Variable> variable = nullptr;
-		void replaceWritten(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var);
+		OperandPtr operand;
+		void replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var);
 		std::string getResult() const;
 	};
 
@@ -187,7 +187,7 @@ namespace LL2X {
 
 		IcmpNode(ASTNode *result_, ASTNode *cond_, ASTNode *left_, ASTNode *right_, ASTNode *unibangs);
 		IcmpNode(const std::string *result_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_);
-		IcmpNode(VariablePtr variable_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_);
+		IcmpNode(const OperandPtr &, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_);
 		TypePtr getType() const { return left->type; }
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Icmp; }
@@ -413,7 +413,7 @@ namespace LL2X {
 
 		LogicNode(ASTNode *result_, ASTNode *logic_type, ASTNode *left_, ASTNode *right_, ASTNode *unibangs);
 		LogicNode(const std::string *result_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_);
-		LogicNode(VariablePtr variable_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_);
+		LogicNode(const OperandPtr &, LogicType logic_type, ConstantPtr left_, ConstantPtr right_);
 		TypePtr getType() const { return left->type; }
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Logic; }

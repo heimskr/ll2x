@@ -5,7 +5,7 @@
 
 namespace LL2X {
 	struct TwoSourcesOnly: TargetInstruction, TwoSources {
-		TwoSourcesOnly(Operand first_source, Operand second_source):
+		TwoSourcesOnly(OperandPtr first_source, OperandPtr second_source):
 			TwoSources(std::move(first_source), std::move(second_source)) {}
 
 		ExtractionResult extract(bool force = false) override;

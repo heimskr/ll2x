@@ -6,7 +6,7 @@
 
 namespace LL2X {
 	struct PopInstruction: TargetInstruction, OneDestination, Sized  {
-		PopInstruction(Operand destination_, x86_64::Width size_):
+		PopInstruction(OperandPtr destination_, x86_64::Width size_):
 			OneDestination(std::move(destination_)),
 			Sized(size_) {}
 

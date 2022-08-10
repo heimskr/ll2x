@@ -165,7 +165,7 @@ namespace LL2X {
 		return out;
 	}
 
-	void Reader::replaceRead(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var) {
+	void Reader::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
 		for (std::shared_ptr<LocalValue> value: allLocals()) {
 			if (value->variable->id == to_replace->id)
 				value->variable = new_var;
@@ -175,13 +175,13 @@ namespace LL2X {
 // Writer
 
 	std::string Writer::getResult() const {
-		return "\e[32m" + (variable? variable->ansiString() : "%" + *result) + "\e[0m";
+		return "\e[32m" + (operand? operand->ansiString() : "%" + *result) + "\e[0m";
 	}
 
-	void Writer::replaceWritten(std::shared_ptr<Variable> to_replace, std::shared_ptr<Variable> new_var) {
-		if (!variable || variable->id != to_replace->id)
+	void Writer::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
+		if (!operand)
 			return;
-		variable = new_var;
+		operand->replace(*to_replace, new_var);
 	}
 
 // SelectNode
@@ -421,8 +421,8 @@ namespace LL2X {
 	IcmpNode::IcmpNode(const std::string *result_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_):
 		cond(cond_), left(left_->convert()), right(right_->convert()) { result = result_; }
 
-	IcmpNode::IcmpNode(VariablePtr variable_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_):
-		cond(cond_), left(left_->convert()), right(right_->convert()) { variable = variable_; }
+	IcmpNode::IcmpNode(const OperandPtr &operand_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_):
+		cond(cond_), left(left_->convert()), right(right_->convert()) { operand = operand_; }
 
 	std::string IcmpNode::debugExtra() const {
 		std::stringstream out;
@@ -954,8 +954,8 @@ namespace LL2X {
 	LogicNode::LogicNode(const std::string *result_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
 		logicType(logic_type), left(left_->convert()), right(right_->convert()) { result = result_; }
 
-	LogicNode::LogicNode(VariablePtr variable_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
-		logicType(logic_type), left(left_->convert()), right(right_->convert()) { variable = variable_; }
+	LogicNode::LogicNode(const OperandPtr &operand_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
+		logicType(logic_type), left(left_->convert()), right(right_->convert()) { operand = operand_; }
 
 	std::string LogicNode::debugExtra() const {
 		std::stringstream out;

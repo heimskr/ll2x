@@ -5,7 +5,7 @@
 
 namespace LL2X {
 	struct SourceOnly: TargetInstruction, OneSource {
-		SourceOnly(Operand source_):
+		SourceOnly(OperandPtr source_):
 			OneSource(std::move(source_)) {}
 
 		ExtractionResult extract(bool force = false) override;
