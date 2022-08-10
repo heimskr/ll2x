@@ -31,10 +31,9 @@
 #include "compiler/LLVMInstruction.h"
 #include "compiler/Program.h"
 #include "exception/NoChoiceError.h"
-// #include "instruction/AddIInstruction.h"
+#include "instruction/Add.h"
 #include "instruction/Comment.h"
 #include "instruction/Label.h"
-// #include "instruction/LuiInstruction.h"
 #include "instruction/Mov.h"
 #include "instruction/Or.h"
 #include "instruction/Shl.h"
@@ -997,17 +996,6 @@ namespace LL2X {
 #endif
 	}
 
-	// void Function::precolorArguments(std::list<Interval> &intervals) {
-	// 	if (getCallingConvention() == CallingConvention::Reg16) {
-	// 		const int max = std::min(16, getArity());
-	// 		int reg = WhyInfo::argumentOffset - 1;
-	// 		for (Interval &interval: intervals)
-	// 			// TODO: change to support non-numeric argument variables
-	// 			if (interval.variable.lock()->isLess(max))
-	// 				interval.setRegisters({++reg});
-	// 	}
-	// }
-
 	void Function::precolorArguments() {
 		using namespace x86_64;
 		static int regs[] {rdi, rsi, rdx, rcx, r8, r9};
@@ -1025,15 +1013,6 @@ namespace LL2X {
 			throw;
 		}
 	}
-
-	// 	if (getCallingConvention() == CallingConvention::Reg16) {
-	// 		const int max = std::min(16, getArity());
-	// 		int reg = WhyInfo::argumentOffset - 1;
-	// 		// TODO: change to support non-numeric argument variables
-	// 		for (int i = 0; i < max; ++i)
-	// 			variableStore.at(StringSet::intern(std::to_string(i)))->setRegisters({++reg});
-	// 	}
-	// }
 
 	VariablePtr Function::makePrecoloredVariable(unsigned char index, BasicBlockPtr definer) {
 		if (x86_64::totalRegisters <= index)
@@ -1697,7 +1676,6 @@ namespace LL2X {
 
 	std::shared_ptr<LocalValue> Function::replaceGetelementptrValue(std::shared_ptr<GetelementptrValue> gep,
 	InstructionPtr instruction) {
-		/*
 		TypePtr out_type;
 
 		const std::list<long> indices = Getelementptr::getLongIndices(*gep);
@@ -1708,31 +1686,46 @@ namespace LL2X {
 
 		switch (gep->variable->valueType()) {
 			case ValueType::Global: {
-				VariablePtr var1(newVariable(std::make_shared<IntType>(32))), var2(newVariable(out_type));
-				// auto set =
-				// 	std::make_shared<SetInstruction>(var1, dynamic_cast<GlobalValue *>(gep->variable.get())->name);
-				// auto addi = std::make_shared<AddIInstruction>(var1, int(offset), var2);
-				// insertBefore(instruction, set)->setDebug(*instruction)->extract();
-				// insertBefore(instruction, addi)->setDebug(*instruction)->extract();
-				return LocalValue::make(var2);
-			}
-			case ValueType::Local: {
-				VariablePtr new_var(newVariable(out_type));
-				// auto addi = AddIInstruction::make(dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this),
-				// 	int(offset), new_var);
-				// insertBefore(instruction, addi)->setDebug(*instruction)->extract();
+				VariablePtr new_var = newVariable(out_type);
+				OperandPtr operand = Operand::make(64, new_var);
+
+				insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32,
+					*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand, x86_64::Width::Four))
+					->setDebug(*instruction, true);
+
+				if (offset != 0)
+					insertBefore(instruction, std::make_shared<AddInstruction>(operand, Operand::make(32, int(offset)),
+						x86_64::Width::Eight))->setDebug(*instruction, true);
+
 				return LocalValue::make(new_var);
 			}
+
+			case ValueType::Local: {
+				VariablePtr new_var(newVariable(out_type));
+				OperandPtr operand = Operand::make(64, new_var);
+
+				insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(
+					dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
+					operand, x86_64::Width::Eight))->setDebug(*instruction, true);
+
+				insertBefore(instruction, std::make_shared<AddInstruction>(operand, Operand::make(32, int(offset)),
+					x86_64::Width::Eight))->setDebug(*instruction, true);
+
+				return LocalValue::make(new_var);
+			}
+
 			default:;
 		}
 
 		if (gep->variable->isIntLike()) {
 			VariablePtr new_var(newVariable(out_type));
-			insertBefore(instruction, SetInstruction::make(new_var, gep->variable->intValue() + int(offset)))
-				->setDebug(*instruction)->extract();
+			OperandPtr operand = Operand::make(64, new_var);
+
+			insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32, gep->variable->intValue() +
+				int(offset)), operand, x86_64::Width::Eight))->setDebug(*instruction, true);
+
 			return LocalValue::make(new_var);
 		}
-		*/
 
 		throw std::invalid_argument("Expected a global, local or intlike value in Function::replaceGetelementptrValue");
 	}
