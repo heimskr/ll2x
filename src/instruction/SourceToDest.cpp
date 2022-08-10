@@ -10,14 +10,14 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		if (!secretReads) {
+		if (!secretReads && source) {
 			if (source->reg)
 				read.insert(source->reg);
 			if (source->index)
 				read.insert(source->index);
 		}
 
-		if (!secretWrites) {
+		if (!secretWrites && destination) {
 			if (destination->reg)
 				written.insert(destination->reg);
 			if (destination->index)
@@ -28,6 +28,9 @@ namespace LL2X {
 	}
 
 	bool SourceToDest::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
+		if (!source)
+			return false;
+
 		bool changed = false;
 
 		if (source->reg && source->reg->isAliasOf(*to_replace)) {
@@ -44,11 +47,15 @@ namespace LL2X {
 	}
 
 	bool SourceToDest::canReplaceRead(const VariablePtr &to_replace) const {
-		return (source->reg   && source->reg  ->isAliasOf(*to_replace))
-		    || (source->index && source->index->isAliasOf(*to_replace));
+		return source &&
+		       ((source->reg   && source->reg  ->isAliasOf(*to_replace))
+		     || (source->index && source->index->isAliasOf(*to_replace)));
 	}
 
 	bool SourceToDest::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
+		if (!destination)
+			return false;
+
 		bool changed = false;
 
 		if (destination->reg && destination->reg->isAliasOf(*to_replace)) {
@@ -64,8 +71,18 @@ namespace LL2X {
 		return changed;
 	}
 
+	bool SourceToDest::replaceWritten(const VariablePtr &to_replace, const OperandPtr &new_operand) {
+		if (destination && destination->isAliasOf(*to_replace)) {
+			destination = new_operand;
+			return true;
+		}
+
+		return false;
+	}
+
 	bool SourceToDest::canReplaceWritten(const VariablePtr &to_replace) const {
-		return (destination->reg   && destination->reg  ->isAliasOf(*to_replace))
-		    || (destination->index && destination->index->isAliasOf(*to_replace));
+		return destination &&
+		       ((destination->reg   && destination->reg  ->isAliasOf(*to_replace))
+		     || (destination->index && destination->index->isAliasOf(*to_replace)));
 	}
 }

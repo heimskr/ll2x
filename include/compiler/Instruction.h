@@ -76,6 +76,10 @@ namespace LL2X {
 				return false;
 			}
 
+			virtual bool replaceWritten(const VariablePtr &, const OperandPtr &) {
+				return false;
+			}
+
 			virtual bool canReplaceWritten(const VariablePtr &) const {
 				return false;
 			}

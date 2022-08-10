@@ -47,6 +47,12 @@ namespace LL2X {
 		return multi->replace(*to_replace, new_var);
 	}
 
+	bool Overlapping::replaceWritten(const VariablePtr &to_replace, const OperandPtr &new_operand) {
+		// TODO: Is it dangerous to replace multi like this?
+		if (multi && multi->isAliasOf(*to_replace))
+			multi = new_operand;
+	}
+
 	bool Overlapping::canReplaceWritten(const VariablePtr &to_replace) const {
 		return (multi->reg   && multi->reg  ->isAliasOf(*to_replace))
 		    || (multi->index && multi->index->isAliasOf(*to_replace));

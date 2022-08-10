@@ -116,6 +116,14 @@ namespace LL2X {
 		return changed;
 	}
 
+	bool Operand::isRegister(int check_reg) const {
+		return isRegister() && reg && reg->reg == check_reg;
+	}
+
+	bool Operand::isAliasOf(const Variable &var) const {
+		return isRegister() && reg && reg->isAliasOf(var);
+	}
+
 	bool Operand::operator==(const Operand &other) const {
 		return this == &other || (mode == other.mode && width == other.width && displacement == other.displacement
 			&& scale == other.scale && reg == other.reg && index == other.index && label == other.label);

@@ -74,6 +74,8 @@ namespace LL2X {
 		bool replace(const Variable &to_replace, const VariablePtr &replace_with);
 
 		bool isRegister() const { return mode == Mode::Register; }
+		bool isRegister(int check_reg) const;
+		bool isAliasOf(const Variable &) const;
 
 		bool operator==(const Operand &) const;
 	};
