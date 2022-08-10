@@ -15,7 +15,7 @@
 #include "util/Timer.h"
 #include "util/Util.h"
 
-#define DEBUG_COLORING
+// #define DEBUG_COLORING
 #define CONSTRUCT_BY_BLOCK
 // #define SELECT_LOWEST_COST
 #define SELECT_MOST_LIVE
@@ -128,7 +128,6 @@ namespace LL2X {
 				if (pair.second->colors.size() != 1)
 					throw std::runtime_error("Incorrect number of colors for " + ptr->toString(x86_64::Width::Eight)
 						+ ": " + std::to_string(pair.second->colors.size()));
-				info() << "Setting " << *ptr << " to " << *pair.second->colors.begin() << '\n';
 				ptr->setRegister(*pair.second->colors.begin());
 			} else {
 				warn() << *ptr << " already has a register: " << ptr->reg << '\n';
@@ -194,16 +193,8 @@ namespace LL2X {
 		int highest = -1;
 		for (const auto *map: {&function->variableStore, &function->extraVariables})
 			for (const auto &[id, var]: *map) {
-				if (var->isSpecialRegister()) {
-					warn() << "Skipping " << *var << ": all registers are special\n";
+				if (var->isSpecialRegister() || !function->canSpill(var))
 					continue;
-				}
-				if (!function->canSpill(var)) {
-					warn() << "Skipping " << *var << ": can't spill\n";
-					continue;
-				}
-				// if (var->allRegistersSpecial() || !function->canSpill(var))
-				// 	continue;
 				const int sum = function->getLiveIn(var).size() + function->getLiveOut(var).size();
 				if (highest < sum && triedIDs.count(var->originalID) == 0) {
 					highest = sum;
@@ -360,10 +351,8 @@ namespace LL2X {
 
 		for (const auto &[id, var]: function->variableStore) {
 			const Variable::ID parent_id = var->parentID();
-			if (var->hasRegister()) {
-				warn() << "Skipping " << *var << ": it already has a register\n";
+			if (var->hasRegister())
 				continue;
-			}
 			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
 				const auto index = bptr.lock()->index;
 				if (!sets[index].contains(parent_id)) {

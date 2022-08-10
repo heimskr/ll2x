@@ -501,20 +501,16 @@ namespace LL2X {
 				stack.erase(location.offset);
 			}
 
-			if (should_insert) {
-				success() << "Can spill " << *variable << ": should_insert is true\n";
+			if (should_insert)
 				return true;
-			}
 		}
 
 		for (auto iter = linearInstructions.begin(), end = linearInstructions.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
 #ifdef STRICT_READ_CHECK
 			if (std::shared_ptr<Variable> read = instruction->doesRead(variable))
-				if (instruction->canReplaceRead(read)) {
-					success() << "Can spill " << *variable << ": can replace read\n";
+				if (instruction->canReplaceRead(read))
 					return true;
-				}
 #else
 			if (instruction->read.count(variable) != 0 && instruction->canReplaceRead(variable))
 				return true;
