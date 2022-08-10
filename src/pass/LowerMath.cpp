@@ -94,23 +94,6 @@ namespace LL2X::Passes {
 			->setDebug(*node)->extract();
 	}
 
-	static InstructionPtr insertCarefully(Function &function, InstructionPtr &instruction, OperandPtr &operand,
-	                                      long value) {
-		if (value < INT_MIN || INT_MAX < value) {
-			auto mov = std::make_shared<Mov>(Operand4((value >> 32) & 0xffffffff), operand, x86_64::Width::Eight);
-			auto shl = std::make_shared<Shl>(operand, Operand4(32), x86_64::Width::Eight);
-			auto or_ = std::make_shared<Or>(operand, Operand4(value & 0xffffffff), x86_64::Width::Eight);
-			function.insertBefore(instruction, mov, false)->setDebug(*instruction, true);
-			function.insertBefore(instruction, shl, false)->setDebug(*instruction, true);
-			function.insertBefore(instruction, or_, true)->setDebug(*instruction, true);
-			return or_;
-		}
-
-		auto mov = std::make_shared<Mov>(Operand4(value), operand, x86_64::Width::Eight);
-		function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-		return mov;
-	}
-
 	void lowerMath(Function &function, InstructionPtr &instruction, BasicMathNode *node) {
 		if (*node->oper == "add") {
 			lowerCommutative<Add>(function, instruction, node);

@@ -57,7 +57,7 @@
 #include "pass/LowerIcmp.h"
 // #include "pass/LowerInlineAsm.h"
 // #include "pass/LowerInsertvalue.h"
-// #include "pass/LowerMath.h"
+#include "pass/LowerMath.h"
 // #include "pass/LowerMemcpy.h"
 // #include "pass/LowerMemory.h"
 // #include "pass/LowerMemset.h"
@@ -892,7 +892,7 @@ namespace LL2X {
 // 		Passes::loadArguments(*this);
 // 		Passes::lowerObjectsize(*this);
 		Passes::lowerIcmp(*this);
-// 		Passes::lowerMath(*this);
+		Passes::lowerMath(*this);
 // 		Passes::lowerConversions(*this);
 // 		Passes::lowerGetelementptr(*this);
 // 		Passes::lowerFreeze(*this);
