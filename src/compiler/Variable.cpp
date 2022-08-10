@@ -71,11 +71,8 @@ namespace LL2X {
 	bool Variable::equivalent(const Variable &other) const {
 		if (*this == other)
 			return true;
-		if (!allRegistersSpecial() || !other.allRegistersSpecial() || registers.size() != other.registers.size())
+		if (!allRegistersSpecial() || !other.allRegistersSpecial() || operand != other.operand)
 			return false;
-		for (const int reg: registers)
-			if (other.registers.count(reg) == 0)
-				return false;
 		return true;
 	}
 
@@ -84,27 +81,13 @@ namespace LL2X {
 			|| other.aliases.count(const_cast<Variable *>(this)) != 0;
 	}
 
-	std::string Variable::ansiString(x86_64::Width width) const {
+	std::string Variable::ansiString() const {
 		std::stringstream out;
 		const std::string base;
-		if (registers.empty())
+		if (!operand)
 			out << "\e[32m%" << *id << "\e[39m";
-		else {
-			out << "\e[92m";
-			if (1 < registers.size())
-				out << '(';
-			bool first = true;
-			for (const int reg: registers) {
-				if (first)
-					first = false;
-				else
-					out << ' ';
-				out << '%' << x86_64::registerName(reg, width);
-			}
-			if (1 < registers.size())
-				out << ')';
-			out << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
-		}
+		else
+			out << "\e[92m" << *operand << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
 #ifdef VARIABLE_EXTRA
 		auto sparent = parent.lock();
 		auto alias_set = sparent? sparent->aliases : aliases;
@@ -123,45 +106,14 @@ namespace LL2X {
 		return out.str();
 	}
 
-	std::string Variable::toString(x86_64::Width width) const {
-		if (1 < registers.size()) {
-			std::string out('(', 1);
-			bool first = true;
-			for (const int reg: registers) {
-				if (first)
-					first = false;
-				else
-					out += ' ';
-				out += '%' + x86_64::registerName(reg, width);
-			}
-			out += ')';
-			return out;
-		}
-
-		if (registers.size() == 1)
-			return '%' + x86_64::registerName(*registers.begin());
-
-		return ansiString(width);
+	std::string Variable::toString() const {
+		return operand? operand->toString() : ansiString();
 	}
 
-	std::string Variable::plainString(x86_64::Width width) const {
-		if (registers.empty())
+	std::string Variable::plainString() const {
+		if (!operand)
 			return '^' + *id;
-		else if (registers.size() == 1)
-			return '%' + x86_64::registerName(*registers.begin(), width) + ":" + *id;
-		else {
-			std::string out('(', 1);
-			bool first = true;
-			for (const int reg: registers) {
-				if (first)
-					first = false;
-				else
-					out += ' ';
-				out += '%' + x86_64::registerName(reg, width);
-			}
-			out += "):" + *id;
-			return out;
-		}
+		return operand->toString();
 	}
 
 	Function * Variable::getFunction() const {
@@ -220,7 +172,7 @@ namespace LL2X {
 		usingBlocks = new_parent->usingBlocks;
 		definitions = new_parent->definitions;
 		uses = new_parent->uses;
-		registers = new_parent->registers; // ???
+		operand = new_parent->operand; // ???
 	}
 
 	void Variable::addDefiner(std::shared_ptr<BasicBlock> block) {
@@ -372,32 +324,22 @@ namespace LL2X {
 	VARSETTER(Uses, const decltype(Variable::uses) &, new_uses, uses)
 	VARSETTER(UsingBlocks, const decltype(Variable::usingBlocks) &, blocks, usingBlocks)
 	VARSETTER(LastUse, decltype(Variable::lastUse), use, lastUse);
-	VARSETTER(Registers, const decltype(Variable::registers) &, new_registers, registers);
+	VARSETTER(Operand, const decltype(Variable::operand) &, new_operand, operand);
 
 	bool Variable::hasSpecialRegister() const {
-		for (const int reg: registers)
-			if (x86_64::isSpecialPurpose(reg))
-				return true;
-		return false;
+		return operand && operand->isSpecialPurpose();
 	}
 
 	bool Variable::hasNonSpecialRegister() const {
-		for (const int reg: registers)
-			if (!x86_64::isSpecialPurpose(reg))
-				return true;
-		return false;
+		return operand && operand->isRegister() && !operand->isSpecialPurpose();
 	}
 
 	int Variable::nonSpecialCount() const {
-		int count = 0;
-		for (const int reg: registers)
-			if (!x86_64::isSpecialPurpose(reg))
-				++count;
-		return count;
+		return operand && operand->isSpecialPurpose()? 1 : 0;
 	}
 
 	bool Variable::allRegistersSpecial() const {
-		return !registers.empty() && !hasNonSpecialRegister();
+		return operand && operand->isSpecialPurpose();
 	}
 
 	bool Variable::compareRegisters(const Variable &other) const {

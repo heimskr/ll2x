@@ -30,12 +30,12 @@ namespace LL2X::x86_64 {
 	constexpr int totalRegisters = 17;
 	constexpr int generalPurposeRegisters = 14; // %rbp and %rsp aren't counted as general-purpose registers.
 
-	constexpr int rax =  0;
-	constexpr int rbx =  1;
-	constexpr int rcx =  2;
-	constexpr int rdx =  3;
-	constexpr int rbp =  4;
-	constexpr int rsp =  5;
+	constexpr int rbp =  0;
+	constexpr int rsp =  1;
+	constexpr int rax =  2;
+	constexpr int rbx =  3;
+	constexpr int rcx =  4;
+	constexpr int rdx =  5;
 	constexpr int rsi =  6;
 	constexpr int rdi =  7;
 	constexpr int r8  =  8;

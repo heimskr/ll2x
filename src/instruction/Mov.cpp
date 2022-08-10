@@ -6,4 +6,9 @@ namespace LL2X {
 			return "mov";
 		return "cmov" + x86_64::conditionSuffix(condition);
 	}
+
+	bool MovInstruction::operator==(const MovInstruction &other) const {
+		return this == &other || (size == other.size && condition == other.condition && source == other.source
+			&& destination == other.destination);
+	}
 }

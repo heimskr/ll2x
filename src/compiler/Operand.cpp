@@ -12,7 +12,15 @@ namespace LL2X {
 		return std::holds_alternative<Operand::Number>(variant) && std::get<Operand::Number>(variant) == 0;
 	}
 
-	std::string Operand::ansiString(x86_64::Width width_) const {
+	static std::string regAnsiString(decltype(Operand::reg) reg) {
+		return "\e[32m%" + x86_64::registerName(reg) + "\e[39m";
+	}
+
+	static std::string regString(decltype(Operand::reg) reg) {
+		return '%' + x86_64::registerName(reg);
+	}
+
+	std::string Operand::ansiString() const {
 		switch (mode) {
 			case Mode::Constant:
 				return "\e[32m$" + stringify(displacement) + "\e[39m";
@@ -21,23 +29,22 @@ namespace LL2X {
 			case Mode::Label:
 				return label;
 			case Mode::Register:
-				return reg->ansiString(width_);
+				return regAnsiString(reg);
 			case Mode::Displaced:
 				if (isZero(displacement))
-					return '(' + reg->ansiString(width_) + ')';
-				return stringify(displacement) + '(' + reg->ansiString(width_) + ')';
+					return '(' + regAnsiString(reg) + ')';
+				return stringify(displacement) + '(' + regAnsiString(reg) + ')';
 			case Mode::Scaled:
 				if (isZero(displacement))
-					return '(' + reg->ansiString(width_) + ", " + index->ansiString(width_) + ", "
-						+ std::to_string(scale) + ')';
-				return stringify(displacement) + '(' + reg->ansiString(width_) + ", " + index->ansiString(width_)
-					+ ", " + std::to_string(scale) + ')';
+					return '(' + regAnsiString(reg) + ", " + regAnsiString(index) + ", " + std::to_string(scale) + ')';
+				return stringify(displacement) + '(' + regAnsiString(reg) + ", " + regAnsiString(index) + ", "
+					+ std::to_string(scale) + ')';
 			default:
 				return "\e[31m???\e[39m";
 		}
 	}
 
-	std::string Operand::toString(x86_64::Width width_) const {
+	std::string Operand::toString() const {
 		switch (mode) {
 			case Mode::Constant:
 				return '$' + stringify(displacement);
@@ -46,42 +53,55 @@ namespace LL2X {
 			case Mode::Label:
 				return label;
 			case Mode::Register:
-				return reg->toString(width_);
+				return regString(reg);
 			case Mode::Displaced:
 				if (isZero(displacement))
-					return '(' + reg->toString() + ')';
-				return stringify(displacement) + '(' + reg->toString(width_) + ')';
+					return '(' + regString(reg) + ')';
+				return stringify(displacement) + '(' + regString(reg) + ')';
 			case Mode::Scaled:
 				if (isZero(displacement))
-					return '(' + reg->toString() + ", " + index->toString(width_) + ", " + std::to_string(scale) + ')';
-				return stringify(displacement) + '(' + reg->toString(width_) + ", " + index->toString(width_) + ", "
+					return '(' + regString(reg) + ", " + regString(index) + ", " + std::to_string(scale) + ')';
+				return stringify(displacement) + '(' + regString(reg) + ", " + regString(index) + ", "
 					+ std::to_string(scale) + ')';
 			default:
 				return "???";
 		}
 	}
 
-	std::string Operand::ansiString() const {
-		return ansiString(width);
+	// bool Operand::replace(const Variable &to_replace, const VariablePtr &replace_with) {
+	// 	bool changed = false;
+
+	// 	if (reg && reg->isAliasOf(to_replace)) {
+	// 		reg = replace_with;
+	// 		changed = true;
+	// 	}
+
+	// 	if (index && index->isAliasOf(to_replace)) {
+	// 		index = replace_with;
+	// 		return true;
+	// 	}
+
+	// 	return changed;
+	// }
+
+	bool Operand::isSpecialPurpose() const {
+		return mode == Mode::Register && x86_64::isSpecialPurpose(reg);
 	}
 
-	std::string Operand::toString() const {
-		return toString(width);
+	bool Operand::isRegister() const {
+		return mode == Mode::Register;
 	}
 
-	bool Operand::replace(const Variable &to_replace, const VariablePtr &replace_with) {
-		bool changed = false;
-
-		if (reg && reg->isAliasOf(to_replace)) {
-			reg = replace_with;
-			changed = true;
-		}
-
-		if (index && index->isAliasOf(to_replace)) {
-			index = replace_with;
-			return true;
-		}
-
-		return changed;
+	bool Operand::isRegister(int other) const {
+		return mode == Mode::Register && reg == other;
 	}
+
+	bool Operand::operator==(const Operand &other) const {
+		return this == &other || (mode == other.mode && width == other.width && displacement == other.displacement
+			&& scale == other.scale && reg == other.reg && index == other.index && label == other.label);
+	}
+}
+
+std::ostream & operator<<(std::ostream &stream, const LL2X::Operand &operand) {
+	return stream << operand.ansiString();
 }

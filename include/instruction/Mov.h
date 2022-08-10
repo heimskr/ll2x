@@ -13,5 +13,7 @@ namespace LL2X {
 		std::string toString() const override { return makeString(getMnemonic()); }
 
 		std::string getMnemonic() const;
+
+		bool operator==(const MovInstruction &) const;
 	};
 }

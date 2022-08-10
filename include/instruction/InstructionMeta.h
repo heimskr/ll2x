@@ -2,6 +2,8 @@
 
 namespace LL2X {
 	enum class InstructionMeta {
-		LoadArgumentsSkip
+		LoadArgumentsSkip,
+		StackStore,
+		StackLoad
 	};
 }

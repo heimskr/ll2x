@@ -35,6 +35,7 @@
 #include "instruction/Comment.h"
 #include "instruction/Label.h"
 // #include "instruction/LuiInstruction.h"
+#include "instruction/Mov.h"
 // #include "instruction/SetInstruction.h"
 // #include "instruction/StackLoadInstruction.h"
 // #include "instruction/StackStoreInstruction.h"
@@ -300,7 +301,6 @@ namespace LL2X {
 	}
 
 	bool Function::spill(VariablePtr variable, bool doDebug) {
-		/*
 		bool out = false;
 		// Right after the definition of the variable to be spilled, store its value onto the stack in the proper
 		// location. For each use of the original variable, replace the original variable with a new variable, and right
@@ -317,13 +317,18 @@ namespace LL2X {
 			InstructionPtr definition = weak_definition.lock();
 			// Because ϕ-instructions are eventually removed after aliasing the variables, they don't count as a real
 			// definition here.
+			// TODO: the above was true for coalescePhi. Is it true for movePhi as well?
 			if (definition->isPhi())
 				continue;
 #ifdef DEBUG_SPILL
 			std::cerr << "  Trying to spill " << *variable << " (definition: " << definition->debugExtra() << " at "
 			          << definition->index << ", OID: " << variable->originalID << ")\n";
 #endif
-			auto store = std::make_shared<StackStoreInstruction>(location, variable);
+			auto rbp = basePointer(definition);
+			auto store = std::make_shared<MovInstruction>(Operand8(variable),
+				Operand(x86_64::Width::Eight, -location.offset, rbp), x86_64::Width::Eight);
+			store->meta.insert(InstructionMeta::StackStore);
+
 			auto next = after(definition);
 			bool should_insert = true;
 
@@ -332,8 +337,8 @@ namespace LL2X {
 				next = after(next);
 
 			if (next) {
-				auto other_store = std::dynamic_pointer_cast<StackStoreInstruction>(next);
-				if (other_store && *other_store == *store) {
+				auto other_store = std::dynamic_pointer_cast<MovInstruction>(next);
+				if (other_store && other_store->meta.contains(InstructionMeta::StackStore) && *other_store == *store) {
 					should_insert = false;
 #ifdef DEBUG_SPILL
 					std::cerr << "    A stack store already exists: " << next->debugExtra() << "\n";
@@ -432,8 +437,6 @@ namespace LL2X {
 		computeLiveness();
 		markSpilled(variable);
 		return out;
-		*/
-		return false;
 	}
 
 	void Function::markSpilled(VariablePtr variable) {
@@ -445,15 +448,14 @@ namespace LL2X {
 	}
 
 	bool Function::canSpill(VariablePtr variable) {
-		/*
 		if (variable->definitions.empty() || isSpilled(variable))
 			return false;
 
 		// If the only definition is a stack store, the variable can't be spilled.
 		if (variable->definitions.size() == 1) {
 			InstructionPtr single_def = variable->definitions.begin()->lock();
-			auto *store = dynamic_cast<StackStoreInstruction *>(single_def.get());
-			if (store && store->variable == variable)
+			auto *store = dynamic_cast<MovInstruction *>(single_def.get());
+			if (store && store->meta.contains(InstructionMeta::StackStore) && store->source.reg == variable)
 				return false;
 		}
 
@@ -466,7 +468,11 @@ namespace LL2X {
 
 			bool created;
 			const StackLocation &location = getSpill(variable, true, &created);
-			auto store = std::make_shared<StackStoreInstruction>(location, variable);
+			auto rbp = basePointer(definition);
+			auto store = std::make_shared<MovInstruction>(Operand8(variable),
+				Operand(x86_64::Width::Eight, -location.offset, rbp), x86_64::Width::Eight);
+			store->meta.insert(InstructionMeta::StackStore);
+
 			auto next = after(definition);
 			bool should_insert = true;
 
@@ -475,8 +481,8 @@ namespace LL2X {
 				next = after(next);
 
 			if (next) {
-				auto other_store = std::dynamic_pointer_cast<StackStoreInstruction>(next);
-				if (other_store && *other_store == *store)
+				auto other_store = std::dynamic_pointer_cast<MovInstruction>(next);
+				if (other_store && other_store->meta.contains(InstructionMeta::StackStore) && *other_store == *store)
 					should_insert = false;
 			}
 
@@ -490,22 +496,27 @@ namespace LL2X {
 				stack.erase(location.offset);
 			}
 
-			if (should_insert)
+			if (should_insert) {
+				success() << "Can spill " << *variable << ": should_insert is true\n";
 				return true;
+			}
 		}
 
 		for (auto iter = linearInstructions.begin(), end = linearInstructions.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
 #ifdef STRICT_READ_CHECK
 			if (std::shared_ptr<Variable> read = instruction->doesRead(variable))
-				if (instruction->canReplaceRead(read))
+				if (instruction->canReplaceRead(read)) {
+					success() << "Can spill " << *variable << ": can replace read\n";
 					return true;
+				}
 #else
 			if (instruction->read.count(variable) != 0 && instruction->canReplaceRead(variable))
 				return true;
 #endif
 		}
-		*/
+
+		warn() << "Can't spill " << *variable << ".\n";
 		return false;
 	}
 
@@ -1830,5 +1841,13 @@ namespace LL2X {
 
 	VariablePtr Function::instructionPointer(InstructionPtr instruction) {
 		return instructionPointer(instruction->parent.lock());
+	}
+
+	VariablePtr Function::basePointer(BasicBlockPtr block) {
+		return makePrecoloredVariable(x86_64::rbp, block);
+	}
+
+	VariablePtr Function::basePointer(InstructionPtr instruction) {
+		return basePointer(instruction->parent.lock());
 	}
 }

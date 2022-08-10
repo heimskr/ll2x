@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <ostream>
 #include <variant>
 
 #include "compiler/x86_64.h"
@@ -25,32 +26,27 @@ namespace LL2X {
 		x86_64::Width width;
 		Variant displacement = 0;
 		Number scale = 1;
-		VariablePtr reg;
-		VariablePtr index;
+		int reg = -1;
+		int index = -1;
 		std::string label;
 
-		Operand(x86_64::Width width_, Number number):
-			mode(Mode::Constant), width(width_), displacement(number) {}
-
-		Operand(x86_64::Width width_, Number number, bool):
-			mode(Mode::Direct), width(width_), displacement(number) {}
+		Operand(Mode mode_, x86_64::Width width_, Number number):
+			mode(mode_), width(width_), displacement(mode == Mode::Constant || mode == Mode::Direct? number : 0),
+			reg(mode == Mode::Register? static_cast<int>(number) : -1) {}
 
 		Operand(x86_64::Width width_, std::string label_):
 			mode(Mode::Label), width(width_), label(std::move(label_)) {}
 
-		Operand(x86_64::Width width_, VariablePtr reg_):
-			mode(Mode::Register), width(width_), reg(reg_) {}
-
-		Operand(x86_64::Width width_, Number displacement_, VariablePtr reg_):
+		Operand(x86_64::Width width_, Number displacement_, Number reg_):
 			mode(Mode::Displaced), width(width_), displacement(displacement_), reg(reg_) {}
 
-		Operand(x86_64::Width width_, Number displacement_, VariablePtr reg_, VariablePtr index_, Number scale_):
+		Operand(x86_64::Width width_, Number displacement_, Number reg_, Number index_, Number scale_):
 			mode(Mode::Scaled), width(width_), displacement(displacement_), scale(scale_), reg(reg_), index(index_) {}
 
-		Operand(x86_64::Width width_, std::string displacement_, VariablePtr reg_):
+		Operand(x86_64::Width width_, std::string displacement_, Number reg_):
 			mode(Mode::Displaced), width(width_), displacement(std::move(displacement_)), reg(reg_) {}
 
-		Operand(x86_64::Width width_, std::string displacement_, VariablePtr reg_, VariablePtr index_, Number scale_):
+		Operand(x86_64::Width width_, std::string displacement_, Number reg_, Number index_, Number scale_):
 			mode(Mode::Scaled),
 			width(width_),
 			displacement(std::move(displacement_)),
@@ -58,12 +54,16 @@ namespace LL2X {
 			reg(reg_),
 			index(index_) {}
 
-		std::string ansiString(x86_64::Width) const;
-		std::string toString(x86_64::Width) const;
 		std::string ansiString() const;
 		std::string toString() const;
 
-		bool replace(const Variable &to_replace, const VariablePtr &replace_with);
+		// bool replace(const Variable &to_replace, const VariablePtr &replace_with);
+
+		bool isSpecialPurpose() const;
+		bool isRegister() const;
+		bool isRegister(int reg) const;
+
+		bool operator==(const Operand &) const;
 	};
 
 	template <typename... Args>
@@ -86,3 +86,5 @@ namespace LL2X {
 		return Operand(x86_64::Width::Low, std::forward<Args>(args)...);
 	}
 }
+
+std::ostream & operator<<(std::ostream &, const LL2X::Operand &);

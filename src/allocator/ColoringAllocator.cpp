@@ -10,8 +10,8 @@
 #include "compiler/x86_64.h"
 #include "exception/NoChoiceError.h"
 #include "graph/UncolorableError.h"
-// #include "pass/MakeCFG.h"
-// #include "pass/SplitBlocks.h"
+#include "pass/MakeCFG.h"
+#include "pass/SplitBlocks.h"
 #include "util/Timer.h"
 #include "util/Util.h"
 
@@ -84,14 +84,15 @@ namespace LL2X {
 #endif
 				lastSpill = to_spill;
 				++spillCount;
-				int split = 0; //// Passes::splitBlocks(*function);
+				int split = 0;
+				Passes::splitBlocks(*function);
 				if (0 < split) {
 #ifdef DEBUG_COLORING
 					std::cerr << split << " block" << (split == 1? " was" : "s were") << " split.\n";
 #endif
 					for (BasicBlockPtr &block: function->blocks)
 						block->extract();
-					//// Passes::makeCFG(*function); 
+					Passes::makeCFG(*function); 
 					function->extractVariables(true);
 					function->resetLiveness();
 					function->computeLiveness();
@@ -189,8 +190,16 @@ namespace LL2X {
 		int highest = -1;
 		for (const auto *map: {&function->variableStore, &function->extraVariables})
 			for (const auto &[id, var]: *map) {
-				if (var->allRegistersSpecial() || !function->canSpill(var))
+				if (var->allRegistersSpecial()) {
+					warn() << "Skipping " << *var << ": all registers are special\n";
 					continue;
+				}
+				if (!function->canSpill(var)) {
+					warn() << "Skipping " << *var << ": can't spill\n";
+					continue;
+				}
+				// if (var->allRegistersSpecial() || !function->canSpill(var))
+				// 	continue;
 				const int sum = function->getLiveIn(var).size() + function->getLiveOut(var).size();
 				if (highest < sum && triedIDs.count(var->originalID) == 0) {
 					highest = sum;

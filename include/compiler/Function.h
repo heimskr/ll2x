@@ -380,7 +380,16 @@ namespace LL2X {
 			/** Convenience method for creating a precolored %rsp register. */
 			VariablePtr stackPointer(InstructionPtr);
 
+			/** Convenience method for creating a precolored %rip register. */
 			VariablePtr instructionPointer(BasicBlockPtr);
+
+			/** Convenience method for creating a precolored %rip register. */
 			VariablePtr instructionPointer(InstructionPtr);
+
+			/** Convenience method for creating a precolored %rbp register. */
+			VariablePtr basePointer(BasicBlockPtr);
+
+			/** Convenience method for creating a precolored %rbp register. */
+			VariablePtr basePointer(InstructionPtr);
 	};
 }

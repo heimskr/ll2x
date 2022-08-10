@@ -5,6 +5,7 @@
 #include <ostream>
 #include <set>
 
+#include "compiler/Operand.h"
 #include "parser/Types.h"
 #include "util/strnatcmp.h"
 #include "util/WeakCompare.h"
@@ -36,7 +37,7 @@ namespace LL2X {
 			WeakSet<BasicBlock>  definingBlocks, usingBlocks;
 			WeakSet<Instruction> definitions, uses;
 			std::weak_ptr<Instruction> lastUse;
-			std::set<int> registers;
+			std::optional<Operand> operand;
 			std::unordered_set<Variable *> phiParents, phiChildren;
 			/** Whether the variable was defined by a ϕ-instruction. */
 			bool fromPhi = false;
@@ -94,7 +95,7 @@ namespace LL2X {
 			void setUses(const decltype(uses) &);
 			void setUsingBlocks(const decltype(usingBlocks) &);
 			void setLastUse(decltype(lastUse));
-			void setRegisters(const decltype(registers) &);
+			void setOperand(const Operand &);
 
 			/** Returns true if the variable has at least one register that is special purpose. */
 			bool hasSpecialRegister() const;
@@ -103,6 +104,7 @@ namespace LL2X {
 			/** Returns the number of non-special-purpose registers. */
 			int nonSpecialCount() const;
 			/** Returns true if the variable has at least one register and all registers are special-purpose. */
+			[[deprecated]]
 			bool allRegistersSpecial() const;
 			/** Returns true if this variable has the same set of registers as the argument. */
 			bool compareRegisters(const Variable &) const;
@@ -115,9 +117,9 @@ namespace LL2X {
 			 *  The string is of the form "$reg" or "($reg1 $reg2 ...)". */
 			std::string registersString() const;
 
-			std::string toString(x86_64::Width = x86_64::Width::Eight) const;
-			std::string plainString(x86_64::Width = x86_64::Width::Eight) const;
-			std::string ansiString(x86_64::Width = x86_64::Width::Eight) const;
+			std::string toString() const;
+			std::string plainString() const;
+			std::string ansiString() const;
 
 			bool operator==(const Variable &) const;
 
