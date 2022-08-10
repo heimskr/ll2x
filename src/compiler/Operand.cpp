@@ -29,7 +29,7 @@ namespace LL2X {
 			case Mode::Direct:
 				return stringify(displacement);
 			case Mode::Label:
-				return label + "@GOTPCREL(%rip)";
+				return label;
 			case Mode::Register:
 				return reg->ansiString(width);
 			case Mode::Displaced:
@@ -54,7 +54,7 @@ namespace LL2X {
 			case Mode::Direct:
 				return stringify(displacement);
 			case Mode::Label:
-				return label + "@GOTPCREL(%rip)";
+				return label;
 			case Mode::Register:
 				return reg->toString(width);
 			case Mode::Displaced:
