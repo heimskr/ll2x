@@ -1731,9 +1731,8 @@ namespace LL2X {
 	}
 
 	VariablePtr Function::makeVariable(ValuePtr value, InstructionPtr instruction, TypePtr hint) {
-		/*
 		VariablePtr new_var;
-		std::shared_ptr<SetInstruction> set;
+		std::shared_ptr<MovInstruction> mov;
 
 		switch (value->valueType()) {
 			case ValueType::Getelementptr:
@@ -1744,17 +1743,20 @@ namespace LL2X {
 			case ValueType::Global: {
 				auto *global = dynamic_cast<GlobalValue *>(value.get());
 				new_var = newVariable(hint? hint : GlobalTemporaryType::make(global->name));
-				set = SetInstruction::make(new_var, global->name);
+				mov = std::make_shared<MovInstruction>(Operand::make(32, *global->name), Operand::make(new_var),
+					x86_64::Width::Eight);
 				break;
 			}
 			case ValueType::Int:
 			case ValueType::Bool:
 			case ValueType::Null:
-			case ValueType::Undef:
+			case ValueType::Undef: {
 				new_var = newVariable(hint? hint : IntType::make(64));
-				set = SetInstruction::make(new_var, value->intValue(false));
-				set->setOriginalValue(value);
+				auto num_operand = Operand::make(64, value->intValue(false));
+				num_operand->originalConstant = value->longValue();
+				mov = std::make_shared<MovInstruction>(num_operand, Operand::make(new_var), x86_64::Width::Eight);
 				break;
+			}
 			case ValueType::Icmp: {
 				auto *icmp = dynamic_cast<IcmpValue *>(value.get());
 				new_var = newVariable(hint? hint : IntType::make(1));
@@ -1764,7 +1766,7 @@ namespace LL2X {
 			case ValueType::Logic: {
 				auto *logic = dynamic_cast<LogicValue *>(value.get());
 				new_var = newVariable(hint? hint : logic->left->type);
-				Passes::lowerLogic(*this, instruction, logic->makeNode(new_var).get());
+				// Passes::lowerLogic(*this, instruction, logic->makeNode(new_var).get());
 				break;
 			}
 			default:
@@ -1775,12 +1777,10 @@ namespace LL2X {
 		if (!new_var)
 			throw std::runtime_error("new_var is null at the end of Function::makeVariable");
 
-		if (set)
-			insertBefore(instruction, set)->setDebug(*instruction)->extract();
+		if (mov)
+			insertBefore(instruction, mov)->setDebug(*instruction)->extract();
 
 		return new_var;
-		*/
-		return nullptr;
 	}
 
 	void Function::hackVariables() {

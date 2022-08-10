@@ -31,6 +31,8 @@ namespace LL2X {
 		VariablePtr index;
 		std::string label;
 
+		Number originalConstant = 0;
+
 		Operand(VariablePtr var);
 
 		Operand(x86_64::Width width_, Number number):
