@@ -16,7 +16,7 @@ namespace LL2X {
 			Direct,    // mov $0, 0xfff0
 			Label,     // jmp bb0
 			Register,  // mov $0, %rax
-			Displaced, // mov $0, 32(%rax) or mov foo(%rip), %rax
+			Displaced, // mov $0, 32(%rax) or mov foo@GOTPCREL(%rip), %rax
 			Scaled,    // mov $0, 32(%rax, %rbx, 8)
 		};
 
@@ -47,7 +47,6 @@ namespace LL2X {
 
 		Operand(x86_64::Width width_, Number displacement_, VariablePtr reg_):
 			mode(Mode::Displaced), width(width_), displacement(displacement_), reg(reg_) {}
-
 
 		Operand(x86_64::Width width_, Number displacement_, VariablePtr reg_, VariablePtr index_, Number scale_):
 			mode(Mode::Scaled), width(width_), displacement(displacement_), scale(scale_), reg(reg_), index(index_) {}

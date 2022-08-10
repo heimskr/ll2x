@@ -12,6 +12,10 @@ namespace LL2X {
 		return std::holds_alternative<Operand::Number>(variant) && std::get<Operand::Number>(variant) == 0;
 	}
 
+	static std::string pcrel(const VariablePtr &var) {
+		return var && var->reg == x86_64::rip? "@GOTPCREL" : "";
+	}
+
 	Operand::Operand(VariablePtr var):
 	mode(Mode::Register), width(x86_64::getWidth(var->type? var->type->width() : 64)), reg(var) {
 		if (!var->type)
@@ -25,19 +29,19 @@ namespace LL2X {
 			case Mode::Direct:
 				return stringify(displacement);
 			case Mode::Label:
-				return label;
+				return label + "@GOTPCREL(%rip)";
 			case Mode::Register:
 				return reg->ansiString(width);
 			case Mode::Displaced:
 				if (isZero(displacement))
 					return '(' + reg->ansiString(width) + ')';
-				return stringify(displacement) + '(' + reg->ansiString(width) + ')';
+				return stringify(displacement) + pcrel(reg) + '(' + reg->ansiString(width) + ')';
 			case Mode::Scaled:
 				if (isZero(displacement))
 					return '(' + reg->ansiString(width) + ", " + index->ansiString(width) + ", " + std::to_string(scale)
 						+ ')';
-				return stringify(displacement) + '(' + reg->ansiString(width) + ", " + index->ansiString(width) + ", "
-					+ std::to_string(scale) + ')';
+				return stringify(displacement) + pcrel(reg) + '(' + reg->ansiString(width) + ", " +
+					index->ansiString(width) + ", " + std::to_string(scale) + ')';
 			default:
 				return "\e[31m???\e[39m";
 		}
@@ -50,19 +54,19 @@ namespace LL2X {
 			case Mode::Direct:
 				return stringify(displacement);
 			case Mode::Label:
-				return label;
+				return label + "@GOTPCREL(%rip)";
 			case Mode::Register:
 				return reg->toString(width);
 			case Mode::Displaced:
 				if (isZero(displacement))
 					return '(' + reg->toString(width) + ')';
-				return stringify(displacement) + '(' + reg->toString(width) + ')';
+				return stringify(displacement) + pcrel(reg) + '(' + reg->toString(width) + ')';
 			case Mode::Scaled:
 				if (isZero(displacement))
 					return '(' + reg->toString(width) + ", " + index->toString(width) + ", " + std::to_string(scale)
 						+ ')';
-				return stringify(displacement) + '(' + reg->toString(width) + ", " + index->toString(width) + ", "
-					+ std::to_string(scale) + ')';
+				return stringify(displacement) + pcrel(reg) + '(' + reg->toString(width) + ", " + index->toString(width)
+					+ ", " + std::to_string(scale) + ')';
 			default:
 				return "???";
 		}
