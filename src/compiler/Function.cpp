@@ -36,9 +36,8 @@
 #include "instruction/Label.h"
 // #include "instruction/LuiInstruction.h"
 #include "instruction/Mov.h"
-// #include "instruction/SetInstruction.h"
-// #include "instruction/StackLoadInstruction.h"
-// #include "instruction/StackStoreInstruction.h"
+#include "instruction/Or.h"
+#include "instruction/Shl.h"
 #include "parser/ASTNode.h"
 #include "parser/FunctionArgs.h"
 #include "parser/FunctionHeader.h"
@@ -1088,15 +1087,18 @@ namespace LL2X {
 	}
 
 	VariablePtr Function::get64(std::shared_ptr<Instruction> before, unsigned long value, bool reindex) {
-		// VariablePtr var = newVariable(std::make_shared<IntType>(64), before->parent.lock());
-		// auto set = std::make_shared<SetInstruction>(var, int(value & 0xffffffff));
-		// auto lui = std::make_shared<LuiInstruction>(var, int(value >> 32));
-		// insertBefore(before, set, false)->setDebug(before->debugIndex)->extract();
-		// insertBefore(before, lui, false)->setDebug(before->debugIndex)->extract();
-		// if (reindex)
-		// 	reindexInstructions();
-		// return var;
-		return nullptr;
+		VariablePtr var = newVariable(IntType::make(64), before->parent.lock());
+		OperandPtr operand = Operand::make(var);
+		auto mov = std::make_shared<MovInstruction>(Operand::make(32, value >> 32), operand, x86_64::Width::Eight);
+		auto shl = std::make_shared<ShlInstruction>(operand, Operand::make(32, 32), x86_64::Width::Eight);
+		auto or_ = std::make_shared<OrInstruction>(operand, Operand::make(32, value & 0xffffffff),
+			x86_64::Width::Eight);
+		insertBefore(before, mov, false)->setDebug(*before, true);
+		insertBefore(before, shl, false)->setDebug(*before, true);
+		insertBefore(before, or_, false)->setDebug(*before, true);
+		if (reindex)
+			reindexInstructions();
+		return var;
 	}
 
 	VariablePtr Function::getVariable(Variable::ID id, bool add_arguments) {
