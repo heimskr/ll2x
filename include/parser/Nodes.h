@@ -96,7 +96,6 @@ namespace LL2X {
 		const std::string *result = nullptr;
 		OperandPtr operand;
 		void replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var);
-		void replaceWritten(const VariablePtr &to_replace, const OperandPtr &new_operand);
 		std::string getResult() const;
 	};
 

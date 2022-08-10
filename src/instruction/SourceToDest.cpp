@@ -71,15 +71,6 @@ namespace LL2X {
 		return changed;
 	}
 
-	bool SourceToDest::replaceWritten(const VariablePtr &to_replace, const OperandPtr &new_operand) {
-		if (destination && destination->isAliasOf(*to_replace)) {
-			destination = new_operand;
-			return true;
-		}
-
-		return false;
-	}
-
 	bool SourceToDest::canReplaceWritten(const VariablePtr &to_replace) const {
 		return destination &&
 		       ((destination->reg   && destination->reg  ->isAliasOf(*to_replace))

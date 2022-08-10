@@ -184,11 +184,6 @@ namespace LL2X {
 		operand->replace(*to_replace, new_var);
 	}
 
-	void Writer::replaceWritten(const VariablePtr &to_replace, const OperandPtr &new_operand) {
-		if (operand && operand->isRegister() && operand->reg->isAliasOf(*to_replace))
-			operand = new_operand;
-	}
-
 // SelectNode
 
 	SelectNode::SelectNode(ASTNode *result_, ASTNode *fastmath_, ASTNode *condition_type, ASTNode *condition_value,

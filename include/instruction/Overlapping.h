@@ -16,7 +16,6 @@ namespace LL2X {
 		bool replaceRead(const VariablePtr &, const VariablePtr &) override;
 		bool canReplaceRead(const VariablePtr &) const override;
 		bool replaceWritten(const VariablePtr &, const VariablePtr &) override;
-		bool replaceWritten(const VariablePtr &, const OperandPtr &) override;
 		bool canReplaceWritten(const VariablePtr &) const override;
 	};
 }
