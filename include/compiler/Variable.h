@@ -37,7 +37,7 @@ namespace LL2X {
 			WeakSet<BasicBlock>  definingBlocks, usingBlocks;
 			WeakSet<Instruction> definitions, uses;
 			std::weak_ptr<Instruction> lastUse;
-			int reg;
+			int reg = -1;
 			std::unordered_set<Variable *> phiParents, phiChildren;
 			/** Whether the variable was defined by a ϕ-instruction. */
 			bool fromPhi = false;

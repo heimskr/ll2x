@@ -4,8 +4,8 @@
 #include "instruction/SizedSourceToDest.h"
 
 namespace LL2X {
-	struct MovInstruction: SizedSourceToDest, HasCondition {
-		MovInstruction(OperandPtr source_, OperandPtr destination_, x86_64::Width size_,
+	struct Mov: SizedSourceToDest, HasCondition {
+		Mov(OperandPtr source_, OperandPtr destination_, x86_64::Width size_,
 		               x86_64::Condition condition = x86_64::Condition::Unconditional):
 			SizedSourceToDest(source_, destination_, size_), HasCondition(condition) {}
 
@@ -14,6 +14,6 @@ namespace LL2X {
 
 		std::string getMnemonic() const;
 
-		bool operator==(const MovInstruction &) const;
+		bool operator==(const Mov &) const;
 	};
 }

@@ -3,7 +3,7 @@
 #include "instruction/SizedTwoSourcesOnly.h"
 
 namespace LL2X {
-	struct CmpInstruction: SizedTwoSourcesOnly  {
+	struct Cmp: SizedTwoSourcesOnly  {
 		using SizedTwoSourcesOnly::SizedTwoSourcesOnly;
 
 		std::string debugExtra() override     { return makeDebug("cmp");  }

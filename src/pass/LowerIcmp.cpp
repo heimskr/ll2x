@@ -70,16 +70,16 @@ namespace LL2X::Passes {
 			} else {
 				rt = function.newVariable(node->getType(), instruction->parent.lock());
 				VariablePtr rip = function.instructionPointer(instruction);
-				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(64, rt),
+				function.insertBefore(instruction, std::make_shared<Mov>(Operand::make(64, rt),
 					Operand::make(width, *dynamic_cast<GlobalValue *>(value2.get())->name, rip), x86_64::Width::Eight))
 					->setDebug(node)->extract();
-				function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(64, rt),
+				function.insertBefore(instruction, std::make_shared<Mov>(Operand::make(64, rt),
 					Operand::make(width, 0, rt), width))->setDebug(node)->extract();
 			}
 
-			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand::make(width, rs),
+			function.insertBefore(instruction, std::make_shared<Cmp>(Operand::make(width, rs),
 				Operand::make(width, rt), width))->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32, 1), rd, width,
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand::make(32, 1), rd, width,
 				x86_64::getCondition(cond)))->setDebug(node)->extract();
 		} else {
 			int64_t imm;
@@ -92,9 +92,9 @@ namespace LL2X::Passes {
 			const int size = node->getType()->width();
 			const auto width = x86_64::getWidth(size);
 
-			function.insertBefore(instruction, std::make_shared<CmpInstruction>(Operand::make(width, rs),
+			function.insertBefore(instruction, std::make_shared<Cmp>(Operand::make(width, rs),
 				Operand::make(width, imm), width))->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32, 1), rd, width,
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand::make(32, 1), rd, width,
 				x86_64::getCondition(cond)))->setDebug(node)->extract();
 		}
 	}

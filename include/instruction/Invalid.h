@@ -4,7 +4,7 @@
 #include "util/Makeable.h"
 
 namespace LL2X {
-	struct InvalidInstruction: public IntermediateInstruction, public Makeable<InvalidInstruction> {
+	struct InvalidInstruction: IntermediateInstruction, Makeable<InvalidInstruction> {
 		std::string message;
 		InvalidInstruction(const std::string &message_ = "INVALID", int index_ = -1):
 			IntermediateInstruction(index_), message(message_) {}

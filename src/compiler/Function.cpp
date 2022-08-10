@@ -323,7 +323,7 @@ namespace LL2X {
 			          << definition->index << ", OID: " << variable->originalID << ")\n";
 #endif
 			auto rbp = basePointer(definition);
-			auto store = std::make_shared<MovInstruction>(Operand::make(64, variable),
+			auto store = std::make_shared<Mov>(Operand::make(64, variable),
 				Operand::make(64, -location.offset, rbp), x86_64::Width::Eight);
 			store->meta.insert(InstructionMeta::StackStore);
 
@@ -335,7 +335,7 @@ namespace LL2X {
 				next = after(next);
 
 			if (next) {
-				auto other_store = std::dynamic_pointer_cast<MovInstruction>(next);
+				auto other_store = std::dynamic_pointer_cast<Mov>(next);
 				if (other_store && other_store->meta.contains(InstructionMeta::StackStore) && *other_store == *store) {
 					should_insert = false;
 #ifdef DEBUG_SPILL
@@ -377,6 +377,9 @@ namespace LL2X {
 
 		for (auto iter = linearInstructions.begin(), end = linearInstructions.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
+			if (auto mov = std::dynamic_pointer_cast<Mov>(instruction))
+				if (mov->meta.contains(InstructionMeta::StackStore))
+					continue;
 #ifdef STRICT_READ_CHECK
 			if (std::shared_ptr<Variable> read = instruction->doesRead(variable)) {
 #else
@@ -408,8 +411,8 @@ namespace LL2X {
 #endif
 					instruction->read.insert(new_var);
 					auto rbp = basePointer(instruction);
-					auto load = std::make_shared<MovInstruction>(Operand::make(64, -location.offset, rbp),
-						Operand::make(64, variable), x86_64::Width::Eight);
+					auto load = std::make_shared<Mov>(Operand::make(64, -location.offset, rbp),
+						Operand::make(64, new_var), x86_64::Width::Eight);
 					insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
 					load->extract();
 					out = true;
@@ -456,7 +459,7 @@ namespace LL2X {
 		// If the only definition is a stack store, the variable can't be spilled.
 		if (variable->definitions.size() == 1) {
 			InstructionPtr single_def = variable->definitions.begin()->lock();
-			auto *store = dynamic_cast<MovInstruction *>(single_def.get());
+			auto *store = dynamic_cast<Mov *>(single_def.get());
 			if (store && store->meta.contains(InstructionMeta::StackStore) && store->source->reg == variable)
 				return false;
 		}
@@ -471,7 +474,7 @@ namespace LL2X {
 			bool created;
 			const StackLocation &location = getSpill(variable, true, &created);
 			auto rbp = basePointer(definition);
-			auto store = std::make_shared<MovInstruction>(Operand::make(64, variable),
+			auto store = std::make_shared<Mov>(Operand::make(64, variable),
 				Operand::make(64, -location.offset, rbp), x86_64::Width::Eight);
 			store->meta.insert(InstructionMeta::StackStore);
 
@@ -483,7 +486,7 @@ namespace LL2X {
 				next = after(next);
 
 			if (next) {
-				auto other_store = std::dynamic_pointer_cast<MovInstruction>(next);
+				auto other_store = std::dynamic_pointer_cast<Mov>(next);
 				if (other_store && other_store->meta.contains(InstructionMeta::StackStore) && *other_store == *store)
 					should_insert = false;
 			}
@@ -1068,7 +1071,7 @@ namespace LL2X {
 	VariablePtr Function::get64(std::shared_ptr<Instruction> before, unsigned long value, bool reindex) {
 		VariablePtr var = newVariable(IntType::make(64), before->parent.lock());
 		OperandPtr operand = Operand::make(var);
-		auto mov = std::make_shared<MovInstruction>(Operand::make(32, value >> 32), operand, x86_64::Width::Eight);
+		auto mov = std::make_shared<Mov>(Operand::make(32, value >> 32), operand, x86_64::Width::Eight);
 		auto shl = std::make_shared<ShlInstruction>(operand, Operand::make(32, 32), x86_64::Width::Eight);
 		auto or_ = std::make_shared<OrInstruction>(operand, Operand::make(32, value & 0xffffffff),
 			x86_64::Width::Eight);
@@ -1689,12 +1692,12 @@ namespace LL2X {
 				VariablePtr new_var = newVariable(out_type);
 				OperandPtr operand = Operand::make(64, new_var);
 
-				insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32,
+				insertBefore(instruction, std::make_shared<Mov>(Operand::make(32,
 					*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand, x86_64::Width::Four))
 					->setDebug(*instruction, true);
 
 				if (offset != 0)
-					insertBefore(instruction, std::make_shared<AddInstruction>(operand, Operand::make(32, int(offset)),
+					insertBefore(instruction, std::make_shared<Add>(operand, Operand::make(32, int(offset)),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);
@@ -1704,11 +1707,11 @@ namespace LL2X {
 				VariablePtr new_var(newVariable(out_type));
 				OperandPtr operand = Operand::make(64, new_var);
 
-				insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(
+				insertBefore(instruction, std::make_shared<Mov>(Operand::make(
 					dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
 					operand, x86_64::Width::Eight))->setDebug(*instruction, true);
 
-				insertBefore(instruction, std::make_shared<AddInstruction>(operand, Operand::make(32, int(offset)),
+				insertBefore(instruction, std::make_shared<Add>(operand, Operand::make(32, int(offset)),
 					x86_64::Width::Eight))->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);
@@ -1721,7 +1724,7 @@ namespace LL2X {
 			VariablePtr new_var(newVariable(out_type));
 			OperandPtr operand = Operand::make(64, new_var);
 
-			insertBefore(instruction, std::make_shared<MovInstruction>(Operand::make(32, gep->variable->intValue() +
+			insertBefore(instruction, std::make_shared<Mov>(Operand::make(32, gep->variable->intValue() +
 				int(offset)), operand, x86_64::Width::Eight))->setDebug(*instruction, true);
 
 			return LocalValue::make(new_var);
@@ -1732,7 +1735,7 @@ namespace LL2X {
 
 	VariablePtr Function::makeVariable(ValuePtr value, InstructionPtr instruction, TypePtr hint) {
 		VariablePtr new_var;
-		std::shared_ptr<MovInstruction> mov;
+		std::shared_ptr<Mov> mov;
 
 		switch (value->valueType()) {
 			case ValueType::Getelementptr:
@@ -1743,7 +1746,7 @@ namespace LL2X {
 			case ValueType::Global: {
 				auto *global = dynamic_cast<GlobalValue *>(value.get());
 				new_var = newVariable(hint? hint : GlobalTemporaryType::make(global->name));
-				mov = std::make_shared<MovInstruction>(Operand::make(32, *global->name), Operand::make(new_var),
+				mov = std::make_shared<Mov>(Operand::make(32, *global->name), Operand::make(new_var),
 					x86_64::Width::Eight);
 				break;
 			}
@@ -1754,7 +1757,7 @@ namespace LL2X {
 				new_var = newVariable(hint? hint : IntType::make(64));
 				auto num_operand = Operand::make(64, value->intValue(false));
 				num_operand->originalConstant = value->longValue();
-				mov = std::make_shared<MovInstruction>(num_operand, Operand::make(new_var), x86_64::Width::Eight);
+				mov = std::make_shared<Mov>(num_operand, Operand::make(new_var), x86_64::Width::Eight);
 				break;
 			}
 			case ValueType::Icmp: {

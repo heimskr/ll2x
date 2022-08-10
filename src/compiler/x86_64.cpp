@@ -82,7 +82,7 @@ namespace LL2X::x86_64 {
 					case rbx:
 					case rcx:
 					case rdx:
-						return {'e', static_cast<char>('a' + reg), 'x'};
+						return {'e', static_cast<char>('a' + (reg - rax)), 'x'};
 					case rbp:
 					case rsp:
 					case rsi:
@@ -97,7 +97,7 @@ namespace LL2X::x86_64 {
 					case rbx:
 					case rcx:
 					case rdx:
-						return {'r', static_cast<char>('a' + reg), 'x'};
+						return {'r', static_cast<char>('a' + (reg - rax)), 'x'};
 					case rbp:
 					case rsp:
 					case rsi:

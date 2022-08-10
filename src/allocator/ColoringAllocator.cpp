@@ -15,7 +15,7 @@
 #include "util/Timer.h"
 #include "util/Util.h"
 
-// #define DEBUG_COLORING
+#define DEBUG_COLORING
 #define CONSTRUCT_BY_BLOCK
 // #define SELECT_LOWEST_COST
 #define SELECT_MOST_LIVE
@@ -25,15 +25,16 @@ namespace LL2X {
 	ColoringAllocator::Result ColoringAllocator::attempt() {
 		++attempts;
 #ifdef DEBUG_COLORING
-		std::cerr << "Allocating for \e[1m" << *function->name << "\e[22m.\n";
+		info() << "Allocating for \e[1m" << *function->name << "\e[22m.\n";
 #endif
 
 		makeInterferenceGraph();
+
 		try {
 			interference.color(Graph::ColoringAlgorithm::Greedy, x86_64::rax, x86_64::r15);
 		} catch (const UncolorableError &err) {
 #ifdef DEBUG_COLORING
-			std::cerr << "Coloring failed.\n";
+			error() << "Coloring failed.\n";
 #endif
 			int highest_degree = -1;
 #ifdef SELECT_LOWEST_COST
@@ -56,12 +57,12 @@ namespace LL2X {
 				throw std::runtime_error("to_spill is null");
 			}
 #ifdef DEBUG_COLORING
-			std::cerr << "Going to spill " << *to_spill;
+			info() << "Going to spill " << *to_spill;
 #if !defined(SELECT_LOWEST_COST) && !defined(SELECT_MOST_LIVE) && !defined(SELECT_CHAITIN)
 			std::cerr << " (degree: " << highest_degree << ")";
 #endif
 			std::cerr << ". Likely name: " << function->variableStore.size() << "\n";
-			std::cerr << "Can spill: " << std::boolalpha << function->canSpill(to_spill) << "\n";
+			info() << "Can spill: " << std::boolalpha << function->canSpill(to_spill) << "\n";
 #endif
 			triedIDs.insert(to_spill->originalID);
 			triedLabels.insert(*to_spill->originalID);
@@ -109,14 +110,14 @@ namespace LL2X {
 		}
 
 #ifdef DEBUG_COLORING
-		std::cerr << "Spilling process complete. There " << (spillCount == 1? "was " : "were ") << spillCount << " "
-		          << "spill" << (spillCount == 1? ".\n" : "s.\n");
+		info() << "Spilling process complete. There " << (spillCount == 1? "was " : "were ") << spillCount << " spill"
+		       << (spillCount == 1? ".\n" : "s.\n");
 #endif
 
 		for (const std::pair<const std::string, Node *> &pair: interference) {
 			VariablePtr ptr = pair.second->get<VariablePtr>();
 #ifdef DEBUG_COLORING
-			std::cerr << "Variable " << std::string(*ptr) << ": " << ptr->registersString() << " -> ( ";
+			std::cerr << "Variable " << ptr->ansiString() << " -> ( ";
 			for (const int color: pair.second->colors) std::cerr << color << ' ';
 			std::cerr << ") a =";
 			for (const Variable *alias: ptr->getAliases())
@@ -127,7 +128,10 @@ namespace LL2X {
 				if (pair.second->colors.size() != 1)
 					throw std::runtime_error("Incorrect number of colors for " + ptr->toString(x86_64::Width::Eight)
 						+ ": " + std::to_string(pair.second->colors.size()));
+				info() << "Setting " << *ptr << " to " << *pair.second->colors.begin() << '\n';
 				ptr->setRegister(*pair.second->colors.begin());
+			} else {
+				warn() << *ptr << " already has a register: " << ptr->reg << '\n';
 			}
 		}
 
@@ -289,10 +293,10 @@ namespace LL2X {
 		std::map<Variable::ID, std::unordered_set<int>> live;
 
 		for (const auto &[id, var]: function->variableStore) {
-			if (!var->registers.empty())
+			if (var->hasRegister())
 				continue;
 #ifdef DEBUG_COLORING
-			std::cerr << "Variable " << *var << ":\n";
+			info() << "Variable " << *var << ":\n";
 #endif
 			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
 				live[var->id].insert(bptr.lock()->index);
@@ -311,19 +315,19 @@ namespace LL2X {
 		for (const std::shared_ptr<BasicBlock> &block: function->blocks) {
 #ifdef DEBUG_COLORING
 			if (!block)
-				std::cerr << "block is null?\n";
+				warn() << "block is null?\n";
 #endif
 			for (const VariablePtr &var: block->liveIn)
-				if (var->registers.empty()) {
+				if (!var->hasRegister()) {
 #ifdef DEBUG_COLORING
-					std::cerr << "Variable " << *var << " is live-in at block " << *block->label << "\n";
+					info() << "Variable " << *var << " is live-in at block " << *block->label << "\n";
 #endif
 					live[var->id].insert(block->index);
 				}
 			for (const VariablePtr &var: block->liveOut)
-				if (var->registers.empty()) {
+				if (!var->hasRegister()) {
 #ifdef DEBUG_COLORING
-					std::cerr << "Variable " << *var << " is live-out at block " << *block->label << "\n";
+					info() << "Variable " << *var << " is live-out at block " << *block->label << "\n";
 #endif
 					live[var->id].insert(block->index);
 				}
@@ -332,7 +336,7 @@ namespace LL2X {
 		if (1 < labels.size()) {
 			const size_t size = labels.size();
 #ifdef DEBUG_COLORING
-			std::cerr << "Label count: " << size << "\n";
+			info() << "Label count: " << size << "\n";
 #endif
 			size_t checks = 0;
 			for (size_t i = 0; i < size - 1; ++i) {
@@ -347,28 +351,29 @@ namespace LL2X {
 				}
 			}
 #ifdef DEBUG_COLORING
-			std::cerr << "Ran " << checks << " check" << (checks == 1? "" : "s") << ".\n";
+			info() << "Ran " << checks << " check" << (checks == 1? "" : "s") << ".\n";
 #endif
 		}
-
 #else
 		std::unordered_map<int, std::vector<Variable::ID>> vecs;
 		std::unordered_map<int, std::unordered_set<Variable::ID>> sets;
 
 		for (const auto &[id, var]: function->variableStore) {
 			const Variable::ID parent_id = var->parentID();
-			if (var->hasRegister())
+			if (var->hasRegister()) {
+				warn() << "Skipping " << *var << ": it already has a register\n";
 				continue;
+			}
 			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
 				const auto index = bptr.lock()->index;
-				if (sets[index].count(parent_id) == 0) {
+				if (!sets[index].contains(parent_id)) {
 					vecs[index].push_back(parent_id);
 					sets[index].insert(parent_id);
 				}
 			}
 			for (const std::weak_ptr<BasicBlock> &bptr: var->usingBlocks) {
 				const auto index = bptr.lock()->index;
-				if (sets[index].count(parent_id) == 0) {
+				if (!sets[index].contains(parent_id)) {
 					vecs[index].push_back(parent_id);
 					sets[index].insert(parent_id);
 				}
@@ -380,14 +385,14 @@ namespace LL2X {
 			auto &set = sets[block->index];
 			for (const VariablePtr &var: block->liveIn) {
 				const Variable::ID parent_id = var->parentID();
-				if (!var->hasRegister() && set.count(parent_id) == 0) {
+				if (!var->hasRegister() && !set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}
 			}
 			for (const VariablePtr &var: block->liveOut) {
 				const Variable::ID parent_id = var->parentID();
-				if (!var->hasRegister() && set.count(parent_id) == 0) {
+				if (!var->hasRegister() && !set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}
@@ -395,7 +400,7 @@ namespace LL2X {
 		}
 
 #ifdef DEBUG_COLORING
-		std::cerr << "Label count: " << labels.size() << "\n";
+		info() << "Label count: " << labels.size() << "\n";
 #endif
 		for (const auto &[block_id, vec]: vecs) {
 			const size_t size = vec.size();
@@ -410,7 +415,7 @@ namespace LL2X {
 #endif
 
 #ifdef DEBUG_COLORING
-		std::cerr << "Made " << links << " link" << (links == 1? "" : "s") << ".\n";
+		info() << "Made " << links << " link" << (links == 1? "" : "s") << ".\n";
 #endif
 	}
 }

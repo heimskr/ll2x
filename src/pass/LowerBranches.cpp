@@ -37,7 +37,7 @@ namespace LL2X::Passes {
 		if (condition_type == ValueType::Bool) {
 			const BoolValue *boolval = dynamic_cast<BoolValue *>(br->condition->value.get());
 			const std::string transformed = function.transformLabel(boolval->value? *br->ifTrue : *br->ifFalse);
-			auto jmp = std::make_shared<JmpInstruction>(Operand::make(64, transformed));
+			auto jmp = std::make_shared<Jmp>(Operand::make(64, transformed));
 			function.insertBefore(instruction, jmp)->setDebug(*br)->extract();
 		} else if (condition_type != ValueType::Local) {
 			br->debug();
@@ -48,10 +48,10 @@ namespace LL2X::Passes {
 			auto *local = dynamic_cast<LocalValue *>(br->condition->value.get());
 			VariablePtr condition = local->variable;
 			auto width = x86_64::getWidth(type->width());
-			auto cmp = std::make_shared<CmpInstruction>(Operand::make(width, condition), Operand::make(32, 0), width);
-			auto jmp_true = std::make_shared<JmpInstruction>(Operand::make(64, function.transformLabel(*br->ifTrue)),
+			auto cmp = std::make_shared<Cmp>(Operand::make(width, condition), Operand::make(32, 0), width);
+			auto jmp_true = std::make_shared<Jmp>(Operand::make(64, function.transformLabel(*br->ifTrue)),
 				x86_64::Condition::IfNotEqual);
-			auto jmp_false = std::make_shared<JmpInstruction>(Operand::make(64, function.transformLabel(*br->ifFalse)));
+			auto jmp_false = std::make_shared<Jmp>(Operand::make(64, function.transformLabel(*br->ifFalse)));
 			function.insertBefore(instruction, cmp)->setDebug(*br)->extract();
 			function.insertBefore(instruction, jmp_true)->setDebug(*br)->extract();
 			function.insertBefore(instruction, jmp_false)->setDebug(*br)->extract();
@@ -60,7 +60,7 @@ namespace LL2X::Passes {
 
 	void lowerBranch(Function &function, InstructionPtr &instruction, BrUncondNode *br) {
 		function.insertBefore(instruction,
-			std::make_shared<JmpInstruction>(Operand::make(64, function.transformLabel(*br->destination))))
+			std::make_shared<Jmp>(Operand::make(64, function.transformLabel(*br->destination))))
 			->setDebug(*br)->extract();
 	}
 }

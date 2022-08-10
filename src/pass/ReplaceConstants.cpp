@@ -44,12 +44,12 @@ namespace LL2X::Passes {
 						TypePtr ptr_type = std::make_shared<PointerType>(out_type);
 						VariablePtr new_var = function.newVariable(ptr_type, instruction->parent.lock());
 						VariablePtr rip = function.instructionPointer(instruction->parent.lock());
-						auto mov_addr = std::make_shared<MovInstruction>(Operand::make(64, *gep_global->name, rip),
+						auto mov_addr = std::make_shared<Mov>(Operand::make(64, *gep_global->name, rip),
 							Operand::make(new_var), x86_64::Width::Eight);
 						function.insertBefore(instruction, mov_addr)->setDebug(*llvm)->extract();
 
 						if (offset != 0) {
-							auto add = std::make_shared<AddInstruction>(Operand::make(new_var),
+							auto add = std::make_shared<Add>(Operand::make(new_var),
 								Operand::make(32, offset), x86_64::Width::Eight);
 							function.insertAfter(mov_addr, add)->setDebug(*llvm)->extract();
 						}

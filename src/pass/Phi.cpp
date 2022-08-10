@@ -64,10 +64,10 @@ namespace LL2X::Passes {
 							InstructionPtr new_instr;
 							
 							if (pair.first->isIntLike())
-								new_instr = std::make_shared<MovInstruction>(Operand::make(phi_width,
+								new_instr = std::make_shared<Mov>(Operand::make(phi_width,
 									pair.first->longValue()), Operand::make(phi_width, target), phi_width);
 							else
-								new_instr = std::make_shared<MovInstruction>(Operand::make(phi_width,
+								new_instr = std::make_shared<Mov>(Operand::make(phi_width,
 									*dynamic_cast<GlobalValue *>(pair.first.get())->name,
 									function.instructionPointer(instruction)),
 									Operand::make(phi_width, target), phi_width);
@@ -184,7 +184,7 @@ namespace LL2X::Passes {
 
 				if (local) {
 					comment = "MovePhi: " + local->variable->plainString() + " -> " + target->plainString();
-					new_instruction = std::make_shared<MovInstruction>(Operand::make(phi_width, local->variable),
+					new_instruction = std::make_shared<Mov>(Operand::make(phi_width, local->variable),
 						Operand::make(phi_width, target), phi_width);
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->valueType() == ValueType::Undef) {
@@ -193,11 +193,11 @@ namespace LL2X::Passes {
 				} else if (value->isIntLike() || value->isGlobal()) {
 					if (value->isIntLike()) {
 						comment = "MovePhi: intlike -> " + target->plainString();
-						new_instruction = std::make_shared<MovInstruction>(Operand::make(phi_width, value->longValue()),
+						new_instruction = std::make_shared<Mov>(Operand::make(phi_width, value->longValue()),
 							Operand::make(phi_width, target), phi_width);
 					} else {
 						comment = "MovePhi: global -> " + target->plainString();
-						new_instruction = std::make_shared<MovInstruction>(Operand::make(phi_width,
+						new_instruction = std::make_shared<Mov>(Operand::make(phi_width,
 							*dynamic_cast<GlobalValue *>(value.get())->name, function.instructionPointer(instruction)),
 							Operand::make(phi_width, target), phi_width);
 					}
@@ -435,7 +435,7 @@ namespace LL2X::Passes {
 							auto *local = dynamic_cast<LocalValue *>(value.get());
 							if (local->variable && *local->variable == *source) {
 								auto block = function.bbMap.at(block_label);
-								auto mov = std::make_shared<MovInstruction>(Operand::make(phi_width, source),
+								auto mov = std::make_shared<Mov>(Operand::make(phi_width, source),
 									Operand::make(phi_width, destination), phi_width);
 								const std::string comment = "CutPhi: " + source->plainString() + " -> " +
 									destination->plainString();
