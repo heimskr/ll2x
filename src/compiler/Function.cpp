@@ -6,7 +6,7 @@
 
 #define DEBUG_BLOCKS
 // #define DEBUG_LINEAR
-#define DEBUG_VARS
+// #define DEBUG_VARS
 // #define DEBUG_RENDER
 // #define DEBUG_SPILL
 // #define DEBUG_SPLIT
@@ -16,7 +16,7 @@
 #define DEBUG_BLOCK_LIVENESS
 #define DEBUG_VAR_LIVENESS
 // #define DEBUG_ALIASES
-#define DEBUG_STACK
+// #define DEBUG_STACK
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
