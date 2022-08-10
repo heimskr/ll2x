@@ -350,10 +350,11 @@ namespace LL2X {
 				insertAfter(definition, store, false);
 				insertBefore(store, std::make_shared<Comment>("Spill: stack store for " +
 					variable->plainString(x86_64::Width::Eight) + " into location=" + std::to_string(location.offset)));
-				//// VariablePtr new_var = mx(6, definition);
-				//// definition->replaceWritten(variable, new_var);
-				//// store->variable = new_var;
-				//// store->extract();
+
+				// Hopefully the blocks are minimized at this point.
+				// TODO: Do we need to reminimize after spilling?
+
+				store->setDebug(*definition, true);
 				out = true;
 #ifdef DEBUG_SPILL
 				std::cerr << "    Inserting a stack store after definition: " << store->debugExtra() << "\n";
@@ -883,6 +884,7 @@ namespace LL2X {
 		Passes::lowerStacksave(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract();
+		precolorArguments();
 		Passes::trimBlocks(*this);
 		Passes::splitBlocks(*this);
 		// Passes::copyArguments(*this);
@@ -1007,7 +1009,24 @@ namespace LL2X {
 	// 	}
 	// }
 
-	// void Function::precolorArguments() {
+	void Function::precolorArguments() {
+		using namespace x86_64;
+		static int regs[] {rdi, rsi, rdx, rcx, r8, r9};
+
+		if (!arguments)
+			throw std::runtime_error("Can't precolor arguments: arguments vector not present");
+
+		try {
+			for (int i = 0, max = std::min(6, getArity()); i < max; ++i)
+				getVariable(std::to_string(i), true)->setRegister(regs[i]);
+		} catch (const std::out_of_range &) {
+			warn() << "VariableStore (" << variableStore.size() << ") in " << *name << ":\n";
+			for (const auto &[id, var]: variableStore)
+				warn() << "  " << *id << '\n';
+			throw;
+		}
+	}
+
 	// 	if (getCallingConvention() == CallingConvention::Reg16) {
 	// 		const int max = std::min(16, getArity());
 	// 		int reg = WhyInfo::argumentOffset - 1;
@@ -1083,11 +1102,15 @@ namespace LL2X {
 	VariablePtr Function::getVariable(Variable::ID id, bool add_arguments) {
 		if (variableStore.count(id) != 0)
 			return variableStore.at(id);
-		else if (add_arguments && getCallingConvention() == CallingConvention::Reg16 && isArgument(id))
+		else if (add_arguments && getCallingConvention() == CallingConvention::Reg6 && isArgument(id))
 			return getVariable(id, arguments->at(Util::parseLong(id)).type, getEntry());
 		else if (extraVariables.count(id) != 0)
 			return extraVariables.at(id);
 		throw std::out_of_range("Couldn't find variable with ID " + *id + " in function " + *name);
+	}
+
+	VariablePtr Function::getVariable(const std::string &label, bool add_arguments) {
+		return getVariable(StringSet::intern(label), add_arguments);
 	}
 
 	VariablePtr Function::getVariable(const std::string &label) {
@@ -1122,7 +1145,7 @@ namespace LL2X {
 	}
 
 	CallingConvention Function::getCallingConvention() const {
-		return isVariadic()? CallingConvention::StackOnly : CallingConvention::Reg16;
+		return CallingConvention::Reg6;
 	}
 
 	bool Function::isLiveInUsingMergeSet(const Node::Map &merges, Node *block, VariablePtr var) {

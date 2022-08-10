@@ -26,6 +26,8 @@ namespace LL2X::Passes {
 			}
 		} while (changed);
 
+		function.blocksAreMinimized = false;
+
 		if (any_changed) {
 			makeCFG(function);
 			function.reindexBlocks();

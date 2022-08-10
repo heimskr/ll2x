@@ -54,6 +54,7 @@ namespace LL2X::Passes {
 		function.bbLabels.clear();
 		function.bbMap.clear();
 		function.blocks.clear();
+		function.blocksAreMinimized = true;
 
 		for (const auto &[index, block]: added_blocks) {
 			function.bbLabels.insert(block->label);

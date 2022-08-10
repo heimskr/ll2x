@@ -24,12 +24,7 @@ namespace LL2X {
 
 	using InstructionPtr = std::shared_ptr<Instruction>;
 
-	/**
-	 * StackOnly: all parameters are pushed to the stack, right-to-left. Used for variadic functions.
-	 * Reg16: The first sixteen arguments are put in registers $a0 through $af, left-to-right. The rest are pushed to
-	 *        the stack right-to-left.
-	 */
-	enum class CallingConvention {StackOnly, Reg16};
+	enum class CallingConvention {Reg6};
 
 	/**
 	 * Represents a function and contains code for converting functions from LLVM's intermediate representation into
@@ -150,6 +145,9 @@ namespace LL2X {
 
 			/** The number of bytes pushed to the stack when InsertPrologue saves registers, including $fp and $sp. */
 			int initialPushedBytes = -1;
+
+			/** Whether all blocks have been minimized to contain exactly one instruction each. */
+			bool blocksAreMinimized = false;
 
 			int debugIndex = -1;
 			int initialDebugIndex = -1;
@@ -308,6 +306,11 @@ namespace LL2X {
 			 *  unless the second argument is true and the variable is one of the argument variables, in which case
 			 *  it'll be added to the variable store and returned. */
 			VariablePtr getVariable(Variable::ID, bool add_arguments = true);
+
+			/** Returns the variable with a given label. If the variable doesn't exist, an exception will be thrown,
+			 *  unless the second argument is true and the variable is one of the argument variables, in which case
+			 *  it'll be added to the variable store and returned. */
+			VariablePtr getVariable(const std::string &label, bool add_arguments);
 
 			/** Returns the variable with a given label. If the variable doesn't exist, an exception will be thrown. */
 			VariablePtr getVariable(const std::string &);
