@@ -109,6 +109,12 @@ namespace LL2X {
 		return function.getVariable(*name);
 	}
 
+	OperandPtr LocalValue::makeOperand() const {
+		if (variable)
+			return Operand::make(variable);
+		throw std::runtime_error("Can't make operand from LocalValue: variable is null");
+	}
+
 	OperandValue::operator std::string() {
 		return operand? operand->ansiString() : "\e[31mNULL\e[39m";
 	}

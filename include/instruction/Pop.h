@@ -5,8 +5,8 @@
 #include "instruction/TargetInstruction.h"
 
 namespace LL2X {
-	struct PopInstruction: TargetInstruction, OneDestination, Sized  {
-		PopInstruction(OperandPtr destination_, x86_64::Width size_):
+	struct Pop: TargetInstruction, OneDestination, Sized  {
+		Pop(OperandPtr destination_, x86_64::Width size_):
 			OneDestination(std::move(destination_)),
 			Sized(size_) {}
 

@@ -32,6 +32,7 @@ namespace LL2X {
 		std::string label;
 
 		Number originalConstant = 0;
+		bool useRip = false;
 
 		Operand(VariablePtr var);
 
@@ -41,8 +42,8 @@ namespace LL2X {
 		Operand(x86_64::Width width_, Number number, bool):
 			mode(Mode::Direct), width(width_), displacement(number) {}
 
-		Operand(x86_64::Width width_, std::string label_):
-			mode(Mode::Label), width(width_), label(std::move(label_)) {}
+		Operand(x86_64::Width width_, std::string label_, bool use_rip = true):
+			mode(Mode::Label), width(width_), label(std::move(label_)), useRip(use_rip) {}
 
 		Operand(x86_64::Width width_, VariablePtr reg_):
 			mode(Mode::Register), width(width_), reg(reg_) {}
@@ -78,29 +79,31 @@ namespace LL2X {
 		bool isRegister(int check_reg) const;
 		bool isAliasOf(const Variable &) const;
 
+		VariablePtr getVariable() const;
+
 		bool operator==(const Operand &) const;
 	};
 
 	using OperandPtr = std::shared_ptr<Operand>;
 
 	template <typename... Args>
-	Operand Operand8(Args &&...args) {
-		return Operand(x86_64::Width::Eight, std::forward<Args>(args)...);
+	OperandPtr Operand8(Args &&...args) {
+		return Operand::make(x86_64::Width::Eight, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	Operand Operand4(Args &&...args) {
-		return Operand(x86_64::Width::Four, std::forward<Args>(args)...);
+	OperandPtr Operand4(Args &&...args) {
+		return Operand::make(x86_64::Width::Four, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	Operand Operand2(Args &&...args) {
-		return Operand(x86_64::Width::Two, std::forward<Args>(args)...);
+	OperandPtr Operand2(Args &&...args) {
+		return Operand::make(x86_64::Width::Two, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	Operand Operand1(Args &&...args) {
-		return Operand(x86_64::Width::Low, std::forward<Args>(args)...);
+	OperandPtr Operand1(Args &&...args) {
+		return Operand::make(x86_64::Width::Low, std::forward<Args>(args)...);
 	}
 }
 

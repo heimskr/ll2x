@@ -1068,8 +1068,8 @@ namespace LL2X {
 		VariablePtr var = newVariable(IntType::make(64), before->parent.lock());
 		OperandPtr operand = Operand::make(var);
 		auto mov = std::make_shared<Mov>(Operand::make(32, value >> 32), operand, x86_64::Width::Eight);
-		auto shl = std::make_shared<ShlInstruction>(operand, Operand::make(32, 32), x86_64::Width::Eight);
-		auto or_ = std::make_shared<OrInstruction>(operand, Operand::make(32, value & 0xffffffff),
+		auto shl = std::make_shared<Shl>(operand, Operand::make(32, 32), x86_64::Width::Eight);
+		auto or_ = std::make_shared<Or>(operand, Operand::make(32, value & 0xffffffff),
 			x86_64::Width::Eight);
 		insertBefore(before, mov, false)->setDebug(*before, true);
 		insertBefore(before, shl, false)->setDebug(*before, true);

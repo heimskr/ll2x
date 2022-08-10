@@ -1,11 +1,11 @@
 #include "instruction/Pop.h"
 
 namespace LL2X {
-	std::string PopInstruction::debugExtra() {
+	std::string Pop::debugExtra() {
 		return std::string("\e[1mpop") + suffix() + "\e[22m " + destination->ansiString();
 	}
 
-	std::string PopInstruction::toString() const {
+	std::string Pop::toString() const {
 		return std::string("pop") + suffix() + ' ' + destination->toString();
 
 	}

@@ -29,7 +29,7 @@ namespace LL2X {
 			case Mode::Direct:
 				return stringify(displacement);
 			case Mode::Label:
-				return label;
+				return useRip? label + "@GOTPCREL(%rip)" : label;
 			case Mode::Register:
 				return reg->ansiString(width);
 			case Mode::Displaced:
@@ -54,7 +54,7 @@ namespace LL2X {
 			case Mode::Direct:
 				return stringify(displacement);
 			case Mode::Label:
-				return label;
+				return useRip? label + "@GOTPCREL(%rip)" : label;
 			case Mode::Register:
 				return reg->toString(width);
 			case Mode::Displaced:
@@ -126,6 +126,12 @@ namespace LL2X {
 
 	bool Operand::isAliasOf(const Variable &var) const {
 		return isRegister() && reg && reg->isAliasOf(var);
+	}
+
+	VariablePtr Operand::getVariable() const {
+		if (mode != Mode::Register)
+			throw std::runtime_error("Can't get variable from operand: not in register mode");
+		return reg;
 	}
 
 	bool Operand::operator==(const Operand &other) const {

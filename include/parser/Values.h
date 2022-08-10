@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <variant>
@@ -9,6 +10,7 @@
 
 #include "ASTNode.h"
 #include "Enums.h"
+#include "compiler/Operand.h"
 #include "util/Makeable.h"
 
 namespace LL2X {
@@ -27,12 +29,9 @@ namespace LL2X {
 	struct Constant;
 	using ConstantPtr = std::shared_ptr<Constant>;
 
-	struct Operand;
-	using OperandPtr = std::shared_ptr<Operand>;
-
 	struct Value {
 		virtual operator std::string() = 0;
-		virtual ~Value() {}
+		virtual ~Value() = default;
 		virtual ValueType valueType() const = 0;
 		virtual ValuePtr copy() const = 0;
 		bool isInt() const;
@@ -47,6 +46,9 @@ namespace LL2X {
 		bool overflows() const;
 		/* Stringifies the Value into something that can be put in a #data section. */
 		virtual std::string compile() const = 0;
+		virtual OperandPtr makeOperand() const {
+			throw std::logic_error("makeOperand unimplemented for " + std::string(typeid(*this).name()));
+		}
 	};
 
 	struct DoubleValue: Value {
@@ -74,6 +76,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return value; }
 		std::string compile() const override { return std::to_string(value); }
+		OperandPtr makeOperand() const override { return Operand4(value); }
 	};
 
 	struct NullValue: IntValue {
@@ -84,6 +87,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return 0; }
 		std::string compile() const override { return "0"; }
+		OperandPtr makeOperand() const override { return Operand1(0); }
 	};
 
 	struct VectorValue: Value {
@@ -108,6 +112,8 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return value? 1 : 0; }
 		std::string compile() const override { return std::to_string(longValue()); }
+		OperandPtr makeOperand() const override { return Operand1(longValue()); }
+
 	};
 
 	struct VariableValue: Value {
@@ -130,6 +136,7 @@ namespace LL2X {
 		operator std::string() override;
 		std::string compile() const override { return "UNSUPPORTED (Local)"; }
 		VariablePtr getVariable(Function &);
+		OperandPtr makeOperand() const override;
 	};
 
 	/** Never produced by the parser. Instead, LocalValues are sometimes replaced with OperandValues during a compiler
@@ -151,6 +158,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<GlobalValue>(name); }
 		operator std::string() override { return "\e[32m@" + *name + "\e[39m"; }
 		std::string compile() const override { return *name; }
+		OperandPtr makeOperand() const override { return Operand8(*name, true); }
 	};
 
 	struct GetelementptrValue: Value {
@@ -205,6 +213,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<VoidValue>(); }
 		operator std::string() override { return "void"; }
 		std::string compile() const override { return "0"; }
+		OperandPtr makeOperand() const override { return Operand8(0); }
 	};
 
 	struct StructValue: Value {
@@ -247,6 +256,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<ZeroinitializerValue>(); }
 		operator std::string() override { return "zeroinitializer"; }
 		std::string compile() const override { return "0"; }
+		OperandPtr makeOperand() const override { return Operand8(0); }
 	};
 
 	struct UndefValue: Value {
@@ -257,6 +267,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return 0; }
 		std::string compile() const override { return "0"; }
+		OperandPtr makeOperand() const override { return Operand8(0); }
 	};
 
 	ValuePtr getValue(ASTNode *);
