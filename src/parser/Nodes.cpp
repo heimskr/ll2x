@@ -949,13 +949,18 @@ namespace LL2X {
 		logicType = logic_inv_map.at(*logic_type->lexerInfo);
 		left      = Constant::make(left_)->convert();
 		right     = Constant::make(right_, left->type)->convert();
+		type      = left->type;
 	}
 
 	LogicNode::LogicNode(const std::string *result_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
-		logicType(logic_type), left(left_->convert()), right(right_->convert()) { result = result_; }
+	logicType(logic_type), left(left_->convert()), right(right_->convert()), type(left->type) {
+		result = result_;
+	}
 
 	LogicNode::LogicNode(const OperandPtr &operand_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
-		logicType(logic_type), left(left_->convert()), right(right_->convert()) { operand = operand_; }
+	logicType(logic_type), left(left_->convert()), right(right_->convert()), type(left->type) {
+		operand = operand_;
+	}
 
 	std::string LogicNode::debugExtra() const {
 		std::stringstream out;

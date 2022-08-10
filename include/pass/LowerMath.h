@@ -15,6 +15,5 @@ namespace LL2X::Passes {
 
 	void lowerMath(Function &, std::shared_ptr<Instruction> &, BasicMathNode *);
 	void lowerMult(Function &, std::shared_ptr<Instruction> &, BasicMathNode *);
-	void lowerSub(Function &, std::shared_ptr<Instruction> &, BasicMathNode *);
 	void lowerLogic(Function &, std::shared_ptr<Instruction> &, LogicNode *);
 }

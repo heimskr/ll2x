@@ -410,6 +410,7 @@ namespace LL2X {
 	struct LogicNode: InstructionNode, Writer, Reader, Makeable<LogicNode> {
 		LogicType logicType;
 		ConstantPtr left, right;
+		TypePtr type;
 
 		LogicNode(ASTNode *result_, ASTNode *logic_type, ASTNode *left_, ASTNode *right_, ASTNode *unibangs);
 		LogicNode(const std::string *result_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_);

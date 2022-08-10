@@ -58,8 +58,10 @@ namespace LL2X::x86_64 {
 		switch (bits) {
 			case 64: return Width::Eight;
 			case 32: return Width::Four;
+			case 24: return Width::Four;
 			case 16: return Width::Two;
-			case  8: return Width::Low;
+			case  8:
+			case  1: return Width::Low;
 			default:
 				throw std::invalid_argument("No width corresponds to bit length " + std::to_string(bits));
 		}
