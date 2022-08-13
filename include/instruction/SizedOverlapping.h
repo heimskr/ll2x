@@ -5,8 +5,8 @@
 
 namespace LL2X {
 	struct SizedOverlapping: public Overlapping, public Sized {
-		SizedOverlapping(OperandPtr multi_, OperandPtr source_only, x86_64::Width size_):
-			Overlapping(std::move(multi_), std::move(source_only)),
+		SizedOverlapping(OperandPtr source_only, OperandPtr multi_, x86_64::Width size_):
+			Overlapping(std::move(source_only), std::move(multi_)),
 			Sized(size_) {}
 
 		protected:

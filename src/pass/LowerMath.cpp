@@ -31,11 +31,11 @@ namespace LL2X::Passes {
 
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
-		OperandPtr rax   = Operand::make(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
-		OperandPtr rdx   = Operand::make(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
+		OperandPtr rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
+		OperandPtr rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
 		const auto width = x86_64::getWidth(node->type->width());
 
-		function.insertBefore(instruction, std::make_shared<Mov>(Operand8(0), rdx, width))
+		function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rdx, width))
 			->setDebug(*instruction, true);
 		function.insertBefore(instruction, std::make_shared<Mov>(left, rax, width))->setDebug(*instruction, true);
 		function.insertBefore(instruction, std::make_shared<Ins>(right, width))->setDebug(*instruction, true);
@@ -78,7 +78,7 @@ namespace LL2X::Passes {
 		const auto width = x86_64::getWidth(node->type->width());
 
 		function.insertBefore(instruction, std::make_shared<Mov>(left, destination, width))->setDebug(*node)->extract();
-		function.insertBefore(instruction, std::make_shared<Ins>(destination, right, width))
+		function.insertBefore(instruction, std::make_shared<Ins>(right, destination, width))
 			->setDebug(*node)->extract();
 	}
 
@@ -90,7 +90,7 @@ namespace LL2X::Passes {
 		const auto width = x86_64::getWidth(node->type->width());
 
 		function.insertBefore(instruction, std::make_shared<Mov>(left, destination, width))->setDebug(*node)->extract();
-		function.insertBefore(instruction, std::make_shared<Ins>(destination, right, width))
+		function.insertBefore(instruction, std::make_shared<Ins>(right, destination, width))
 			->setDebug(*node)->extract();
 	}
 

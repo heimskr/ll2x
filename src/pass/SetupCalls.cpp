@@ -160,7 +160,7 @@ namespace LL2X::Passes {
 			// Next, move variables into the argument registers.
 			for (i = 0; i < reg_max && i < arg_count; ++i) {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
-				setupCallValue(function, precolored, instruction, call->constants[i]);
+				setupCallValue(function, OperandV(precolored), instruction, call->constants[i]);
 			}
 
 			// Push variables onto the stack, right to left.
@@ -251,17 +251,6 @@ namespace LL2X::Passes {
 				case  0:
 				case 64:
 					return;
-				case  1:
-					// mov 0, %dest
-					function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), Operand8(destination)),
-						false)->setDebug(*instruction, true);
-					// and %src, 1
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(source), Operand4(1)), false)
-						->setDebug(*instruction, true);
-					// sub %dest, %src
-					function.insertBefore(instruction, std::make_shared<Sub>(Operand8(destination), Operand8(source)),
-						false)->setDebug(*instruction, true);
-					return;
 				case  8:
 					// movsbq %src, %dest
 					function.insertBefore(instruction, std::make_shared<Movsx>(Operand1(source), Operand8(destination)),
@@ -289,28 +278,30 @@ namespace LL2X::Passes {
 				case 64:
 					return;
 				case  1:
+					// mov %src, %dest
 					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
 						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination), Operand4(1),
+					// and %dest, $1
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(1), Operand8(destination),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case  8:
 					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
 						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination), Operand4(0xff),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xff), Operand8(destination),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case 16:
 					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
 						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination), Operand4(0xffff),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffff), Operand8(destination),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case 32:
 					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
 						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination),
-						Operand4(0xffffffff), x86_64::Width::Eight))->setDebug(*instruction, true);
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffffffff),
+						Operand8(destination), x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';
@@ -344,10 +335,8 @@ namespace LL2X::Passes {
 		} else if (value_type == ValueType::Int) {
 			// Integer-like values
 			VariablePtr new_var = function.newVariable(constant->type);
-			OperandPtr mov_source = Operand8(constant->value->intValue(false));
-			mov_source->originalConstant = constant->value->longValue();
-			auto mov  = std::make_shared<Mov>(mov_source, OperandV(new_var));
-			auto push = std::make_shared<Push>(new_var, x86_64::Width::Eight);
+			auto mov  = std::make_shared<Mov>(Operand4(constant->value->longValue()), OperandV(new_var));
+			auto push = std::make_shared<Push>(OperandV(new_var), x86_64::Width::Eight);
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
 			insert_exts(new_var, new_var);
 			function.insertBefore(instruction, push)->setDebug(*instruction, true);
@@ -417,35 +406,24 @@ namespace LL2X::Passes {
 		signext = signext == 64? 0 : signext;
 		zeroext = zeroext == 64? 0 : zeroext;
 
-		auto insert_signext = [&](const VariablePtr &source, const VariablePtr &destination) -> void {
+		auto insert_signext = [&] {
 			switch (signext) {
 				case  0:
 				case 64:
 					return;
-				case  1:
-					// mov 0, %dest
-					function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), Operand8(destination)),
-						false)->setDebug(*instruction, true);
-					// and %src, 1
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(source), Operand4(1)), false)
-						->setDebug(*instruction, true);
-					// sub %dest, %src
-					function.insertBefore(instruction, std::make_shared<Sub>(Operand8(destination), Operand8(source)),
-						false)->setDebug(*instruction, true);
-					return;
 				case  8:
-					// movsbq %src, %dest
-					function.insertBefore(instruction, std::make_shared<Movsx>(Operand1(source), Operand8(destination)),
+					// movsbq %var, %var
+					function.insertBefore(instruction, std::make_shared<Movsx>(Operand1(new_var), Operand8(new_var)),
 						false)->setDebug(*instruction, true);
 					return;
 				case 16:
-					// movswq %src, %dest
-					function.insertBefore(instruction, std::make_shared<Movsx>(Operand2(source), Operand8(destination)),
+					// movswq %var, %var
+					function.insertBefore(instruction, std::make_shared<Movsx>(Operand2(new_var), Operand8(new_var)),
 						false)->setDebug(*instruction, true);
 					return;
 				case 32:
-					// movsdq %src, %dest
-					function.insertBefore(instruction, std::make_shared<Movsx>(Operand4(source), Operand8(destination)),
+					// movsdq %var, %var
+					function.insertBefore(instruction, std::make_shared<Movsx>(Operand4(new_var), Operand8(new_var)),
 						false)->setDebug(*instruction, true);
 					return;
 				default:
@@ -454,34 +432,26 @@ namespace LL2X::Passes {
 			}
 		};
 
-		auto insert_zeroext = [&](const VariablePtr &source, const VariablePtr &destination) -> void {
+		auto insert_zeroext = [&] {
 			switch (zeroext) {
 				case  0:
 				case 64:
 					return;
 				case  1:
-					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
-						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination), Operand4(1),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(1), Operand8(new_var),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case  8:
-					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
-						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination), Operand4(0xff),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xff), Operand8(new_var),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case 16:
-					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
-						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination), Operand4(0xffff),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffff), Operand8(new_var),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case 32:
-					function.insertBefore(instruction, std::make_shared<Mov>(Operand1(source), Operand1(destination),
-						x86_64::Width::Low))->setDebug(*instruction, true);
-					function.insertBefore(instruction, std::make_shared<And>(Operand8(destination),
-						Operand4(0xffffffff), x86_64::Width::Eight))->setDebug(*instruction, true);
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffffffff), Operand8(new_var),
+						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';
@@ -489,43 +459,39 @@ namespace LL2X::Passes {
 			}
 		};
 
-		auto insert_exts = [&](const VariablePtr &source, const VariablePtr &destination) -> void {
-			insert_signext(source, destination);
-			insert_zeroext(source, destination);
+		auto insert_exts = [&] {
+			insert_signext();
+			insert_zeroext();
 		};
 
 		ValueType value_type = constant->value->valueType();
 		if (value_type == ValueType::Local) {
 			// If it's a variable, move it into the argument register.
 			std::shared_ptr<LocalValue> local = std::dynamic_pointer_cast<LocalValue>(constant->value);
-			auto move = std::make_shared<MoveInstruction>(local->variable, new_var);
-			auto out =function.insertBefore(instruction, move);
+			auto mov = std::make_shared<Mov>(OperandV(local->variable), OperandV(new_var), x86_64::Width::Eight);
+			auto out = function.insertBefore(instruction, mov);
 			out->setDebug(*instruction, true);
-			if (signext)
-				function.insertBefore(instruction, make_signext());
+			insert_exts();
 			return out;
 		} else if (value_type == ValueType::Int) {
 			// If it's an integer constant, set the argument register to it.
-			auto set = std::make_shared<SetInstruction>(new_var, constant->value->intValue(false));
-			set->setOriginalValue(constant->value);
-			auto out = function.insertBefore(instruction, set);
+			auto mov = std::make_shared<Mov>(Operand4(constant->value->longValue()), OperandV(new_var));
+			auto out = function.insertBefore(instruction, mov);
 			out->setDebug(*instruction, true);
-			if (signext)
-				function.insertBefore(instruction, make_signext());
+			insert_exts();
 			return out;
 		} else if (value_type == ValueType::Bool) {
 			// If it's a boolean constant, convert it to an integer and do the same.
 			std::shared_ptr<BoolValue> bval = std::dynamic_pointer_cast<BoolValue>(constant->value);
-			auto set = std::make_shared<SetInstruction>(new_var, bval->value? 1 : 0);
-			auto out = function.insertBefore(instruction, set);
+			auto mov = std::make_shared<Mov>(Operand4(bval->value? 1 : 0), OperandV(new_var));
+			auto out = function.insertBefore(instruction, mov);
 			out->setDebug(*instruction, true);
-			if (signext)
-				function.insertBefore(instruction, make_signext());
+			insert_exts();
 			return out;
 		} else if (value_type == ValueType::Null || value_type == ValueType::Undef) {
 			// If it's a null or undef constant, just use zero. No need to sign extend.
-			auto set = std::make_shared<SetInstruction>(new_var, 0);
-			auto out = function.insertBefore(instruction, set);
+			auto mov = std::make_shared<Mov>(Operand4(0), OperandV(new_var));
+			auto out = function.insertBefore(instruction, mov);
 			out->setDebug(*instruction, true);
 			return out;
 		} else if (value_type == ValueType::Getelementptr) {
@@ -556,16 +522,18 @@ namespace LL2X::Passes {
 
 				InstructionPtr out;
 				if (offset == 0) {
-					auto move = std::make_shared<MoveInstruction>(local->getVariable(function), new_var);
-					function.insertBefore(instruction, move)->setDebug(*instruction, true);
-					out = move;
+					auto mov = std::make_shared<Mov>(OperandV(local->getVariable(function)), OperandV(new_var));
+					function.insertBefore(instruction, mov)->setDebug(*instruction, true);
+					out = mov;
 				} else {
-					auto addi = std::make_shared<AddIInstruction>(local->getVariable(function), int(offset), new_var);
+					VariablePtr var = local->getVariable(function);
+					auto mov = std::make_shared<Mov>(OperandV(var), OperandV(new_var));
+					function.insertBefore(instruction, mov)->setDebug(*instruction, true);
+					auto add = std::make_shared<Add>(OperandV(new_var), Operand4(offset));
 					function.insertBefore(instruction, addi)->setDebug(*instruction, true);
 					out = addi;
 				}
-				if (signext)
-					function.insertBefore(instruction, make_signext());
+				insert_exts();
 				return out;
 			} else {
 				const std::list<long> indices = Getelementptr::getLongIndices(*gep);
@@ -580,23 +548,20 @@ namespace LL2X::Passes {
 				if (offset != 0)
 					function.insertAfter(setsym, std::make_shared<AddIInstruction>(new_var, int(offset), new_var))
 						->setDebug(*instruction, true);
-				if (signext)
-					function.insertBefore(instruction, make_signext());
+				insert_exts();
 				return out;
 			}
 		} else if (value_type == ValueType::Global) {
 			auto *global = dynamic_cast<GlobalValue *>(constant->value.get());
 			auto out = function.insertBefore(instruction, std::make_shared<SetInstruction>(new_var, global->name));
 			out->setDebug(*instruction, true);
-			if (signext)
-				function.insertBefore(instruction, make_signext());
+			insert_exts();
 			return out;
 		} else if (value_type == ValueType::Icmp) {
 			auto *icmp = dynamic_cast<IcmpValue *>(constant->value.get());
 			auto node = IcmpNode::make(new_var, icmp->cond, icmp->left, icmp->right);
 			Passes::lowerIcmp(function, instruction, node.get());
-			if (signext)
-				function.insertBefore(instruction, make_signext());
+			insert_exts();
 			return nullptr; // Whatever.
 		} else {
 			warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"

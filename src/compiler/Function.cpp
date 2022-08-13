@@ -1686,14 +1686,14 @@ namespace LL2X {
 		switch (gep->variable->valueType()) {
 			case ValueType::Global: {
 				VariablePtr new_var = newVariable(out_type);
-				OperandPtr operand = Operand::make(64, new_var);
+				OperandPtr operand = OperandV(new_var);
 
-				insertBefore(instruction, std::make_shared<Mov>(Operand::make(32,
-					*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand, x86_64::Width::Four))
+				insertBefore(instruction, std::make_shared<Mov>(
+					Operand4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand))
 					->setDebug(*instruction, true);
 
 				if (offset != 0)
-					insertBefore(instruction, std::make_shared<Add>(operand, Operand::make(32, int(offset)),
+					insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand,
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);
@@ -1707,7 +1707,7 @@ namespace LL2X {
 					dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
 					operand, x86_64::Width::Eight))->setDebug(*instruction, true);
 
-				insertBefore(instruction, std::make_shared<Add>(operand, Operand::make(32, int(offset)),
+				insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand,
 					x86_64::Width::Eight))->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);

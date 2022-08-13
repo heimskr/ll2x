@@ -9,7 +9,7 @@ namespace LL2X {
 		OperandPtr multi;
 		OperandPtr sourceOnly;
 
-		Overlapping(OperandPtr multi_, OperandPtr source_only):
+		Overlapping(OperandPtr source_only, OperandPtr multi_):
 			multi(std::move(multi_)), sourceOnly(std::move(source_only)) {}
 
 		ExtractionResult extract(bool force = false) override;
