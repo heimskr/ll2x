@@ -12,5 +12,5 @@ namespace LL2X::Passes {
 	/** Lowers icmp instructions with Why instructions. */
 	int lowerIcmp(Function &);
 
-	void lowerIcmp(Function &, std::shared_ptr<Instruction> &, IcmpNode *node);
+	void lowerIcmp(Function &, const std::shared_ptr<Instruction> &, IcmpNode *node);
 }

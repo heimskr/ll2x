@@ -34,7 +34,16 @@ namespace LL2X {
 		Number originalConstant = 0;
 		bool useRip = false;
 
+		Operand() = delete;
+
+		Operand(const Operand &) = default;
+		Operand(Operand &&) = default;
+
 		Operand(VariablePtr var);
+
+		Operand(x86_64::Width width_, const OperandPtr &other): Operand(*other) {
+			width = width_;
+		}
 
 		Operand(x86_64::Width width_, Number number):
 			mode(Mode::Constant), width(width_), displacement(number) {}
@@ -88,26 +97,26 @@ namespace LL2X {
 	using OperandPtr = std::shared_ptr<Operand>;
 
 	template <typename... Args>
-	OperandPtr Operand8(Args &&...args) {
+	inline OperandPtr Operand8(Args &&...args) {
 		return Operand::make(x86_64::Width::Eight, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	OperandPtr Operand4(Args &&...args) {
+	inline OperandPtr Operand4(Args &&...args) {
 		return Operand::make(x86_64::Width::Four, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	OperandPtr Operand2(Args &&...args) {
+	inline OperandPtr Operand2(Args &&...args) {
 		return Operand::make(x86_64::Width::Two, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	OperandPtr Operand1(Args &&...args) {
+	inline OperandPtr Operand1(Args &&...args) {
 		return Operand::make(x86_64::Width::Low, std::forward<Args>(args)...);
 	}
 
-	OperandPtr OperandV(const VariablePtr &var) {
+	inline OperandPtr OperandV(const VariablePtr &var) {
 		return Operand::make(var);
 	}
 }

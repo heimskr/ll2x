@@ -27,7 +27,7 @@ namespace LL2X::Passes {
 		return to_remove.size();
 	}
 
-	void lowerIcmp(Function &function, InstructionPtr &instruction, IcmpNode *node) {
+	void lowerIcmp(Function &function, const InstructionPtr &instruction, IcmpNode *node) {
 		if (node->getType()->typeType() == TypeType::Vector)
 			throw std::runtime_error("Vectors are unsupported in icmp instructions");
 
