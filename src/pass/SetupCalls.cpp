@@ -198,7 +198,7 @@ namespace LL2X::Passes {
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {
 				VariablePtr rsp = function.stackPointer(block);
-				auto add = std::make_shared<Add>(rsp, Operand4(bytes_pushed));
+				auto add = std::make_shared<Add>(Operand4(bytes_pushed), rsp);
 				function.insertBefore(instruction, add, "SetupCalls: readjust stack pointer", false)
 					->setDebug(*llvm)->extract();
 			}
@@ -376,7 +376,7 @@ namespace LL2X::Passes {
 				auto movsym = std::make_shared<Mov>(Operand8(*gep_global->name), OperandV(new_var));
 				function.insertBefore(instruction, movsym)->setDebug(*instruction, true);
 				if (offset != 0) {
-					auto add = std::make_shared<Add>(OperandV(new_var), Operand4(offset));
+					auto add = std::make_shared<Add>(Operand4(offset), OperandV(new_var));
 					function.insertBefore(instruction, add)->setDebug(*instruction, true);
 				}
 				insert_exts(new_var, new_var);
@@ -529,9 +529,9 @@ namespace LL2X::Passes {
 					VariablePtr var = local->getVariable(function);
 					auto mov = std::make_shared<Mov>(OperandV(var), OperandV(new_var));
 					function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-					auto add = std::make_shared<Add>(OperandV(new_var), Operand4(offset));
-					function.insertBefore(instruction, addi)->setDebug(*instruction, true);
-					out = addi;
+					auto add = std::make_shared<Add>(Operand4(offset), OperandV(new_var));
+					function.insertBefore(instruction, add)->setDebug(*instruction, true);
+					out = add;
 				}
 				insert_exts();
 				return out;
@@ -542,21 +542,22 @@ namespace LL2X::Passes {
 				if (Util::outOfRange(offset))
 					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 
-				auto setsym = std::make_shared<SetInstruction>(new_var, gep_global->name);
-				auto out = function.insertBefore(instruction, setsym);
+				auto movsym = std::make_shared<Mov>(Operand8(*gep_global->name), OperandV(new_var));
+				auto out = function.insertBefore(instruction, movsym);
 				out->setDebug(*instruction, true);
-				if (offset != 0)
-					function.insertAfter(setsym, std::make_shared<AddIInstruction>(new_var, int(offset), new_var))
-						->setDebug(*instruction, true);
+				if (offset != 0) {
+					auto add = std::make_shared<Add>(Operand4(offset), OperandV(new_var));
+					function.insertBefore(instruction, add)->setDebug(*instruction, true);
+				}
 				insert_exts();
 				return out;
 			}
 		} else if (value_type == ValueType::Global) {
 			auto *global = dynamic_cast<GlobalValue *>(constant->value.get());
-			auto out = function.insertBefore(instruction, std::make_shared<SetInstruction>(new_var, global->name));
-			out->setDebug(*instruction, true);
+			auto mov = std::make_shared<Mov>(Operand8(*global->name), OperandV(new_var));
+			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
 			insert_exts();
-			return out;
+			return mov;
 		} else if (value_type == ValueType::Icmp) {
 			auto *icmp = dynamic_cast<IcmpValue *>(constant->value.get());
 			auto node = IcmpNode::make(new_var, icmp->cond, icmp->left, icmp->right);
