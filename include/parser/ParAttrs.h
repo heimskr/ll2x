@@ -16,12 +16,17 @@ namespace LL2X {
 		int align = -1, dereferenceable = -1;
 		bool orNull = false;
 		bool signext = false;
+		bool zeroext = false;
 
 		ParAttrs();
 		ParAttrs(const ASTNode &);
 		ParAttrs(const ParAttrs &);
+		ParAttrs(ParAttrs &&) = default;
+
+		~ParAttrs() = default;
 
 		ParAttrs & operator=(const ParAttrs &);
+		ParAttrs & operator=(ParAttrs &&) = default;
 
 		operator std::string() const;
 	};

@@ -6,8 +6,10 @@
 namespace LL2X {
 	struct Mov: SizedSourceToDest, HasCondition {
 		Mov(OperandPtr source_, OperandPtr destination_, x86_64::Width size_,
-		               x86_64::Condition condition = x86_64::Condition::Unconditional):
-			SizedSourceToDest(source_, destination_, size_), HasCondition(condition) {}
+			x86_64::Condition condition = x86_64::Condition::Unconditional);
+
+		Mov(OperandPtr source_, OperandPtr destination_,
+			x86_64::Condition condition = x86_64::Condition::Unconditional);
 
 		std::string debugExtra() override     { return makeDebug(getMnemonic());  }
 		std::string toString() const override { return makeString(getMnemonic()); }

@@ -78,6 +78,7 @@ namespace LL2X {
 		bool isRegister() const { return mode == Mode::Register; }
 		bool isRegister(int check_reg) const;
 		bool isAliasOf(const Variable &) const;
+		bool isLabel() const;
 
 		VariablePtr getVariable() const;
 
@@ -104,6 +105,10 @@ namespace LL2X {
 	template <typename... Args>
 	OperandPtr Operand1(Args &&...args) {
 		return Operand::make(x86_64::Width::Low, std::forward<Args>(args)...);
+	}
+
+	OperandPtr OperandV(const VariablePtr &var) {
+		return Operand::make(var);
 	}
 }
 

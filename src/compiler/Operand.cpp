@@ -128,6 +128,10 @@ namespace LL2X {
 		return isRegister() && reg && reg->isAliasOf(var);
 	}
 
+	bool Operand::isLabel() const {
+		return mode == Mode::Label;
+	}
+
 	VariablePtr Operand::getVariable() const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't get variable from operand: not in register mode");

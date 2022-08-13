@@ -78,7 +78,7 @@
 // #include "pass/RemoveUselessBranches.h"
 #include "pass/ReplaceConstants.h"
 // #include "pass/ReplaceStoresAndLoads.h"
-// #include "pass/SetupCalls.h"
+#include "pass/SetupCalls.h"
 #include "pass/SplitBlocks.h"
 // #include "pass/SplitResultMoves.h"
 #include "pass/StackSkip.h"
@@ -904,7 +904,7 @@ namespace LL2X {
 // 		Passes::lowerVarargsFirst(*this);
 // 		Passes::lowerMemcpy(*this);
 // 		Passes::lowerMemset(*this);
-// 		Passes::setupCalls(*this);
+		Passes::setupCalls(*this);
 // 		Passes::lowerMemory(*this);
 // 		Passes::lowerInlineAsm(*this);
 // 		Passes::lowerExtractvalue(*this);

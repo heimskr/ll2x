@@ -16,6 +16,7 @@ namespace LL2X {
 		dereferenceable = source.dereferenceable;
 		orNull = source.orNull;
 		signext = source.signext;
+		zeroext = source.zeroext;
 	}
 	
 	ParAttrs::ParAttrs(const ASTNode &node) {
@@ -31,6 +32,8 @@ namespace LL2X {
 						attributes.insert(pair.first);
 						if (pair.first == ParAttr::Signext)
 							signext = true;
+						if (pair.first == ParAttr::Zeroext)
+							zeroext = true;
 						break;
 					}
 		}
@@ -46,6 +49,7 @@ namespace LL2X {
 		dereferenceable = other.dereferenceable;
 		orNull = other.orNull;
 		signext = other.signext;
+		zeroext = other.zeroext;
 		return *this;
 	}
 
