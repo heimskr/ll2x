@@ -86,6 +86,7 @@ namespace LL2X {
 
 		bool isRegister() const { return mode == Mode::Register; }
 		bool isRegister(int check_reg) const;
+		bool isRegisters(const std::set<int> &check_regs) const;
 		bool isAliasOf(const Variable &) const;
 		bool isLabel() const;
 

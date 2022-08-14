@@ -9,7 +9,14 @@ namespace LL2X {
 	class Variable;
 
 	struct StackLocation {
-		enum class Purpose {Spill};
+		enum class Purpose {
+			/** For spilled registers, unsurprisingly. */
+			Spill,
+
+			/** Functions that return large (> 128 bits) structs secretly take a pointer to somewhere on the stack as an
+			 *  additional argument and return that pointer instead of copying the struct directly. */
+			BigStruct,
+		};
 		
 		Function *function = nullptr;
 		Purpose purpose;

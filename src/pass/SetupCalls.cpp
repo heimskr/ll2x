@@ -9,6 +9,7 @@
 #include "instruction/Call.h"
 #include "instruction/Invalid.h"
 #include "instruction/Jmp.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "instruction/Movsx.h"
 #include "instruction/Pop.h"
@@ -118,6 +119,9 @@ namespace LL2X::Passes {
 				ellipsis = false;
 			}
 
+			const bool big_return = 64 < call->returnType->width();
+			const int arg_offset = big_return? 1 : 0; 
+
 			constexpr int reg_max = 6;
 			const int arg_count = argument_types.size();
 
@@ -131,18 +135,28 @@ namespace LL2X::Passes {
 			};
 
 			// First, push the current values of the argument registers to the stack.
-			for (i = 0; i < arg_count && i < reg_max; ++i) {
+			for (i = 0; i < arg_count + arg_offset && i < reg_max; ++i) {
 				VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
 				function.insertBefore(instruction, std::make_shared<Push>(Operand8(arg_variable), x86_64::Width::Eight),
 					false)->setDebug(*llvm, true);
 			}
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
+			VariablePtr rdx;
 
 			// Next, if the function returns a value, push %rax to the stack.
 			if (call->result)
 				function.insertBefore(instruction, std::make_shared<Push>(Operand8(rax), x86_64::Width::Eight), false)
 					->setDebug(*llvm, true);
+
+			// If the callee returns a big enough value (but not too big), push %rdx to the stack.
+			const int return_size = call->returnType->width();
+			const bool use_rdx = 64 < return_size && return_size <= 128;
+			if (call->result && use_rdx) {
+				rdx = function.makePrecoloredVariable(x86_64::rdx, block);
+				function.insertBefore(instruction, std::make_shared<Push>(Operand8(rdx), x86_64::Width::Eight), false)
+					->setDebug(*llvm, true);
+			}
 
 			// Next, if applicable, we account for the situation where the jump is to an argument register. Because it
 			// may be overwritten right before the jump, we'd need to copy it to a temporary variable and jump to that.
@@ -157,10 +171,23 @@ namespace LL2X::Passes {
 			// 	}
 			// }
 
+			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
+			// the stack for the struct and pass a pointer to it in %rdi.
+			VariablePtr big_result;
+			if (call->result && 128 < return_size) {
+				big_result = function.newVariable(call->returnType, block);
+				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
+				VariablePtr rbp = function.basePointer(block);
+				OperandPtr pointer = Operand8(-location.offset, rbp);
+				OperandPtr rdi = Operand8(function.makePrecoloredVariable(x86_64::rdi, block));
+				auto lea = std::make_shared<Lea>(pointer, rdi);
+				function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
+			}
+
 			// Next, move variables into the argument registers.
-			for (i = 0; i < reg_max && i < arg_count; ++i) {
+			for (i = arg_offset; i < reg_max && i < arg_count + arg_offset; ++i) {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
-				setupCallValue(function, OperandV(precolored), instruction, call->constants[i]);
+				setupCallValue(function, OperandV(precolored), instruction, call->constants[i - arg_offset]);
 			}
 
 			// Push variables onto the stack, right to left.
@@ -169,8 +196,8 @@ namespace LL2X::Passes {
 				for (i = call->constants.size() - 1; 0 <= i; --i)
 					bytes_pushed += pushCallValue(function, instruction, call->constants[i]);
 			else
-				for (i = arg_count - 1; reg_max <= i; --i)
-					bytes_pushed += pushCallValue(function, instruction, call->constants[i]);
+				for (i = arg_count + arg_offset - 1; reg_max <= i; --i)
+					bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset]);
 
 			// VariablePtr m2;
 
@@ -206,24 +233,37 @@ namespace LL2X::Passes {
 			// if (function.isVariadic())
 			// 	function.insertBefore(instruction, std::make_shared<StackPopInstruction>(m2), false);
 
-			// Pop %rax if necessary.
-			if (call->result)
+			// Pop %rdx if necessary.
+			if (call->result && use_rdx)
+				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rdx), x86_64::Width::Eight), false)
+					->setDebug(*llvm, true);
+
+			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)
+			// and pop %rax. Or something.
+			if (call->result) {
+				if (return_size <= 128) {
+					// mov %rax, %result
+					auto move = std::make_shared<Mov>(Operand8(rax), OperandV(function.getVariable(*call->result)));
+					function.insertBefore(instruction, move, "SetupCalls: move result from %rax", false)
+						->setDebug(*llvm, true);
+					function.categories["SetupCalls:MoveFromResult"].insert(move);
+
+					// Oops!
+					if (64 <= return_size)
+						throw std::runtime_error("Values in the range (64 bits, 128 bits] are currently unsupported as "
+							"return values");
+				}
+
+				// pop %rax
 				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rax), x86_64::Width::Eight), false)
 					->setDebug(*llvm, true);
+			}
 
 			// Pop the argument registers from the stack.
 			for (i = std::min(reg_max - 1, arg_count - 1); 0 <= i; --i) {
 				VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
 				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(arg_variable), x86_64::Width::Eight),
 					false)->setDebug(*llvm, true);
-			}
-
-			// If the call specified a result variable, move %rax into that variable.
-			if (call->result) {
-				auto move = std::make_shared<Mov>(Operand8(rax), OperandV(function.getVariable(*call->result)));
-				function.insertBefore(instruction, move, "SetupCalls: move result from %rax", false)
-					->setDebug(*llvm, true);
-				function.categories["SetupCalls:MoveFromResult"].insert(move);
 			}
 
 			to_remove.push_back(instruction);

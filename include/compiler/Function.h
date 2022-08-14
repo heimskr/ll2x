@@ -282,7 +282,7 @@ namespace LL2X {
 			/** Assigns special argument registers to all variables as appropriate. */
 			void precolorArguments();
 
-			/** Assigns or looks up a stack location for a given variable. */
+			/** Assigns or looks up a stack location for a given variable. The width parameter is in bytes. */
 			StackLocation & addToStack(VariablePtr, StackLocation::Purpose, int width = -1);
 
 			/** Removes an instruction from the function. */

@@ -69,7 +69,14 @@ namespace LL2X {
 	}
 
 	bool Variable::equivalent(const Variable &other) const {
-		return *this == other || reg == other.reg;
+		if (*this == other)
+			return true;
+		if (!allRegistersSpecial() || !other.allRegistersSpecial() || registers.size() != other.registers.size())
+			return false;
+		for (const int reg: registers)
+			if (other.registers.count(reg) == 0)
+				return false;
+		return true;
 	}
 
 	bool Variable::isAliasOf(const Variable &other) const {
@@ -80,10 +87,24 @@ namespace LL2X {
 	std::string Variable::ansiString(x86_64::Width width) const {
 		std::stringstream out;
 		const std::string base;
-		if (reg < 0)
+		if (registers.empty())
 			out << "\e[32m%" << *id << "\e[39m";
-		else
-			out << "\e[92m%" << x86_64::registerName(reg, width) << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
+		else {
+			out << "\e[92m";
+			if (1 < registers.size())
+				out << '(';
+			bool first = true;
+			for (const int reg: registers) {
+				if (first)
+					first = false;
+				else
+					out << ' ';
+				out << '%' << x86_64::registerName(reg, width);
+			}
+			if (1 < registers.size())
+				out << ')';
+			out << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
+		}
 #ifdef VARIABLE_EXTRA
 		auto sparent = parent.lock();
 		auto alias_set = sparent? sparent->aliases : aliases;
@@ -103,15 +124,44 @@ namespace LL2X {
 	}
 
 	std::string Variable::toString(x86_64::Width width) const {
-		if (reg < 0)
-			return '%' + x86_64::registerName(reg);
+		if (1 < registers.size()) {
+			std::string out('(', 1);
+			bool first = true;
+			for (const int reg: registers) {
+				if (first)
+					first = false;
+				else
+					out += ' ';
+				out += '%' + x86_64::registerName(reg, width);
+			}
+			out += ')';
+			return out;
+		}
+
+		if (registers.size() == 1)
+			return '%' + x86_64::registerName(*registers.begin());
+
 		return ansiString(width);
 	}
 
 	std::string Variable::plainString(x86_64::Width width) const {
-		if (reg < 0)
+		if (registers.empty())
 			return '^' + *id;
-		return '%' + x86_64::registerName(reg, width) + ":" + *id;
+		else if (registers.size() == 1)
+			return '%' + x86_64::registerName(*registers.begin(), width) + ":" + *id;
+		else {
+			std::string out('(', 1);
+			bool first = true;
+			for (const int reg: registers) {
+				if (first)
+					first = false;
+				else
+					out += ' ';
+				out += '%' + x86_64::registerName(reg, width);
+			}
+			out += "):" + *id;
+			return out;
+		}
 	}
 
 	Function * Variable::getFunction() const {
@@ -170,7 +220,7 @@ namespace LL2X {
 		usingBlocks = new_parent->usingBlocks;
 		definitions = new_parent->definitions;
 		uses = new_parent->uses;
-		reg = new_parent->reg; // ???
+		registers = new_parent->registers; // ???
 	}
 
 	void Variable::addDefiner(std::shared_ptr<BasicBlock> block) {
@@ -322,22 +372,75 @@ namespace LL2X {
 	VARSETTER(Uses, const decltype(Variable::uses) &, new_uses, uses)
 	VARSETTER(UsingBlocks, const decltype(Variable::usingBlocks) &, blocks, usingBlocks)
 	VARSETTER(LastUse, decltype(Variable::lastUse), use, lastUse);
-	VARSETTER(Register, decltype(Variable::reg), new_register, reg);
+	VARSETTER(Registers, const decltype(Variable::registers) &, new_registers, registers);
 
-	bool Variable::isSpecialRegister() const {
-		return 0 <= reg && x86_64::isSpecialPurpose(reg);
+	bool Variable::hasSpecialRegister() const {
+		for (const int reg: registers)
+			if (x86_64::isSpecialPurpose(reg))
+				return true;
+		return false;
+	}
+
+	bool Variable::hasNonSpecialRegister() const {
+		for (const int reg: registers)
+			if (!x86_64::isSpecialPurpose(reg))
+				return true;
+		return false;
+	}
+
+	int Variable::nonSpecialCount() const {
+		int count = 0;
+		for (const int reg: registers)
+			if (!x86_64::isSpecialPurpose(reg))
+				++count;
+		return count;
+	}
+
+	bool Variable::allRegistersSpecial() const {
+		return !registers.empty() && !hasNonSpecialRegister();
 	}
 
 	bool Variable::compareRegisters(const Variable &other) const {
-		return reg == other.reg;
+		if (registers.size() != other.registers.size())
+			return false;
+		auto this_iter = registers.begin(), that_iter = other.registers.begin();
+		for (; this_iter != registers.end(); ++this_iter, ++that_iter)
+			if (*this_iter != *that_iter)
+				return false;
+		return true;
 	}
 
-	bool Variable::hasRegister() const {
-		return 0 <= reg;
+	int Variable::registersRequired(bool may_warn) const {
+		if (!type) {
+			if (may_warn)
+				warn() << "Variable::registersRequired: " << *this << " has no type in function " << functionName()
+				       << ".\n";
+			return 1;
+		}
+		return Util::updiv(type->width(), 64);
+	}
+
+	bool Variable::multireg() const {
+		return 1 < registers.size();
+	}
+
+	std::string Variable::registersString() const {
+		std::string out = 1 < registers.size()? "(" : "";
+		bool first = true;
+		for (const int reg: registers) {
+			if (first)
+				first = false;
+			else
+				out += ' ';
+			out += '%' + x86_64::registerName(reg);
+		}
+		if (1 < registers.size())
+			out += ')';
+		return out;
 	}
 
 	std::ostream & operator<<(std::ostream &os, const LL2X::Variable &var) {
-		return os << var.ansiString(x86_64::Width::Eight);
+		return os << var.ansiString();
 	}
 
 	bool Variable::isLess(long max) const {

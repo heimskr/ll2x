@@ -1,5 +1,6 @@
 #include "compiler/Operand.h"
 #include "compiler/Variable.h"
+#include "util/Util.h"
 
 namespace LL2X {
 	static std::string stringify(const Operand::Variant &variant) {
@@ -13,7 +14,7 @@ namespace LL2X {
 	}
 
 	static std::string pcrel(const VariablePtr &var) {
-		return var && var->reg == x86_64::rip? "@GOTPCREL" : "";
+		return (var && var->registers.size() == 1 && *var->registers.begin() == x86_64::rip)? "@GOTPCREL" : "";
 	}
 
 	Operand::Operand(VariablePtr var):
@@ -121,7 +122,11 @@ namespace LL2X {
 	}
 
 	bool Operand::isRegister(int check_reg) const {
-		return isRegister() && reg && reg->reg == check_reg;
+		return isRegister() && reg && reg->registers.size() == 1 && *reg->registers.begin() == check_reg;
+	}
+
+	bool Operand::isRegisters(const std::set<int> &check_regs) const {
+		return isRegister() && reg && Util::equal(reg->registers, check_regs);
 	}
 
 	bool Operand::isAliasOf(const Variable &var) const {

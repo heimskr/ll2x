@@ -124,13 +124,11 @@ namespace LL2X {
 				std::cerr << ' ' << *alias;
 			std::cerr << '\n';
 #endif
-			if (!ptr->hasRegister()) {
-				if (pair.second->colors.size() != 1)
-					throw std::runtime_error("Incorrect number of colors for " + ptr->toString(x86_64::Width::Eight)
-						+ ": " + std::to_string(pair.second->colors.size()));
-				ptr->setRegister(*pair.second->colors.begin());
-			} else {
-				warn() << *ptr << " already has a register: " << ptr->reg << '\n';
+			if (ptr->registers.empty()) {
+				std::set<int> assigned;
+				for (const int color: pair.second->colors)
+					assigned.insert(color);
+				ptr->setRegisters(assigned);
 			}
 		}
 
@@ -171,7 +169,7 @@ namespace LL2X {
 		VariablePtr ptr;
 		int lowest = INT_MAX;
 		for (const auto &[id, var]: function->variableStore) {
-			if (var->isSpecialRegister())
+			if (var->allRegistersSpecial())
 				continue;
 			var->clearSpillCost();
 			const int cost = var->spillCost();
@@ -193,7 +191,7 @@ namespace LL2X {
 		int highest = -1;
 		for (const auto *map: {&function->variableStore, &function->extraVariables})
 			for (const auto &[id, var]: *map) {
-				if (var->isSpecialRegister() || !function->canSpill(var))
+				if (var->allRegistersSpecial() || !function->canSpill(var))
 					continue;
 				const int sum = function->getLiveIn(var).size() + function->getLiveOut(var).size();
 				if (highest < sum && triedIDs.count(var->originalID) == 0) {
@@ -221,7 +219,7 @@ namespace LL2X {
 		long lowest = LONG_MAX;
 		for (const Node *node: interference.nodes()) {
 			VariablePtr var = node->get<VariablePtr>();
-			if (var->isSpecialRegister() || !function->canSpill(var))
+			if (var->allRegistersSpecial() || !function->canSpill(var))
 				continue;
 			var->clearSpillCost();
 			const int cost = var->spillCost();
@@ -254,7 +252,7 @@ namespace LL2X {
 			// for (Variable *v: pair.second->getAliases()) std::cerr << " " << *v;
 			// std::cerr << "\n";
 #endif
-			if (!var->hasRegister()) {
+			if (var->registers.empty()) {
 				const std::string *parent_id = var->parentID();
 				if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
 					Node &node = interference.addNode(*parent_id);
@@ -351,7 +349,7 @@ namespace LL2X {
 
 		for (const auto &[id, var]: function->variableStore) {
 			const Variable::ID parent_id = var->parentID();
-			if (var->hasRegister())
+			if (!var->registers.empty())
 				continue;
 			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
 				const auto index = bptr.lock()->index;
@@ -374,14 +372,14 @@ namespace LL2X {
 			auto &set = sets[block->index];
 			for (const VariablePtr &var: block->liveIn) {
 				const Variable::ID parent_id = var->parentID();
-				if (!var->hasRegister() && !set.contains(parent_id)) {
+				if (var->registers.empty() && !set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}
 			}
 			for (const VariablePtr &var: block->liveOut) {
 				const Variable::ID parent_id = var->parentID();
-				if (!var->hasRegister() && !set.contains(parent_id)) {
+				if (var->registers.empty() && !set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}

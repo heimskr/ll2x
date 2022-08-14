@@ -62,7 +62,7 @@
 // #include "pass/LowerMemory.h"
 // #include "pass/LowerMemset.h"
 // #include "pass/LowerObjectsize.h"
-// #include "pass/LowerRet.h"
+#include "pass/LowerRet.h"
 // #include "pass/LowerSelect.h"
 // #include "pass/LowerStack.h"
 // #include "pass/LowerStackrestore.h"
@@ -864,11 +864,16 @@ namespace LL2X {
 	void Function::resetRegisters(bool respectful) {
 		if (!respectful)
 			for (const auto &[id, var]: variableStore)
-				var->setRegister(-1);
+				var->setRegisters({});
 		else
-			for (const auto &[id, var]: variableStore)
-				if (!var->isSpecialRegister())
-					var->setRegister(-1); // TODO: maybe just set reg directly?
+			for (const auto &[id, var]: variableStore) {
+				std::unordered_set<int> to_remove;
+				for (const int reg: var->registers)
+					if (!x86_64::isSpecialPurpose(reg))
+						to_remove.insert(reg);
+				for (const int reg: to_remove)
+					var->registers.erase(reg);
+			}
 	}
 
 	void Function::initialCompile() {
@@ -942,12 +947,12 @@ namespace LL2X {
 		Passes::mergeAllBlocks(*this);
 		// Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
-		// const bool naked = isNaked();
-		// if (!naked)
-		// 	Passes::insertPrologue(*this);
+		const bool naked = isNaked();
+		if (!naked)
+			Passes::insertPrologue(*this);
 		// Passes::loadArgumentsReadjust(*this);
-		// if (!naked)
-		// 	Passes::lowerRet(*this);
+		if (!naked)
+			Passes::lowerRet(*this);
 		// Passes::lowerVarargsSecond(*this);
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
@@ -1003,8 +1008,18 @@ namespace LL2X {
 			throw std::runtime_error("Can't precolor arguments: arguments vector not present");
 
 		try {
-			for (int i = 0, max = std::min(6, getArity()); i < max; ++i)
-				getVariable(std::to_string(i), true)->setRegister(regs[i]);
+			int argument_index = 0;
+			const int arity = getArity();
+			for (int i = 0; i < 6 && argument_index < arity; ++i) {
+				VariablePtr argument = getVariable(std::to_string(argument_index++), true);
+				const int required = argument->registersRequired();
+				if (6 - i < required)
+					break;
+				std::set<int> registers;
+				for (int j = 0; j < required; ++j)
+					registers.insert(regs[i++ + j]);
+				argument->setRegisters(registers);
+			}
 		} catch (const std::out_of_range &) {
 			warn() << "VariableStore (" << variableStore.size() << ") in " << *name << ":\n";
 			for (const auto &[id, var]: variableStore)
@@ -1017,7 +1032,7 @@ namespace LL2X {
 		if (x86_64::totalRegisters <= index)
 			throw std::invalid_argument("Index too high: " + std::to_string(index));
 		VariablePtr new_var = newVariable(std::make_shared<IntType>(64), definer);
-		new_var->setRegister(index);
+		new_var->setRegisters({index});
 		return new_var;
 	}
 
@@ -1244,7 +1259,7 @@ namespace LL2X {
 		// This is obviously O(bv), where b is the number of basic blocks and v is the number of variables.
 		// I'm guessing that's around 45,000 for vsnprintf. That's absurd.
 		for (const auto &[name, var]: variableStore)
-			if (!var->isSpecialRegister())
+			if (!var->hasSpecialRegister())
 				for (const auto &block: blocks) {
 					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
 						block->liveIn.insert(var);
@@ -1252,7 +1267,7 @@ namespace LL2X {
 						block->liveOut.insert(var);
 				}
 		for (const auto &[name, var]: extraVariables)
-			if (!var->isSpecialRegister())
+			if (!var->hasSpecialRegister())
 				for (const auto &block: blocks) {
 					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
 						block->liveIn.insert(var);
@@ -1791,30 +1806,31 @@ namespace LL2X {
 			all_vars.push_back(pair.second);
 		for (VariablePtr &var: all_vars) {
 			auto var_parent = var->getParent().lock();
-			if (!var->hasRegister() && var_parent != nullptr)
-				var->reg = var_parent->reg;
 
-			if (!var->hasRegister()) {
+			if (var->registers.empty() && var_parent != nullptr)
+				var->registers = var_parent->registers;
+
+			if (var->registers.empty()) {
 				for (Variable *alias: var->getAliases())
-					if (alias->hasRegister()) {
-						var->reg = alias->reg;
+					if (!alias->registers.empty()) {
+						var->registers = alias->registers;
 						break;
 					}
 				// As a last resort, if this variable *still* has no register assigned, check all other known variables
 				// for a variable with the same id and try to absorb its register assignment.
-				if (!var->hasRegister()) {
+				if (var->registers.empty()) {
 					for (VariablePtr &other: all_vars)
-						if (other != var && other->id == var->id && other->hasRegister()) {
-							var->reg = other->reg;
+						if (other != var && other->id == var->id && !other->registers.empty()) {
+							var->registers = other->registers;
 							break;
 						}
-					if (!var->hasRegister())
+					if (var->registers.empty())
 						warn() << "hackVariables: last resort failed\n";
 				}
 			} else
 				for (Variable *alias: var->getAliases())
-					if (!alias->hasRegister())
-						alias->reg = var->reg;
+					if (alias->registers.empty())
+						alias->registers = var->registers;
 		}
 	}
 
