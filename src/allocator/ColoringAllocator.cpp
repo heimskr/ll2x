@@ -263,7 +263,7 @@ namespace LL2X {
 					// 	std::cerr << " " << std::string(*var->type);
 					// std::cerr << "\n";
 #endif
-					node.colorsNeeded = 1; // var->registersRequired();
+					node.colorsNeeded = var->registersRequired();
 #ifdef DEBUG_COLORING
 				} else {
 					// std::cerr << "Skipping " << *var << " (" << *id << "): parent (" << *parent_id << ") is in graph\n";
