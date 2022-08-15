@@ -4,7 +4,6 @@
 #include <thread>
 
 // #define COMPILE_MULTITHREADED
-// #define HIDE_PRINTS
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"
@@ -161,19 +160,9 @@ namespace LL2X {
 
 	std::string Program::toString() {
 		std::stringstream out;
-		out << "#meta\n";
-		out << "name: \"" << Util::escape(sourceFilename.empty()? "Program" : sourceFilename) << "\"\n";
-		out << "\n#debug\n";
-		debugSection(&out);
-		out << "\n#text\n\n%data\n\n";
+		// debugSection(&out);
 		dataSection(out);
-		out << "\n%code\n\n";
-		if (functions.count("@main") == 1 || hasArg("-main"))
-			out << ":: main\n<halt>\n\n";
 		for (std::pair<const std::string, Function *> &pair: functions) {
-#ifdef HIDE_PRINTS
-			if (pair.first != "@prc" && pair.first != "@prd" && pair.first != "@strprint")
-#endif
 			out << pair.second->toString() << "\n";
 		}
 		return out.str();
@@ -204,8 +193,12 @@ namespace LL2X {
 		if (global_data.count("llvm.global_ctors") != 0) {
 			const GlobalData &def = global_data.at("llvm.global_ctors");
 			if (auto *array = dynamic_cast<const ArrayType *>(def.constant->type.get())) {
-				out << "%align 8\n\n@__ctors_start\n%8b llvm.global_ctors\n\n";
-				out << "@__ctors_end\n%8b llvm.global_ctors + " << (24 * array->count) << "\n\n";
+				out << ".align 8\n\n";
+				out << "__ctors_start:\n";
+				out << ".quad llvm.global_ctors\n\n";
+				out << "__ctors_end:\n";
+				// TODO: verify for x86_64
+				out << ".quad (llvm.global_ctors + " << (24 * array->count) << ")\n\n";
 			} else if (!def.constant->type)
 				throw std::runtime_error("@llvm.global_ctors was expected to be an array but has no type");
 			else
@@ -243,11 +236,11 @@ namespace LL2X {
 		} while (changed);
 
 		for (const auto &[name, stringified]: global_strings) {
-			out << "%align 8\n";
+			out << ".align 8\n";
 			if (stringified.empty())
-				out << '@' << name << "\n%8b 0\n\n";
+				out << name << ":\n.byte 0\n\n";
 			else
-				out << '@' << name << '\n' << stringified << "\n\n";
+				out << name << ":\n" << stringified << "\n\n";
 		}
 
 		if (!global_data.empty()) {
@@ -293,7 +286,7 @@ namespace LL2X {
 				if (difference < 0) {
 					throw std::runtime_error("Difference between struct offset and total width is negative");
 				} else if (0 < difference) {
-					out += "%fill " + std::to_string(difference) + " 0\n";
+					out += ".fill " + std::to_string(difference) + ", 1, 0\n";
 					sum = offset;
 				}
 				out += outputValue(constant->type, constant->value);
@@ -308,10 +301,10 @@ namespace LL2X {
 		if (bitwidth % 8 != 0)
 			throw std::runtime_error("Int width (" + std::to_string(bitwidth) + "b) isn't a multiple of 8");
 		switch (bitwidth / 8) {
-			case 8: return "%8b ";
-			case 4: return "%4b ";
-			case 2: return "%2b ";
-			case 1: return "%1b ";
+			case 8: return ".quad ";
+			case 4: return ".int ";
+			case 2: return ".word ";
+			case 1: return ".byte ";
 			default:
 				throw std::runtime_error("Invalid int width: " + std::to_string(bitwidth / 8) + "B");
 		}
@@ -320,7 +313,7 @@ namespace LL2X {
 	std::string Program::outputValue(const TypePtr &type, const ValuePtr &value) {
 		switch (value->valueType()) {
 			case ValueType::CString:
-				return "%string \"" + dynamic_cast<CStringValue *>(value.get())->reescape() + "\"";
+				return ".ascii \"" + dynamic_cast<CStringValue *>(value.get())->reescape() + "\"";
 			case ValueType::Array:
 				return outputArray(*dynamic_cast<ArrayValue *>(value.get()));
 			case ValueType::Int: {
@@ -333,18 +326,18 @@ namespace LL2X {
 			case ValueType::Zeroinitializer:
 				if (type) {
 					const auto width = type->width();
-					if (width % 8)
+					if (width % 8 != 0)
 						throw std::runtime_error("Invalid type width for null/undef/zeroinitializer value: " +
 							std::to_string(width) + "b");
-					return "%fill " + std::to_string(width / 8) + " 0";
+					return ".fill " + std::to_string(width / 8) + ", 1, 0";
 				}
-				return "%1b 0";
+				return ".byte 0";
 			case ValueType::Struct:
 				return outputStruct(*dynamic_cast<StructValue *>(value.get()));
 			case ValueType::Global: {
 				const std::string *name = dynamic_cast<GlobalValue *>(value.get())->name;
 				referencedGlobals.insert(*name);
-				return "%8b " + *name;
+				return ".quad " + *name;
 			}
 			case ValueType::Getelementptr: {
 				GetelementptrValue *gep = dynamic_cast<GetelementptrValue *>(value.get());
@@ -376,8 +369,8 @@ namespace LL2X {
 					throw std::runtime_error("Expected source of a getelementptr expression to be a global, but got "
 						"type " + value_map.at(gep->variable->valueType()) + " instead");
 
-				return "%8b " + *dynamic_cast<GlobalValue *>(gep->variable.get())->name + "+" + std::to_string(offset) +
-					(comment_changed? comment : "");
+				return ".quad " + *dynamic_cast<GlobalValue *>(gep->variable.get())->name + "+" + std::to_string(offset)
+					+ (comment_changed? comment : "");
 			}
 			default:
 				std::cerr << *value << '\n';

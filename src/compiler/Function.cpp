@@ -1427,12 +1427,19 @@ namespace LL2X {
 	std::string Function::toString() {
 		Timer timer("Function::toString");
 		std::stringstream out;
-		out << *name << "\n";
+
+		if (*name == "@main") {
+			out << ".global _main\n_main:\n";
+		} else {
+			auto chopped = std::string_view(*name).substr(1);
+			out << ".global " << chopped << '\n' << chopped << ":\n";
+		}
+
 		for (InstructionPtr &instruction: linearInstructions) {
 #ifdef SPACE_COUNT
 			out << std::string(' ', SPACE_COUNT);
 #else
-			out << "\t";
+			out << '\t';
 #endif
 			out << instruction->toString();
 			const int dbg = instruction->debugIndex;
@@ -1441,9 +1448,9 @@ namespace LL2X {
 				if (parent.locations.count(dbg) != 0)
 					out << " !" << parent.locations.at(dbg).index;
 				else
-					warn() << "Couldn't find location for !" << dbg << "\n";
+					warn() << "Couldn't find location for !" << dbg << '\n';
 			}
-			out << "\n";
+			out << '\n';
 		}
 		return out.str();
 	}
