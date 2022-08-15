@@ -1012,7 +1012,7 @@ namespace LL2X {
 		try {
 			int argument_index = 0;
 			const int arity = getArity();
-			for (int i = 0; i < 6 && argument_index < arity; ++i) {
+			for (int i = 0; i < 6 && argument_index < arity;) {
 				VariablePtr argument = getVariable(std::to_string(argument_index++), true);
 				const int required = argument->registersRequired();
 				if (6 - i < required)
