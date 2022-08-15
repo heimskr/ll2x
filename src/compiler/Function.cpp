@@ -892,33 +892,33 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		Passes::replaceConstants(*this);
-// 		Passes::lowerAlloca(*this);
-// 		Passes::loadArguments(*this);
-// 		Passes::lowerObjectsize(*this);
+		// Passes::lowerAlloca(*this);
+		// Passes::loadArguments(*this);
+		// Passes::lowerObjectsize(*this);
 		Passes::lowerIcmp(*this);
 		Passes::lowerMath(*this);
-// 		Passes::lowerConversions(*this);
-// 		Passes::lowerGetelementptr(*this);
-// 		Passes::lowerFreeze(*this);
-// 		Passes::lowerSelect(*this);
-// 		initialStackSize = stackSize;
-// 		extractVariables();
+		// Passes::lowerConversions(*this);
+		// Passes::lowerGetelementptr(*this);
+		// Passes::lowerFreeze(*this);
+		// Passes::lowerSelect(*this);
+		// initialStackSize = stackSize;
+		// extractVariables();
 		// Passes::lowerStackrestore(*this);
 		Passes::makeCFG(*this);
-// 		Passes::lowerVarargsFirst(*this);
-// 		Passes::lowerMemcpy(*this);
-// 		Passes::lowerMemset(*this);
+		// Passes::lowerVarargsFirst(*this);
+		// Passes::lowerMemcpy(*this);
+		// Passes::lowerMemset(*this);
 		Passes::setupCalls(*this);
-// 		Passes::lowerMemory(*this);
-// 		Passes::lowerInlineAsm(*this);
-// 		Passes::lowerExtractvalue(*this);
-// 		Passes::transformInstructions(*this);
-// 		for (BasicBlockPtr &block: blocks)
-// 			block->extract(true);
+		// Passes::lowerMemory(*this);
+		// Passes::lowerInlineAsm(*this);
+		// Passes::lowerExtractvalue(*this);
+		// Passes::transformInstructions(*this);
+		// for (BasicBlockPtr &block: blocks)
+		// 	block->extract(true);
 		Passes::movePhi(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
-// 		Passes::lowerSwitch(*this);
+		// Passes::lowerSwitch(*this);
 		Passes::minimizeBlocks(*this);
 		Passes::makeCFG(*this);
 		for (BasicBlockPtr &block: blocks)

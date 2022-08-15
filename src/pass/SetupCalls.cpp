@@ -31,11 +31,16 @@ namespace LL2X::Passes {
 		do {
 			// First, we check the call node itself—it sometimes contains the signature of the function.
 			if (call->argumentsExplicit) {
-				if (argument_types)
+				if ((ellipsis = call->argumentEllipsis)) {
+					if (argument_types) {
+						argument_types->reserve(call->constants.size());
+						for (const auto &constant: call->constants)
+							argument_types->push_back(constant->convert()->type);
+					}
+				} else if (argument_types)
 					*argument_types = call->argumentTypes;
-				ellipsis = call->argumentEllipsis;
 				return;
-			} else if (function.parent.functions.count("@" + *global) != 0) {
+			} else if (function.parent.functions.contains("@" + *global)) {
 				// When the arguments aren't explicit, we check the parent program's map of functions.
 				Function &func = *function.parent.functions.at("@" + *global);
 				ellipsis = func.isVariadic();
@@ -45,7 +50,7 @@ namespace LL2X::Passes {
 						argument_types->push_back(argument.type);
 				}
 				return;
-			} else if (function.parent.declarations.count(*global) != 0) {
+			} else if (function.parent.declarations.contains(*global)) {
 				// We can also check the map of declarations.
 				FunctionHeader *header = function.parent.declarations.at(*global);
 				ellipsis = header->arguments->ellipsis;
@@ -55,11 +60,12 @@ namespace LL2X::Passes {
 						argument_types->push_back(argument.type);
 				}
 				return;
-			} else if (function.parent.aliases.count(StringSet::intern("@" + *global)) != 0) {
+			} else if (function.parent.aliases.contains(StringSet::intern("@" + *global))) {
 				// In rare cases, there may be an alias.
 				AliasDef *alias = function.parent.aliases.at(StringSet::intern("@" + *global));
 				global = alias->aliasTo->front() == '@'? StringSet::intern(alias->aliasTo->substr(1)) : alias->aliasTo;
-			} else throw std::runtime_error("Couldn't find signature for function " + *global);
+			} else
+				throw std::runtime_error("Couldn't find signature for function " + *global);
 		} while (true);
 	}
 
@@ -191,12 +197,8 @@ namespace LL2X::Passes {
 
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
-			if (ellipsis)
-				for (i = call->constants.size() - 1; 0 <= i; --i)
-					bytes_pushed += pushCallValue(function, instruction, call->constants[i]);
-			else
-				for (i = arg_count + arg_offset - 1; reg_max <= i; --i)
-					bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset]);
+			for (i = arg_count + arg_offset - 1; reg_max <= i; --i)
+				bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset]);
 
 			// VariablePtr m2;
 
