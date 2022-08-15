@@ -141,6 +141,12 @@ namespace LL2X {
 		return mode == Mode::Constant || mode == Mode::Direct;
 	}
 
+	std::shared_ptr<Operand> Operand::toDisplaced(int displacement) const {
+		if (mode != Mode::Register)
+			throw std::runtime_error("Can't displace non-register operand " + toString());
+		return OperandX(width, 0, reg);
+	}
+
 	VariablePtr Operand::getVariable() const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't get variable from operand: not in register mode");
