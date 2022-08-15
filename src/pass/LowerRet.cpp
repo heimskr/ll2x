@@ -6,6 +6,7 @@
 #include "instruction/Jmp.h"
 #include "instruction/Label.h"
 #include "instruction/Mov.h"
+#include "instruction/Movabs.h"
 #include "instruction/Pop.h"
 #include "instruction/Ret.h"
 #include "pass/LowerRet.h"
@@ -31,57 +32,61 @@ namespace LL2X::Passes {
 			if (!block)
 				throw std::runtime_error("Couldn't lock instruction parent in LowerRet");
 
-			VariablePtr fp = function.fp(block);
-			VariablePtr sp = function.sp(block);
-			VariablePtr rt = function.makePrecoloredVariable(WhyInfo::returnAddressOffset, block);
-			VariablePtr r0 = function.makePrecoloredVariable(WhyInfo::returnValueOffset, block);
+			VariablePtr rbp = function.basePointer(block);
+			VariablePtr rsp = function.stackPointer(block);
+			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 
-			// $fp -> $sp
-			function.insertBefore(instruction, std::make_shared<MoveInstruction>(fp, sp), false)
-				->setDebug(llvm)->extract();
+			// popq %rbp
+			function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rbp)), false)->setDebug(llvm, true);
 
-			// Put the return value into $r0.
+			// Put the return value into %rax (and possibly also %rdx).
 			if (ret->value->isIntLike()) {
-				auto set = std::make_shared<SetInstruction>(r0, ret->value->intValue(false));
-				set->setOriginalValue(ret->value);
-				function.insertBefore(instruction, set, false)->setDebug(llvm)->extract();
+				int64_t long_value = ret->value->longValue();
+				InstructionPtr mov;
+				if (UINT32_MAX < static_cast<uint64_t>(long_value))
+					mov = std::make_shared<Movabs>(Operand8(long_value), Operand8(rax));
+				else
+					mov = std::make_shared<Mov>(Operand4(long_value), Operand8(rax));
+				function.insertBefore(instruction, mov, false)->setDebug(llvm, true);
 			} else if (ret->value->isLocal()) {
 				VariablePtr var = dynamic_cast<LocalValue *>(ret->value.get())->variable;
-				// std::cerr << "Banishing " << *var << " in LowerRet.\n";
 				function.extraVariables.emplace(var->id, var);
 				if (var->multireg()) {
-					if (WhyInfo::returnValueCount < var->registers.size())
+					VariablePtr rdx = function.makePrecoloredVariable(x86_64::rdx, block);
+					if (2 < var->registers.size())
 						throw std::runtime_error("Too many registers for " + var->plainString() + " in LowerRet");
 					auto iter = var->registers.begin();
 					for (size_t i = 0; i < var->registers.size(); ++i) {
 						auto subvar = function.makePrecoloredVariable(*iter++, block);
-						auto retreg = function.makePrecoloredVariable(WhyInfo::returnValueOffset + i, block);
-						function.insertBefore(instruction, std::make_shared<MoveInstruction>(subvar, retreg), false)
-							->setDebug(llvm)->extract();
+						auto mov = std::make_shared<Mov>(OperandV(subvar), Operand8(i == 0? rax : rdx));
+						function.insertBefore(instruction, mov, false)->setDebug(llvm, true);
 					}
 				} else {
-					function.insertBefore(instruction, std::make_shared<MoveInstruction>(var, r0), false)
-						->setDebug(llvm)->extract();
+					function.insertBefore(instruction, std::make_shared<Mov>(OperandV(var), Operand8(rax)), false)
+						->setDebug(llvm, true);
 				}
-			}
+			} else
+				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
+					std::string(*ret->value));
 
-			// Pop all the general-purpose registers that were saved in the prologue.
+			// Pop all the registers that were saved in the prologue.
 			for (auto begin = function.savedRegisters.rbegin(), iter = begin, end = function.savedRegisters.rend();
 			     iter != end; ++iter) {
 				VariablePtr variable = function.makePrecoloredVariable(*iter, block);
-				function.insertBefore(instruction, std::make_shared<StackPopInstruction>(variable), false)
-					->setDebug(llvm)->extract();
+				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(variable)), false)
+					->setDebug(llvm, true);
 			}
 
 			// Insert the epilogue (minus the jump).
-			function.insertBefore(instruction, std::make_shared<StackPopInstruction>(fp), false)
-				->setDebug(llvm)->extract(); // ] $fp
-			function.insertBefore(instruction, std::make_shared<StackPopInstruction>(rt), false)
-				->setDebug(llvm)->extract(); // ] $rt
+			// movq %rbp, %rsp
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(rbp), Operand8(rsp)), false)
+				->setDebug(llvm, true);
+			// popq %rbp
+			function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rbp)), false)->setDebug(llvm, true);
 
-			// Jump to the return address.
-			function.insertBefore(instruction, std::make_shared<JumpRegisterInstruction>(rt, false), false)
-				->setDebug(llvm)->extract();
+			// Return from the function.
+			function.insertBefore(instruction, std::make_shared<Ret>(), false)->setDebug(llvm, true);
+
 			to_remove.push_back(instruction);
 		}
 

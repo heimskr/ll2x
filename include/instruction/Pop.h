@@ -10,6 +10,10 @@ namespace LL2X {
 			OneDestination(std::move(destination_)),
 			Sized(size_) {}
 
+		Pop(OperandPtr destination_):
+			OneDestination(std::move(destination_)),
+			Sized(destination_->width) {}
+
 		std::string debugExtra() override;
 		std::string toString() const override;
 	};

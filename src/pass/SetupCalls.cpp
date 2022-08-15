@@ -7,6 +7,7 @@
 #include "instruction/Add.h"
 #include "instruction/And.h"
 #include "instruction/Call.h"
+#include "instruction/Clobber.h"
 #include "instruction/Invalid.h"
 #include "instruction/Jmp.h"
 #include "instruction/Lea.h"
@@ -131,7 +132,9 @@ namespace LL2X::Passes {
 				x86_64::rdx,
 				x86_64::rcx,
 				x86_64::r8,
-				x86_64::r9
+				x86_64::r9,
+				x86_64::r10, // Not technically an argument register, but needs to be saved by the caller.
+				x86_64::r11, // Same here.
 			};
 
 			// First, push the current values of the argument registers to the stack.
@@ -141,10 +144,18 @@ namespace LL2X::Passes {
 					false)->setDebug(*llvm, true);
 			}
 
+			// Clobber caller-saved registers as necessary.
+			for (; i < 8; ++i) {
+				auto clobber = std::make_shared<Clobber>(arg_regs[i]);
+				function.insertBefore(instruction, clobber, false)->setDebug(*instruction, true);
+				function.categories["SetupCalls:Clobber"].insert(clobber);
+			}
+
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 			VariablePtr rdx;
 
 			// Next, if the function returns a value, push %rax to the stack.
+			// TODO: push with a precolored or just clobber?
 			if (call->result)
 				function.insertBefore(instruction, std::make_shared<Push>(Operand8(rax), x86_64::Width::Eight), false)
 					->setDebug(*llvm, true);
@@ -157,19 +168,6 @@ namespace LL2X::Passes {
 				function.insertBefore(instruction, std::make_shared<Push>(Operand8(rdx), x86_64::Width::Eight), false)
 					->setDebug(*llvm, true);
 			}
-
-			// Next, if applicable, we account for the situation where the jump is to an argument register. Because it
-			// may be overwritten right before the jump, we'd need to copy it to a temporary variable and jump to that.
-			// VariablePtr jump_var;
-			// if (!global_uptr) {
-			// 	jump_var = dynamic_cast<LocalValue *>(name_value)->variable;
-			// 	if (jump_var->isLess(arg_count)) {
-			// 		VariablePtr new_var = function.newVariable(jump_var->type);
-			// 		auto move = std::make_shared<MoveInstruction>(jump_var, new_var);
-			// 		function.insertBefore(instruction, move, "jump_var -> new_var")->setDebug(*llvm)->extract();
-			// 		jump_var = new_var;
-			// 	}
-			// }
 
 			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
 			// the stack for the struct and pass a pointer to it in %rdi.
@@ -247,11 +245,6 @@ namespace LL2X::Passes {
 					function.insertBefore(instruction, move, "SetupCalls: move result from %rax", false)
 						->setDebug(*llvm, true);
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
-
-					// Oops!
-					if (64 <= return_size)
-						throw std::runtime_error("Values in the range (64 bits, 128 bits] are currently unsupported as "
-							"return values");
 				}
 
 				// pop %rax
