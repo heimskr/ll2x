@@ -45,7 +45,7 @@
 #include "pass/FillLocalValues.h"
 // #include "pass/FinishMultireg.h"
 #include "pass/IgnoreIntrinsics.h"
-// #include "pass/InsertLabels.h"
+#include "pass/InsertLabels.h"
 #include "pass/InsertPrologue.h"
 // #include "pass/LoadArguments.h"
 // #include "pass/LowerAlloca.h"
@@ -947,7 +947,7 @@ namespace LL2X {
 		// Passes::removeRedundantMoves(*this);
 		// Passes::removeUselessBranches(*this);
 		Passes::mergeAllBlocks(*this);
-		// Passes::insertLabels(*this);
+		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
 		const bool naked = isNaked();
 		if (!naked)
