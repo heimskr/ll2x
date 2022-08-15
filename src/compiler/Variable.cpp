@@ -139,7 +139,7 @@ namespace LL2X {
 		}
 
 		if (registers.size() == 1)
-			return '%' + x86_64::registerName(*registers.begin());
+			return '%' + x86_64::registerName(*registers.begin(), width);
 
 		return ansiString(width);
 	}

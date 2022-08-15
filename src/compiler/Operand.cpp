@@ -137,6 +137,10 @@ namespace LL2X {
 		return mode == Mode::Label;
 	}
 
+	bool Operand::isNumeric() const {
+		return mode == Mode::Constant || mode == Mode::Direct;
+	}
+
 	VariablePtr Operand::getVariable() const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't get variable from operand: not in register mode");

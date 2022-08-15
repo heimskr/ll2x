@@ -48,7 +48,7 @@ namespace LL2X::Passes {
 			auto *local = dynamic_cast<LocalValue *>(br->condition->value.get());
 			VariablePtr condition = local->variable;
 			auto width = x86_64::getWidth(type->width());
-			auto cmp = std::make_shared<Cmp>(Operand::make(width, condition), Operand::make(32, 0), width);
+			auto cmp = std::make_shared<Cmp>(OperandV(condition), Operand4(0), width);
 			auto jmp_true = std::make_shared<Jmp>(Operand8(function.transformLabel(*br->ifTrue), false),
 				x86_64::Condition::IfNotEqual);
 			auto jmp_false = std::make_shared<Jmp>(Operand8(function.transformLabel(*br->ifFalse), false));

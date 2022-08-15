@@ -6,8 +6,8 @@ namespace LL2X {
 	struct Cmp: SizedTwoSourcesOnly  {
 		using SizedTwoSourcesOnly::SizedTwoSourcesOnly;
 
-		std::string debugExtra() override     { return makeDebug("cmp");  }
-		std::string toString() const override { return makeString("cmp"); }
+		std::string debugExtra() override     { return makeDebug("cmp", true);  }
+		std::string toString() const override { return makeString("cmp", true); }
 
 		bool altersFlags() const override { return true; }
 	};

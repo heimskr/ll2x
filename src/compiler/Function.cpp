@@ -44,6 +44,7 @@
 // #include "pass/CopyArguments.h"
 #include "pass/FillLocalValues.h"
 // #include "pass/FinishMultireg.h"
+#include "pass/HackOperands.h"
 #include "pass/IgnoreIntrinsics.h"
 #include "pass/InsertLabels.h"
 #include "pass/InsertPrologue.h"
@@ -324,8 +325,7 @@ namespace LL2X {
 			          << definition->index << ", OID: " << variable->originalID << ")\n";
 #endif
 			auto rbp = basePointer(definition);
-			auto store = std::make_shared<Mov>(Operand::make(64, variable),
-				Operand::make(64, -location.offset, rbp), x86_64::Width::Eight);
+			auto store = std::make_shared<Mov>(OperandV(variable), Operand8(-location.offset, rbp));
 			store->meta.insert(InstructionMeta::StackStore);
 
 			auto next = after(definition);
@@ -412,8 +412,7 @@ namespace LL2X {
 #endif
 					instruction->read.insert(new_var);
 					auto rbp = basePointer(instruction);
-					auto load = std::make_shared<Mov>(Operand::make(64, -location.offset, rbp),
-						Operand::make(64, new_var), x86_64::Width::Eight);
+					auto load = std::make_shared<Mov>(Operand8(-location.offset, rbp), OperandV(new_var));
 					insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
 					load->extract();
 					out = true;
@@ -475,8 +474,7 @@ namespace LL2X {
 			bool created;
 			const StackLocation &location = getSpill(variable, true, &created);
 			auto rbp = basePointer(definition);
-			auto store = std::make_shared<Mov>(Operand::make(64, variable),
-				Operand::make(64, -location.offset, rbp), x86_64::Width::Eight);
+			auto store = std::make_shared<Mov>(OperandV(variable), Operand8(-location.offset, rbp));
 			store->meta.insert(InstructionMeta::StackStore);
 
 			auto next = after(definition);
@@ -958,7 +956,8 @@ namespace LL2X {
 		// Passes::lowerVarargsSecond(*this);
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
-		// hackVariables();
+		hackVariables();
+		Passes::hackOperands(*this);
 		// for (InstructionPtr &instruction: linearInstructions) {
 		// 	if (instruction->debugIndex != -1) {
 		// 		auto lock = parent.getLock();
@@ -1084,10 +1083,9 @@ namespace LL2X {
 	VariablePtr Function::get64(std::shared_ptr<Instruction> before, unsigned long value, bool reindex) {
 		VariablePtr var = newVariable(IntType::make(64), before->parent.lock());
 		OperandPtr operand = Operand::make(var);
-		auto mov = std::make_shared<Mov>(Operand::make(32, value >> 32), operand, x86_64::Width::Eight);
-		auto shl = std::make_shared<Shl>(operand, Operand::make(32, 32), x86_64::Width::Eight);
-		auto or_ = std::make_shared<Or>(operand, Operand::make(32, value & 0xffffffff),
-			x86_64::Width::Eight);
+		auto mov = std::make_shared<Mov>(Operand4(value >> 32), operand, x86_64::Width::Eight);
+		auto shl = std::make_shared<Shl>(operand, Operand4(32), x86_64::Width::Eight);
+		auto or_ = std::make_shared<Or>(operand, Operand4(value & 0xffffffff), x86_64::Width::Eight);
 		insertBefore(before, mov, false)->setDebug(*before, true);
 		insertBefore(before, shl, false)->setDebug(*before, true);
 		insertBefore(before, or_, false)->setDebug(*before, true);
@@ -1719,12 +1717,12 @@ namespace LL2X {
 				VariablePtr new_var(newVariable(out_type));
 				OperandPtr operand = Operand::make(64, new_var);
 
-				insertBefore(instruction, std::make_shared<Mov>(Operand::make(
+				insertBefore(instruction, std::make_shared<Mov>(OperandV(
 					dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
 					operand, x86_64::Width::Eight))->setDebug(*instruction, true);
 
-				insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand,
-					x86_64::Width::Eight))->setDebug(*instruction, true);
+				insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand, x86_64::Width::Eight))
+					->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);
 			}
@@ -1736,8 +1734,8 @@ namespace LL2X {
 			VariablePtr new_var(newVariable(out_type));
 			OperandPtr operand = Operand::make(64, new_var);
 
-			insertBefore(instruction, std::make_shared<Mov>(Operand::make(32, gep->variable->intValue() +
-				int(offset)), operand, x86_64::Width::Eight))->setDebug(*instruction, true);
+			insertBefore(instruction, std::make_shared<Mov>(Operand4(gep->variable->intValue() + int(offset)), operand))
+				->setDebug(*instruction, true);
 
 			return LocalValue::make(new_var);
 		}
@@ -1758,8 +1756,7 @@ namespace LL2X {
 			case ValueType::Global: {
 				auto *global = dynamic_cast<GlobalValue *>(value.get());
 				new_var = newVariable(hint? hint : GlobalTemporaryType::make(global->name));
-				mov = std::make_shared<Mov>(Operand::make(32, *global->name), Operand::make(new_var),
-					x86_64::Width::Eight);
+				mov = std::make_shared<Mov>(Operand4(*global->name), OperandV(new_var));
 				break;
 			}
 			case ValueType::Int:
@@ -1767,9 +1764,7 @@ namespace LL2X {
 			case ValueType::Null:
 			case ValueType::Undef: {
 				new_var = newVariable(hint? hint : IntType::make(64));
-				auto num_operand = Operand::make(64, value->intValue(false));
-				num_operand->originalConstant = value->longValue();
-				mov = std::make_shared<Mov>(num_operand, Operand::make(new_var), x86_64::Width::Eight);
+				mov = std::make_shared<Mov>(Operand8(value->longValue()), OperandV(new_var));
 				break;
 			}
 			case ValueType::Icmp: {
@@ -1781,7 +1776,7 @@ namespace LL2X {
 			case ValueType::Logic: {
 				auto *logic = dynamic_cast<LogicValue *>(value.get());
 				new_var = newVariable(hint? hint : logic->left->type);
-				// Passes::lowerLogic(*this, instruction, logic->makeNode(new_var).get());
+				Passes::lowerLogic(*this, instruction, logic->makeNode(new_var).get());
 				break;
 			}
 			default:

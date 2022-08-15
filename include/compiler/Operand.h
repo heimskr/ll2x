@@ -89,6 +89,7 @@ namespace LL2X {
 		bool isRegisters(const std::set<int> &check_regs) const;
 		bool isAliasOf(const Variable &) const;
 		bool isLabel() const;
+		bool isNumeric() const;
 
 		VariablePtr getVariable() const;
 
