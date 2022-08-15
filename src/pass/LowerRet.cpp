@@ -36,9 +36,6 @@ namespace LL2X::Passes {
 			VariablePtr rsp = function.stackPointer(block);
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 
-			// popq %rbp
-			function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rbp)), false)->setDebug(llvm, true);
-
 			// Put the return value into %rax (and possibly also %rdx).
 			if (ret->value->isIntLike()) {
 				int64_t long_value = ret->value->longValue();
