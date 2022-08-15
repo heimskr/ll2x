@@ -145,6 +145,7 @@ namespace LL2X::Passes {
 			}
 
 			// Clobber caller-saved registers as necessary.
+			const int clobber_start = i;
 			for (; i < 8; ++i) {
 				auto clobber = std::make_shared<Clobber>(arg_regs[i]);
 				function.insertBefore(instruction, clobber, false)->setDebug(*instruction, true);
@@ -251,6 +252,13 @@ namespace LL2X::Passes {
 				// pop %rax
 				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rax), x86_64::Width::Eight), false)
 					->setDebug(*llvm, true);
+			}
+
+			// Unclobber caller-saved registers as necessary.
+			for (i = 7; clobber_start <= i; --i) {
+				auto unclobber = std::make_shared<Unclobber>(arg_regs[i]);
+				function.insertBefore(instruction, unclobber, false)->setDebug(*instruction, true);
+				function.categories["SetupCalls:Unclobber"].insert(unclobber);
 			}
 
 			// Pop the argument registers from the stack.
