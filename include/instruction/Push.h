@@ -10,6 +10,10 @@ namespace LL2X {
 			OneSource(std::move(source_)),
 			Sized(size_) {}
 
+		Push(OperandPtr source_):
+			OneSource(std::move(source_)),
+			Sized(source_->width) {}
+
 		std::string debugExtra() override;
 		std::string toString() const override;
 	};

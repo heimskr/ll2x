@@ -46,7 +46,7 @@
 // #include "pass/FinishMultireg.h"
 #include "pass/IgnoreIntrinsics.h"
 // #include "pass/InsertLabels.h"
-// #include "pass/InsertPrologue.h"
+#include "pass/InsertPrologue.h"
 // #include "pass/LoadArguments.h"
 // #include "pass/LowerAlloca.h"
 #include "pass/LowerBranches.h"
