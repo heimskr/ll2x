@@ -1428,12 +1428,8 @@ namespace LL2X {
 		Timer timer("Function::toString");
 		std::stringstream out;
 
-		if (*name == "@main") {
-			out << ".global _main\n_main:\n";
-		} else {
-			auto chopped = std::string_view(*name).substr(1);
-			out << ".global " << chopped << '\n' << chopped << ":\n";
-		}
+		auto chopped = std::string_view(*name).substr(1);
+		out << ".global _" << chopped << "\n_" << chopped << ":\n";
 
 		for (InstructionPtr &instruction: linearInstructions) {
 #ifdef SPACE_COUNT
