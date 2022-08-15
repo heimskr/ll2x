@@ -11,7 +11,7 @@ namespace LL2X {
 
 		SizedOverlapping(OperandPtr source_only, OperandPtr multi_):
 			Overlapping(std::move(source_only), std::move(multi_)),
-			Sized(multi_->width) {}
+			Sized(multi->width) {}
 
 		protected:
 			std::string makeDebug(const char *mnemonic) const;

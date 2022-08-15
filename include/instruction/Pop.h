@@ -12,7 +12,7 @@ namespace LL2X {
 
 		Pop(OperandPtr destination_):
 			OneDestination(std::move(destination_)),
-			Sized(destination_->width) {}
+			Sized(destination->width) {}
 
 		std::string debugExtra() override;
 		std::string toString() const override;
