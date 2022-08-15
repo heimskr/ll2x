@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <memory>
 #include <ostream>
+#include <unordered_set>
 #include <variant>
 
 #include "compiler/x86_64.h"
@@ -91,6 +92,9 @@ namespace LL2X {
 		bool isLabel() const;
 		bool isNumeric() const;
 		bool isHackable() const;
+
+		void extract(bool is_write, std::unordered_set<VariablePtr> &read, std::unordered_set<VariablePtr> &written)
+			const;
 
 		/** Returns a copy of a register operand (e.g. "%rax") that's displaced (e.g. "8(%rax)").
 		 *  Throws an exception if this isn't a register operand. */

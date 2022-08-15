@@ -10,19 +10,8 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		if (!secretReads && source) {
-			if (source->reg)
-				read.insert(source->reg);
-			if (source->index)
-				read.insert(source->index);
-		}
-
-		if (!secretWrites && destination) {
-			if (destination->reg)
-				written.insert(destination->reg);
-			if (destination->index)
-				written.insert(destination->index);
-		}
+		source->extract(false, read, written);
+		destination->extract(true, read, written);
 
 		return {read.size(), written.size()};
 	}

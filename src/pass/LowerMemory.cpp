@@ -196,7 +196,6 @@ namespace LL2X::Passes {
 				// %src -> [global]
 				int symsize = function.parent.symbolSize("@" + *global->name);
 				symsize = symsize / 8 + (symsize % 8? 1 : 0);
-				const auto width = x86_64::getWidth(symsize * 8);
 
 				VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
 				// movq var@GOTPCREL(%rip), %temp

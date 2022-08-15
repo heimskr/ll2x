@@ -4,23 +4,16 @@
 namespace LL2X {
 	ExtractionResult TwoSourcesOnly::extract(bool force) {
 		if (extracted && !force)
-			return {read.size(), 0};
+			return {read.size(), written.size()};
 
 		read.clear();
+		written.clear();
 		extracted = true;
 
-		if (!secretReads) {
-			if (firstSource->reg)
-				read.insert(firstSource->reg);
-			if (firstSource->index)
-				read.insert(firstSource->index);
-			if (secondSource->reg)
-				read.insert(secondSource->reg);
-			if (secondSource->index)
-				read.insert(secondSource->index);
-		}
+		firstSource->extract(false, read, written);
+		secondSource->extract(false, read, written);
 
-		return {read.size(), 0};
+		return {read.size(), written.size()};
 	}
 
 	bool TwoSourcesOnly::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {

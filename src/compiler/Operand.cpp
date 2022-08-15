@@ -145,6 +145,19 @@ namespace LL2X {
 		return !isNumeric() && mode != Mode::Displaced && mode != Mode::Scaled;
 	}
 
+	void Operand::extract(bool is_write, std::unordered_set<VariablePtr> &read,
+	                      std::unordered_set<VariablePtr> &written) const {
+		if (is_write && (mode == Mode::Displaced || mode == Mode::Scaled))
+				is_write = false;
+
+		auto &set = is_write? written : read;
+
+		if (reg)
+			set.insert(reg);
+		if (index)
+			set.insert(index);
+	}
+
 	std::shared_ptr<Operand> Operand::toDisplaced(int displacement) const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't displace non-register operand " + toString());

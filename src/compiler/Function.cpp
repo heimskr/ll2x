@@ -1015,6 +1015,10 @@ namespace LL2X {
 			for (int i = 0; i < 6 && argument_index < arity;) {
 				VariablePtr argument = getVariable(std::to_string(argument_index++), true);
 				const int required = argument->registersRequired();
+				if (required == 0) {
+					++i;
+					continue;
+				}
 				if (6 - i < required)
 					break;
 				std::set<int> registers;
