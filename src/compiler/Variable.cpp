@@ -141,7 +141,7 @@ namespace LL2X {
 		if (registers.size() == 1)
 			return '%' + x86_64::registerName(*registers.begin(), width);
 
-		return ansiString(width);
+		return plainString(width);
 	}
 
 	std::string Variable::plainString(x86_64::Width width) const {

@@ -21,6 +21,8 @@ namespace LL2X {
 	class ColoringAllocator;
 	struct FunctionArgs;
 	class Program;
+	struct Clobber;
+	struct Unclobber;
 
 	using InstructionPtr = std::shared_ptr<Instruction>;
 
@@ -376,6 +378,10 @@ namespace LL2X {
 			Graph makeDependencyGraph() const;
 
 			void makeInitialDebugIndex();
+
+			std::shared_ptr<Clobber> clobber(const InstructionPtr &, int reg);
+
+			std::shared_ptr<Unclobber> unclobber(const InstructionPtr &, const std::shared_ptr<Clobber> &);
 
 			/** Convenience method for creating a precolored %rsp register. */
 			VariablePtr stackPointer(BasicBlockPtr);

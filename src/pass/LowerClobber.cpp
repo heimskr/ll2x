@@ -34,16 +34,13 @@ namespace LL2X::Passes {
 		Timer timer("LowerClobber");
 		std::list<InstructionPtr> to_remove;
 		
-		for (InstructionPtr &instruction: function.linearInstructions) {
-			if (auto clobber = std::dynamic_pointer_cast<Clobber>(instruction))
+		for (InstructionPtr &instruction: function.linearInstructions)
+			if (auto clobber = std::dynamic_pointer_cast<Clobber>(instruction)) {
 				lower<Push>(function, clobber, clobber->reg);
-			else if (auto unclobber = std::dynamic_pointer_cast<Unclobber>(instruction))
-				lower<Pop>(function, unclobber, unclobber->reg);
-			else
-				continue;
-
-			to_remove.push_back(instruction);
-		}
+				lower<Pop>(function, clobber->unclobber, clobber->unclobber->reg);
+				to_remove.push_back(clobber);
+				to_remove.push_back(clobber->unclobber);
+			}
 
 		function.reindexInstructions();
 

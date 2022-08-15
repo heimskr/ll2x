@@ -32,6 +32,7 @@
 #include "compiler/Program.h"
 #include "exception/NoChoiceError.h"
 #include "instruction/Add.h"
+#include "instruction/Clobber.h"
 #include "instruction/Comment.h"
 #include "instruction/Label.h"
 #include "instruction/Mov.h"
@@ -49,7 +50,7 @@
 #include "pass/InsertLabels.h"
 #include "pass/InsertPrologue.h"
 // #include "pass/LoadArguments.h"
-// #include "pass/LowerAlloca.h"
+#include "pass/LowerAlloca.h"
 #include "pass/LowerBranches.h"
 #include "pass/LowerClobber.h"
 // #include "pass/LowerConversions.h"
@@ -892,7 +893,7 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		Passes::replaceConstants(*this);
-		// Passes::lowerAlloca(*this);
+		Passes::lowerAlloca(*this);
 		// Passes::loadArguments(*this);
 		// Passes::lowerObjectsize(*this);
 		Passes::lowerIcmp(*this);
@@ -1856,6 +1857,20 @@ namespace LL2X {
 		Location location(subprogram.line, 1, debugIndex);
 		location.file = subprogram.file;
 		parent.locations.emplace(initialDebugIndex, location);
+	}
+
+	std::shared_ptr<Clobber> Function::clobber(const InstructionPtr &instruction, int reg) {
+		auto out = Clobber::make(reg);
+		insertBefore(instruction, out)->setDebug(*instruction);
+		return out;
+	}
+
+	std::shared_ptr<Unclobber>
+	Function::unclobber(const InstructionPtr &instruction, const std::shared_ptr<Clobber> &clob) {
+		auto out = Unclobber::make(clob->reg);
+		clob->unclobber = out;
+		insertBefore(instruction, out)->setDebug(*instruction);
+		return out;
 	}
 
 	VariablePtr Function::stackPointer(BasicBlockPtr block) {

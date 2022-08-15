@@ -8,6 +8,9 @@ namespace LL2X {
 		Div(OperandPtr source_, x86_64::Width width_):
 			SizedSourceOnly(std::move(source_), width_) {}
 
+		Div(OperandPtr source_):
+			SizedSourceOnly(source_, source_->width) {}
+
 		std::string debugExtra() override     { return makeDebug("div");  }
 		std::string toString() const override { return makeString("div"); }
 	};

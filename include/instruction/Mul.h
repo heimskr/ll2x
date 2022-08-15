@@ -8,6 +8,9 @@ namespace LL2X {
 		Mul(OperandPtr source_, x86_64::Width width_):
 			SizedSourceOnly(std::move(source_), width_) {}
 
+		Mul(OperandPtr source_):
+			SizedSourceOnly(source_, source_->width) {}
+
 		std::string debugExtra() override     { return makeDebug("mul");  }
 		std::string toString() const override { return makeString("mul"); }
 	};

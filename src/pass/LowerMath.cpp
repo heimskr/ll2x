@@ -26,8 +26,8 @@
 namespace LL2X::Passes {
 	template <typename Ins, bool Rem>
 	static void lowerDiv(Function &function, InstructionPtr &instruction, SimpleNode *node) {
-		for (int reg: {x86_64::rax, x86_64::rdx})
-			function.insertBefore(instruction, Clobber::make(reg))->setDebug(*instruction, true);
+		auto rax_clobber = function.clobber(instruction, x86_64::rax);
+		auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
@@ -35,15 +35,17 @@ namespace LL2X::Passes {
 		OperandPtr rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
 		const auto width = x86_64::getWidth(node->type->width());
 
-		function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rdx, width))
+		function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rdx, width), false)
 			->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Mov>(left, rax, width))->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Ins>(right, width))->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Mov>(Rem? rdx : rax, node->operand, width))
+		function.insertBefore(instruction, std::make_shared<Mov>(left, rax, width), false)
+			->setDebug(*instruction, true);
+		function.insertBefore(instruction, std::make_shared<Ins>(right, width), false)
+			->setDebug(*instruction, true);
+		function.insertBefore(instruction, std::make_shared<Mov>(Rem? rdx : rax, node->operand, width), false)
 			->setDebug(*instruction, true);
 
-		for (int reg: {x86_64::rdx, x86_64::rax})
-			function.insertBefore(instruction, Unclobber::make(reg))->setDebug(*instruction, true);
+		function.unclobber(instruction, rdx_clobber);
+		function.unclobber(instruction, rax_clobber);
 	}
 
 	std::string getName(BasicMathNode *node) {
@@ -108,8 +110,8 @@ namespace LL2X::Passes {
 	}
 
 	void lowerMult(Function &function, InstructionPtr &instruction, BasicMathNode *node) {
-		for (int reg: {x86_64::rax, x86_64::rdx})
-			function.insertBefore(instruction, Clobber::make(reg))->setDebug(*instruction, true);
+		auto rax_clobber = function.clobber(instruction, x86_64::rax);
+		auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
@@ -117,15 +119,17 @@ namespace LL2X::Passes {
 		OperandPtr rdx   = Operand::make(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
 		OperandPtr destination = node->operand;
 
-		function.insertBefore(instruction, std::make_shared<Mov>(left, rax, x86_64::Width::Eight))
+		// mov %left, %rax
+		function.insertBefore(instruction, std::make_shared<Mov>(left, rax), false)->setDebug(*instruction, true);
+		// mul %right
+		function.insertBefore(instruction, std::make_shared<Mul>(right, destination->width), false)
 			->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Mul>(right, destination->width))
-			->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Mov>(rax, destination, x86_64::Width::Eight))
+		// mov %rax, %dest
+		function.insertBefore(instruction, std::make_shared<Mov>(rax, destination), false)
 			->setDebug(*instruction, true);
 
-		for (int reg: {x86_64::rdx, x86_64::rax})
-			function.insertBefore(instruction, Unclobber::make(reg))->setDebug(*instruction, true);
+		function.unclobber(instruction, rdx_clobber);
+		function.unclobber(instruction, rax_clobber);
 	}
 
 	void lowerLogic(Function &function, InstructionPtr &instruction, LogicNode *node) {

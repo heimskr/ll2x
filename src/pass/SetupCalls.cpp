@@ -152,11 +152,9 @@ namespace LL2X::Passes {
 
 			// Clobber caller-saved registers as necessary.
 			const int clobber_start = i;
-			for (; i < 8; ++i) {
-				auto clobber = std::make_shared<Clobber>(arg_regs[i]);
-				function.insertBefore(instruction, clobber, false)->setDebug(*instruction, true);
-				function.categories["SetupCalls:Clobber"].insert(clobber);
-			}
+			std::unordered_map<int, std::shared_ptr<Clobber>> clobbers;
+			for (; i < 8; ++i)
+				clobbers.emplace(i, function.clobber(instruction, arg_regs[i]));
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 			VariablePtr rdx;
@@ -257,11 +255,8 @@ namespace LL2X::Passes {
 			}
 
 			// Unclobber caller-saved registers as necessary.
-			for (i = 7; clobber_start <= i; --i) {
-				auto unclobber = std::make_shared<Unclobber>(arg_regs[i]);
-				function.insertBefore(instruction, unclobber, false)->setDebug(*instruction, true);
-				function.categories["SetupCalls:Unclobber"].insert(unclobber);
-			}
+			for (i = 7; clobber_start <= i; --i)
+				function.unclobber(instruction, clobbers.at(i));
 
 			// Pop the argument registers from the stack.
 			for (i = std::min(reg_max - 1, arg_count - 1); 0 <= i; --i) {

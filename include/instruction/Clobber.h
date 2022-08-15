@@ -5,8 +5,11 @@
 #include "util/Makeable.h"
 
 namespace LL2X {
+	struct Unclobber;
+
 	struct Clobber: IntermediateInstruction, Makeable<Clobber> {
 		int reg;
+		std::shared_ptr<Unclobber> unclobber;
 		Clobber(int reg_, int index_ = -1):
 			IntermediateInstruction(index_), reg(reg_) {}
 		std::string debugExtra() override { return toString(); }
@@ -14,7 +17,7 @@ namespace LL2X {
 		bool maySpill() const override { return false; }
 	};
 
-	struct Unclobber: IntermediateInstruction, Makeable<Clobber> {
+	struct Unclobber: IntermediateInstruction, Makeable<Unclobber> {
 		int reg;
 		Unclobber(int reg_, int index_ = -1):
 			IntermediateInstruction(index_), reg(reg_) {}

@@ -40,8 +40,8 @@ namespace LL2X {
 
 			virtual ~Instruction();
 
-			/** Returns a vector of all registers that the instruction inherently messes with. Useful for instructions like mul,
-			 *  which always overwrites rax. */
+			/** Returns a vector of all registers that the instruction inherently messes with. Useful for instructions
+			 *  like mul, which always overwrites rax. */
 			virtual std::vector<int> clobbers() const { return {}; }
 
 			virtual bool altersFlags() const { return false; }
