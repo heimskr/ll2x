@@ -8,7 +8,7 @@
 #include "parser/Parser.h"
 #include "util/Timer.h"
 
-#define DEBUGMODE
+// #define DEBUGMODE
 
 int global_argc = -1;
 char **global_argv = nullptr;
@@ -42,7 +42,9 @@ int main(int argc, char **argv) {
 	}
 #endif
 
+#ifdef DEBUGMODE
 	LL2X::Timer::summary();
+#endif
 	LL2X::StructType::knownStructs.clear();
 }
 

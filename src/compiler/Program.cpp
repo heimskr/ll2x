@@ -401,28 +401,7 @@ namespace LL2X {
 	}
 
 	void Program::debugSection(std::ostream *out) {
-		int i = 0;
-		for (auto &[index, file]: files) {
-			if (out)
-				*out << "1 \"" << Util::escape(file.filename) << "\"\n";
-			file.index = i++;
-		}
-		for (auto &[index, subprogram]: subprograms) {
-			if (out)
-				*out << "2 \"" << Util::escape(subprogram.getName()) << "\"\n";
-			subprogram.index = i++;
-		}
-		for (auto &[index, location]: locations) {
-			if (files.count(location.file) == 0) {
-				warn() << "Couldn't find file " << location.file << " from location " << index << ".\n";
-			} else if (subprograms.count(location.scope) != 0) {
-				if (out)
-					*out << "3 " << files.at(location.file).index << " " << location.line << " " << location.column
-					     << " " << subprograms.at(location.scope).index << "\n";
-				location.index = i++;
-			} else
-				warn() << "Couldn't find scope " << location.scope << " from location " << index << ".\n";
-		}
+
 	}
 
 	int Program::symbolSize(const std::string &name) const {

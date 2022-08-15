@@ -1447,7 +1447,6 @@ namespace LL2X {
 			}
 			out << "\n";
 		}
-		out << "\t: $rt\n";
 		return out.str();
 	}
 
