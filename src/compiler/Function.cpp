@@ -50,6 +50,7 @@
 // #include "pass/LoadArguments.h"
 // #include "pass/LowerAlloca.h"
 #include "pass/LowerBranches.h"
+#include "pass/LowerClobber.h"
 // #include "pass/LowerConversions.h"
 // #include "pass/LowerExtractvalue.h"
 // #include "pass/LowerFreeze.h"
@@ -935,6 +936,7 @@ namespace LL2X {
 
 	void Function::finalCompile() {
 		Timer timer("FinalCompile");
+		Passes::lowerClobber(*this);
 		// Passes::lowerInsertvalue(*this);
 		// Passes::readjustStackSkip(*this);
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
