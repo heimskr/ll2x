@@ -13,48 +13,35 @@ namespace LL2X::Passes {
 		Timer timer("HackOperands");
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			// info() << instruction->debugExtra() << '\n';
-
 			auto target = std::dynamic_pointer_cast<TargetInstruction>(instruction);
-			if (!target) {
-				// error() << '\n';
+			if (!target)
 				continue;
-			}
 
 			auto sized = std::dynamic_pointer_cast<Sized>(target);
-			if (!sized) {
-				// error() << '\n';
+			if (!sized)
 				continue;
-			}
-
-			// success() << '\n';
 
 			const x86_64::Width width = sized->size;
 
 			if (auto one_source = std::dynamic_pointer_cast<OneSource>(target))
-				if (!one_source->source->isNumeric()) {
-					// info() << instruction->debugExtra() << "  ->\n";
+				if (one_source->source->isHackable())
 					one_source->source->width = width;
-					// std::cerr << "    " << instruction->debugExtra() << "\n\n";
-				}
 
 			if (auto one_destination = std::dynamic_pointer_cast<OneDestination>(target))
-				if (!one_destination->destination->isNumeric())
+				if (one_destination->destination->isHackable())
 					one_destination->destination->width = width;
 
 			if (auto two_sources = std::dynamic_pointer_cast<TwoSources>(target)) {
-				// info() << instruction->debugExtra() << "  ->\n";
-				if (!two_sources->firstSource->isNumeric())
+				if (two_sources->firstSource->isHackable())
 					two_sources->firstSource->width = width;
-				if (!two_sources->secondSource->isNumeric())
+				if (two_sources->secondSource->isHackable())
 					two_sources->secondSource->width = width;
-				// std::cerr << "    " << instruction->debugExtra() << "\n\n";
 			}
 
 			if (auto overlapping = std::dynamic_pointer_cast<Overlapping>(target)) {
-				if (!overlapping->multi->isNumeric())
+				if (overlapping->multi->isHackable())
 					overlapping->multi->width = width;
-				if (!overlapping->sourceOnly->isNumeric())
+				if (overlapping->sourceOnly->isHackable())
 					overlapping->sourceOnly->width = width;
 			}
 		}

@@ -90,6 +90,7 @@ namespace LL2X {
 		bool isAliasOf(const Variable &) const;
 		bool isLabel() const;
 		bool isNumeric() const;
+		bool isHackable() const;
 
 		/** Returns a copy of a register operand (e.g. "%rax") that's displaced (e.g. "8(%rax)").
 		 *  Throws an exception if this isn't a register operand. */

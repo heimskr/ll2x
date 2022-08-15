@@ -141,6 +141,10 @@ namespace LL2X {
 		return mode == Mode::Constant || mode == Mode::Direct;
 	}
 
+	bool Operand::isHackable() const {
+		return !isNumeric() && mode != Mode::Displaced && mode != Mode::Scaled;
+	}
+
 	std::shared_ptr<Operand> Operand::toDisplaced(int displacement) const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't displace non-register operand " + toString());
