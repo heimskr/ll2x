@@ -32,9 +32,10 @@ namespace LL2X::Passes {
 		function.insertBefore(first, std::make_shared<Mov>(Operand8(rsp), Operand8(rbp)), false)->setDebug(*first,
 			true);
 
-		// Move %rsp down to make room for stack allocations.
-		function.insertBefore(first, std::make_shared<Sub>(Operand4(function.stackSize), Operand8(rsp)), false)
-			->setDebug(*first, true);
+		// Move %rsp down to make room for stack allocations if necessary.
+		if (0 < function.stackSize)
+			function.insertBefore(first, std::make_shared<Sub>(Operand4(function.stackSize), Operand8(rsp)), false)
+				->setDebug(*first, true);
 
 		// Next, we need to push any variables that are written to.
 		std::set<int> written;
