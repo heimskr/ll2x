@@ -33,9 +33,11 @@ namespace LL2X::Passes {
 			true);
 
 		// Move %rsp down to make room for stack allocations if necessary.
-		if (0 < function.stackSize)
-			function.insertBefore(first, std::make_shared<Sub>(Operand4(function.stackSize), Operand8(rsp)), false)
-				->setDebug(*first, true);
+		if (0 < function.stackSize) {
+			auto sub = std::make_shared<Sub>(Operand4(function.stackSize), Operand8(rsp));
+			function.insertBefore(first, sub, false)->setDebug(*first, true);
+			function.categories["StackSkip"].insert(sub);
+		}
 
 		// Next, we need to push any variables that are written to.
 		std::set<int> written;

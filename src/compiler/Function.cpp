@@ -881,7 +881,7 @@ namespace LL2X {
 		extractBlocks();
 		makeInitialDebugIndex();
 		Passes::ignoreIntrinsics(*this);
-		Passes::insertStackSkip(*this);
+		// Passes::insertStackSkip(*this);
 		Passes::fillLocalValues(*this);
 		Passes::lowerStacksave(*this);
 		for (BasicBlockPtr &block: blocks)
@@ -936,7 +936,7 @@ namespace LL2X {
 	void Function::finalCompile() {
 		Timer timer("FinalCompile");
 		// Passes::lowerInsertvalue(*this);
-		Passes::readjustStackSkip(*this);
+		// Passes::readjustStackSkip(*this);
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
 		// Passes::replaceStoresAndLoads(*this);
 		// Passes::lowerStack(*this);

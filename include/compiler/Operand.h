@@ -117,6 +117,16 @@ namespace LL2X {
 		return Operand::make(x86_64::Width::Low, std::forward<Args>(args)...);
 	}
 
+	template <typename... Args>
+	inline OperandPtr OperandX(int bits, Args &&...args) {
+		return Operand::make(x86_64::getWidth(bits), std::forward<Args>(args)...);
+	}
+
+	template <typename... Args>
+	inline OperandPtr OperandX(x86_64::Width width, Args &&...args) {
+		return Operand::make(width, std::forward<Args>(args)...);
+	}
+
 	inline OperandPtr OperandV(const VariablePtr &var) {
 		return Operand::make(var);
 	}
