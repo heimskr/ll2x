@@ -130,114 +130,89 @@ namespace LL2X::Passes {
 			throw;
 		}
 
-		ValuePtr source_value = node->source->convert()->value;
+		ConstantPtr converted_source = node->source->convert();
+		ValuePtr source_value = converted_source->value;
+		TypePtr source_type = converted_source->type;
 		const ValueType value_type = source_value->valueType();
 
 		if (source_value->isIntLike()) {
-			int int_value = 0;
+			int64_t long_value = 0;
 			ValuePtr value;
+
 			if (value_type == ValueType::Int || value_type == ValueType::Bool) {
-				int_value = source_value->intValue(false);
+				long_value = source_value->longValue();
 				value = source_value;
 			}
+
 			if (local) {
-				auto m1 = function.mx(1, instruction);
 				auto lvar = local->getVariable(function);
-				// Because there's no single instruction of the form imm -> [$reg], we have to use a set+store pair.
-				// imm -> $m1
-				auto set = std::make_shared<SetInstruction>(m1, int_value);
-				set->setOriginalValue(value);
-				// $m1 -> [%var]
-				auto store = std::make_shared<StoreRInstruction>(m1, lvar, size);
-				function.insertBefore(instruction, set,   "LowerMemory: imm -> $m1")->setDebug(&llvm)->extract();
-				function.insertBefore(instruction, store, "LowerMemory: $m1 -> [" + lvar->plainString() + "]")
-					->setDebug(&llvm)->extract();
+				// mov $imm, (%var)
+				function.insertBefore(instruction, std::make_shared<Mov>(Operand4(long_value),
+					OperandV(lvar)->toDisplaced()), "LowerMemory: mov $imm, (%var)", false)->setDebug(llvm, true);
 			} else if (global) {
-				auto m1 = function.mx(1, instruction->parent.lock());
-				// In this case, it would be impossible for there to be a single instruction for what we're trying to do
-				// because there are two immediate values. As such, we use two instructions by necessity.
-				// imm -> $m1
-				auto set = std::make_shared<SetInstruction>(m1, int_value);
-				set->setOriginalValue(value);
-				function.insertBefore(instruction, set,   "LowerMemory: imm -> $m1")->setDebug(&llvm)->extract();
-
 				const int symsize = Util::updiv(function.parent.symbolSize("@" + *global->name), 8);
-
-				// $m1 -> [global]
-				if (symsize == 1 || symsize == 8) {
-					InstructionPtr store;
-					try {
-						store = std::make_shared<StoreIInstruction>(m1, global->name, symsize);
-					} catch (const std::out_of_range &) {
-						throw std::runtime_error("Couldn't find global variable @" + *global->name);
-					}
-
-					function.insertBefore(instruction, store, "LowerMemory: $m1 -> [global]")
-						->setDebug(&llvm)->extract();
-				} else if (symsize == 2 || symsize == 4) {
-					VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
-					function.insertBefore(instruction, std::make_shared<SetInstruction>(new_var, global->name),
-						"LowerMemory: global -> temp")->setDebug(&llvm)->extract();
-					function.insertBefore(instruction, std::make_shared<StoreRInstruction>(m1, new_var, symsize),
-						"LowerMemory: $m1 -> [temp]")->setDebug(&llvm)->extract();
-				} else
-					throw std::runtime_error("$m1 -> [global] failed: invalid symbol size: " + std::to_string(symsize));
+				const auto width = x86_64::getWidth(symsize * 8);
+				auto temp = function.newVariable(source_type, instruction->parent.lock());
+				// mov $imm, %temp
+				auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandV(temp));
+				// mov %temp, (global)
+				auto mov_global = std::make_shared<Mov>(OperandV(temp), OperandX(width, *global->name, true), width);
+				function.insertBefore(instruction, mov_imm, "LowerMemory: mov $imm, %temp", false)
+					->setDebug(llvm, true);
+				function.insertBefore(instruction, mov_global, "LowerMemory: mov %temp, (global)", false)
+					->setDebug(llvm, true);
 			} else if (converted->value->isIntLike()) {
-				auto m1 = function.mx(1, instruction->parent.lock());
-				const int intptr = converted->value->intValue();
-				// imm -> $m1
-				auto set = std::make_shared<SetInstruction>(m1, int_value);
-				set->setOriginalValue(value);
-				// $m1 -> [intptr]
-				auto store = std::make_shared<StoreIInstruction>(m1, intptr, size);
-				store->setOriginalValue(converted->value);
-				function.insertBefore(instruction, set,   "LowerMemory: imm -> $m1")->setDebug(&llvm)->extract();
-				function.insertBefore(instruction, store, "LowerMemory: $m1 -> [" + std::to_string(intptr) + "]")
-					->setDebug(&llvm)->extract();
+				const int64_t longptr = converted->value->longValue();
+				const auto width = x86_64::getWidth(source_type->width());
+				auto temp = function.newVariable(source_type, instruction->parent.lock());
+				// mov $imm, %temp
+				auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandV(temp));
+				// mov %temp, addr
+				auto mov_longptr = std::make_shared<Mov>(OperandV(temp), OperandX(width, longptr, true), width);
+				function.insertBefore(instruction, mov_imm, "LowerMemory: mov $imm, %temp", false)
+					->setDebug(llvm, true);
+				function.insertBefore(instruction, mov_longptr, "LowerMemory: mov %temp, addr", false)
+					->setDebug(llvm, true);
 			}
 		} else if (value_type == ValueType::Local || value_type == ValueType::Global) {
 			VariablePtr svar;
 			if (value_type == ValueType::Global) {
 				svar = function.newVariable(node->source->type);
-				auto set = std::make_shared<SetInstruction>(svar,
-					dynamic_cast<GlobalValue *>(source_value.get())->name);
-				function.insertBefore(instruction, set, "LowerMemory: load global")->setDebug(&llvm)->extract();
-			} else {
+				const std::string &global_name = *dynamic_cast<GlobalValue *>(source_value.get())->name;
+				auto mov = std::make_shared<Mov>(Operand4(global_name, true), OperandV(svar));
+				function.insertBefore(instruction, mov, "LowerMemory: load global")->setDebug(llvm, true);
+			} else
 				svar = dynamic_cast<LocalValue *>(source_value.get())->getVariable(function);
-			}
 
 			if (local) {
 				auto lvar = local->getVariable(function);
-				// %src -> [%dest]
-				auto store = std::make_shared<StoreRInstruction>(svar, lvar, size);
-				function.insertBefore(instruction, store, "LowerMemory: " + svar->plainString() + " -> [" +
-					lvar->plainString() + "]")->setDebug(&llvm)->extract();
+				// mov %src, (%dest)
+				const auto width = x86_64::getWidth(size * 8);
+				auto mov = std::make_shared<Mov>(OperandV(svar), OperandX(width, 0, lvar), width);
+				function.insertBefore(instruction, mov, "LowerMemory: mov " + svar->plainString() + ", (" +
+					lvar->plainString() + ")", false)->setDebug(llvm, true);
 			} else if (global) {
 				// %src -> [global]
 				int symsize = function.parent.symbolSize("@" + *global->name);
 				symsize = symsize / 8 + (symsize % 8? 1 : 0);
-				if (symsize == 2 || symsize == 4) {
-					// No ssi or shi instructions exist.
-					VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
-					auto set = std::make_shared<SetInstruction>(new_var, global->name);
-					function.insertBefore(instruction, set, "LowerMemory: " + svar->plainString() + " -> [global]")
-						->setDebug(&llvm)->extract();
-					set->setOriginalValue(converted->value);
-					function.insertBefore(instruction, std::make_shared<StoreRInstruction>(svar, new_var, symsize))
-						->setDebug(&llvm)->extract();
-				} else {
-					auto store = std::make_shared<StoreIInstruction>(svar, global->name, symsize);
-					function.insertBefore(instruction, store, "LowerMemory: " + svar->plainString() + " -> [global]")
-						->setDebug(&llvm)->extract();
-				}
+				const auto width = x86_64::getWidth(symsize * 8);
+
+				VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
+				// movq var@GOTPCREL(%rip), %temp
+				auto mov_global = std::make_shared<Mov>(Operand8(*global->name, true), Operand8(new_var));
+				// mov %src, (%temp)
+				auto mov_source = std::make_shared<Mov>(OperandV(svar), OperandX(width, 0, new_var));
+				function.insertBefore(instruction, mov_global, "LowerMemory: movq var, %temp", false)
+					->setDebug(llvm, true);
+				function.insertBefore(instruction, mov_source, "LowerMemory: movq %src, (%temp)", false)
+					->setDebug(llvm, true);
 			} else if (converted->value->isIntLike()) {
-				const int intptr = converted->value->intValue();
-				// %src -> [intptr]
-				auto store = std::make_shared<StoreIInstruction>(svar, intptr, size);
-				store->setOriginalValue(converted->value);
-				function.insertBefore(instruction, store, "LowerMemory: " + svar->plainString() + " -> [" +
-					std::to_string(intptr) + "]");
-				store->setDebug(&llvm)->extract();
+				const int64_t longptr = converted->value->longValue();
+				const auto width = x86_64::getWidth(converted->type->width());
+				// mov %src, addr
+				auto mov = std::make_shared<Mov>(OperandV(svar), OperandX(width, longptr, true), width);
+				function.insertBefore(instruction, mov, "LowerMemory: mov " + svar->plainString() + ", " +
+					std::to_string(longptr))->setDebug(llvm, true);
 			} else
 				throw std::runtime_error("Unexpected destination ValueType in store instruction: " +
 					value_map.at(converted->value->valueType()));
@@ -259,14 +234,13 @@ namespace LL2X::Passes {
 				return 1;
 			return constant_int->width() / 8;
 		} else if (dynamic_cast<PointerType *>(subtype) || dynamic_cast<FunctionType *>(subtype)) {
-			return WhyInfo::pointerWidth;
+			return x86_64::pointerWidth;
 		} else if (StructType *constant_struct = dynamic_cast<StructType *>(subtype)) {
 			return constant_struct->width() / 8;
 		} else {
 			warn() << "getLoadStoreSize: Unexpected pointer subtype " + std::string(*constant_ptr->subtype)
 			       << " in " << instruction->debugExtra() << "\n";
 			return constant_ptr->subtype->width() / 8;
-			// return -1;
 		}
 	}
 }
