@@ -198,19 +198,22 @@ namespace LL2X::Passes {
 			for (i = arg_count + arg_offset - 1; reg_max <= i; --i)
 				bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset]);
 
-			// VariablePtr m2;
-
-			// if (function.isVariadic()) {
-			// 	m2 = function.mx(2, instruction->parent.lock());
-			// 	function.insertBefore(instruction, std::make_shared<StackPushInstruction>(m2))
-			// 		->setDebug(*llvm)->extract();
-			// }
+			// The number of floating point arguments passed to a variadic function has to be stored in %rax.
+			// Floating point numbers aren't really supported yet and currently aren't properly passed to the function.
+			// (They need to be passed in the %xmm registers.)
+			if (function.isVariadic()) {
+				int floating = 0;
+				for (const auto &constant: call->constants)
+					if (constant->type->typeType() == TypeType::Float)
+						++floating;
+				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(floating), Operand8(rax)), false);
+			}
 
 			// Once we're done putting the arguments in the proper place, remove the variables from the call
 			// instruction's set of read variables so the register allocator doesn't try to insert any spills/loads.
 			llvm->read.clear();
 
-			// At this point, we're ready to insert the jump.
+			// At this point, we're ready to insert the call.
 			if (global_uptr) {
 				function.insertBefore(instruction, std::make_shared<Call>(Operand8(*global_uptr->name, false)))
 					->setDebug(*llvm, true);
