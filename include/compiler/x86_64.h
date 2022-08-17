@@ -3,6 +3,7 @@
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <unordered_set>
 
 #include "parser/Enums.h"
 
@@ -48,6 +49,8 @@ namespace LL2X::x86_64 {
 	constexpr int r14 = 14;
 	constexpr int r15 = 15;
 	constexpr int rip = 16;
+
+	extern std::unordered_set<int> calleeSaved;
 
 	std::set<int> makeRegisterPool();
 	bool isSpecialPurpose(int);

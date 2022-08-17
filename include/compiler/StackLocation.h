@@ -16,6 +16,8 @@ namespace LL2X {
 			/** Functions that return large (> 128 bits) structs secretly take a pointer to somewhere on the stack as an
 			 *  additional argument and return that pointer instead of copying the struct directly. */
 			BigStruct,
+
+			Clobber,
 		};
 		
 		Function *function = nullptr;

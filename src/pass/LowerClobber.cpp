@@ -1,10 +1,10 @@
+#include <cassert>
 #include <iostream>
 
 #include "compiler/Function.h"
 #include "compiler/Instruction.h"
 #include "instruction/Clobber.h"
-#include "instruction/Pop.h"
-#include "instruction/Push.h"
+#include "instruction/Mov.h"
 #include "pass/LowerClobber.h"
 #include "util/Timer.h"
 
@@ -22,22 +22,39 @@ namespace LL2X::Passes {
 		return false;
 	}
 
-	template <typename P>
-	static void lower(Function &function, const std::shared_ptr<IntermediateInstruction> &instruction, int reg) {
-		if (isLive(instruction, reg)) {
-			OperandPtr precolored = Operand8(function.makePrecoloredVariable(reg, instruction->parent.lock()));
-			function.insertBefore(instruction, std::make_shared<P>(precolored), false)->setDebug(*instruction, true);
-		}
-	}
-
 	int lowerClobber(Function &function) {
 		Timer timer("LowerClobber");
 		std::list<InstructionPtr> to_remove;
+
+		VariablePtr rsp;
 		
 		for (InstructionPtr &instruction: function.linearInstructions)
 			if (auto clobber = std::dynamic_pointer_cast<Clobber>(instruction)) {
-				lower<Push>(function, clobber, clobber->reg);
-				lower<Pop>(function, clobber->unclobber, clobber->unclobber->reg);
+				const int reg = clobber->reg;
+				assert(reg == clobber->unclobber->reg);
+				if (isLive(instruction, reg)) {
+					if (!rsp)
+						rsp = function.stackPointer(function.getEntry());
+
+					VariablePtr precolored = function.makePrecoloredVariable(reg, instruction->parent.lock());
+					const StackLocation *location = nullptr;
+
+					if (function.clobbers.contains(reg)) {
+						location = function.clobbers.at(reg);
+					} else {
+						location = &function.addToStack(precolored, StackLocation::Purpose::Clobber);
+						function.clobbers.emplace(reg, location);
+					}
+
+					const int offset = -location->offset;
+
+					function.insertBefore(clobber, std::make_shared<Mov>(Operand8(precolored), Operand8(offset, rsp)),
+						"Clobber " + x86_64::registerName(reg), false)->setDebug(*instruction, true);
+					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Operand8(offset, rsp),
+						Operand8(precolored)), false)->setDebug(*instruction, true);
+
+				}
+
 				to_remove.push_back(clobber);
 				to_remove.push_back(clobber->unclobber);
 			}

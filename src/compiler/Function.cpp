@@ -38,6 +38,7 @@
 #include "instruction/Mov.h"
 #include "instruction/Or.h"
 #include "instruction/Shl.h"
+#include "options.h"
 #include "parser/ASTNode.h"
 #include "parser/FunctionArgs.h"
 #include "parser/FunctionHeader.h"
@@ -1429,12 +1430,17 @@ namespace LL2X {
 		});
 	}
 
+
 	std::string Function::toString() {
 		Timer timer("Function::toString");
 		std::stringstream out;
 
 		auto chopped = std::string_view(*name).substr(1);
+#ifdef USE_UNDERSCORE
 		out << ".global _" << chopped << "\n_" << chopped << ":\n";
+#else
+		out << ".global " << chopped << '\n' << chopped << ":\n";
+#endif
 
 		for (InstructionPtr &instruction: linearInstructions) {
 #ifdef SPACE_COUNT

@@ -127,6 +127,9 @@ namespace LL2X {
 			 *  needs to be split up after register allocation. */
 			std::unordered_map<std::string, std::unordered_set<InstructionPtr>> categories;
 
+			/** Stores stack locations for register clobbering. */
+			std::unordered_map<int, const StackLocation *> clobbers;
+
 			/** The control-flow graph computed by makeCFG. */
 			CFG cfg;
 

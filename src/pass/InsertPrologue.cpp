@@ -48,12 +48,13 @@ namespace LL2X::Passes {
 						written.insert(reg);
 
 		function.savedRegisters.clear();
-		for (int reg: written) {
-			function.savedRegisters.push_back(reg);
-			VariablePtr variable = function.makePrecoloredVariable(reg, front_block);
-			function.insertBefore(first, std::make_shared<Push>(Operand8(variable)), false)->setDebug(*first, true);
-			function.initialPushedBytes += 8;
-		}
+		for (const int reg: written)
+			if (x86_64::calleeSaved.contains(reg)) {
+				function.savedRegisters.push_back(reg);
+				VariablePtr variable = function.makePrecoloredVariable(reg, front_block);
+				function.insertBefore(first, std::make_shared<Push>(Operand8(variable)), false)->setDebug(*first, true);
+				function.initialPushedBytes += 8;
+			}
 
 #ifdef MOVE_STACK_POINTER
 		int to_skip = 0;
