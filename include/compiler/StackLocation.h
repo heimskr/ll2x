@@ -19,7 +19,9 @@ namespace LL2X {
 
 			Clobber,
 
-			CalleeSave
+			CalleeSave,
+
+			Alloca,
 		};
 		
 		Function *function = nullptr;

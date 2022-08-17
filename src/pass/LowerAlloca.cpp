@@ -5,6 +5,7 @@
 #include "instruction/And.h"
 #include "instruction/Clobber.h"
 #include "instruction/Div.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "instruction/Mul.h"
 #include "instruction/Pop.h"
@@ -13,8 +14,6 @@
 #include "pass/LowerAlloca.h"
 #include "util/Timer.h"
 #include "util/Util.h"
-
-// #define ADD_ALLOCA_TO_STACK
 
 namespace LL2X::Passes {
 	int lowerAlloca(Function &function) {
@@ -37,8 +36,27 @@ namespace LL2X::Passes {
 
 			// First, mark the alloca instruction for removal.
 			to_remove.push_back(instruction);
+			++replaced_count;
 
 			BasicBlockPtr block = llvm->parent.lock();
+
+			if (block == entry && block->preds.empty()) {
+				// If we know the alloca runs only once and has a fixed size, we can assign a static location on the
+				// stack for it instead of doing runtime stack pointer math.
+
+				if (!alloca->numelementsValue || alloca->numelementsValue->isIntLike()) {
+					int size = Util::upalign(alloca->type->width(), 8 * (alloca->align < 1? 1 : alloca->align)) / 8;
+					if (alloca->numelementsValue)
+						size *= alloca->numelementsValue->intValue(true);
+
+					VariablePtr destination = function.getVariable(*alloca->result);
+					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size);
+
+					auto lea = std::make_shared<Lea>(Operand8(-location.offset, rbp), Operand8(destination));
+					function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
+					continue;
+				}
+			}
 
 			// Move the stack pointer down to get the alignment right.
 			if (alloca->align == 16 || alloca->align == 8 || alloca->align == 4 || alloca->align == 2) {
@@ -82,8 +100,8 @@ namespace LL2X::Passes {
 			const int width = alloca->type->width() / 8;
 
 			// The number of elements requested is usually an integer constant, but it can also be a local variable.
-			// We need to copy the stack pointer to the result variable and then move the stack pointer down past the
-			// allocated memory.
+			// We need to copy the stack pointer to the result variable and then move the stack pointer down past
+			// the allocated memory.
 			int num_elements = -1;
 			if (alloca->numelementsValue) {
 				Value *value = alloca->numelementsValue.get();
@@ -94,7 +112,8 @@ namespace LL2X::Passes {
 					// If it's a local variable instead, we can't do the multiplication at compile time.
 					LocalValue *local = dynamic_cast<LocalValue *>(value);
 					auto mov = std::make_shared<Mov>(OperandV(alloca_reg), alloca->operand);
-					function.insertBefore(instruction, mov, "LowerAlloca: mov %rsp, %var", false)->setDebug(llvm, true);
+					function.insertBefore(instruction, mov, "LowerAlloca: mov %rsp, %var", false)
+						->setDebug(llvm, true);
 					if (width != 0) {
 						// TODO: use shifts for widths that are powers of two
 
@@ -137,12 +156,6 @@ namespace LL2X::Passes {
 				}
 				function.comment(mov, "LowerAlloca: mov %rsp, " + alloca->operand->toString());
 			}
-
-#ifdef ADD_ALLOCA_TO_STACK
-			function.addToStack(alloca->variable, StackLocation::Purpose::Alloca);
-#endif
-
-			++replaced_count;
 		}
 
 		// Remove the alloca instructions to complete their replacement.
