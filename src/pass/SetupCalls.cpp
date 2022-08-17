@@ -201,7 +201,7 @@ namespace LL2X::Passes {
 			// The number of floating point arguments passed to a variadic function has to be stored in %rax.
 			// Floating point numbers aren't really supported yet and currently aren't properly passed to the function.
 			// (They need to be passed in the %xmm registers.)
-			if (function.isVariadic()) {
+			if (ellipsis) {
 				int floating = 0;
 				for (const auto &constant: call->constants)
 					if (constant->type->typeType() == TypeType::Float)
