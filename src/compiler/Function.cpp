@@ -1437,9 +1437,9 @@ namespace LL2X {
 
 		auto chopped = std::string_view(*name).substr(1);
 #ifdef USE_UNDERSCORE
-		out << ".global _" << chopped << "\n_" << chopped << ":\n";
+		out << ".global _" << chopped << "\n.p2align 4, 0x90\n_" << chopped << ":\n";
 #else
-		out << ".global " << chopped << '\n' << chopped << ":\n";
+		out << ".global " << chopped << "\n.p2align 4, 0x90\n" << chopped << ":\n";
 #endif
 
 		for (InstructionPtr &instruction: linearInstructions) {
