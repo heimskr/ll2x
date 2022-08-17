@@ -26,15 +26,15 @@ namespace LL2X::Passes {
 		Timer timer("LowerClobber");
 		std::list<InstructionPtr> to_remove;
 
-		VariablePtr rsp;
+		VariablePtr rbp;
 		
 		for (InstructionPtr &instruction: function.linearInstructions)
 			if (auto clobber = std::dynamic_pointer_cast<Clobber>(instruction)) {
 				const int reg = clobber->reg;
 				assert(reg == clobber->unclobber->reg);
 				if (isLive(instruction, reg)) {
-					if (!rsp)
-						rsp = function.stackPointer(function.getEntry());
+					if (!rbp)
+						rbp = function.basePointer(function.getEntry());
 
 					VariablePtr precolored = function.makePrecoloredVariable(reg, instruction->parent.lock());
 					const StackLocation *location = nullptr;
@@ -48,9 +48,9 @@ namespace LL2X::Passes {
 
 					const int offset = -location->offset;
 
-					function.insertBefore(clobber, std::make_shared<Mov>(Operand8(precolored), Operand8(offset, rsp)),
+					function.insertBefore(clobber, std::make_shared<Mov>(Operand8(precolored), Operand8(offset, rbp)),
 						"Clobber " + x86_64::registerName(reg), false)->setDebug(*instruction, true);
-					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Operand8(offset, rsp),
+					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Operand8(offset, rbp),
 						Operand8(precolored)), false)->setDebug(*instruction, true);
 
 				}
