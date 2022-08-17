@@ -66,12 +66,13 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
 					std::string(*ret->value));
 
-			// Pop all the registers that were saved in the prologue.
+			// Restore all the registers that were saved in the prologue.
 			for (auto begin = function.savedRegisters.rbegin(), iter = begin, end = function.savedRegisters.rend();
 			     iter != end; ++iter) {
 				VariablePtr variable = function.makePrecoloredVariable(*iter, block);
-				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(variable)), false)
-					->setDebug(llvm, true);
+				const auto &location = *function.calleeSaved.at(*iter);
+				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(-location.offset, rbp),
+					Operand8(variable)), false)->setDebug(llvm, true);
 			}
 
 			// Insert the epilogue (minus the jump).

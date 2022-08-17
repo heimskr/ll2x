@@ -60,14 +60,14 @@ namespace LL2X::Passes {
 			LocalValue *local = dynamic_cast<LocalValue *>(converted->value.get());
 			VariablePtr localvar = local->getVariable(function);
 			auto mov = std::make_shared<Mov>(Operand8(0, localvar), node->operand, width);
-			function.insertBefore(instruction, mov, prefix + " load (" + localvar->plainString() + ") into " +
+			function.insertBefore(instruction, mov, prefix + "load (" + localvar->plainString() + ") into " +
 				node->operand->toString())->setDebug(llvm, true);
 
 		} else if (value_type == ValueType::Global) {
 
 			GlobalValue *global = dynamic_cast<GlobalValue *>(converted->value.get());
 			auto mov = std::make_shared<Mov>(OperandX(width, *global->name), node->operand, width);
-			function.insertBefore(instruction, mov, prefix + " load " + *global->name + " into " +
+			function.insertBefore(instruction, mov, prefix + "load " + *global->name + " into " +
 				node->operand->toString())->setDebug(llvm, true);
 
 		} else if (value_type == ValueType::Null) { // In case you're begging for a segfault.
@@ -81,8 +81,8 @@ namespace LL2X::Passes {
 
 			const int64_t long_value = converted->value->longValue();
 			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(long_value),
-				node->operand), "Load " + std::to_string(long_value) + " into " + node->operand->toString(), false)
-				->setDebug(llvm, true);
+				node->operand), prefix + "load " + std::to_string(long_value) + " into " + node->operand->toString(),
+				false)->setDebug(llvm, true);
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
 				false)->setDebug(llvm, true);
 
@@ -90,8 +90,8 @@ namespace LL2X::Passes {
 
 			const int64_t bool_value = dynamic_cast<BoolValue *>(converted->value.get())->value? 1 : 0;
 			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(bool_value),
-				node->operand), "Load " + std::to_string(bool_value) + " into " + node->operand->toString(), false)
-				->setDebug(llvm, true);
+				node->operand), prefix + "load " + std::to_string(bool_value) + " into " + node->operand->toString(),
+				false)->setDebug(llvm, true);
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
 				false)->setDebug(llvm, true);
 

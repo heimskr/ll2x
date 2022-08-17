@@ -161,7 +161,7 @@ namespace LL2X {
 	std::shared_ptr<Operand> Operand::toDisplaced(int displacement) const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't displace non-register operand " + toString());
-		return OperandX(width, 0, reg);
+		return OperandX(width, displacement, reg);
 	}
 
 	VariablePtr Operand::getVariable() const {

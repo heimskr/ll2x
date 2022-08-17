@@ -8,8 +8,6 @@
 #include "pass/InsertPrologue.h"
 #include "util/Timer.h"
 
-// #define MOVE_STACK_POINTER
-
 namespace LL2X::Passes {
 	void insertPrologue(Function &function) {
 		Timer timer("InsertPrologue");
@@ -32,39 +30,35 @@ namespace LL2X::Passes {
 		function.insertBefore(first, std::make_shared<Mov>(Operand8(rsp), Operand8(rbp)), false)->setDebug(*first,
 			true);
 
-		// Move %rsp down to make room for stack allocations if necessary.
-		if (0 < function.stackSize) {
-			auto sub = std::make_shared<Sub>(Operand4(function.stackSize), Operand8(rsp));
-			function.insertBefore(first, sub, false)->setDebug(*first, true);
-			function.categories["StackSkip"].insert(sub);
-		}
-
-		// Next, we need to push any variables that are written to.
+		// Next, we need to save to the stack any registers that are written to. Start by finding the registers.
 		std::set<int> written;
 		for (InstructionPtr &instruction: function.linearInstructions)
 			for (const VariablePtr &variable: instruction->written)
 				for (const int reg: variable->registers)
-					if (!x86_64::isSpecialPurpose(reg))
+					if (!x86_64::isSpecialPurpose(reg) && x86_64::calleeSaved.contains(reg)) {
 						written.insert(reg);
+						const auto &location = function.addToStack(variable, StackLocation::Purpose::CalleeSave);
+						function.calleeSaved.emplace(reg, &location);
+					}
+
+		function.initialPushedBytes += 8 * written.size();
+
+		// Move %rsp down to make room for stack allocations if necessary.
+		if (0 < function.stackSize) {
+			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize, 16) + 8), Operand8(rsp));
+			function.insertBefore(first, sub, false)->setDebug(*first, true);
+			function.categories["StackSkip"].insert(sub);
+		}
 
 		function.savedRegisters.clear();
-		for (const int reg: written)
-			if (x86_64::calleeSaved.contains(reg)) {
-				function.savedRegisters.push_back(reg);
-				VariablePtr variable = function.makePrecoloredVariable(reg, front_block);
-				function.insertBefore(first, std::make_shared<Push>(Operand8(variable)), false)->setDebug(*first, true);
-				function.initialPushedBytes += 8;
-			}
-
-#ifdef MOVE_STACK_POINTER
-		int to_skip = 0;
-		for (const std::pair<int, StackLocation> &pair: function.stack)
-			to_skip += pair.second.width;
-
-		if (to_skip != 0)
-			function.insertBefore(first, std::make_shared<SubIInstruction>(sp, to_skip, sp), false)
-				->setDebug(*first, true);
-#endif
+		for (const int reg: written) {
+			function.savedRegisters.push_back(reg);
+			VariablePtr variable = function.makePrecoloredVariable(reg, front_block);
+			const auto &location = *function.calleeSaved.at(reg);
+			auto save = std::make_shared<Mov>(Operand8(variable), Operand8(-location.offset, rbp));
+			function.insertBefore(first, save, false)->setDebug(*first, true);
+			function.categories["PrologueSave"].insert(save);
+		}
 
 		function.reindexInstructions();
 	}

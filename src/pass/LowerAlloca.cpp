@@ -21,10 +21,10 @@ namespace LL2X::Passes {
 		Timer timer("LowerAlloca");
 		std::list<InstructionPtr> to_remove;
 
-		int replaced_count = 0;
+		int  replaced_count = 0;
 		BasicBlockPtr entry = function.getEntry();
-		VariablePtr rbp = function.basePointer(entry);
-		VariablePtr rsp = function.stackPointer(entry);
+		VariablePtr   rbp   = function.basePointer(entry);
+		VariablePtr   rsp   = function.stackPointer(entry);
 
 		VariablePtr alloca_reg = rsp;
 
@@ -45,10 +45,10 @@ namespace LL2X::Passes {
 				auto and_ = std::make_shared<And>(Operand4(-alloca->align), Operand8(rsp));
 				function.insertBefore(instruction, and_, false)->setDebug(llvm, true);
 			} else if (0 < alloca->align) {
-				const int align = Util::upalign(alloca->align, 8);
-				VariablePtr   temp  = function.newVariable(IntType::make(64), block);
-				OperandPtr    rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, block));
-				OperandPtr    rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, block));
+				const int   align = Util::upalign(alloca->align, 8);
+				VariablePtr temp  = function.newVariable(IntType::make(64), block);
+				OperandPtr  rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, block));
+				OperandPtr  rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, block));
 
 				// I hope this part is never run.
 

@@ -130,6 +130,9 @@ namespace LL2X {
 			/** Stores stack locations for register clobbering. */
 			std::unordered_map<int, const StackLocation *> clobbers;
 
+			/** Stores stack locations for saved registers in the prologue and epilogue. */
+			std::unordered_map<int, const StackLocation *> calleeSaved;
+
 			/** The control-flow graph computed by makeCFG. */
 			CFG cfg;
 

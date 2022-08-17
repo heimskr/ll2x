@@ -143,17 +143,17 @@ namespace LL2X::Passes {
 				x86_64::r11, // Same here.
 			};
 
-			// First, push the current values of the argument registers to the stack.
-			for (i = 0; i < arg_count + arg_offset && i < reg_max; ++i) {
-				VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
-				function.insertBefore(instruction, std::make_shared<Push>(Operand8(arg_variable), x86_64::Width::Eight),
-					false)->setDebug(*llvm, true);
-			}
+			// // First, push the current values of the argument registers to the stack.
+			// for (i = 0; i < arg_count + arg_offset && i < reg_max; ++i) {
+			// 	VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
+			// 	function.insertBefore(instruction, std::make_shared<Push>(Operand8(arg_variable), x86_64::Width::Eight),
+			// 		false)->setDebug(*llvm, true);
+			// }
 
 			// Clobber caller-saved registers as necessary.
-			const int clobber_start = i;
+			const int clobber_start = 0;
 			std::unordered_map<int, std::shared_ptr<Clobber>> clobbers;
-			for (; i < 8; ++i)
+			for (i = 0; i < 8; ++i)
 				clobbers.emplace(i, function.clobber(instruction, arg_regs[i]));
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);

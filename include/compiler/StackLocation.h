@@ -18,6 +18,8 @@ namespace LL2X {
 			BigStruct,
 
 			Clobber,
+
+			CalleeSave
 		};
 		
 		Function *function = nullptr;
