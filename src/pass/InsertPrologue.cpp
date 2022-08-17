@@ -45,7 +45,7 @@ namespace LL2X::Passes {
 
 		// Move %rsp down to make room for stack allocations if necessary.
 		if (0 < function.stackSize) {
-			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize, 16) + 8), Operand8(rsp));
+			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize, 16)), Operand8(rsp));
 			function.insertBefore(first, sub, false)->setDebug(*first, true);
 			function.categories["StackSkip"].insert(sub);
 		}
