@@ -72,7 +72,7 @@ namespace LL2X::Passes {
 
 		} else if (value_type == ValueType::Null) { // In case you're begging for a segfault.
 
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), node->operand),
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), node->operand, width),
 				"Guaranteed segfault.", false)->setDebug(llvm, true);
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
 				false)->setDebug(llvm, true);
@@ -80,8 +80,8 @@ namespace LL2X::Passes {
 		} else if (value_type == ValueType::Int) {
 
 			const int64_t long_value = converted->value->longValue();
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(long_value),
-				node->operand), prefix + "load " + std::to_string(long_value) + " into " + node->operand->toString(),
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(long_value), node->operand, width),
+				prefix + "load " + std::to_string(long_value) + " into " + node->operand->toString(),
 				false)->setDebug(llvm, true);
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
 				false)->setDebug(llvm, true);
@@ -89,8 +89,8 @@ namespace LL2X::Passes {
 		} else if (value_type == ValueType::Bool) {
 
 			const int64_t bool_value = dynamic_cast<BoolValue *>(converted->value.get())->value? 1 : 0;
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(bool_value),
-				node->operand), prefix + "load " + std::to_string(bool_value) + " into " + node->operand->toString(),
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(bool_value), node->operand, width),
+				prefix + "load " + std::to_string(bool_value) + " into " + node->operand->toString(),
 				false)->setDebug(llvm, true);
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
 				false)->setDebug(llvm, true);
@@ -134,6 +134,7 @@ namespace LL2X::Passes {
 		ValuePtr source_value = converted_source->value;
 		TypePtr source_type = converted_source->type;
 		const ValueType value_type = source_value->valueType();
+		const x86_64::Width width = x86_64::getWidth(size * 8);
 
 		if (source_value->isIntLike()) {
 			int64_t long_value = 0;
@@ -148,14 +149,12 @@ namespace LL2X::Passes {
 				auto lvar = local->getVariable(function);
 				// mov $imm, (%var)
 				function.insertBefore(instruction, std::make_shared<Mov>(Operand4(long_value),
-					OperandV(lvar)->toDisplaced()), "LowerMemory.1: mov $imm, (" + lvar->plainString() + ")", false)
-					->setDebug(llvm, true);
+					OperandV(lvar)->toDisplaced(), width), "LowerMemory.1: mov $imm, (" + lvar->plainString() + ")",
+					false)->setDebug(llvm, true);
 			} else if (global) {
-				const int symsize = Util::updiv(function.parent.symbolSize("@" + *global->name), 8);
-				const auto width = x86_64::getWidth(symsize * 8);
 				auto temp = function.newVariable(source_type, instruction->parent.lock());
 				// mov $imm, %temp
-				auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandV(temp));
+				auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandV(temp), width);
 				// mov %temp, (global)
 				auto mov_global = std::make_shared<Mov>(OperandV(temp), OperandX(width, *global->name, true), width);
 				function.insertBefore(instruction, mov_imm, "LowerMemory.2: mov $imm, %temp", false)
@@ -164,10 +163,9 @@ namespace LL2X::Passes {
 					->setDebug(llvm, true);
 			} else if (converted->value->isIntLike()) {
 				const int64_t longptr = converted->value->longValue();
-				const auto width = x86_64::getWidth(source_type->width());
 				auto temp = function.newVariable(source_type, instruction->parent.lock());
 				// mov $imm, %temp
-				auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandV(temp));
+				auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandV(temp), width);
 				// mov %temp, addr
 				auto mov_longptr = std::make_shared<Mov>(OperandV(temp), OperandX(width, longptr, true), width);
 				function.insertBefore(instruction, mov_imm, "LowerMemory.4: mov $imm, %temp", false)
@@ -180,7 +178,7 @@ namespace LL2X::Passes {
 			if (value_type == ValueType::Global) {
 				svar = function.newVariable(node->source->type);
 				const std::string &global_name = *dynamic_cast<GlobalValue *>(source_value.get())->name;
-				auto mov = std::make_shared<Mov>(Operand4(global_name, true), OperandV(svar));
+				auto mov = std::make_shared<Mov>(Operand4(global_name, true), OperandV(svar), width);
 				function.insertBefore(instruction, mov, "LowerMemory.6: load global")->setDebug(llvm, true);
 			} else
 				svar = dynamic_cast<LocalValue *>(source_value.get())->getVariable(function);
@@ -188,7 +186,6 @@ namespace LL2X::Passes {
 			if (local) {
 				auto lvar = local->getVariable(function);
 				// mov %src, (%dest)
-				const auto width = x86_64::getWidth(size * 8);
 				auto mov = std::make_shared<Mov>(OperandV(svar), Operand8(0, lvar), width);
 				function.insertBefore(instruction, mov, "LowerMemory.7: mov " + svar->plainString() + ", (" +
 					lvar->plainString() + ")", false)->setDebug(llvm, true);
@@ -201,14 +198,13 @@ namespace LL2X::Passes {
 				// movq var@GOTPCREL(%rip), %temp
 				auto mov_global = std::make_shared<Mov>(Operand8(*global->name, true), Operand8(new_var));
 				// mov %src, (%temp)
-				auto mov_source = std::make_shared<Mov>(OperandV(svar), Operand8(0, new_var));
+				auto mov_source = std::make_shared<Mov>(OperandV(svar), Operand8(0, new_var), width);
 				function.insertBefore(instruction, mov_global, "LowerMemory.8: movq var, %temp", false)
 					->setDebug(llvm, true);
 				function.insertBefore(instruction, mov_source, "LowerMemory.9: movq " + svar->plainString() + ", (%temp)",
 					false)->setDebug(llvm, true);
 			} else if (converted->value->isIntLike()) {
 				const int64_t longptr = converted->value->longValue();
-				const auto width = x86_64::getWidth(converted->type->width());
 				// mov %src, addr
 				auto mov = std::make_shared<Mov>(OperandV(svar), Operand8(longptr, true), width);
 				function.insertBefore(instruction, mov, "LowerMemory.10: mov " + svar->plainString() + ", " +
