@@ -10,8 +10,10 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		firstSource->extract(false, read, written);
-		secondSource->extract(false, read, written);
+		if (!secretReads) {
+			firstSource->extract(false, read, written);
+			secondSource->extract(false, read, written);
+		}
 
 		return {read.size(), written.size()};
 	}

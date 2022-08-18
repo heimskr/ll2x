@@ -129,6 +129,10 @@ namespace LL2X {
 				secretWrites = writes;
 				return this;
 			}
+
+			Instruction * setSecret() {
+				return setSecret(true, true);
+			}
 	};
 
 	using InstructionPtr = std::shared_ptr<Instruction>;

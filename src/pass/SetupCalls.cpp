@@ -157,10 +157,6 @@ namespace LL2X::Passes {
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 			std::shared_ptr<Clobber> rax_clobber;
 
-			// Next, if the function returns a value, clobber %rax.
-			if (call->result)
-				rax_clobber = function.clobber(instruction, x86_64::rax);
-
 			const int return_size = call->returnType->width();
 
 			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
@@ -175,11 +171,15 @@ namespace LL2X::Passes {
 				function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
 			}
 
-			// Next, move variables into the argument registers.
+			// Move variables into the argument registers.
 			for (i = arg_offset; i < reg_max && i < arg_count + arg_offset; ++i) {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
 				setupCallValue(function, OperandV(precolored), instruction, call->constants[i - arg_offset]);
 			}
+
+			// If the function returns a value, clobber %rax.
+			if (call->result)
+				rax_clobber = function.clobber(instruction, x86_64::rax);
 
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
@@ -229,7 +229,7 @@ namespace LL2X::Passes {
 					// mov %rax, %result
 					auto move = std::make_shared<Mov>(OperandX(result->width, rax), result);
 					function.insertBefore(instruction, move, "SetupCalls: move result from %rax", false)
-						->setDebug(*llvm, true);
+						->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				}
 

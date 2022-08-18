@@ -10,8 +10,11 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		source->extract(false, read, written);
-		destination->extract(true, read, written);
+		if (!secretReads)
+			source->extract(false, read, written);
+
+		if (!(destination->isDisplaced()? secretReads : secretWrites))
+			destination->extract(true, read, written);
 
 		return {read.size(), written.size()};
 	}

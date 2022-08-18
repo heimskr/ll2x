@@ -92,6 +92,8 @@ namespace LL2X {
 		bool isLabel() const;
 		bool isNumeric() const;
 		bool isHackable() const;
+		/** Returns true iff the mode is Displaced or Scaled. */
+		bool isDisplaced() const;
 
 		void extract(bool is_write, std::unordered_set<VariablePtr> &read, std::unordered_set<VariablePtr> &written)
 			const;
