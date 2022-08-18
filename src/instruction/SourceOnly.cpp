@@ -4,20 +4,21 @@
 namespace LL2X {
 	ExtractionResult SourceOnly::extract(bool force) {
 		if (extracted && !force)
-			return {read.size(), 0};
+			return {read.size(), written.size()};
 
 		read.clear();
+		written.clear();
 		extracted = true;
 
 		source->extract(false, read, written);
 
-		return {read.size(), 0};
+		return {read.size(), written.size()};
 	}
 
 	bool SourceOnly::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
 		bool changed = false;
 
-		if (source->reg && source->reg->isAliasOf(*to_replace)) {
+		if (source->isRegister() && source->reg && source->reg->isAliasOf(*to_replace)) {
 			source->reg = new_var;
 			changed = true;
 		}
@@ -31,7 +32,8 @@ namespace LL2X {
 	}
 
 	bool SourceOnly::canReplaceRead(const VariablePtr &to_replace) const {
-		return (source->reg   && source->reg  ->isAliasOf(*to_replace))
-		    || (source->index && source->index->isAliasOf(*to_replace));
+		return source->isRegister() &&
+		      ((source->reg   && source->reg  ->isAliasOf(*to_replace))
+		    || (source->index && source->index->isAliasOf(*to_replace)));
 	}
 }

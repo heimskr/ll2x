@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 
 #include "compiler/Function.h"
@@ -5,6 +6,7 @@
 #include "compiler/LLVMInstruction.h"
 #include "instruction/Cmp.h"
 #include "instruction/Mov.h"
+#include "instruction/Set.h"
 #include "pass/LowerIcmp.h"
 #include "util/Timer.h"
 
@@ -58,6 +60,7 @@ namespace LL2X::Passes {
 
 		VariablePtr rs = dynamic_cast<LocalValue *>(value1.get())->variable;
 		OperandPtr rd = node->operand;
+		rd->width = x86_64::Width::Low;
 		
 		const ValueType type2 = value2->valueType();
 		if (type2 == ValueType::Local || type2 == ValueType::Global) {
@@ -78,13 +81,8 @@ namespace LL2X::Passes {
 
 			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(width, rs), OperandX(width, rt), width),
 				false)->setDebug(node)->extract();
-			OperandPtr temp = OperandV(function.newVariable(IntType::make(32), instruction->parent.lock()));
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rd, width), false)
+			function.insertBefore(instruction, std::make_shared<Set>(rd, x86_64::getCondition(cond)), false)
 				->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(1), temp), false)
-				->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Mov>(temp, rd, width, x86_64::getCondition(cond)),
-				false)->setDebug(node)->extract();
 		} else {
 			int64_t imm;
 			if (type2 == ValueType::Int)
@@ -99,13 +97,8 @@ namespace LL2X::Passes {
 
 			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(width, rs), OperandX(width, imm), width),
 				false)->setDebug(node)->extract();
-			OperandPtr temp = OperandV(function.newVariable(IntType::make(32), instruction->parent.lock()));
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rd, width), false)
+			function.insertBefore(instruction, std::make_shared<Set>(rd, x86_64::getCondition(cond)), false)
 				->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand4(1), temp), false)
-				->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Mov>(temp, rd, width, x86_64::getCondition(cond)),
-				false)->setDebug(node)->extract();
 		}
 	}
 }

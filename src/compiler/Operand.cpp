@@ -148,7 +148,7 @@ namespace LL2X {
 	void Operand::extract(bool is_write, std::unordered_set<VariablePtr> &read,
 	                      std::unordered_set<VariablePtr> &written) const {
 		if (is_write && (mode == Mode::Displaced || mode == Mode::Scaled))
-				is_write = false;
+			is_write = false;
 
 		auto &set = is_write? written : read;
 
