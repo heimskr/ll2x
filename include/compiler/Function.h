@@ -133,6 +133,9 @@ namespace LL2X {
 			/** Stores stack locations for saved registers in the prologue and epilogue. */
 			std::unordered_map<int, const StackLocation *> calleeSaved;
 
+			/** The highest number of bytes pushed to the stack as part of a function call. */
+			int maxPushedForCalls = 0;
+
 			/** The control-flow graph computed by makeCFG. */
 			CFG cfg;
 
@@ -145,8 +148,9 @@ namespace LL2X {
 			/** The number of random walks that have been performed on the control flow graph. */
 			int walkCount = 0;
 
-			/** The number of bytes reserved on the stack for variables and spills. */
-			int stackSize = 0;
+			/** The number of bytes reserved on the stack for variables and spills. This starts at 8 to account for %rbp
+			 *  having been pushed to the stack. */
+			int stackSize = 8;
 
 			/** The number of bytes reserved on the stack for spills. */
 			int spillSize = 0;
@@ -389,22 +393,8 @@ namespace LL2X {
 
 			std::shared_ptr<Unclobber> unclobber(const InstructionPtr &, const std::shared_ptr<Clobber> &);
 
-			/** Convenience method for creating a precolored %rsp register. */
-			VariablePtr stackPointer(BasicBlockPtr);
-
-			/** Convenience method for creating a precolored %rsp register. */
-			VariablePtr stackPointer(InstructionPtr);
-
-			/** Convenience method for creating a precolored %rip register. */
-			VariablePtr instructionPointer(BasicBlockPtr);
-
-			/** Convenience method for creating a precolored %rip register. */
-			VariablePtr instructionPointer(InstructionPtr);
-
-			/** Convenience method for creating a precolored %rbp register. */
-			VariablePtr basePointer(BasicBlockPtr);
-
-			/** Convenience method for creating a precolored %rbp register. */
-			VariablePtr basePointer(InstructionPtr);
+			VariablePtr rsp;
+			VariablePtr rbp;
+			VariablePtr rip;
 	};
 }

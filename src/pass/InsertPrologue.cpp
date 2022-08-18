@@ -21,8 +21,8 @@ namespace LL2X::Passes {
 			first->debugIndex = function.initialDebugIndex;
 
 		// Start by pushing %rbp to the stack.
-		VariablePtr rbp = function.basePointer(front_block);
-		VariablePtr rsp = function.stackPointer(front_block);
+		const VariablePtr &rbp = function.rbp;
+		const VariablePtr &rsp = function.rsp;
 		function.insertBefore(first, std::make_shared<Push>(Operand8(rbp)), false)->setDebug(*first, true);
 		function.initialPushedBytes = 8;
 
@@ -45,7 +45,8 @@ namespace LL2X::Passes {
 
 		// Move %rsp down to make room for stack allocations if necessary.
 		if (0 < function.stackSize) {
-			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize, 16)), Operand8(rsp));
+			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize + function.maxPushedForCalls,
+				16)), Operand8(rsp));
 			function.insertBefore(first, sub, false)->setDebug(*first, true);
 			function.categories["StackSkip"].insert(sub);
 		}

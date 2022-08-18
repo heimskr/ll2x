@@ -68,9 +68,8 @@ namespace LL2X::Passes {
 									pair.first->longValue()), Operand::make(phi_width, target), phi_width);
 							else
 								new_instr = std::make_shared<Mov>(Operand::make(phi_width,
-									*dynamic_cast<GlobalValue *>(pair.first.get())->name,
-									function.instructionPointer(instruction)),
-									Operand::make(phi_width, target), phi_width);
+									*dynamic_cast<GlobalValue *>(pair.first.get())->name, function.rip),
+									OperandX(phi_width, target), phi_width);
 
 							new_instr->parent = block;
 							if (block->instructions.empty()) {
@@ -198,8 +197,8 @@ namespace LL2X::Passes {
 					} else {
 						comment = "MovePhi: global -> " + target->plainString();
 						new_instruction = std::make_shared<Mov>(Operand::make(phi_width,
-							*dynamic_cast<GlobalValue *>(value.get())->name, function.instructionPointer(instruction)),
-							Operand::make(phi_width, target), phi_width);
+							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OperandX(phi_width, target),
+							phi_width);
 					}
 				} else {
 					warn() << "Value " << std::string(*value) << " isn't intlike or global in "

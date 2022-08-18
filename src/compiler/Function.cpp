@@ -326,7 +326,6 @@ namespace LL2X {
 			std::cerr << "  Trying to spill " << *variable << " (definition: " << definition->debugExtra() << " at "
 			          << definition->index << ", OID: " << variable->originalID << ")\n";
 #endif
-			auto rbp = basePointer(definition);
 			auto store = std::make_shared<Mov>(OperandV(variable), Operand8(-location.offset, rbp));
 			store->meta.insert(InstructionMeta::StackStore);
 
@@ -413,7 +412,6 @@ namespace LL2X {
 					instruction->read.erase(variable);
 #endif
 					instruction->read.insert(new_var);
-					auto rbp = basePointer(instruction);
 					auto load = std::make_shared<Mov>(Operand8(-location.offset, rbp), OperandV(new_var));
 					insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
 					load->extract();
@@ -475,7 +473,6 @@ namespace LL2X {
 
 			bool created;
 			const StackLocation &location = getSpill(variable, true, &created);
-			auto rbp = basePointer(definition);
 			auto store = std::make_shared<Mov>(OperandV(variable), Operand8(-location.offset, rbp));
 			store->meta.insert(InstructionMeta::StackStore);
 
@@ -881,6 +878,10 @@ namespace LL2X {
 		Timer timer("InitialCompile");
 		extractBlocks();
 		makeInitialDebugIndex();
+		BasicBlockPtr entry = getEntry();
+		rsp = makePrecoloredVariable(x86_64::rsp, entry);
+		rbp = makePrecoloredVariable(x86_64::rbp, entry);
+		rip = makePrecoloredVariable(x86_64::rip, entry);
 		Passes::ignoreIntrinsics(*this);
 		// Passes::insertStackSkip(*this);
 		Passes::fillLocalValues(*this);
@@ -1881,29 +1882,5 @@ namespace LL2X {
 		clob->unclobber = out;
 		insertBefore(instruction, out)->setDebug(*instruction);
 		return out;
-	}
-
-	VariablePtr Function::stackPointer(BasicBlockPtr block) {
-		return makePrecoloredVariable(x86_64::rsp, block);
-	}
-
-	VariablePtr Function::stackPointer(InstructionPtr instruction) {
-		return stackPointer(instruction->parent.lock());
-	}
-
-	VariablePtr Function::instructionPointer(BasicBlockPtr block) {
-		return makePrecoloredVariable(x86_64::rip, block);
-	}
-
-	VariablePtr Function::instructionPointer(InstructionPtr instruction) {
-		return instructionPointer(instruction->parent.lock());
-	}
-
-	VariablePtr Function::basePointer(BasicBlockPtr block) {
-		return makePrecoloredVariable(x86_64::rbp, block);
-	}
-
-	VariablePtr Function::basePointer(InstructionPtr instruction) {
-		return basePointer(instruction->parent.lock());
 	}
 }

@@ -15,7 +15,7 @@ namespace LL2X::Passes {
 	void setupCalls(Function &);
 
 	/** Pushes a value to the stack before a call instruction. Returns how many bytes were pushed. */
-	int pushCallValue(Function &, const std::shared_ptr<Instruction> &, const std::shared_ptr<Constant> &);
+	int pushCallValue(Function &, const std::shared_ptr<Instruction> &, const std::shared_ptr<Constant> &, int pushed);
 
 	/** Inserts a value into a precolored variable before a call instruction. */
 	std::shared_ptr<Instruction> setupCallValue(Function &, const std::shared_ptr<Operand> &,

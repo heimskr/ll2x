@@ -158,20 +158,19 @@ namespace LL2X::Passes {
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 			VariablePtr rdx;
+			std::shared_ptr<Clobber> rax_clobber;
+			std::shared_ptr<Clobber> rdx_clobber;
 
-			// Next, if the function returns a value, push %rax to the stack.
-			// TODO: push with a precolored or just clobber?
+			// Next, if the function returns a value, clobber %rax.
 			if (call->result)
-				function.insertBefore(instruction, std::make_shared<Push>(Operand8(rax), x86_64::Width::Eight), false)
-					->setDebug(*llvm, true);
+				rax_clobber = function.clobber(instruction, x86_64::rax);
 
-			// If the callee returns a big enough value (but not too big), push %rdx to the stack.
+			// If the callee returns a big enough value (but not too big), clobber %rdx.
 			const int return_size = call->returnType->width();
 			const bool use_rdx = 64 < return_size && return_size <= 128;
 			if (call->result && use_rdx) {
 				rdx = function.makePrecoloredVariable(x86_64::rdx, block);
-				function.insertBefore(instruction, std::make_shared<Push>(Operand8(rdx), x86_64::Width::Eight), false)
-					->setDebug(*llvm, true);
+				rdx_clobber = function.clobber(instruction, x86_64::rdx);
 			}
 
 			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
@@ -180,8 +179,7 @@ namespace LL2X::Passes {
 			if (call->result && 128 < return_size) {
 				big_result = function.newVariable(call->returnType, block);
 				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
-				VariablePtr rbp = function.basePointer(block);
-				OperandPtr pointer = Operand8(-location.offset, rbp);
+				OperandPtr pointer = Operand8(-location.offset, function.rbp);
 				OperandPtr rdi = Operand8(function.makePrecoloredVariable(x86_64::rdi, block));
 				auto lea = std::make_shared<Lea>(pointer, rdi);
 				function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
@@ -196,7 +194,9 @@ namespace LL2X::Passes {
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
 			for (i = arg_count + arg_offset - 1; reg_max <= i; --i)
-				bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset]);
+				bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset], bytes_pushed);
+
+			function.maxPushedForCalls = std::max(function.maxPushedForCalls, bytes_pushed);
 
 			// The number of floating point arguments passed to a variadic function has to be stored in %rax.
 			// Floating point numbers aren't really supported yet and currently aren't properly passed to the function.
@@ -226,8 +226,7 @@ namespace LL2X::Passes {
 
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {
-				VariablePtr rsp = function.stackPointer(block);
-				auto add = std::make_shared<Add>(Operand4(bytes_pushed), Operand8(rsp), x86_64::Width::Eight);
+				auto add = std::make_shared<Add>(Operand4(bytes_pushed), Operand8(function.rsp), x86_64::Width::Eight);
 				function.insertBefore(instruction, add, "SetupCalls: readjust stack pointer", false)
 					->setDebug(*llvm)->extract();
 			}
@@ -235,10 +234,9 @@ namespace LL2X::Passes {
 			// if (function.isVariadic())
 			// 	function.insertBefore(instruction, std::make_shared<StackPopInstruction>(m2), false);
 
-			// Pop %rdx if necessary.
+			// Unclobber %rdx if necessary.
 			if (call->result && use_rdx)
-				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rdx), x86_64::Width::Eight), false)
-					->setDebug(*llvm, true);
+				function.unclobber(instruction, rdx_clobber);
 
 			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)
 			// and pop %rax. Or something.
@@ -252,21 +250,20 @@ namespace LL2X::Passes {
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				}
 
-				// pop %rax
-				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rax), x86_64::Width::Eight), false)
-					->setDebug(*llvm, true);
+				// unclobber %rax
+				function.unclobber(instruction, rax_clobber);
 			}
 
 			// Unclobber caller-saved registers as necessary.
 			for (i = 7; clobber_start <= i; --i)
 				function.unclobber(instruction, clobbers.at(i));
 
-			// Pop the argument registers from the stack.
-			for (i = std::min(reg_max - 1, arg_count - 1); 0 <= i; --i) {
-				VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
-				function.insertBefore(instruction, std::make_shared<Pop>(Operand8(arg_variable), x86_64::Width::Eight),
-					false)->setDebug(*llvm, true);
-			}
+			// // Pop the argument registers from the stack.
+			// for (i = std::min(reg_max - 1, arg_count - 1); 0 <= i; --i) {
+			// 	VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
+			// 	function.insertBefore(instruction, std::make_shared<Pop>(Operand8(arg_variable), x86_64::Width::Eight),
+			// 		false)->setDebug(*llvm, true);
+			// }
 
 			to_remove.push_back(instruction);
 			function.reindexInstructions();
@@ -278,10 +275,10 @@ namespace LL2X::Passes {
 		function.extractVariables();
 	}
 
-	int pushCallValue(Function &function, const InstructionPtr &instruction, const ConstantPtr &constant) {
+	int pushCallValue(Function &function, const InstructionPtr &instruction, const ConstantPtr &constant, int pushed) {
 		// Stack parameters seem to be passed on a 64-bit boundary.
 
-		constexpr int size = 8;
+		int size = 8;
 		ValueType value_type = constant->value->valueType();
 		int signext = constant->parattrs.signext? constant->type->width() : 0;
 		int zeroext = constant->parattrs.zeroext? constant->type->width() : 0;
@@ -359,47 +356,56 @@ namespace LL2X::Passes {
 		if (value_type == ValueType::Local) {
 			// Local variables
 			std::shared_ptr<LocalValue> local = std::dynamic_pointer_cast<LocalValue>(constant->value);
+
+			if (constant->type->typeType() == TypeType::Struct) {
+				// Some notes based on seeing what clang -S emits:
+				// - A struct containing a single 64-bit member is passed like a scalar.
+				// - A struct containing two 64-bit members is put in the caller's stack frame and a pointer thereto is
+				//   passed to the callee.
+				throw std::runtime_error("Passing structs on the stack is not yet supported");
+			}
+
 			VariablePtr var = signext? function.newVariable(IntType::make(64)) : local->variable;
 			insert_exts(local->variable, var);
-			function.insertBefore(instruction, std::make_shared<Push>(Operand8(var), x86_64::Width::Eight))
-				->setDebug(*instruction, true);
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(var), Operand8(pushed, function.rsp)),
+				false)->setDebug(*instruction, true);
 			return size;
 		} else if (value_type == ValueType::Global) {
 			// Global variables
 			std::shared_ptr<GlobalValue> global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov  = std::make_shared<Mov>(Operand8(*global->name), OperandV(new_var));
-			auto push = std::make_shared<Push>(Operand8(new_var), x86_64::Width::Eight);
+			auto mov = std::make_shared<Mov>(Operand8(*global->name), OperandV(new_var));
 			insert_exts(new_var, new_var);
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-			function.insertBefore(instruction, push)->setDebug(*instruction, true);
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(new_var), Operand8(pushed, function.rsp)),
+				false)->setDebug(*instruction, true);
 			return size;
 		} else if (value_type == ValueType::Int) {
 			// Integer-like values
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov  = std::make_shared<Mov>(Operand4(constant->value->longValue()), OperandV(new_var));
-			auto push = std::make_shared<Push>(Operand8(new_var), x86_64::Width::Eight);
+			auto mov = std::make_shared<Mov>(Operand4(constant->value->longValue()), OperandV(new_var));
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
 			insert_exts(new_var, new_var);
-			function.insertBefore(instruction, push)->setDebug(*instruction, true);
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(new_var), Operand8(pushed, function.rsp)),
+				false)->setDebug(*instruction, true);
 			return size;
 		} else if (value_type == ValueType::Bool) {
 			// Booleans
 			std::shared_ptr<BoolValue> bval = std::dynamic_pointer_cast<BoolValue>(constant->value);
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov  = std::make_shared<Mov>(Operand4(bval->value? 1 : 0), OperandV(new_var), x86_64::Width::Eight);
-			auto push = std::make_shared<Push>(OperandV(new_var), x86_64::Width::Eight);
+			auto mov = std::make_shared<Mov>(Operand4(bval->value? 1 : 0), OperandV(new_var), x86_64::Width::Eight);
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
 			insert_exts(new_var, new_var);
-			function.insertBefore(instruction, push)->setDebug(*instruction, true);
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(new_var), Operand8(pushed, function.rsp)),
+				false)->setDebug(*instruction, true);
 			return size;
 		} else if (value_type == ValueType::Null || value_type == ValueType::Undef) {
 			// Null and undef values
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov  = std::make_shared<Mov>(Operand4(0), OperandV(new_var));
-			auto push = std::make_shared<Push>(Operand8(new_var), x86_64::Width::Eight);
+			auto mov = std::make_shared<Mov>(Operand4(0), OperandV(new_var));
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-			function.insertBefore(instruction, push)->setDebug(*instruction, true);
+			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(new_var), Operand8(pushed, function.rsp)),
+				false)->setDebug(*instruction, true);
 			return size;
 		} else if (value_type == ValueType::Getelementptr) {
 			// Getelementptr expressions
@@ -422,12 +428,12 @@ namespace LL2X::Passes {
 					function.insertBefore(instruction, add)->setDebug(*instruction, true);
 				}
 				insert_exts(new_var, new_var);
-				auto push = std::make_shared<Push>(OperandV(new_var), x86_64::Width::Eight);
-				function.insertBefore(instruction, push)->setDebug(*instruction, true);
+				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(new_var),
+					Operand8(pushed, function.rsp)), false)->setDebug(*instruction, true);
 				return size;
 			}
 		} else if (constant->conversionSource) {
-			return pushCallValue(function, instruction, constant->conversionSource);
+			return pushCallValue(function, instruction, constant->conversionSource, pushed);
 		} else {
 			warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
 			       << __LINE__ << '\n';

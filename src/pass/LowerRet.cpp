@@ -32,8 +32,8 @@ namespace LL2X::Passes {
 			if (!block)
 				throw std::runtime_error("Couldn't lock instruction parent in LowerRet");
 
-			VariablePtr rbp = function.basePointer(block);
-			VariablePtr rsp = function.stackPointer(block);
+			const VariablePtr &rbp = function.rbp;
+			const VariablePtr &rsp = function.rsp;
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 
 			// Put the return value into %rax (and possibly also %rdx).

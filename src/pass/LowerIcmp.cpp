@@ -69,9 +69,8 @@ namespace LL2X::Passes {
 				rt = dynamic_cast<LocalValue *>(value2.get())->variable;
 			} else {
 				rt = function.newVariable(node->getType(), instruction->parent.lock());
-				VariablePtr rip = function.instructionPointer(instruction);
 				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(rt),
-					OperandX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, rip), x86_64::Width::Eight))
+					OperandX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.rip)))
 					->setDebug(node)->extract();
 				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(rt),
 					OperandX(width, 0, rt), width))->setDebug(node)->extract();
