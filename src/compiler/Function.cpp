@@ -1054,8 +1054,8 @@ namespace LL2X {
 				variable->type->width() / 8, 8);
 		}
 
-		auto &added = stack.emplace(stackSize, StackLocation(this, variable, purpose, stackSize, width)).first->second;
 		stackSize += width;
+		auto &added = stack.emplace(stackSize, StackLocation(this, variable, purpose, stackSize, width)).first->second;
 		if (purpose == StackLocation::Purpose::Spill)
 			spillSize += width;
 		return added;

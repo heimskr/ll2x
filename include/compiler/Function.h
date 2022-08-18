@@ -148,9 +148,8 @@ namespace LL2X {
 			/** The number of random walks that have been performed on the control flow graph. */
 			int walkCount = 0;
 
-			/** The number of bytes reserved on the stack for variables and spills. This starts at 8 to account for %rbp
-			 *  having been pushed to the stack. */
-			int stackSize = 8;
+			/** The number of bytes reserved on the stack for variables and spills. */
+			int stackSize = 0;
 
 			/** The number of bytes reserved on the stack for spills. */
 			int spillSize = 0;
