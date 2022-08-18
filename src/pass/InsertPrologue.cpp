@@ -47,8 +47,9 @@ namespace LL2X::Passes {
 		if (0 < function.stackSize) {
 			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize + function.maxPushedForCalls,
 				16)), Operand8(rsp));
-			function.insertBefore(first, sub, false)->setDebug(*first, true);
-			function.categories["StackSkip"].insert(sub);
+			function.insertBefore(first, sub, "upalign(" + std::to_string(function.stackSize) + " + " +
+				std::to_string(function.maxPushedForCalls) + ", 16)", false)->setDebug(*first, true);
+			// function.categories["StackSkip"].insert(sub);
 		}
 
 		function.savedRegisters.clear();

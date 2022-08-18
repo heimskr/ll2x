@@ -1,5 +1,3 @@
-#include <tuple>
-
 #include "compiler/Function.h"
 #include "compiler/Getelementptr.h"
 #include "compiler/Program.h"
@@ -157,21 +155,13 @@ namespace LL2X::Passes {
 				clobbers.emplace(i, function.clobber(instruction, arg_regs[i]));
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
-			VariablePtr rdx;
 			std::shared_ptr<Clobber> rax_clobber;
-			std::shared_ptr<Clobber> rdx_clobber;
 
 			// Next, if the function returns a value, clobber %rax.
 			if (call->result)
 				rax_clobber = function.clobber(instruction, x86_64::rax);
 
-			// If the callee returns a big enough value (but not too big), clobber %rdx.
 			const int return_size = call->returnType->width();
-			const bool use_rdx = 64 < return_size && return_size <= 128;
-			if (call->result && use_rdx) {
-				rdx = function.makePrecoloredVariable(x86_64::rdx, block);
-				rdx_clobber = function.clobber(instruction, x86_64::rdx);
-			}
 
 			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
 			// the stack for the struct and pass a pointer to it in %rdi.
@@ -231,15 +221,8 @@ namespace LL2X::Passes {
 					->setDebug(*llvm)->extract();
 			}
 
-			// if (function.isVariadic())
-			// 	function.insertBefore(instruction, std::make_shared<StackPopInstruction>(m2), false);
-
-			// Unclobber %rdx if necessary.
-			if (call->result && use_rdx)
-				function.unclobber(instruction, rdx_clobber);
-
 			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)
-			// and pop %rax. Or something.
+			// and unclobber %rax. Or something.
 			if (call->result) {
 				if (return_size <= 128) {
 					auto result = OperandV(function.getVariable(*call->result));
@@ -257,13 +240,6 @@ namespace LL2X::Passes {
 			// Unclobber caller-saved registers as necessary.
 			for (i = 7; clobber_start <= i; --i)
 				function.unclobber(instruction, clobbers.at(i));
-
-			// // Pop the argument registers from the stack.
-			// for (i = std::min(reg_max - 1, arg_count - 1); 0 <= i; --i) {
-			// 	VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
-			// 	function.insertBefore(instruction, std::make_shared<Pop>(Operand8(arg_variable), x86_64::Width::Eight),
-			// 		false)->setDebug(*llvm, true);
-			// }
 
 			to_remove.push_back(instruction);
 			function.reindexInstructions();
