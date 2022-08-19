@@ -178,10 +178,10 @@ namespace LL2X {
 		return "\e[32m" + (operand? operand->ansiString() : "%" + *result) + "\e[0m";
 	}
 
-	void Writer::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
+	bool Writer::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
 		if (!operand)
-			return;
-		operand->replace(*to_replace, new_var);
+			return false;
+		return operand->replace(*to_replace, new_var);
 	}
 
 // SelectNode

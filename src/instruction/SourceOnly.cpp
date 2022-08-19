@@ -37,4 +37,13 @@ namespace LL2X {
 		      ((source->reg   && source->reg  ->isAliasOf(*to_replace))
 		    || (source->index && source->index->isAliasOf(*to_replace)));
 	}
+
+	bool SourceOnly::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		if (*source == *to_replace) {
+			source = replace_with;
+			return true;
+		}
+
+		return false;
+	}
 }

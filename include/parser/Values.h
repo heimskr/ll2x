@@ -38,6 +38,7 @@ namespace LL2X {
 		bool isBool() const;
 		bool isNull() const;
 		bool isLocal() const;
+		bool isOperand() const;
 		bool isGlobal() const;
 		bool isGetelementptr() const;
 		virtual bool isIntLike() const { return false; }

@@ -95,7 +95,7 @@ namespace LL2X {
 	struct Writer {
 		const std::string *result = nullptr;
 		OperandPtr operand;
-		void replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var);
+		bool replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var);
 		std::string getResult() const;
 	};
 

@@ -48,6 +48,15 @@ namespace LL2X {
 		return false;
 	}
 
+	bool DestinationOnly::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		if (*destination == *to_replace) {
+			destination = replace_with;
+			return true;
+		}
+
+		return false;
+	}
+
 	bool DestinationOnly::canReplaceWritten(const VariablePtr &to_replace) const {
 		return destination->isRegister() && destination->reg && destination->reg->isAliasOf(*to_replace);
 	}

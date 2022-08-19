@@ -19,10 +19,11 @@ namespace LL2X {
 			std::string debugExtra() override;
 			std::string toString() const override;
 
-			bool replaceRead(const std::shared_ptr<Variable> &, const std::shared_ptr<Variable> &) override;
-			bool canReplaceRead(const std::shared_ptr<Variable> &) const override;
-			bool replaceWritten(const std::shared_ptr<Variable> &, const std::shared_ptr<Variable> &) override;
-			bool canReplaceWritten(const std::shared_ptr<Variable> &) const override;
+			bool replaceRead(const VariablePtr &, const VariablePtr &) override;
+			bool canReplaceRead(const VariablePtr &) const override;
+			bool replaceWritten(const VariablePtr &, const VariablePtr &) override;
+			bool canReplaceWritten(const VariablePtr &) const override;
+			bool replaceOperand(const OperandPtr &, const OperandPtr &) override;
 
 			bool replaceLabel(const std::string *, const std::string *) override;
 			std::vector<const std::string *> getLabels() const override;

@@ -43,4 +43,20 @@ namespace LL2X {
 		return (multi->reg   && multi->reg  ->isAliasOf(*to_replace))
 		    || (multi->index && multi->index->isAliasOf(*to_replace));
 	}
+
+	bool Overlapping::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (*multi == *to_replace) {
+			multi = replace_with;
+			out = true;
+		}
+
+		if (*sourceOnly == *to_replace) {
+			sourceOnly = replace_with;
+			out = true;
+		}
+
+		return out;
+	}
 }

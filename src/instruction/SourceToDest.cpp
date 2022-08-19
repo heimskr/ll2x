@@ -68,4 +68,20 @@ namespace LL2X {
 		       ((destination->reg   && destination->reg  ->isAliasOf(*to_replace))
 		     || (destination->index && destination->index->isAliasOf(*to_replace)));
 	}
+
+	bool SourceToDest::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (*source == *to_replace) {
+			source = replace_with;
+			out = true;
+		}
+
+		if (*destination == *to_replace) {
+			destination = replace_with;
+			out = true;
+		}
+
+		return out;
+	}
 }

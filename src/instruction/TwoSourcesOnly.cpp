@@ -50,4 +50,20 @@ namespace LL2X {
 		    || ( firstSource->reg   &&  firstSource->reg  ->isAliasOf(*to_replace))
 		    || (secondSource->index && secondSource->index->isAliasOf(*to_replace));
 	}
+
+	bool TwoSourcesOnly::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (*firstSource == *to_replace) {
+			firstSource = replace_with;
+			out = true;
+		}
+
+		if (*secondSource == *to_replace) {
+			secondSource = replace_with;
+			out = true;
+		}
+
+		return out;
+	}
 }

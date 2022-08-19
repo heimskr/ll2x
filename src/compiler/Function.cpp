@@ -886,7 +886,6 @@ namespace LL2X {
 		Passes::ignoreIntrinsics(*this);
 		// Passes::insertStackSkip(*this);
 		Passes::fillLocalValues(*this);
-		Passes::fillOperands(*this);
 		Passes::lowerStacksave(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract();
@@ -897,6 +896,7 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		Passes::replaceConstants(*this);
+		Passes::fillOperands(*this);
 		Passes::lowerAlloca(*this);
 		// Passes::loadArguments(*this);
 		// Passes::lowerObjectsize(*this);

@@ -36,6 +36,10 @@ namespace LL2X {
 		return valueType() == ValueType::Local;
 	}
 
+	bool Value::isOperand() const {
+		return valueType() == ValueType::Operand;
+	}
+
 	bool Value::isGlobal() const {
 		return valueType() == ValueType::Global;
 	}

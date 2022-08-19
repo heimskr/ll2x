@@ -219,8 +219,7 @@ namespace LL2X {
 		return "\e[41;37;1mUntranslated node:\e[0m " + node->debugExtra();
 	}
 
-	bool LLVMInstruction::replaceRead(const std::shared_ptr<Variable> &to_replace,
-	                                  const std::shared_ptr<Variable> &new_var) {
+	bool LLVMInstruction::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
 		if (Reader *reader = dynamic_cast<Reader *>(node)) {
 			reader->replaceRead(to_replace, new_var);
 			return true;
@@ -229,22 +228,40 @@ namespace LL2X {
 		return false;
 	}
 
-	bool LLVMInstruction::canReplaceRead(const std::shared_ptr<Variable> &) const {
+	bool LLVMInstruction::canReplaceRead(const VariablePtr &) const {
 		return dynamic_cast<Reader *>(node) != nullptr;
 	}
 
-	bool LLVMInstruction::replaceWritten(const std::shared_ptr<Variable> &to_replace,
-	                                     const std::shared_ptr<Variable> &new_var) {
-		if (Writer *writer = dynamic_cast<Writer *>(node)) {
-			writer->replaceWritten(to_replace, new_var);
-			return true;
-		}
-
+	bool LLVMInstruction::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
+		if (Writer *writer = dynamic_cast<Writer *>(node))
+			return writer->replaceWritten(to_replace, new_var);
 		return false;
 	}
 
-	bool LLVMInstruction::canReplaceWritten(const std::shared_ptr<Variable> &) const {
+	bool LLVMInstruction::canReplaceWritten(const VariablePtr &) const {
 		return dynamic_cast<Writer *>(node) != nullptr;
+	}
+
+	bool LLVMInstruction::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (Reader *reader = dynamic_cast<Reader *>(node))
+			for (auto *value: reader->allValuePointers())
+				if (value && *value && (*value)->isOperand()) {
+					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
+					if (*operand == *to_replace) {
+						operand = replace_with;
+						out = true;
+					}
+				}
+
+		if (Writer *writer = dynamic_cast<Writer *>(node))
+			if (*writer->operand == *to_replace) {
+				writer->operand = replace_with;
+				out = true;
+			}
+
+		return out;
 	}
 
 	bool LLVMInstruction::replaceLabel(const std::string *to_replace, const std::string *replace_with) {
