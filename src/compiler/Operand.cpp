@@ -198,6 +198,42 @@ namespace LL2X {
 
 		return true;
 	}
+
+	bool Operand::similarTo(const Operand &other) const {
+		if (this == &other)
+			return true;
+
+		if (mode != other.mode || width != other.width || displacement != other.displacement || scale != other.scale)
+			return false;
+
+		if (label != other.label)
+			return false;
+
+		if (reg && !reg->registers.empty()) {
+			if (!other.reg || !Util::equal(reg->registers, other.reg->registers))
+				return false;
+
+			if (index) {
+				if (!other.index || !Util::equal(index->registers, other.index->registers))
+					return false;
+			} else if (index != other.index)
+				return false;
+		} else {
+			if (reg) {
+				if (!other.reg || *reg != *other.reg)
+					return false;
+			} else if (reg != other.reg)
+				return false;
+
+			if (index) {
+				if (!other.index || *index != *other.index)
+					return false;
+			} else if (index != other.index)
+				return false;
+		}
+
+		return true;
+	}
 }
 
 std::ostream & operator<<(std::ostream &stream, const LL2X::Operand &operand) {

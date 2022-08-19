@@ -105,6 +105,10 @@ namespace LL2X {
 		VariablePtr getVariable() const;
 
 		bool operator==(const Operand &) const;
+		/** If the operands have had registers assigned, this function is similar to operator== but requires register
+		 *  assignments to be the same instead of using Variable equality. Otherwise, it functions the same as
+		 *  operator==. */
+		bool similarTo(const Operand &) const;
 	};
 
 	using OperandPtr = std::shared_ptr<Operand>;

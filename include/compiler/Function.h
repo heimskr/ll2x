@@ -23,6 +23,7 @@ namespace LL2X {
 	class Program;
 	struct Clobber;
 	struct Unclobber;
+	struct Operand;
 
 	using InstructionPtr = std::shared_ptr<Instruction>;
 
@@ -391,6 +392,9 @@ namespace LL2X {
 			std::shared_ptr<Clobber> clobber(const InstructionPtr &, int reg);
 
 			std::shared_ptr<Unclobber> unclobber(const InstructionPtr &, const std::shared_ptr<Clobber> &);
+
+			/** Replaces one operand with another throughout the function. */
+			bool replaceOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
 
 			VariablePtr rsp;
 			VariablePtr rbp;
