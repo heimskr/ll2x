@@ -251,7 +251,7 @@ namespace LL2X::Passes {
 						const std::string *new_label = function.newLabel();
 						comment += " (in new block " + *new_label + " whose parent is " + *block->label + ")";
 						middle_block = std::make_shared<BasicBlock>(new_label, std::vector {block->label},
-							std::list<InstructionPtr> {});
+							std::list<InstructionPtr>());
 						middle_block->parent = &function;
 						auto block_iter = std::find(function.blocks.begin(), function.blocks.end(), block);
 						if (block_iter == function.blocks.end())

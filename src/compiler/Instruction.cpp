@@ -20,7 +20,7 @@ namespace LL2X {
 	}
 
 	VariablePtr Instruction::doesRead(const VariablePtr &var) const {
-		if (read.count(var) != 0)
+		if (read.contains(var))
 			return var;
 		std::shared_ptr<BasicBlock> block = parent.lock();
 		for (const VariablePtr &read_var: read)
@@ -28,7 +28,7 @@ namespace LL2X {
 				return read_var;
 		for (Variable *alias: var->getAliases()) {
 			VariablePtr shared_alias = block->parent->getVariable(alias->id);
-			if (read.count(shared_alias) != 0)
+			if (read.contains(shared_alias))
 				return shared_alias;
 		}
 
@@ -36,7 +36,7 @@ namespace LL2X {
 	}
 
 	VariablePtr Instruction::doesWrite(const VariablePtr &var) const {
-		if (written.count(var) != 0)
+		if (written.contains(var))
 			return var;
 		std::shared_ptr<BasicBlock> block = parent.lock();
 		for (const VariablePtr &written_var: written)
@@ -44,7 +44,7 @@ namespace LL2X {
 				return written_var;
 		for (Variable *alias: var->getAliases()) {
 			VariablePtr shared_alias = block->parent->getVariable(alias->id);
-			if (written.count(shared_alias) != 0)
+			if (written.contains(shared_alias))
 				return shared_alias;
 		}
 
