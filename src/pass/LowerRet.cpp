@@ -62,6 +62,13 @@ namespace LL2X::Passes {
 					function.insertBefore(instruction, std::make_shared<Mov>(OperandV(var), Operand8(rax)), false)
 						->setDebug(llvm, true);
 				}
+			} else if (ret->value->valueType() == ValueType::Operand) {
+				// TODO: Handle multireg in Register mode
+				OperandPtr operand = dynamic_cast<OperandValue *>(ret->value.get())->operand;
+				if (!operand->isRegisters({x86_64::rax})) {
+					function.insertBefore(instruction, std::make_shared<Mov>(operand, OperandX(operand->width, rax)),
+						false)->setDebug(llvm, true);
+				}
 			} else
 				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
 					std::string(*ret->value));

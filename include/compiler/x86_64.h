@@ -57,7 +57,9 @@ namespace LL2X::x86_64 {
 	std::string registerName(int, Width = Width::Eight);
 	std::string conditionSuffix(Condition);
 	std::string widthSuffix(Width);
-	constexpr Width getWidth(int bits) {
+	Condition getCondition(IcmpCond);
+
+	constexpr inline Width getWidth(int bits) {
 		switch (bits) {
 			case 64: return Width::Eight;
 			case 32: return Width::Four;
@@ -69,5 +71,17 @@ namespace LL2X::x86_64 {
 				throw std::invalid_argument("No width corresponds to bit length " + std::to_string(bits));
 		}
 	}
-	Condition getCondition(IcmpCond);
+
+	constexpr inline int getWidth(Width width) {
+		switch (width) {
+			case Width::Eight: return 64;
+			case Width::Four:  return 32;
+			case Width::Two:   return 16;
+			case Width::High:  return 8;
+			case Width::Low:   return 8;
+			default:
+				throw std::invalid_argument("No bit length corresponds to invalid width " +
+					std::to_string(static_cast<int>(width)));
+		}
+	}
 }

@@ -38,7 +38,7 @@ namespace LL2X {
 			bool isInt(int width) const;
 	};
 
-	struct VoidType: public Type {
+	struct VoidType: Type, Makeable<VoidType> {
 		TypeType typeType() const override { return TypeType::Void; }
 		VoidType() {}
 		operator std::string() override { return "void"; }
@@ -48,7 +48,7 @@ namespace LL2X {
 		int alignment() const override { return 1; }
 	};
 
-	struct IntType: public Type {
+	struct IntType: Type {
 		TypeType typeType() const override { return TypeType::Int; }
 		/** The width of the integer in bits. */
 		int intWidth;
@@ -62,7 +62,7 @@ namespace LL2X {
 		static std::shared_ptr<IntType> make(int width) { return std::make_shared<IntType>(width); }
 	};
 
-	struct AggregateType: public Type {
+	struct AggregateType: Type {
 		virtual TypePtr extractType(std::list<int> indices) const = 0;
 		TypePtr extractType(const std::vector<int> &indices) const {
 			return extractType(std::list<int>(indices.begin(), indices.end()));
@@ -88,7 +88,7 @@ namespace LL2X {
 		bool operator==(const Type &) const override;
 	};
 
-	struct VectorType: public ArrayType {
+	struct VectorType: ArrayType {
 		TypeType typeType() const override { return TypeType::Vector; }
 		using ArrayType::ArrayType;
 		operator std::string() override;
@@ -97,7 +97,7 @@ namespace LL2X {
 		bool operator==(const Type &) const override;
 	};
 
-	struct FloatType: public Type {
+	struct FloatType: Type {
 		TypeType typeType() const override { return TypeType::Float; }
 		enum class Type: int {Half, Float, Double, FP128, x86_FP80, PPC_FP128};
 		FloatType::Type type;
@@ -111,7 +111,7 @@ namespace LL2X {
 		bool operator==(const LL2X::Type &) const override;
 	};
 
-	struct PointerType: public Type, public HasSubtype {
+	struct PointerType: Type, HasSubtype {
 		TypeType typeType() const override { return TypeType::Pointer; }
 		PointerType(TypePtr subtype_): HasSubtype(subtype_) {}
 		operator std::string() override;
@@ -194,7 +194,7 @@ namespace LL2X {
 	/** During padded struct extraction, it's necessary to read one register from a register pack representing a struct.
 	 *  This register may contain data from multiple members or from only a fraction of member, and as such has no
 	 *  specific type. However, it's always one register in size. */
-	struct OpaqueType: public Type {
+	struct OpaqueType: Type {
 		TypeType typeType() const override { return TypeType::Opaque; }
 		OpaqueType() {}
 		operator std::string() override { return "\e[1mopaque\e[22m"; }
