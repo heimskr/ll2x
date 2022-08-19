@@ -175,8 +175,28 @@ namespace LL2X {
 	}
 
 	bool Operand::operator==(const Operand &other) const {
-		return this == &other || (mode == other.mode && width == other.width && displacement == other.displacement
-			&& scale == other.scale && reg == other.reg && index == other.index && label == other.label);
+		if (this == &other)
+			return true;
+
+		if (mode != other.mode || width != other.width || displacement != other.displacement || scale != other.scale)
+			return false;
+
+		if (label != other.label)
+			return false;
+
+		if (reg) {
+			if (!other.reg || *reg != *other.reg)
+				return false;
+		} else if (reg != other.reg)
+			return false;
+
+		if (index) {
+			if (!other.index || *index != *other.index)
+				return false;
+		} else if (index != other.index)
+			return false;
+
+		return true;
 	}
 }
 
