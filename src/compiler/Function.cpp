@@ -1895,4 +1895,12 @@ namespace LL2X {
 		insertBefore(instruction, out)->setDebug(*instruction);
 		return out;
 	}
+
+	bool Function::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+		for (const InstructionPtr &instruction: linearInstructions)
+			if (instruction->replaceOperand(to_replace, replace_with))
+				out = true;
+		return out;
+	}
 }
