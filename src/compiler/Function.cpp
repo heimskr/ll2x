@@ -1903,4 +1903,12 @@ namespace LL2X {
 				out = true;
 		return out;
 	}
+
+	bool Function::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+		for (const InstructionPtr &instruction: linearInstructions)
+			if (instruction->replaceSimilarOperand(to_replace, replace_with))
+				out = true;
+		return out;
+	}
 }

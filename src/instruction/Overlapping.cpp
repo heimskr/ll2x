@@ -59,4 +59,20 @@ namespace LL2X {
 
 		return out;
 	}
+
+	bool Overlapping::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (multi->similarTo(*to_replace)) {
+			multi = replace_with;
+			out = true;
+		}
+
+		if (sourceOnly->similarTo(*to_replace)) {
+			sourceOnly = replace_with;
+			out = true;
+		}
+
+		return out;
+	}
 }

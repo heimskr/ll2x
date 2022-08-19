@@ -46,4 +46,13 @@ namespace LL2X {
 
 		return false;
 	}
+
+	bool SourceOnly::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		if (source->similarTo(*to_replace)) {
+			source = replace_with;
+			return true;
+		}
+
+		return false;
+	}
 }

@@ -84,4 +84,20 @@ namespace LL2X {
 
 		return out;
 	}
+
+	bool SourceToDest::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (source->similarTo(*to_replace)) {
+			source = replace_with;
+			out = true;
+		}
+
+		if (destination->similarTo(*to_replace)) {
+			destination = replace_with;
+			out = true;
+		}
+
+		return out;
+	}
 }

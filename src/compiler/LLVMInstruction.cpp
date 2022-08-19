@@ -264,6 +264,28 @@ namespace LL2X {
 		return out;
 	}
 
+	bool LLVMInstruction::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		bool out = false;
+
+		if (Reader *reader = dynamic_cast<Reader *>(node))
+			for (auto *value: reader->allValuePointers())
+				if (value && *value && (*value)->isOperand()) {
+					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
+					if (operand->similarTo(*to_replace)) {
+						operand = replace_with;
+						out = true;
+					}
+				}
+
+		if (Writer *writer = dynamic_cast<Writer *>(node))
+			if (writer->operand->similarTo(*to_replace)) {
+				writer->operand = replace_with;
+				out = true;
+			}
+
+		return out;
+	}
+
 	bool LLVMInstruction::replaceLabel(const std::string *to_replace, const std::string *replace_with) {
 		switch (node->nodeType()) {
 			case NodeType::BrCond: {
