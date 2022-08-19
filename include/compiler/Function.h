@@ -394,10 +394,10 @@ namespace LL2X {
 			std::shared_ptr<Unclobber> unclobber(const InstructionPtr &, const std::shared_ptr<Clobber> &);
 
 			/** Replaces one operand with another throughout the function. */
-			bool replaceOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
+			size_t replaceOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
 
 			/** Replaces one operand with a similar other one throughout the function. */
-			bool replaceSimilarOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
+			size_t replaceSimilarOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
 
 			VariablePtr rsp;
 			VariablePtr rbp;

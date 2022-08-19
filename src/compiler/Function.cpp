@@ -1896,19 +1896,19 @@ namespace LL2X {
 		return out;
 	}
 
-	bool Function::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
-		bool out = false;
+	size_t Function::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		size_t out = 0;
 		for (const InstructionPtr &instruction: linearInstructions)
 			if (instruction->replaceOperand(to_replace, replace_with))
-				out = true;
+				++out;
 		return out;
 	}
 
-	bool Function::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
-		bool out = false;
+	size_t Function::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		size_t out = 0;
 		for (const InstructionPtr &instruction: linearInstructions)
 			if (instruction->replaceSimilarOperand(to_replace, replace_with))
-				out = true;
+				++out;
 		return out;
 	}
 }
