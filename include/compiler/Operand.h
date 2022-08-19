@@ -106,8 +106,8 @@ namespace LL2X {
 
 		bool operator==(const Operand &) const;
 		/** If the operands have had registers assigned, this function is similar to operator== but requires register
-		 *  assignments to be the same instead of using Variable equality. Otherwise, it functions the same as
-		 *  operator==. */
+		 *  assignments to be the same instead of using Variable equality. Otherwise, it functions like operator==.
+		 *  In either case, width is not checked. */
 		bool similarTo(const Operand &) const;
 	};
 

@@ -203,7 +203,7 @@ namespace LL2X {
 		if (this == &other)
 			return true;
 
-		if (mode != other.mode || width != other.width || displacement != other.displacement || scale != other.scale)
+		if (mode != other.mode || displacement != other.displacement || scale != other.scale)
 			return false;
 
 		if (label != other.label)
