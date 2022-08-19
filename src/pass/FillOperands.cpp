@@ -11,17 +11,10 @@ namespace LL2X::Passes {
 				InstructionNode *node = llvm->node;
 				if (Reader *reader = dynamic_cast<Reader *>(node))
 					for (ValuePtr *value: reader->allValuePointers())
-						if (value && *value && (*value)->isLocal()) {
-							info() << llvm->debugExtra() << '\n';
-							info() << "value->get() == " << value->get() << '\n';
-							auto *cast = dynamic_cast<LocalValue *>(value->get());
-							info() << "(LocalValue *) value->get() == " << cast << '\n';
-							info() << "value->variable.get() == " << cast->variable.get() << '\n';
-							info() << "*value->name == \"" << *cast->name << "\"\n";
+						if (value && *value && (*value)->isLocal())
 							*value = OperandValue::make(OperandV(dynamic_cast<LocalValue *>(value->get())->variable));
-						}
 			} else {
-
+				
 			}
 		}
 	}

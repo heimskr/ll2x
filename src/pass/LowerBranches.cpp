@@ -39,22 +39,25 @@ namespace LL2X::Passes {
 			const std::string transformed = function.transformLabel(boolval->value? *br->ifTrue : *br->ifFalse);
 			auto jmp = std::make_shared<Jmp>(Operand8(transformed, false));
 			function.insertBefore(instruction, jmp)->setDebug(*br)->extract();
-		} else if (condition_type != ValueType::Local) {
-			br->debug();
-			throw std::runtime_error("Expected a pvar for the condition of a conditional jump, got " +
-				getName(condition_type));
-		} else {
+		} else if (condition_type == ValueType::Local || condition_type == ValueType::Operand) {
 			TypePtr type = br->condition->type;
-			auto *local = dynamic_cast<LocalValue *>(br->condition->value.get());
-			VariablePtr condition = local->variable;
+			OperandPtr condition;
+			if (condition_type == ValueType::Local)
+				condition = OperandV(dynamic_cast<LocalValue *>(br->condition->value.get())->variable);
+			else
+				condition = dynamic_cast<OperandValue *>(br->condition->value.get())->operand;
 			auto width = x86_64::getWidth(type->width());
-			auto cmp = std::make_shared<Cmp>(OperandV(condition), Operand4(0), width);
+			auto cmp = std::make_shared<Cmp>(condition, Operand4(0), width);
 			auto jmp_true = std::make_shared<Jmp>(Operand8(function.transformLabel(*br->ifTrue), false),
 				x86_64::Condition::IfNotEqual);
 			auto jmp_false = std::make_shared<Jmp>(Operand8(function.transformLabel(*br->ifFalse), false));
 			function.insertBefore(instruction, cmp)->setDebug(*br)->extract();
 			function.insertBefore(instruction, jmp_true)->setDebug(*br)->extract();
 			function.insertBefore(instruction, jmp_false)->setDebug(*br)->extract();
+		} else {
+			br->debug();
+			throw std::runtime_error("Expected a bool, pvar or operand for the condition of a conditional jump, got " +
+				getName(condition_type));
 		}
 	}
 
