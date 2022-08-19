@@ -437,18 +437,18 @@ namespace LL2X::Passes {
 					return;
 				case  8:
 					// movsbq %var, %var
-					function.insertBefore(instruction, std::make_shared<Movsx>(Operand1(new_operand),
-						Operand8(new_operand)), false)->setDebug(*instruction, true);
+					function.insertBefore(instruction, std::make_shared<Movsx>(Operand1(*new_operand),
+						Operand8(*new_operand)), false)->setDebug(*instruction, true);
 					return;
 				case 16:
 					// movswq %var, %var
-					function.insertBefore(instruction, std::make_shared<Movsx>(Operand2(new_operand),
-						Operand8(new_operand)), false)->setDebug(*instruction, true);
+					function.insertBefore(instruction, std::make_shared<Movsx>(Operand2(*new_operand),
+						Operand8(*new_operand)), false)->setDebug(*instruction, true);
 					return;
 				case 32:
 					// movsdq %var, %var
-					function.insertBefore(instruction, std::make_shared<Movsx>(Operand4(new_operand),
-						Operand8(new_operand)), false)->setDebug(*instruction, true);
+					function.insertBefore(instruction, std::make_shared<Movsx>(Operand4(*new_operand),
+						Operand8(*new_operand)), false)->setDebug(*instruction, true);
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';
@@ -462,20 +462,20 @@ namespace LL2X::Passes {
 				case 64:
 					return;
 				case  1:
-					function.insertBefore(instruction, std::make_shared<And>(Operand4(1), Operand8(new_operand),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(1), Operand8(*new_operand),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case  8:
-					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xff), Operand8(new_operand),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xff), Operand8(*new_operand),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case 16:
-					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffff), Operand8(new_operand),
+					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffff), Operand8(*new_operand),
 						x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				case 32:
 					function.insertBefore(instruction, std::make_shared<And>(Operand4(0xffffffff),
-						Operand8(new_operand), x86_64::Width::Eight))->setDebug(*instruction, true);
+						Operand8(*new_operand), x86_64::Width::Eight))->setDebug(*instruction, true);
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';

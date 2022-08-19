@@ -183,8 +183,13 @@ namespace LL2X::Passes {
 
 				if (local) {
 					comment = "MovePhi: " + local->variable->plainString() + " -> " + target->plainString();
-					new_instruction = std::make_shared<Mov>(Operand::make(phi_width, local->variable),
-						Operand::make(phi_width, target), phi_width);
+					new_instruction = std::make_shared<Mov>(OperandX(phi_width, local->variable),
+						OperandX(phi_width, target), phi_width);
+					function.categories["MovePhi"].insert(new_instruction);
+				} else if (value->isOperand()) {
+					OperandPtr operand = dynamic_cast<OperandValue *>(value.get())->operand;
+					comment = "MovePhi: " + operand->toString() + " -> " + target->plainString();
+					new_instruction = std::make_shared<Mov>(operand, OperandX(phi_width, target));
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->valueType() == ValueType::Undef) {
 					// Do nothing for undef values. This allows us to insert moves in cutPhi.
