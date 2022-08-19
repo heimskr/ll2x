@@ -4,7 +4,7 @@ namespace LL2X {
 	class Function;
 }
 
-// TODO: find allocas that are executed only once per function invocation and addToStack-ify them.
+// TODO: find allocas that are executed only once per function invocation and addToStack-ify them (partially done).
 
 namespace LL2X::Passes {
 	/** Replaces alloca instructions with instructions that set the result variables to the assigned addresses.

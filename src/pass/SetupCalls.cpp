@@ -491,7 +491,7 @@ namespace LL2X::Passes {
 		ValueType value_type = constant->value->valueType();
 		if (value_type == ValueType::Local) {
 			// If it's a variable, move it into the argument register.
-			std::shared_ptr<LocalValue> local = std::dynamic_pointer_cast<LocalValue>(constant->value);
+			auto local = std::dynamic_pointer_cast<LocalValue>(constant->value);
 			auto mov = std::make_shared<Mov>(OperandV(local->variable), new_operand, x86_64::Width::Eight);
 			auto out = function.insertBefore(instruction, mov);
 			out->setDebug(*instruction, true);
@@ -506,7 +506,7 @@ namespace LL2X::Passes {
 			return out;
 		} else if (value_type == ValueType::Bool) {
 			// If it's a boolean constant, convert it to an integer and do the same.
-			std::shared_ptr<BoolValue> bval = std::dynamic_pointer_cast<BoolValue>(constant->value);
+			auto bval = std::dynamic_pointer_cast<BoolValue>(constant->value);
 			auto mov = std::make_shared<Mov>(Operand4(bval->value? 1 : 0), new_operand);
 			auto out = function.insertBefore(instruction, mov);
 			out->setDebug(*instruction, true);
@@ -520,19 +520,19 @@ namespace LL2X::Passes {
 			return out;
 		} else if (value_type == ValueType::Getelementptr) {
 			// If it's a getelementptr expression, things are a little more difficult.
-			GetelementptrValue *gep = dynamic_cast<GetelementptrValue *>(constant->value.get());
-			GlobalValue *gep_global = dynamic_cast<GlobalValue *>(gep->variable.get());
+			auto *gep = dynamic_cast<GetelementptrValue *>(constant->value.get());
+			auto *gep_global = dynamic_cast<GlobalValue *>(gep->variable.get());
 			// TODO, maybe: reduce duplication
 			if (!gep_global) {
 				std::shared_ptr<LocalValue> local;
-				if (LocalValue *gep_local = dynamic_cast<LocalValue *>(gep->variable.get()))
+				if (auto *gep_local = dynamic_cast<LocalValue *>(gep->variable.get()))
 					local = std::make_shared<LocalValue>(gep_local->getVariable(function));
 				else if (auto subgep = std::dynamic_pointer_cast<GetelementptrValue>(gep->variable))
 					local = function.replaceGetelementptrValue(subgep, instruction);
 				else {
 					warn() << "Not sure what to do when the argument of getelementptr isn't a global or getelementptr."
-					       << "\n    " << std::string(*gep->variable);
-					if (LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get()))
+					          "\n    " << std::string(*gep->variable);
+					if (auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get()))
 						std::cerr << " (" << llvm->node->location << ")";
 					std::cerr << "\n";
 					return function.insertBefore(instruction, InvalidInstruction::make());
@@ -588,6 +588,13 @@ namespace LL2X::Passes {
 			Passes::lowerIcmp(function, instruction, node.get());
 			insert_exts();
 			return nullptr; // Whatever.
+		} else if (value_type == ValueType::Operand) {
+			auto operand_value = std::dynamic_pointer_cast<OperandValue>(constant->value);
+			auto mov = std::make_shared<Mov>(operand_value->operand, new_operand);
+			auto out = function.insertBefore(instruction, mov);
+			out->setDebug(*instruction, true);
+			insert_exts();
+			return out;
 		} else {
 			warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
 			       << __LINE__ << '\n';

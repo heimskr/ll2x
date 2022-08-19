@@ -98,6 +98,12 @@ namespace LL2X {
 		name = node->lexerInfo->at(0) == '%'? StringSet::intern(node->lexerInfo->substr(1)) : node->lexerInfo;
 	}
 
+	ValuePtr LocalValue::copy() const {
+		if (variable)
+			return std::make_shared<LocalValue>(variable);
+		return std::make_shared<LocalValue>(name);
+	}
+
 	LocalValue::operator std::string() {
 		return "\e[32m" + (variable? variable->ansiString(x86_64::getWidth(variable->type? variable->type->width()
 			: 64)) : "%" + *name) + "\e[39m";
@@ -357,6 +363,7 @@ namespace LL2X {
 		{ValueType::Global, "Global"}, {ValueType::Getelementptr, "Getelementptr"}, {ValueType::Void, "Void"},
 		{ValueType::Struct, "Struct"}, {ValueType::Array, "Array"}, {ValueType::CString, "CString"},
 		{ValueType::Zeroinitializer, "Zeroinitializer"}, {ValueType::Undef, "Undef"}, {ValueType::Icmp, "Icmp"},
+		{ValueType::Operand, "Operand"},
 	};
 
 	std::string getName(ValueType type) {

@@ -315,13 +315,11 @@ namespace LL2X {
 	}
 
 	std::vector<ValuePtr> StoreNode::allValues() {
-		return {source->convert()->value, destination->convert()->value};
+		return {(source = source->convert())->value, (destination = destination->convert())->value};
 	}
 
 	std::vector<ValuePtr *> StoreNode::allValuePointers() {
-		source = source->convert();
-		destination = destination->convert();
-		return {&source->value, &destination->value};
+		return {&(source = source->convert())->value, &(destination = destination->convert())->value};
 	}
 
 // LoadNode
@@ -734,13 +732,13 @@ namespace LL2X {
 
 	std::vector<ValuePtr> GetelementptrNode::allValues() {
 		if (!cachedConstantValue)
-			cachedConstantValue = constant->convert()->value;
+			cachedConstantValue = (constant = constant->convert())->value;
 		return {cachedConstantValue};
 	}
 
 	std::vector<ValuePtr *> GetelementptrNode::allValuePointers() {
 		if (!cachedConstantValue)
-			cachedConstantValue = constant->convert()->value;
+			cachedConstantValue = (constant = constant->convert())->value;
 		return {&cachedConstantValue};
 	}
 

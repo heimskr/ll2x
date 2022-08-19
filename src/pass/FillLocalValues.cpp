@@ -13,8 +13,17 @@ namespace LL2X::Passes {
 
 			InstructionNode *node = llvm->node;
 			if (Reader *reader = dynamic_cast<Reader *>(node)) {
-				for (std::shared_ptr<LocalValue> value: reader->allLocals())
+				for (std::shared_ptr<LocalValue> value: reader->allLocals()) {
+					info() << llvm->debugExtra() << ": (@ " << value.get() << ") " << *value->name << " -> ";
 					value->variable = function.getVariable(*value->name);
+					std::cerr << value->variable.get() << '\n';
+				}
+
+				for (auto *ptr: reader->allValuePointers()) {
+					if (ptr && *ptr && (*ptr)->isLocal()) {
+						std::cerr << " :: (@ " << ptr->get() << ") " << dynamic_cast<LocalValue *>(ptr->get())->variable.get() << '\n';
+					}
+				}
 			}
 
 			if (Writer *writer = dynamic_cast<Writer *>(node)) {

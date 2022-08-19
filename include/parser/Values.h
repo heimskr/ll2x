@@ -126,13 +126,13 @@ namespace LL2X {
 	};
 
 	struct LocalValue: VariableValue, Makeable<LocalValue> {
-		VariablePtr variable = nullptr;
+		VariablePtr variable;
 		LocalValue(const std::string *name_): VariableValue(name_) {}
 		LocalValue(const std::string &name_): LocalValue(StringSet::intern(name_)) {}
 		LocalValue(const VariablePtr &);
 		LocalValue(const ASTNode *node);
 		ValueType valueType() const override { return ValueType::Local; }
-		ValuePtr copy() const override { return std::make_shared<LocalValue>(name); }
+		ValuePtr copy() const override;
 		operator std::string() override;
 		std::string compile() const override { return "UNSUPPORTED (Local)"; }
 		VariablePtr getVariable(Function &);
@@ -142,12 +142,13 @@ namespace LL2X {
 	/** Never produced by the parser. Instead, LocalValues are sometimes replaced with OperandValues during a compiler
 	 *  pass. */
 	struct OperandValue: Value, Makeable<OperandValue> {
-		OperandPtr operand = nullptr;
+		OperandPtr operand;
 		OperandValue(const OperandPtr &operand_): operand(operand_) {}
 		ValueType valueType() const override { return ValueType::Operand; }
 		ValuePtr copy() const override { return std::make_shared<OperandValue>(operand); }
 		operator std::string() override;
 		std::string compile() const override;
+		OperandPtr makeOperand() const override { return operand; }
 	};
 
 	struct GlobalValue: VariableValue {

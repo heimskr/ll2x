@@ -45,6 +45,7 @@
 // #include "pass/BreakUpBigSets.h"
 // #include "pass/CopyArguments.h"
 #include "pass/FillLocalValues.h"
+#include "pass/FillOperands.h"
 // #include "pass/FinishMultireg.h"
 #include "pass/HackOperands.h"
 #include "pass/IgnoreIntrinsics.h"
@@ -885,6 +886,7 @@ namespace LL2X {
 		Passes::ignoreIntrinsics(*this);
 		// Passes::insertStackSkip(*this);
 		Passes::fillLocalValues(*this);
+		Passes::fillOperands(*this);
 		Passes::lowerStacksave(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract();
@@ -1792,6 +1794,16 @@ namespace LL2X {
 				auto *logic = dynamic_cast<LogicValue *>(value.get());
 				new_var = newVariable(hint? hint : logic->left->type);
 				Passes::lowerLogic(*this, instruction, logic->makeNode(new_var).get());
+				break;
+			}
+			case ValueType::Operand: {
+				auto *operand_value = dynamic_cast<OperandValue *>(value.get());
+				if (operand_value->operand->isRegister()) {
+					new_var = operand_value->operand->reg;
+				} else {
+					new_var = newVariable(hint? hint : IntType::make(64));
+					mov = std::make_shared<Mov>(operand_value->operand, OperandV(new_var));
+				}
 				break;
 			}
 			default:
