@@ -16,6 +16,7 @@
 #include "util/Util.h"
 
 // #define DEBUG_COLORING
+// #define DEBUG_SELECTMOSTLIVE
 #define CONSTRUCT_BY_BLOCK
 // #define SELECT_LOWEST_COST
 #define SELECT_MOST_LIVE
@@ -191,8 +192,20 @@ namespace LL2X {
 		int highest = -1;
 		for (const auto *map: {&function->variableStore, &function->extraVariables})
 			for (const auto &[id, var]: *map) {
-				if (var->allRegistersSpecial() || !function->canSpill(var))
+				if (var->allRegistersSpecial()) {
+#ifdef DEBUG_SELECTMOSTLIVE
+					std::cerr << "Skipping " << var->ansiString() << ": all registers are special\n";
+#endif
 					continue;
+				}
+
+				if (!function->canSpill(var)) {
+#ifdef DEBUG_SELECTMOSTLIVE
+					std::cerr << "Skipping " << var->ansiString() << ": can't spill\n";
+#endif
+					continue;
+				}
+
 				const int sum = function->getLiveIn(var).size() + function->getLiveOut(var).size();
 				if (highest < sum && triedIDs.count(var->originalID) == 0) {
 					highest = sum;

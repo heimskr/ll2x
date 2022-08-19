@@ -6,7 +6,7 @@
 
 #define DEBUG_BLOCKS
 // #define DEBUG_LINEAR
-// #define DEBUG_VARS
+#define DEBUG_VARS
 // #define DEBUG_RENDER
 // #define DEBUG_SPILL
 // #define DEBUG_SPLIT
@@ -17,6 +17,7 @@
 #define DEBUG_VAR_LIVENESS
 // #define DEBUG_ALIASES
 // #define DEBUG_STACK
+// #define DEBUG_CANSPILL
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
@@ -348,9 +349,13 @@ namespace LL2X {
 			}
 
 			if (should_insert) {
-				insertAfter(definition, store, false);
-				insertBefore(store, std::make_shared<Comment>("Spill: stack store for " +
-					variable->plainString(x86_64::Width::Eight) + " into location=" + std::to_string(location.offset)));
+				// insertAfter(definition, store, false);
+				// insertBefore(store, std::make_shared<Comment>("Spill: stack store for " + variable->plainString() +
+				// 	" into location=" + std::to_string(location.offset)));
+
+				definition->replaceSimilarOperand(OperandV(variable), Operand8(-location.offset, rbp));
+				definition->extract(true);
+
 
 				// Hopefully the blocks are minimized at this point.
 				// TODO: Do we need to reminimize after spilling?
@@ -361,8 +366,7 @@ namespace LL2X {
 				std::cerr << "    Inserting a stack store after definition: " << store->debugExtra() << "\n";
 #endif
 			} else {
-				comment(after(definition), "Spill: no store inserted here for " +
-					variable->plainString(x86_64::Width::Eight));
+				comment(after(definition), "Spill: no store inserted here for " + variable->plainString());
 #ifdef DEBUG_SPILL
 				std::cerr << "    \e[1mNot\e[22m inserting a stack store after definition: " << store->debugExtra()
 				          << "\n";
@@ -386,14 +390,16 @@ namespace LL2X {
 #ifdef STRICT_READ_CHECK
 			if (std::shared_ptr<Variable> read = instruction->doesRead(variable)) {
 #else
-			if (instruction->read.count(variable) != 0) {
+			if (instruction->read.contains(variable)) {
 #endif
-				VariablePtr new_var = newVariable(variable->type, instruction->parent.lock());
+				// VariablePtr new_var = newVariable(variable->type, instruction->parent.lock());
 				const std::string old_extra = instruction->debugExtra();
 #ifdef STRICT_READ_CHECK
-				const bool replaced = instruction->replaceRead(read, new_var);
+				// const bool replaced = instruction->replaceRead(read, new_var);
+				const bool replaced = instruction->canReplaceRead(read);
 #else
-				const bool replaced = instruction->replaceRead(variable, new_var);
+				// const bool replaced = instruction->replaceRead(variable, new_var);
+				const bool replaced = instruction->canReplaceRead(variable);
 #endif
 #ifdef DEBUG_SPILL
 				BasicBlockPtr par = instruction->parent.lock();
@@ -407,26 +413,32 @@ namespace LL2X {
 				std::cerr << "\n";
 #endif
 				if (replaced) {
-#ifdef STRICT_READ_CHECK
-					instruction->read.erase(read);
-#else
-					instruction->read.erase(variable);
-#endif
-					instruction->read.insert(new_var);
-					auto load = std::make_shared<Mov>(Operand8(-location.offset, rbp), OperandV(new_var));
-					insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
-					load->extract();
+// #ifdef STRICT_READ_CHECK
+// 					instruction->read.erase(read);
+// #else
+// 					instruction->read.erase(variable);
+// #endif
+// 					instruction->read.insert(new_var);
+
+					instruction->replaceSimilarOperand(OperandV(read), Operand8(-location.offset, rbp));
+					instruction->extract(true);
+
+					// auto load = std::make_shared<Mov>(Operand8(-location.offset, rbp), OperandV(new_var));
+					// insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
+
+					// load->extract();
 					out = true;
 #ifdef DEBUG_SPILL
-				std::cerr << "      Inserting a stack load before " << instruction->debugExtra() << ": "
-				          << load->debugExtra() << "\n";
+					std::cerr << "      Inserting a stack load before " << instruction->debugExtra() << ": "
+							<< load->debugExtra() << "\n";
+					std::cerr << "      Replacing operand in " << instruction->debugExtra() << '\n';
 #endif
-					markSpilled(new_var);
+					// markSpilled(new_var);
 				} else {
 #ifdef DEBUG_SPILL
-					std::cerr << "      Removing variable " << *new_var << "\n";
+					// std::cerr << "      Removing variable " << *new_var << "\n";
 #endif
-					variableStore.erase(new_var->id);
+					// variableStore.erase(new_var->id);
 				}
 			}
 		}
@@ -454,15 +466,30 @@ namespace LL2X {
 	}
 
 	bool Function::canSpill(VariablePtr variable) {
-		if (variable->definitions.empty() || isSpilled(variable))
+		if (variable->definitions.empty()) {
+#ifdef DEBUG_CANSPILL
+			std::cerr << "Can't spill " << variable->ansiString() << ": no definitions\n";
+#endif
 			return false;
+		}
+
+		if (isSpilled(variable)) {
+#ifdef DEBUG_CANSPILL
+			std::cerr << "Can't spill " << variable->ansiString() << ": already spilled\n";
+#endif
+			return false;
+		}
 
 		// If the only definition is a stack store, the variable can't be spilled.
 		if (variable->definitions.size() == 1) {
 			InstructionPtr single_def = variable->definitions.begin()->lock();
 			auto *store = dynamic_cast<Mov *>(single_def.get());
-			if (store && store->meta.contains(InstructionMeta::StackStore) && store->source->reg == variable)
+			if (store && store->meta.contains(InstructionMeta::StackStore) && store->source->reg == variable) {
+#ifdef DEBUG_CANSPILL
+				std::cerr << "Can't spill " << variable->ansiString() << ": only definition is a stack store\n";
+#endif
 				return false;
+			}
 		}
 
 		for (std::weak_ptr<Instruction> weak_definition: variable->definitions) {
@@ -500,19 +527,31 @@ namespace LL2X {
 				stack.erase(location.offset);
 			}
 
-			if (should_insert)
+			if (should_insert) {
+#ifdef DEBUG_CANSPILL
+			std::cerr << "Can spill " << variable->ansiString() << ": should insert\n";
+#endif
 				return true;
+			}
 		}
 
 		for (auto iter = linearInstructions.begin(), end = linearInstructions.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
 #ifdef STRICT_READ_CHECK
 			if (std::shared_ptr<Variable> read = instruction->doesRead(variable))
-				if (instruction->canReplaceRead(read))
+				if (instruction->canReplaceRead(read)) {
+#ifdef DEBUG_CANSPILL
+					std::cerr << "Can spill " << variable->ansiString() << ": is read and can be replaced\n";
+#endif
 					return true;
+				}
 #else
-			if (instruction->read.count(variable) != 0 && instruction->canReplaceRead(variable))
+			if (instruction->read.contains(variable) && instruction->canReplaceRead(variable)) {
+#ifdef DEBUG_CANSPILL
+				std::cerr << "Can spill " << variable->ansiString() << ": is read and can be replaced\n";
+#endif
 				return true;
+			}
 #endif
 		}
 

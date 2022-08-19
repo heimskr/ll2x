@@ -32,12 +32,22 @@ namespace LL2X::x86_64 {
 			case r13: return "r13";
 			case r14: return "r14";
 			case r15: return "r15";
+			case rip: return "ip";
 			default:
 				throw std::invalid_argument("Invalid register: " + std::to_string(reg));
 		}
 	}
 
 	std::string registerName(int reg, Width width) {
+		if (reg == rip) {
+			switch (width) {
+				case Width::Four:  return "eip";
+				case Width::Eight: return "rip";
+				default:
+					throw std::runtime_error("Invalid width for %rip: " + std::to_string(getWidth(width)));
+			}
+		}
+
 		switch (width) {
 			case Width::Low:
 				switch (reg) {

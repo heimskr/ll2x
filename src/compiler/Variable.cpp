@@ -88,7 +88,7 @@ namespace LL2X {
 		std::stringstream out;
 		const std::string base;
 		if (registers.empty())
-			out << "\e[32m%" << *id << "\e[39m";
+			out << "\e[38;5;202m%" << *id << "\e[39m";
 		else {
 			out << "\e[92m";
 			if (1 < registers.size())
