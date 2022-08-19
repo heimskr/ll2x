@@ -394,7 +394,8 @@ namespace LL2X {
 	}
 
 	void Program::debugSection(std::ostream *out) {
-
+		// TODO: implement debug data
+		(void) out;
 	}
 
 	int Program::symbolSize(const std::string &name) const {
