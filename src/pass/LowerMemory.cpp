@@ -193,7 +193,7 @@ namespace LL2X::Passes {
 					// mov operand, %temp
 					auto mov_operand = std::make_shared<Mov>(operand, Operand8(temp));
 					// mov $imm, (%temp)
-					auto mov_imm = std::make_shared<Mov>(Operand4(long_value), OperandX(width, 0, temp), width);
+					auto mov_imm = std::make_shared<Mov>(Operand4(long_value), Operand8(0, temp), width);
 					function.insertBefore(instruction, mov_operand, "LowerMemory.4a: mov operand, %temp", false)
 						->setDebug(llvm, true);
 					function.insertBefore(instruction, mov_imm, "LowerMemory.4b: mov $imm, (%temp)", false)
