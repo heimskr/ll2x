@@ -188,15 +188,9 @@ namespace LL2X::Passes {
 						operand->toDisplaced(), width), "LowerMemory.3: mov $imm, " + operand->toString(), false)
 						->setDebug(llvm, true);
 				} else {
-					VariablePtr temp = function.newVariable(PointerType::make(VoidType::make()),
-						instruction->parent.lock());
-					// mov operand, %temp
-					auto mov_operand = std::make_shared<Mov>(operand, Operand8(temp));
-					// mov $imm, (%temp)
-					auto mov_imm = std::make_shared<Mov>(Operand4(long_value), Operand8(0, temp), width);
-					function.insertBefore(instruction, mov_operand, "LowerMemory.4a: mov operand, %temp", false)
-						->setDebug(llvm, true);
-					function.insertBefore(instruction, mov_imm, "LowerMemory.4b: mov $imm, (%temp)", false)
+					// mov $imm, operand
+					auto mov = std::make_shared<Mov>(Operand4(long_value), operand, width);
+					function.insertBefore(instruction, mov, "LowerMemory.4: mov $imm, operand", false)
 						->setDebug(llvm, true);
 				}
 			} else if (converted->value->isIntLike()) {
@@ -252,16 +246,10 @@ namespace LL2X::Passes {
 					function.insertBefore(instruction, mov, "LowerMemory.9: mov " + soperand->toString() + ", (" +
 						doperand->toString() + ")", false)->setDebug(llvm, true);
 				} else {
-					// TODO: verify new_var type
-					VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
-					// mov dest, %temp
-					auto mov_operand = std::make_shared<Mov>(doperand, OperandV(new_var), x86_64::Width::Eight);
-					// mov %src, (%temp)
-					auto mov = std::make_shared<Mov>(soperand, Operand8(0, new_var), width);
-					function.insertBefore(instruction, mov_operand, "LowerMemory.10a: mov " + doperand->toString() +
-						", %temp", false)->setDebug(llvm, true);
-					function.insertBefore(instruction, mov, "LowerMemory.10b: mov " + soperand->toString() +
-						", (%temp)", false)->setDebug(llvm, true);
+					// mov %src, dest
+					auto mov = std::make_shared<Mov>(soperand, doperand, width);
+					function.insertBefore(instruction, mov, "LowerMemory.10: mov " + soperand->toString() +
+						", " + doperand->toString(), false)->setDebug(llvm, true);
 				}
 			} else if (converted->value->isIntLike()) {
 				const int64_t longptr = converted->value->longValue();
