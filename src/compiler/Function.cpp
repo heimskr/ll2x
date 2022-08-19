@@ -18,6 +18,7 @@
 // #define DEBUG_ALIASES
 // #define DEBUG_STACK
 // #define DEBUG_CANSPILL
+// #define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
@@ -499,7 +500,7 @@ namespace LL2X {
 			if (definition->isPhi())
 				continue;
 
-			bool created;
+			bool created = false;
 			const StackLocation &location = getSpill(variable, true, &created);
 			auto store = std::make_shared<Mov>(OperandV(variable), Operand8(-location.offset, rbp));
 			store->meta.insert(InstructionMeta::StackStore);
@@ -873,8 +874,8 @@ namespace LL2X {
 		const std::string end = str.front() == '%'? str.substr(1) : str;
 		// Some lambdas will have names like "@\"_ZZ11kernel_mainENK3$_0clEm\""
 		if (1 < name->size() && (*name)[1] == '"')
-			return ".\"__" + name->substr(2, name->size() - 3) + "_label" + end + "\"";
-		return ".__" + name->substr(1) + "_label" + end;
+			return ".\"__" + name->substr(2, name->size() - 3) + "__" + end + "\"";
+		return ".__" + name->substr(1) + "__" + end;
 	}
 
 	void Function::updateInstructionNodes() {
@@ -1012,6 +1013,9 @@ namespace LL2X {
 		// 		        << "\n\n";
 		// }
 		finalDone = true;
+#ifdef FINAL_DEBUG
+		debug();
+#endif
 	}
 
 	void Function::compile() {

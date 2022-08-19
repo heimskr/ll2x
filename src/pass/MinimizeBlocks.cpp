@@ -28,7 +28,7 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Instruction has an invalid index even after reindexing");
 			}
 
-			const std::string *new_label = StringSet::intern("mini__" + std::to_string(index));
+			const std::string *new_label = StringSet::intern("M" + std::to_string(index));
 
 			auto new_block = std::make_shared<BasicBlock>(new_label);
 			new_block->parent = &function;
