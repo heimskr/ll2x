@@ -35,17 +35,32 @@ namespace LL2X {
 			changed = true;
 		}
 
+		if (!destination->isRegister()) {
+			if (destination->reg && destination->reg->isAliasOf(*to_replace)) {
+				destination->reg = new_var;
+				changed = true;
+			}
+
+			if (destination->index && destination->index->isAliasOf(*to_replace)) {
+				destination->index = new_var;
+				changed = true;
+			}
+		}
+
 		return changed;
 	}
 
 	bool SourceToDest::canReplaceRead(const VariablePtr &to_replace) const {
-		return source &&
-		       ((source->reg   && source->reg  ->isAliasOf(*to_replace))
-		     || (source->index && source->index->isAliasOf(*to_replace)));
+		if (source && ((source->reg   && source->reg  ->isAliasOf(*to_replace))
+		            || (source->index && source->index->isAliasOf(*to_replace))))
+			 return true;
+		return destination && !destination->isRegister() &&
+			  ((destination->reg   && destination->reg  ->isAliasOf(*to_replace))
+			|| (destination->index && destination->index->isAliasOf(*to_replace)));
 	}
 
 	bool SourceToDest::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
-		if (!destination)
+		if (!destination || !destination->isRegister())
 			return false;
 
 		bool changed = false;
@@ -64,7 +79,7 @@ namespace LL2X {
 	}
 
 	bool SourceToDest::canReplaceWritten(const VariablePtr &to_replace) const {
-		return destination &&
+		return destination && !destination->isRegister() &&
 		       ((destination->reg   && destination->reg  ->isAliasOf(*to_replace))
 		     || (destination->index && destination->index->isAliasOf(*to_replace)));
 	}
