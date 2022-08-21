@@ -196,6 +196,11 @@ namespace LL2X::Util {
 		}
 		return os;
 	}
+
+	template <typename T>
+	bool isPowerOfTwo(T num) {
+		return (num & (num - 1)) == 0;
+	}
 }
 
 namespace LL2X {

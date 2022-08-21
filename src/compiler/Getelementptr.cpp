@@ -5,11 +5,9 @@
 #include "compiler/PaddedStructs.h"
 #include "compiler/Variable.h"
 #include "exception/TypeError.h"
-// #include "instruction/AddIInstruction.h"
-// #include "instruction/AddRInstruction.h"
-// #include "instruction/MoveInstruction.h"
-// #include "instruction/MultIInstruction.h"
-// #include "instruction/MultRInstruction.h"
+#include "instruction/Add.h"
+#include "instruction/Mov.h"
+#include "instruction/Mul.h"
 #include "parser/Types.h"
 #include "parser/StructNode.h"
 #include "parser/Values.h"
@@ -50,7 +48,6 @@ namespace LL2X::Getelementptr {
 		// offset instead of being added to by the computed offset. This would obviate the need to set out_var to zero
 		// at the beginning of the insert functions.
 
-		/*
 		if (indices.empty()) {
 			if (out_type)
 				*out_type = PointerType::make(type->copy());
@@ -67,21 +64,20 @@ namespace LL2X::Getelementptr {
 				const long subbytes = Util::updiv(subtype->width(), 8);
 				if (std::holds_alternative<long>(front)) {
 					const long offset = std::get<long>(front) * subbytes;
-					InstructionPtr add;
-					if (Util::outOfRange(offset))
-						add = AddRInstruction::make(out_var, function.get64(instruction, offset), out_var);
-					else if (offset != 0)
-						add = AddIInstruction::make(out_var, int(offset), out_var);
-					if (add)
+					if (offset != 0) {
+						auto add = std::make_shared<Add>(Operand4(offset), OperandV(out_var));
 						function.insertBefore(instruction, add)->setDebug(*instruction, true);
+					}
 				} else {
-					VariablePtr m8 = function.mx(8, instruction);
-					function.insertBefore(instruction, MultIInstruction::make(function.getVariable(
-						std::get<const std::string *>(front), false), int(subbytes)))->setDebug(*instruction, true);
-					function.insertBefore(instruction, MoveInstruction::make(function.lo(instruction), m8))
-						->setDebug(*instruction, true);
-					function.insertBefore(instruction, AddRInstruction::make(out_var, m8, out_var))
-						->setDebug(*instruction, true);
+					// VariablePtr m8 = function.mx(8, instruction);
+					// function.insertBefore(instruction, MultIInstruction::make(
+					// 	function.getVariable(std::get<const std::string *>(front), false),
+					// 	int(subbytes))
+					// )->setDebug(*instruction, true);
+					// function.insertBefore(instruction, MoveInstruction::make(function.lo(instruction), m8))
+					// 	->setDebug(*instruction, true);
+					// function.insertBefore(instruction, AddRInstruction::make(out_var, m8, out_var))
+					// 	->setDebug(*instruction, true);
 				}
 				insert_mutating(function, subtype, indices, instruction, out_var, out_type);
 				break;
@@ -102,7 +98,7 @@ namespace LL2X::Getelementptr {
 					warn() << "PaddedStructs offset " << offset << " is out of the integer range. Incorrect code will "
 					          "be produced.\n";
 				if (offset != 0)
-					function.insertBefore(instruction, AddIInstruction::make(out_var, int(offset), out_var))
+					function.insertBefore(instruction, std::make_shared<Add>(Operand4(offset), OperandV(out_var)))
 						->setDebug(*instruction, true);
 				insert_mutating(function, snode->types.at(index), indices, instruction, out_var, out_type);
 				break;
@@ -111,7 +107,6 @@ namespace LL2X::Getelementptr {
 				throw TypeError("Getelementptr::insert encountered an invalid type: " + std::string(*type) + " (" +
 					type_map.at(type->typeType()) + ")", type);
 		}
-		*/
 	}
 
 	long compute(TypePtr type, std::list<long> indices, TypePtr *out_type) {

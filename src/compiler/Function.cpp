@@ -36,8 +36,10 @@
 #include "instruction/Add.h"
 #include "instruction/Clobber.h"
 #include "instruction/Comment.h"
+#include "instruction/Imul.h"
 #include "instruction/Label.h"
 #include "instruction/Mov.h"
+#include "instruction/Mul.h"
 #include "instruction/Or.h"
 #include "instruction/Shl.h"
 #include "options.h"
@@ -831,7 +833,7 @@ namespace LL2X {
 		after->instructions.clear();
 
 		// Replace the after-block's label with the before-block's in all instructions.
-		// TODO: When Why branches are implemented, add them here.
+		// TODO: Add x86_64 branches.
 		const std::string *before_p_label = StringSet::intern("%" + *before->label);
 		const std::string *after_p_label  = StringSet::intern("%" + *after->label);
 		const std::string *before_label   = before->label;
@@ -1953,5 +1955,15 @@ namespace LL2X {
 			if (instruction->replaceSimilarOperand(to_replace, replace_with))
 				++out;
 		return out;
+	}
+
+	void Function::multiply(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool reindex,
+	                        int debug) {
+		multiply_impl<Imul>(anchor, operand, value, reindex, debug);
+	}
+
+	void Function::multiply(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
+	                        int debug) {
+		multiply_impl<Mul>(anchor, operand, value, reindex, debug);
 	}
 }

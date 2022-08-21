@@ -14,6 +14,9 @@
 #include "compiler/Variable.h"
 #include "graph/DJGraph.h"
 #include "graph/DTree.h"
+#include "instruction/Mov.h"
+#include "instruction/Shl.h"
+#include "instruction/Xor.h"
 #include "parser/FunctionArgs.h"
 
 namespace LL2X {
@@ -399,8 +402,61 @@ namespace LL2X {
 			/** Replaces one operand with a similar other one throughout the function. */
 			size_t replaceSimilarOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
 
+			void multiply(const InstructionPtr &anchor, const OperandPtr &, int64_t, bool reindex = true,
+			              int debug = -1);
+
+			void multiply(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
+			              int debug = -1);
+
 			VariablePtr rsp;
 			VariablePtr rbp;
 			VariablePtr rip;
+
+		private:
+
+			template <typename I, typename N>
+			void multiply_impl(const InstructionPtr &anchor, const OperandPtr &operand, N value, bool reindex,
+			                   int debug) {
+				if (value == 0) {
+					auto xor_ = std::make_shared<Xor>(operand, operand);
+					insertBefore(anchor, xor_, reindex);
+					if (debug != -1)
+						xor_->setDebug(debug, false);
+					xor_->extract();
+					return;
+				}
+
+				if (value == 1)
+					return;
+
+				if (Util::isPowerOfTwo(value)) {
+					auto shl = std::make_shared<Shl>(Operand4(std::bit_width(static_cast<uint64_t>(value)) - 1),
+						operand);
+					insertBefore(anchor, shl, reindex);
+					if (debug != -1)
+						shl->setDebug(debug, false);
+					shl->extract();
+				} else {
+					auto rax_clobber = clobber(anchor, x86_64::rax);
+					auto rdx_clobber = clobber(anchor, x86_64::rdx);
+					auto rax = OperandX(operand->width, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
+					auto mov_in = std::make_shared<Mov>(operand, rax);
+					auto mul = std::make_shared<I>(Operand4(value));
+					auto mov_out = std::make_shared<Mov>(rax, operand);
+					insertBefore(anchor, mov_in, reindex);
+					insertBefore(anchor, mul, reindex);
+					insertBefore(anchor, mov_out, reindex);
+					if (debug != -1) {
+						mov_in->setDebug(debug, false);
+						mul->setDebug(debug, false);
+						mov_out->setDebug(debug, false);
+					}
+					mov_in->extract();
+					mul->extract();
+					mov_out->extract();
+					unclobber(anchor, rdx_clobber);
+					unclobber(anchor, rax_clobber);
+				}
+			}
 	};
 }
