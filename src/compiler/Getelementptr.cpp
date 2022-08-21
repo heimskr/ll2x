@@ -69,15 +69,13 @@ namespace LL2X::Getelementptr {
 						function.insertBefore(instruction, add)->setDebug(*instruction, true);
 					}
 				} else {
-					// VariablePtr m8 = function.mx(8, instruction);
-					// function.insertBefore(instruction, MultIInstruction::make(
-					// 	function.getVariable(std::get<const std::string *>(front), false),
-					// 	int(subbytes))
-					// )->setDebug(*instruction, true);
-					// function.insertBefore(instruction, MoveInstruction::make(function.lo(instruction), m8))
-					// 	->setDebug(*instruction, true);
-					// function.insertBefore(instruction, AddRInstruction::make(out_var, m8, out_var))
-					// 	->setDebug(*instruction, true);
+					VariablePtr temp = function.newVariable(IntType::make(64), instruction->parent.lock());
+					function.insertBefore(instruction,
+						std::make_shared<Mov>(OperandV(function.getVariable(std::get<const std::string *>(front),
+						false)), OperandV(temp)), false)->setDebug(*instruction, true);
+					function.multiply(instruction, OperandV(temp), subbytes, false, instruction->debugIndex);
+					function.insertBefore(instruction, std::make_shared<Add>(OperandV(temp), OperandV(out_var)), true)
+						->setDebug(*instruction, true);
 				}
 				insert_mutating(function, subtype, indices, instruction, out_var, out_type);
 				break;
