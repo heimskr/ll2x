@@ -14,6 +14,7 @@
 
 namespace LL2X::Getelementptr {
 	long compute_mutating(TypePtr type, std::list<long> &indices, TypePtr *out_type) {
+		// compute_mutating... computating
 		if (indices.empty()) {
 			if (out_type)
 				*out_type = PointerType::make(type->copy());
