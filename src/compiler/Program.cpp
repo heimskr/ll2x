@@ -16,6 +16,7 @@
 #include "parser/Values.h"
 #include "util/Util.h"
 #include "main.h"
+#include "options.h"
 
 namespace LL2X {
 	struct GlobalData {
@@ -162,8 +163,24 @@ namespace LL2X {
 		std::stringstream out;
 		// debugSection(&out);
 		dataSection(out);
-		for (std::pair<const std::string, Function *> &pair: functions)
+		std::vector<Function *> startup;
+		for (std::pair<const std::string, Function *> &pair: functions) {
 			out << pair.second->toString() << "\n";
+			if (pair.second->section && *pair.second->section == ".text.startup")
+				startup.push_back(pair.second);
+		}
+
+		if (!startup.empty()) {
+			out << "\n.section .init_array\n.p2align 3\n";
+			for (const Function *function: startup) {
+#ifdef USE_UNDERSCORE
+				out << ".quad _" << function->name->substr(1) << '\n';
+#else
+				out << ".quad " << function->name->substr(1) << '\n';
+#endif
+			}
+		}
+
 		return out.str();
 	}
 
