@@ -3,7 +3,7 @@ source_filename = "fibo.c"
 target datalayout = "e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-apple-macosx12.0.0"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d -> %d\0A\00", align 1
 
 ; @main is the same as fibo0, but @fibonacci was compiled with -O3.
 
