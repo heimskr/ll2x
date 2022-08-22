@@ -1,0 +1,37 @@
+digraph {
+	M0 -> M3
+	M0 -> M6
+    M3 -> M59
+	M6 -> M15
+	M6 -> M20
+	M15 -> M29
+	M20 -> M60
+	M29 -> M32
+	M29 -> M35
+	M32 -> M59
+	M35 -> M42
+	M42 -> M49
+	M42 -> M52
+	M49 -> M59
+	M52 -> M42
+	M60 -> M81
+	M60 -> M88
+	M81 -> M60
+	M88 -> M29
+
+    M20[shape=box,fontname="Noto Sans Mono",xlabel="M20",label="rbx = rax & $-8\lr12 = $0\lr13 = $1\lr14 = rax & $-8\l"]
+    M6[shape=box,fontname="Noto Sans Mono",xlabel="M6",label="rax = rdi - $2\lrcx = (rdi - $2) & $7\lKill rbx\l"]
+    M81[shape=box,fontname="Noto Sans Mono",xlabel="M81",label="r12 = rbx\lr13 = rax\lr14 = r10\l"]
+    M60[shape=box,fontname="Noto Sans Mono",xlabel="M60",label="rax = 21*r12 + 13*r13\lrbx = 34*r12 + 21*r13\lr10 = r14 - $8\lKill r15\l"]
+    M88[shape=box,fontname="Noto Sans Mono",xlabel="M88",label="rdx = rbx\l-8 = rax\l"]
+    M15[shape=box,fontname="Noto Sans Mono",xlabel="M15",label="rdx = $0\lrsi = $1\l"]
+    M29[shape=box,fontname="Noto Sans Mono",xlabel="M29",label="Kill rax\l"]
+    M35[shape=box,fontname="Noto Sans Mono",xlabel="M35",label="rdi = rdx\l"]
+    M52[shape=box,fontname="Noto Sans Mono",xlabel="M52",label="rdi = rax\lr8 = rax\lr9 = rbx\l"]
+    M42[shape=box,fontname="Noto Sans Mono",xlabel="M42",label="rax = rdi + r8\lrbx = r9 - $1\lKill r10\l"]
+    M49[shape=box,fontname="Noto Sans Mono",xlabel="M49",label="r11 = rdi\l"]
+    M59[shape=box,fontname="Noto Sans Mono",xlabel="M59",label="rax = r11\lretq\l"]
+    M32[shape=box,fontname="Noto Sans Mono",xlabel="M32",label="r11 = -8\l"]
+    M3[shape=box,fontname="Noto Sans Mono",xlabel="M3",label="r11 = $1\l"]
+    M0[shape=box,fontname="Noto Sans Mono",xlabel="M0",label="Prologue\l"]
+}
