@@ -43,13 +43,11 @@ namespace LL2X::Passes {
 							warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 						TypePtr ptr_type = std::make_shared<PointerType>(out_type);
 						VariablePtr new_var = function.newVariable(ptr_type, instruction->parent.lock());
-						auto mov_addr = std::make_shared<Mov>(Operand8(*gep_global->name, function.rip),
-							OperandV(new_var));
+						auto mov_addr = std::make_shared<Mov>(Operand8(*gep_global->name), OperandV(new_var));
 						function.insertBefore(instruction, mov_addr)->setDebug(*llvm)->extract();
 
 						if (offset != 0) {
-							auto add = std::make_shared<Add>(Operand::make(new_var),
-								Operand::make(32, offset), x86_64::Width::Eight);
+							auto add = std::make_shared<Add>(Operand4(offset), OperandV(new_var));
 							function.insertAfter(mov_addr, add)->setDebug(*llvm)->extract();
 						}
 
@@ -57,8 +55,7 @@ namespace LL2X::Passes {
 					}
 				} else if (IcmpValue *icmp = dynamic_cast<IcmpValue *>(value->get())) {
 					VariablePtr new_var = function.newVariable(IntType::make(1), instruction->parent.lock());
-					auto icmp_node = std::make_unique<IcmpNode>(Operand::make(new_var), icmp->cond, icmp->left,
-						icmp->right);
+					auto icmp_node = std::make_unique<IcmpNode>(OperandV(new_var), icmp->cond, icmp->left, icmp->right);
 					lowerIcmp(function, instruction, icmp_node.get());
 					*value = LocalValue::make(new_var);
 				}
