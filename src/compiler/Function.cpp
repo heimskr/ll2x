@@ -59,7 +59,7 @@
 #include "pass/LowerAlloca.h"
 #include "pass/LowerBranches.h"
 #include "pass/LowerClobber.h"
-// #include "pass/LowerConversions.h"
+#include "pass/LowerConversions.h"
 // #include "pass/LowerExtractvalue.h"
 // #include "pass/LowerFreeze.h"
 // #include "pass/LowerGetelementptr.h"
@@ -944,7 +944,7 @@ namespace LL2X {
 		// Passes::lowerObjectsize(*this);
 		Passes::lowerIcmp(*this);
 		Passes::lowerMath(*this);
-		// Passes::lowerConversions(*this);
+		Passes::lowerConversions(*this);
 		// Passes::lowerGetelementptr(*this);
 		// Passes::lowerFreeze(*this);
 		// Passes::lowerSelect(*this);
