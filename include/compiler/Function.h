@@ -84,7 +84,9 @@ namespace LL2X {
 			std::vector<FunctionArgument> *arguments = nullptr;
 
 			/** A pointer to an interned string containing the name of the function. */
-			const std::string *name;
+			const std::string *name = nullptr;
+
+			const std::string *section = nullptr;
 
 			/** The type of the returned value. */
 			TypePtr returnType;

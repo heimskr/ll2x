@@ -115,7 +115,7 @@ namespace LL2X {
 			throw std::runtime_error("Bad symbol for fnattrs node: " + std::string(parser->getName(_fnattrs->symbol)));
 
 		if (_section)
-			section = _section->at(0)->lexerInfo;
+			section = _section->at(0)->extracted();
 
 		if (_comdat) {
 			if (_comdat->empty())

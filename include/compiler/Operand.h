@@ -11,7 +11,9 @@
 #include "Declarations.h"
 
 namespace LL2X {
-	struct Operand: Makeable<Operand> {
+	class Type;
+
+	struct Operand: Makeable<Operand>, std::enable_shared_from_this<Operand> {
 		enum class Mode {
 			Constant,  // mul $99
 			Direct,    // mov $0, 0xfff0
@@ -31,6 +33,7 @@ namespace LL2X {
 		VariablePtr reg;
 		VariablePtr index;
 		std::string label;
+		std::shared_ptr<Type> type;
 
 		Number originalConstant = 0;
 		bool useRip = false;
@@ -103,6 +106,11 @@ namespace LL2X {
 		std::shared_ptr<Operand> toDisplaced(int displacement = 0) const;
 
 		VariablePtr getVariable() const;
+
+		inline OperandPtr setType(const std::shared_ptr<Type> &new_type) {
+			type = new_type;
+			return shared_from_this();
+		}
 
 		bool operator==(const Operand &) const;
 		/** If the operands have had registers assigned, this function is similar to operator== but requires register

@@ -112,6 +112,7 @@ namespace LL2X {
 		returnType = header->returnType;
 		allocator = std::make_unique<ColoringAllocator>(*this);
 		debugIndex = header->debugIndex;
+		section = header->section;
 	}
 
 	Allocator::Result Function::attemptAllocation() {
@@ -1483,7 +1484,10 @@ namespace LL2X {
 		Timer timer("Function::toString");
 		std::stringstream out;
 
-		out << ".section .text\n";
+		if (section)
+			out << ".section " << *section << '\n';
+		else
+			out << ".section .text\n";
 		auto chopped = std::string_view(*name).substr(1);
 #ifdef USE_UNDERSCORE
 		out << ".global _" << chopped << "\n.p2align 4, 0x90\n_" << chopped << ":\n";

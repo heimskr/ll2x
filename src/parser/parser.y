@@ -634,9 +634,9 @@ gdef_extras: gdef_extras "," section { $$ = $1->adopt($3); D($2); }
            | gdef_extras "," LLVMTOK_ALIGN LLVMTOK_DECIMAL { $$ = $1->adopt($3->adopt($4)); D($2); }
            | gdef_extras cdebug { $$ = $1->adopt($2); }
            | { $$ = new AN(llvmParser, LLVM_GDEF_EXTRAS); };
-section: LLVMTOK_SECTION LLVMTOK_STRING       { $$ = $1->adopt($2); };
-comdat:  LLVMTOK_COMDAT "(" any_ident ")" { $$ = $1->adopt($3); D($2, $4); }
-      |  LLVMTOK_COMDAT;
+section: "section" LLVMTOK_STRING       { $$ = $1->adopt($2); };
+comdat:  "comdat" "(" any_ident ")" { $$ = $1->adopt($3); D($2, $4); }
+      |  "comdat";
 
 
 

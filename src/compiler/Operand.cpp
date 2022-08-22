@@ -21,6 +21,7 @@ namespace LL2X {
 	mode(Mode::Register), width(x86_64::getWidth(var->type? var->type->width() : 64)), reg(var) {
 		if (!var->type)
 			throw std::runtime_error("Variable provided to Operand() has no type");
+		type = var->type;
 	}
 
 	std::string Operand::ansiString() const {
