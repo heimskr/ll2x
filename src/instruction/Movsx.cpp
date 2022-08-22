@@ -10,7 +10,7 @@ namespace LL2X {
 	}
 
 	std::string Movsx::getMnemonic() const {
-		std::string mnemonic = "mov";
+		std::string mnemonic = "movs";
 
 		switch (source->width) {
 			case x86_64::Width::Low:   mnemonic += 'b'; break;

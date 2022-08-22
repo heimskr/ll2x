@@ -162,15 +162,14 @@ namespace LL2X {
 		std::stringstream out;
 		// debugSection(&out);
 		dataSection(out);
-		for (std::pair<const std::string, Function *> &pair: functions) {
+		for (std::pair<const std::string, Function *> &pair: functions)
 			out << pair.second->toString() << "\n";
-		}
 		return out.str();
 	}
 
 	void Program::dataSection(std::ostream &out) {
 		std::map<std::string, GlobalData> global_data;
-		std::map<std::string, std::string> global_strings;
+		std::map<std::string, std::pair<const char *, std::string>> global_strings;
 
 		for (const std::pair<const std::string, GlobalVarDef *> &pair: globals) {
 			const std::string name = pair.first.substr(1);
@@ -193,6 +192,7 @@ namespace LL2X {
 		if (global_data.count("llvm.global_ctors") != 0) {
 			const GlobalData &def = global_data.at("llvm.global_ctors");
 			if (auto *array = dynamic_cast<const ArrayType *>(def.constant->type.get())) {
+				out << ".section .data.rel\n";
 				out << ".align 8\n\n";
 				out << "__ctors_start:\n";
 				out << ".quad llvm.global_ctors\n\n";
@@ -212,9 +212,10 @@ namespace LL2X {
 			changed = false;
 			for (const auto &[name, data]: global_data) {
 				if (data.value) {
-					const std::string stringified = outputValue(data.constant->type, data.value);
+					const char *section = nullptr;
+					const std::string stringified = outputValue(data.constant->type, data.value, section);
 					if (!stringified.empty()) {
-						global_strings.emplace(name, stringified);
+						global_strings.try_emplace(name, section, stringified);
 						changed = true;
 					} else if (data.value->valueType() == ValueType::Global) {
 						const std::string &target = *dynamic_cast<GlobalValue *>(data.value.get())->name;
@@ -224,7 +225,7 @@ namespace LL2X {
 						}
 					}
 				} else {
-					global_strings.emplace(name, "");
+					global_strings.try_emplace(name, ".data", "");
 					changed = true;
 				}
 
@@ -236,11 +237,12 @@ namespace LL2X {
 		} while (changed);
 
 		for (const auto &[name, stringified]: global_strings) {
+			out << ".section " << stringified.first << '\n';
 			out << ".align 8\n";
-			if (stringified.empty())
+			if (stringified.second.empty())
 				out << name << ":\n.byte 0\n\n";
 			else
-				out << name << ":\n" << stringified << "\n\n";
+				out << name << ":\n" << stringified.second << "\n\n";
 		}
 
 		if (!global_data.empty()) {
@@ -264,13 +266,14 @@ namespace LL2X {
 			types.push_back(constants.back()->type);
 		}
 
+		const char *dummy = nullptr;
 		if (packed) {
 			for (const ConstantPtr &constant: constants) {
 				if (first)
 					first = false;
 				else
 					out += '\n';
-				out += outputValue(constant->type, constant->value);
+				out += outputValue(constant->type, constant->value, dummy);
 			}
 		} else {
 			auto snode = std::make_shared<StructNode>(types, packed? StructShape::Packed : StructShape::Default);
@@ -289,7 +292,7 @@ namespace LL2X {
 					out += ".fill " + std::to_string(difference) + ", 1, 0\n";
 					sum = offset;
 				}
-				out += outputValue(constant->type, constant->value);
+				out += outputValue(constant->type, constant->value, dummy);
 				sum += constant->type->width() / 8;
 			}
 		}
@@ -310,13 +313,16 @@ namespace LL2X {
 		}
 	}
 
-	std::string Program::outputValue(const TypePtr &type, const ValuePtr &value) {
+	std::string Program::outputValue(const TypePtr &type, const ValuePtr &value, const char * &section) {
 		switch (value->valueType()) {
 			case ValueType::CString:
+				section = ".rodata";
 				return ".ascii \"" + dynamic_cast<CStringValue *>(value.get())->reescape() + "\"";
 			case ValueType::Array:
+				section = ".data";
 				return outputArray(*dynamic_cast<ArrayValue *>(value.get()));
 			case ValueType::Int: {
+				section = ".data";
 				const auto int_width = dynamic_cast<IntType *>(type.get())->intWidth;
 				const std::string stringified = std::to_string(dynamic_cast<IntValue *>(value.get())->longValue());
 				return valuePrefix(int_width) + stringified;
@@ -324,6 +330,7 @@ namespace LL2X {
 			case ValueType::Null:
 			case ValueType::Undef:
 			case ValueType::Zeroinitializer:
+				section = ".data";
 				if (type) {
 					const auto width = type->width();
 					if (width % 8 != 0)
@@ -333,13 +340,16 @@ namespace LL2X {
 				}
 				return ".byte 0";
 			case ValueType::Struct:
+				section = ".data";
 				return outputStruct(*dynamic_cast<StructValue *>(value.get()));
 			case ValueType::Global: {
+				section = ".data";
 				const std::string *name = dynamic_cast<GlobalValue *>(value.get())->name;
 				referencedGlobals.insert(*name);
 				return ".quad " + *name;
 			}
 			case ValueType::Getelementptr: {
+				section = ".data";
 				GetelementptrValue *gep = dynamic_cast<GetelementptrValue *>(value.get());
 
 				auto validate = [value](GetelementptrValue *gep) {
@@ -382,13 +392,14 @@ namespace LL2X {
 	std::string Program::outputArray(const ArrayValue &array) {
 		std::string out;
 		bool first = true;
+		const char *dummy = nullptr;
 		for (const ConstantPtr &constant: array.constants) {
 			if (first)
 				first = false;
 			else
 				out += "\n";
 			ConstantPtr converted = constant->convert();
-			out += outputValue(converted->type, converted->value);
+			out += outputValue(converted->type, converted->value, dummy);
 		}
 		return out;
 	}

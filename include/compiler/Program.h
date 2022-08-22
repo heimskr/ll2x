@@ -26,7 +26,7 @@ namespace LL2X {
 
 			std::string outputStruct(const StructValue &);
 			std::string valuePrefix(size_t bitwidth);
-			std::string outputValue(const TypePtr &type, const ValuePtr &value);
+			std::string outputValue(const TypePtr &type, const ValuePtr &value, const char * &section);
 			std::string outputArray(const ArrayValue &);
 
 		public:
