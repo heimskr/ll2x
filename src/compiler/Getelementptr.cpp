@@ -43,8 +43,9 @@ namespace LL2X::Getelementptr {
 		}
 	}
 
-	void insert_mutating(Function &function, TypePtr type, std::list<std::variant<long, const std::string *>> &indices,
-	                     InstructionPtr &instruction, VariablePtr &out_var, TypePtr *out_type) {
+	static void
+	insert_mutating(Function &function, TypePtr type, std::list<std::variant<long, const std::string *>> &indices,
+	                InstructionPtr &instruction, OperandPtr &out_operand, TypePtr *out_type) {
 		// TODO: add a bool first parameter, which if true indicates that out_var should be directly set to the computed
 		// offset instead of being added to by the computed offset. This would obviate the need to set out_var to zero
 		// at the beginning of the insert functions.
@@ -66,7 +67,7 @@ namespace LL2X::Getelementptr {
 				if (std::holds_alternative<long>(front)) {
 					const long offset = std::get<long>(front) * subbytes;
 					if (offset != 0) {
-						auto add = std::make_shared<Add>(Operand4(offset), OperandV(out_var));
+						auto add = std::make_shared<Add>(Operand4(offset), out_operand);
 						function.insertBefore(instruction, add)->setDebug(*instruction, true);
 					}
 				} else {
@@ -75,10 +76,10 @@ namespace LL2X::Getelementptr {
 						std::make_shared<Mov>(OperandV(function.getVariable(std::get<const std::string *>(front),
 						false)), OperandV(temp)), false)->setDebug(*instruction, true);
 					function.multiply(instruction, OperandV(temp), subbytes, false, instruction->debugIndex);
-					function.insertBefore(instruction, std::make_shared<Add>(OperandV(temp), OperandV(out_var)), true)
+					function.insertBefore(instruction, std::make_shared<Add>(OperandV(temp), out_operand), true)
 						->setDebug(*instruction, true);
 				}
-				insert_mutating(function, subtype, indices, instruction, out_var, out_type);
+				insert_mutating(function, subtype, indices, instruction, out_operand, out_type);
 				break;
 			}
 			case TypeType::Struct: {
@@ -97,9 +98,9 @@ namespace LL2X::Getelementptr {
 					warn() << "PaddedStructs offset " << offset << " is out of the integer range. Incorrect code will "
 					          "be produced.\n";
 				if (offset != 0)
-					function.insertBefore(instruction, std::make_shared<Add>(Operand4(offset), OperandV(out_var)))
+					function.insertBefore(instruction, std::make_shared<Add>(Operand4(offset), out_operand))
 						->setDebug(*instruction, true);
-				insert_mutating(function, snode->types.at(index), indices, instruction, out_var, out_type);
+				insert_mutating(function, snode->types.at(index), indices, instruction, out_operand, out_type);
 				break;
 			}
 			default:
@@ -118,20 +119,20 @@ namespace LL2X::Getelementptr {
 	}
 
 	void insert(Function &function, TypePtr type, std::list<std::variant<long, const std::string *>> indices,
-	            InstructionPtr instruction, VariablePtr &out_var, TypePtr *out_type) {
-		if (!out_var)
-			throw std::invalid_argument("out_var must not be null in Getelementptr::insert");
+	            InstructionPtr instruction, OperandPtr &out_operand, TypePtr *out_type) {
+		if (!out_operand)
+			throw std::invalid_argument("out_operand must not be null in Getelementptr::insert");
 			// out_var = function.newVariable(IntType::make(64), instruction->parent.lock());
-		insert_mutating(function, type, indices, instruction, out_var, out_type);
+		insert_mutating(function, type, indices, instruction, out_operand, out_type);
 	}
 
 	void insert(Function &function, const GetelementptrValue *value, std::shared_ptr<Instruction> instruction,
-	            VariablePtr &out_var, std::shared_ptr<Type> *out_type) {
+	            OperandPtr &out_operand, std::shared_ptr<Type> *out_type) {
 		auto indices = getVariantIndices(*value);
-		if (!out_var)
-			throw std::invalid_argument("out_var must not be null in Getelementptr::insert");
-			// out_var = function.newVariable(IntType::make(64), instruction->parent.lock());
-		insert_mutating(function, value->ptrType, indices, instruction, out_var, out_type);
+		if (!out_operand)
+			throw std::invalid_argument("out_operand must not be null in Getelementptr::insert");
+			// out_operand = function.newVariable(IntType::make(64), instruction->parent.lock());
+		insert_mutating(function, value->ptrType, indices, instruction, out_operand, out_type);
 	}
 
 	std::list<long> getLongIndices(const GetelementptrValue &value) {

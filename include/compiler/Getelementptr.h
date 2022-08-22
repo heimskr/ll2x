@@ -11,6 +11,7 @@ namespace LL2X {
 	class Type;
 	class Variable;
 	struct GetelementptrValue;
+	struct Operand;
 
 	namespace Getelementptr {
 		/** Computes the offset (in bits) of a getelementptr expression. Doesn't support pvar indices. */
@@ -22,12 +23,12 @@ namespace LL2X {
 		/** Computes the offset (in bits) of a getelementptr expression, inserting instructions before a given base
 		 *  instruction as necessary to support pvar indices. */
 		void insert(Function &, std::shared_ptr<Type>, std::list<std::variant<long, const std::string *>>,
-		            std::shared_ptr<Instruction>, std::shared_ptr<Variable> &,
+		            std::shared_ptr<Instruction>, std::shared_ptr<Operand> &,
 		            std::shared_ptr<Type> *out_type = nullptr);
 
 		/** Computes the offset (in bits) of a getelementptr expression, inserting instructions before a given base
 		 *  instruction as necessary to support pvar indices. */
-		void insert(Function &, const GetelementptrValue *, std::shared_ptr<Instruction>, std::shared_ptr<Variable> &,
+		void insert(Function &, const GetelementptrValue *, std::shared_ptr<Instruction>, std::shared_ptr<Operand> &,
 		            std::shared_ptr<Type> *out_type = nullptr);
 
 		/** Returns a list of indices from a GetelementptrValue, checking to see whether all of them are longs. For each
