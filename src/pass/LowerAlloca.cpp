@@ -52,10 +52,10 @@ namespace LL2X::Passes {
 					VariablePtr destination = function.getVariable(*alloca->result);
 					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size);
 
-					function.replaceSimilarOperand(OperandV(destination), Operand8(-location.offset, rbp));
+					// function.replaceSimilarOperand(OperandV(destination), Operand8(-location.offset, rbp));
 
-					// auto lea = std::make_shared<Lea>(Operand8(-location.offset, rbp), Operand8(destination));
-					// function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
+					auto lea = std::make_shared<Lea>(Operand8(-location.offset, rbp), Operand8(destination));
+					function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
 					continue;
 				}
 			}
