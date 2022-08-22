@@ -278,7 +278,7 @@ namespace LL2X {
 				}
 
 		if (Writer *writer = dynamic_cast<Writer *>(node))
-			if (writer->operand->similarTo(*to_replace)) {
+			if (writer->operand && writer->operand->similarTo(*to_replace)) {
 				writer->operand = replace_with;
 				out = true;
 			}

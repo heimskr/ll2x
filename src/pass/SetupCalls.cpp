@@ -81,8 +81,7 @@ namespace LL2X::Passes {
 			CallNode *call = dynamic_cast<CallNode *>(llvm->node);
 			BasicBlockPtr block = instruction->parent.lock();
 
-			VariableValue *name_value = dynamic_cast<VariableValue *>(call->name.get());
-			GlobalValue *global_name = dynamic_cast<GlobalValue *>(name_value);
+			GlobalValue *global_name = dynamic_cast<GlobalValue *>(call->name.get());
 			std::unique_ptr<GlobalValue> global_uptr;
 
 			if (global_name) {
@@ -207,12 +206,19 @@ namespace LL2X::Passes {
 			if (global_uptr) {
 				function.insertBefore(instruction, std::make_shared<Call>(Operand8(*global_uptr->name, false)))
 					->setDebug(*llvm, true);
-			} else {
-				VariablePtr jump_var = dynamic_cast<LocalValue *>(name_value)->variable;
+			} else if (call->name->isLocal()) {
+				auto name_value = std::dynamic_pointer_cast<LocalValue>(call->name);
+				VariablePtr jump_var = name_value->variable;
 				auto jump = std::make_shared<Call>(Operand8(jump_var));
 				function.insertBefore(instruction, jump, "SetupCalls: jump to function pointer " +
 					jump_var->plainString(), false)->setDebug(*llvm, true);
-			}
+			} else if (call->name->isOperand()) {
+				auto operand = std::dynamic_pointer_cast<OperandValue>(call->name)->operand;
+				auto jump = std::make_shared<Call>(operand);
+				function.insertBefore(instruction, jump, "SetupCalls: jump to function operand " + operand->toString(),
+					false)->setDebug(*llvm, true);
+			} else
+				throw std::runtime_error("Unsupported call destination: " + std::string(*call->name));
 
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {

@@ -69,7 +69,7 @@ namespace LL2X::Passes {
 					function.insertBefore(instruction, std::make_shared<Mov>(operand, OperandX(operand->width, rax)),
 						false)->setDebug(llvm, true);
 				}
-			} else
+			} else if (ret->value->valueType() != ValueType::Void)
 				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
 					std::string(*ret->value));
 
