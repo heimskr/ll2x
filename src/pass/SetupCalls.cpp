@@ -138,7 +138,10 @@ namespace LL2X::Passes {
 				x86_64::r9,
 				x86_64::r10, // Not technically an argument register, but needs to be saved by the caller.
 				x86_64::r11, // Same here.
+				x86_64::rax, // Same here.
 			};
+
+			constexpr int arg_reg_count = sizeof(arg_regs) / sizeof(arg_regs[0]);
 
 			// // First, push the current values of the argument registers to the stack.
 			// for (i = 0; i < arg_count + arg_offset && i < reg_max; ++i) {
@@ -150,11 +153,10 @@ namespace LL2X::Passes {
 			// Clobber caller-saved registers as necessary.
 			const int clobber_start = 0;
 			std::unordered_map<int, std::shared_ptr<Clobber>> clobbers;
-			for (i = 0; i < 8; ++i)
+			for (i = 0; i < arg_reg_count; ++i)
 				clobbers.emplace(i, function.clobber(instruction, arg_regs[i]));
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
-			std::shared_ptr<Clobber> rax_clobber;
 
 			const int return_size = call->returnType->width();
 
@@ -175,10 +177,6 @@ namespace LL2X::Passes {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
 				setupCallValue(function, OperandV(precolored), instruction, call->constants[i - arg_offset]);
 			}
-
-			// If the function returns a value, clobber %rax.
-			if (call->result)
-				rax_clobber = function.clobber(instruction, x86_64::rax);
 
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
@@ -238,13 +236,10 @@ namespace LL2X::Passes {
 						->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				}
-
-				// unclobber %rax
-				function.unclobber(instruction, rax_clobber);
 			}
 
 			// Unclobber caller-saved registers as necessary.
-			for (i = 7; clobber_start <= i; --i)
+			for (i = arg_reg_count - 1; clobber_start <= i; --i)
 				function.unclobber(instruction, clobbers.at(i));
 
 			to_remove.push_back(instruction);
