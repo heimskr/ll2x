@@ -471,8 +471,8 @@ namespace LL2X {
 	}
 
 	std::string BrCondNode::debugExtra() const {
-		return "\e[91mbr \e[33mi1\e[39m " + std::string(*condition) + ", label \e[32m" + *ifTrue + "\e[39m, label "
-			"\e[32m" + *ifFalse + "\e[39m";
+		return "\e[91mbr " + std::string(*condition) + ", label \e[32m" + *ifTrue + "\e[39m, label \e[32m" + *ifFalse +
+			"\e[39m";
 	}
 
 // CallInvokeNode

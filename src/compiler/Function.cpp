@@ -6,18 +6,19 @@
 
 #define DEBUG_BLOCKS
 // #define DEBUG_LINEAR
-#define DEBUG_VARS
+// #define DEBUG_VARS
 // #define DEBUG_RENDER
 // #define DEBUG_SPILL
 // #define DEBUG_SPLIT
 #define DEBUG_READ_WRITTEN
 // #define DISABLE_COMMENTS
 // #define DEBUG_ESTIMATIONS
-#define DEBUG_BLOCK_LIVENESS
+// #define DEBUG_BLOCK_LIVENESS
 #define DEBUG_VAR_LIVENESS
 // #define DEBUG_ALIASES
 // #define DEBUG_STACK
 // #define DEBUG_CANSPILL
+#define DEBUG_MINILABELS
 // #define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
@@ -1592,6 +1593,10 @@ namespace LL2X {
 			stream << headerString() + " \e[94m{\e[39m\n";
 		if (doBlocks) {
 			for (const BasicBlockPtr &block: blocks) {
+#ifdef DEBUG_MINILABELS
+				(void) blockLiveness;
+				stream << "\e[34m" << *block->label << ":\e[39m\n";
+#else
 				stream << "    \e[2m; \e[4m<label>:\e[1m" << *block->label << "\e[22;2;4m @ " << block->index
 				       << ": preds =";
 				for (auto begin = block->preds.begin(), iter = begin, end = block->preds.end(); iter != end; ++iter) {
@@ -1620,6 +1625,7 @@ namespace LL2X {
 					}
 				}
 				stream << "\e[22;24m\n";
+#endif
 				if (readWritten)
 					for (const std::shared_ptr<Instruction> &instruction: block->instructions) {
 						int read, written;

@@ -17,7 +17,7 @@
 #include "util/Util.h"
 
 // #define DEBUG_COLORING
-// #define DEBUG_SELECTMOSTLIVE
+#define DEBUG_SELECTMOSTLIVE
 #define CONSTRUCT_BY_BLOCK
 // #define SELECT_LOWEST_COST
 #define SELECT_MOST_LIVE
