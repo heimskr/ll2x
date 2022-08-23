@@ -219,7 +219,7 @@ namespace LL2X {
 
 		if (!ptr) {
 			function->debug();
-			throw std::runtime_error("Couldn't select variable with highest liveness");
+			throw std::runtime_error("Couldn't select variable with highest liveness in function " + *function->name);
 		}
 
 		if (liveness_out)

@@ -70,6 +70,7 @@ LLVM_SHR				("lshr"|"ashr")
 LLVM_FMATH				("fadd"|"fsub"|"fmul"|"fdiv"|"frem")
 LLVM_COMDATTYPE			("any"|"exactmatch"|"largest"|"noduplicates"|"samesize")
 LLVM_TYPED_PARATTR		("byval"|"byref"|"preallocated"|"sret"|"elementtype")
+LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 
 %%
 
@@ -133,6 +134,7 @@ LLVM_TYPED_PARATTR		("byval"|"byref"|"preallocated"|"sret"|"elementtype")
 {LLVM_FMATH}				{ LLVMRTOKEN(FMATH) }
 {LLVM_COMDATTYPE}			{ LLVMRTOKEN(COMDATTYPE) }
 {LLVM_TYPED_PARATTR}		{ LLVMRTOKEN(TYPED_PARATTR) }
+{LLVM_ATOMICOP}				{ LLVMRTOKEN(ATOMICOP) }
 
 
 "!invariant.group"			{ LLVMRTOKEN(INVARIANT_GROUP) }
@@ -333,6 +335,7 @@ LLVM_TYPED_PARATTR		("byval"|"byref"|"preallocated"|"sret"|"elementtype")
 "isUnsigned"				{ LLVMRTOKEN(ISUNSIGNED) }
 "defaulted"					{ LLVMRTOKEN(DEFAULTED) }
 "noundef"					{ LLVMRTOKEN(NOUNDEF) }
+"atomicrmw"					{ LLVMRTOKEN(ATOMICRMW) }
 
 {LLVM_IDENT}				{ LLVMRTOKEN(IDENT) }
 

@@ -346,7 +346,10 @@ namespace LL2X {
 		result = result_->extracted();
 		type = getType(type_);
 		constant = std::make_shared<Constant>(constant_);
-		align = align_->atoi();
+
+		if (align_)
+			align = align_->atoi();
+
 		for (const std::pair<const Ordering, std::string> &pair: ordering_map)
 			if (*ordering_->lexerInfo == pair.second) {
 				ordering = pair.first;
@@ -354,7 +357,7 @@ namespace LL2X {
 			}
 
 		if (syncscope_)
-			syncscope = StringSet::intern(syncscope_->extractName());
+			syncscope = syncscope_->extracted();
 
 		volatile_ = bool(volatile__);
 
@@ -1134,5 +1137,54 @@ namespace LL2X {
 		if (*node->lexerInfo != "bitcast")
 			throw std::invalid_argument("Unexpected conversion expr in ignoreConversion: " + *node->lexerInfo);
 		return node->at(0)->at(1);
+	}
+
+// AtomicrmwNode
+
+	std::unordered_map<std::string, AtomicrmwNode::Op> AtomicrmwNode::opMap {
+		{"xchg", Op::Xchg}, {"add",  Op::Add},  {"sub",  Op::Sub},  {"and",  Op::And},  {"nand", Op::Nand},
+		{"or",   Op::Or},   {"xor",  Op::Xor},  {"max",  Op::Max},  {"min",  Op::Min},  {"umax", Op::Umax},
+		{"umin", Op::Umin}, {"fadd", Op::Fadd}, {"fsub", Op::Fsub}, {"fmax", Op::Fmax}, {"fmin", Op::Fmin},
+	};
+
+	AtomicrmwNode::AtomicrmwNode(ASTNode *result_, ASTNode *volatile__, ASTNode *op_, ASTNode *pointer_type,
+	                             ASTNode *pointer_, ASTNode *type_, ASTNode *value_, ASTNode *syncscope_,
+	                             ASTNode *ordering_, ASTNode *align_, ASTNode *unibangs) {
+		Deleter
+		deleter(unibangs, volatile__, op_, pointer_type, pointer_, type_, value_, syncscope_, ordering_, align_);
+		handleUnibangs(unibangs);
+		result = result_->extracted();
+		opString = op_->lexerInfo;
+		op = opMap.at(*opString);
+		pointerType = getType(pointer_type);
+		pointer = getValue(pointer_);
+		type = getType(type_);
+		value = getValue(value_);
+		if (syncscope_)
+			syncscope = syncscope_->extracted();
+		volatile_ = bool(volatile__);
+		if (align_)
+			align = align_->atoi();
+		for (const std::pair<const Ordering, std::string> &pair: ordering_map)
+			if (*ordering_->lexerInfo == pair.second) {
+				ordering = pair.first;
+				break;
+			}
+	}
+
+	std::string AtomicrmwNode::debugExtra() const {
+		std::stringstream out;
+		out << getResult() << "\e[2m = \e[22;91matomicrmw\e[39m";
+		if (volatile_)
+			out << " \e[38;5;202mvolatile\e[39m";
+		out << " \e[91m" << *opString << "\e[39m " << *pointerType << "\e[2m,\e[22m " << *pointer << "\e[2m,\e[22m ";
+		out << ' ' << *type << "\e[2m,\e[22m " << *value << "\e[2m,\e[22m ";
+		if (syncscope)
+			out << " \e[34msyncscope\e[39;2m(\e[22m\"" << *syncscope << "\"\e[2m)\e[22m";
+		if (ordering != Ordering::None)
+			out << " \e[38;5;202m" << ordering_map.at(ordering) << "\e[39m";
+		if (align != -1)
+			out << "\e[2m,\e[22;34m align \e[39m" << align;
+		return out.str();
 	}
 }

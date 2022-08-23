@@ -7,9 +7,17 @@
 
 #include "parser/Enums.h"
 
+/** Contains constants and functions pertaining to x86_64. */
 namespace LL2X::x86_64 {
-	/** Contains constants and functions pertaining to x86_64. */
-	enum class Width {Low, High, Two, Four, Eight};
+	enum class Width {
+		Low,
+		High,
+		Two,
+		Four,
+		Eight,
+		/** Anything bigger than 64 bits */
+		Huge
+	};
 
 	enum class Condition {
 		Unconditional,
@@ -60,6 +68,9 @@ namespace LL2X::x86_64 {
 	Condition getCondition(IcmpCond);
 
 	constexpr inline Width getWidth(int bits) {
+		if (64 < bits)
+			return Width::Huge;
+
 		switch (bits) {
 			case 64: return Width::Eight;
 			case 32: return Width::Four;
@@ -73,6 +84,9 @@ namespace LL2X::x86_64 {
 	}
 
 	constexpr inline int getWidth(Width width) {
+		if (width == Width::Huge)
+			throw std::runtime_error("Cannot convert Width::Huge to a bit width");
+
 		switch (width) {
 			case Width::Eight: return 64;
 			case Width::Four:  return 32;
