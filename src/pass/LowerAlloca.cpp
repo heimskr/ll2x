@@ -55,7 +55,9 @@ namespace LL2X::Passes {
 					// function.replaceSimilarOperand(OperandV(destination), Operand8(-location.offset, rbp));
 
 					auto lea = std::make_shared<Lea>(Operand8(-location.offset, rbp), Operand8(destination));
-					function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
+					function.insertBefore(instruction, lea, "LowerAlloca(" + std::string(alloca->location) + "): size="
+						+ std::to_string(size) + ", type=" + (destination->type? destination->type->toString() : "?") +
+						", var=" + destination->toString(), false)->setDebug(*instruction, true);
 					continue;
 				}
 			}
