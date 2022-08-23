@@ -1940,9 +1940,9 @@ namespace LL2X {
 
 	std::shared_ptr<Unclobber>
 	Function::unclobber(const InstructionPtr &instruction, const std::shared_ptr<Clobber> &clob) {
-		auto out = Unclobber::make(clob->reg);
+		auto out = Unclobber::make(clob->reg, makePrecoloredVariable(clob->reg, instruction->parent.lock()));
 		clob->unclobber = out;
-		insertBefore(instruction, out)->setDebug(*instruction);
+		insertBefore(instruction, out)->setDebug(*instruction, true);
 		return out;
 	}
 

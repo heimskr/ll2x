@@ -143,13 +143,6 @@ namespace LL2X::Passes {
 
 			constexpr int arg_reg_count = sizeof(arg_regs) / sizeof(arg_regs[0]);
 
-			// // First, push the current values of the argument registers to the stack.
-			// for (i = 0; i < arg_count + arg_offset && i < reg_max; ++i) {
-			// 	VariablePtr arg_variable = function.makePrecoloredVariable(arg_regs[i], block);
-			// 	function.insertBefore(instruction, std::make_shared<Push>(Operand8(arg_variable), x86_64::Width::Eight),
-			// 		false)->setDebug(*llvm, true);
-			// }
-
 			// Clobber caller-saved registers as necessary.
 			const int clobber_start = 0;
 			std::unordered_map<int, std::shared_ptr<Clobber>> clobbers;

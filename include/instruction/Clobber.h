@@ -17,14 +17,17 @@ namespace LL2X {
 		bool maySpill() const override { return false; }
 	};
 
+	/** Ideally not to be instantiated directly—use Function::unclobber instead. */
 	struct Unclobber: IntermediateInstruction, Makeable<Unclobber> {
 		int reg;
-		Unclobber(int reg_, int index_ = -1):
-			IntermediateInstruction(index_), reg(reg_) {}
+		VariablePtr pvar;
+		Unclobber(int reg_, VariablePtr pvar_, int index_ = -1):
+			IntermediateInstruction(index_), reg(reg_), pvar(std::move(pvar_)) {}
 		std::string debugExtra() override { return toString(); }
 		std::string toString() const override {
 			return "\e[33munclobber\e[32m " + x86_64::registerName(reg) + " \e[39m";
 		}
+		ExtractionResult extract(bool force) override;
 		bool maySpill() const override { return false; }
 	};
 }
