@@ -409,7 +409,7 @@ namespace LL2X {
 	void Graph::color(Graph::ColoringAlgorithm algo, int color_min, int color_max) {
 		const int total_colors = color_max != -1? color_max - color_min + 1 : -1;
 		if (algo == Graph::ColoringAlgorithm::Bad) {
-			if (color_max != -1 && total_colors < static_cast<int>(nodes_.size()))
+			if (color_max != -1 && static_cast<size_t>(total_colors) < nodes_.size())
 				throw UncolorableError();
 			int color = color_min - 1;
 			for (Node *node: nodes_) {
@@ -424,6 +424,9 @@ namespace LL2X {
 				all_colors.insert(i);
 
 			for (Node *node: nodes_) {
+				// Ignore precolored nodes.
+				if (!node->colors.empty())
+					continue;
 				std::set<int> available = all_colors;
 				for (Node *neighbor: node->out_)
 					for (const int color: neighbor->colors)

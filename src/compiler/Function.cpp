@@ -1168,7 +1168,8 @@ namespace LL2X {
 	}
 
 	VariablePtr Function::getVariable(Variable::ID id, const TypePtr type, BasicBlockPtr definer) {
-		const size_t vcount = variableStore.count(id), ecount = extraVariables.count(id);
+		const size_t vcount = variableStore.count(id);
+		const size_t ecount = extraVariables.count(id);
 		if (vcount == 0 && ecount == 0) {
 			auto out =
 				variableStore.emplace(id, std::make_shared<Variable>(id, type? type->copy() : nullptr)).first->second;

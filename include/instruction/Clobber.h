@@ -21,13 +21,28 @@ namespace LL2X {
 	struct Unclobber: IntermediateInstruction, Makeable<Unclobber> {
 		int reg;
 		VariablePtr pvar;
+
 		Unclobber(int reg_, VariablePtr pvar_, int index_ = -1):
 			IntermediateInstruction(index_), reg(reg_), pvar(std::move(pvar_)) {}
-		std::string debugExtra() override { return toString(); }
+
+		std::string debugExtra() override { return toString() + " / " + pvar->ansiString(); }
+
 		std::string toString() const override {
 			return "\e[33munclobber\e[32m " + x86_64::registerName(reg) + " \e[39m";
 		}
-		ExtractionResult extract(bool force) override;
+
+		ExtractionResult extract(bool) override {
+			read.clear();
+			written.clear();
+			written.insert(pvar);
+			return {0, 1};
+		}
+
 		bool maySpill() const override { return false; }
+
+		std::pair<int, int> extractPrecolored() override {
+			precoloredWritten = {reg};
+			return {0, 1};
+		}
 	};
 }

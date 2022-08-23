@@ -90,7 +90,7 @@ define dso_local noundef i32 @main() #4 {
   %10 = load i32 (%struct.Foo*)*, i32 (%struct.Foo*)** %9, align 8
   %11 = call noundef i32 %10(%struct.Foo* noundef nonnull align 8 dereferenceable(12) %6)
   store i32 %11, i32* %4, align 4
-  %12 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([6 x i8], [6 x i8]* @.str, i64 0, i64 0))
+  %12 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, i8* noundef getelementptr inbounds ([6 x i8], [6 x i8]* @.str, i64 0, i64 0))
   %13 = load i32, i32* %4, align 4
   %14 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %12, i32 noundef %13)
   %15 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %14, i8 noundef signext 10)
@@ -131,7 +131,7 @@ define linkonce_odr dso_local void @_ZN3FooC2Ei(%struct.Foo* noundef nonnull ali
   %7 = getelementptr inbounds %struct.Foo, %struct.Foo* %5, i32 0, i32 1
   %8 = load i32, i32* %4, align 4
   store i32 %8, i32* %7, align 8
-  %9 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([15 x i8], [15 x i8]* @.str.1, i64 0, i64 0))
+  %9 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, i8* noundef getelementptr inbounds ([15 x i8], [15 x i8]* @.str.1, i64 0, i64 0))
   ret void
 }
 
@@ -140,7 +140,7 @@ define linkonce_odr dso_local noundef i32 @_ZN3Bar3fooEv(%struct.Bar* noundef no
   %2 = alloca %struct.Bar*, align 8
   store %struct.Bar* %0, %struct.Bar** %2, align 8
   %3 = load %struct.Bar*, %struct.Bar** %2, align 8
-  %4 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([6 x i8], [6 x i8]* @.str.2, i64 0, i64 0))
+  %4 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, i8* noundef getelementptr inbounds ([6 x i8], [6 x i8]* @.str.2, i64 0, i64 0))
   %5 = bitcast %struct.Bar* %3 to %struct.Foo*
   %6 = getelementptr inbounds %struct.Foo, %struct.Foo* %5, i32 0, i32 1
   %7 = load i32, i32* %6, align 8

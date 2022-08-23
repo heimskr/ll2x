@@ -10,6 +10,7 @@
 #include "compiler/x86_64.h"
 #include "exception/NoChoiceError.h"
 #include "graph/UncolorableError.h"
+#include "instruction/Intermediate.h"
 #include "pass/MakeCFG.h"
 #include "pass/SplitBlocks.h"
 #include "util/Timer.h"
@@ -116,11 +117,14 @@ namespace LL2X {
 #endif
 
 		for (const std::pair<const std::string, Node *> &pair: interference) {
+			if (!pair.second->data.has_value())
+				continue;
 			VariablePtr ptr = pair.second->get<VariablePtr>();
 #ifdef DEBUG_COLORING
-			std::cerr << "Variable " << ptr->ansiString() << " -> ( ";
-			for (const int color: pair.second->colors) std::cerr << color << ' ';
-			std::cerr << ") a =";
+			std::cerr << "Variable " << ptr->ansiString() << " -> registers = ( ";
+			for (const int color: pair.second->colors)
+				std::cerr << color << ' ';
+			std::cerr << ") aliases =";
 			for (const Variable *alias: ptr->getAliases())
 				std::cerr << ' ' << *alias;
 			std::cerr << '\n';
@@ -261,11 +265,13 @@ namespace LL2X {
 
 		for (const auto &[id, var]: function->variableStore) {
 #ifdef DEBUG_COLORING
-			// std::cerr << "%% " << pair.first << " " << *pair.second << "; aliases:";
-			// for (Variable *v: pair.second->getAliases()) std::cerr << " " << *v;
-			// std::cerr << "\n";
+			std::cerr << "%% " << *id << " " << var->ansiString() << "; aliases:";
+			for (Variable *alias: var->getAliases())
+				std::cerr << " " << alias->ansiString();
+			std::cerr << "\n";
 #endif
-			if (var->registers.empty()) {
+			// if (var->registers.empty()) {
+			if (true) {
 				const std::string *parent_id = var->parentID();
 				if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
 					Node &node = interference.addNode(*parent_id);
@@ -402,6 +408,7 @@ namespace LL2X {
 #ifdef DEBUG_COLORING
 		info() << "Label count: " << labels.size() << "\n";
 #endif
+
 		for (const auto &[block_id, vec]: vecs) {
 			const size_t size = vec.size();
 			if (size < 2)
@@ -413,6 +420,29 @@ namespace LL2X {
 				}
 		}
 #endif
+
+		// With all that out of the way, we have to add some precolored nodes to tell the graph coloring algorithm not
+		// to assign certain registers to certain variables. As of this writing, only unclobber instructions cause
+		// precolored nodes to be made.
+		int precolored_added = 0;
+		for (const InstructionPtr &instruction: function->linearInstructions)
+			if (auto intermediate = std::dynamic_pointer_cast<IntermediateInstruction>(instruction)) {
+				// TODO: maybe we'll have to care about precoloredReads someday. Probably not.
+				intermediate->extractPrecolored();
+				const auto &written = intermediate->precoloredWritten;
+				if (written.empty())
+					continue;
+				
+				const std::string label = "__ll2x!precolored" + std::to_string(precolored_added++);
+				Node &node = interference.addNode(label);
+				node.colors = {written.begin(), written.end()};
+				// Assumption: each basic block contains one instruction (i.e., they've all been minimized).
+				// Though does that assumption matter here?
+				// TODO: do we need to care about live-in too?
+				BasicBlockPtr block = intermediate->parent.lock();
+				for (const VariablePtr &var: block->liveOut)
+					interference.link(label, *var->parentID(), true);
+			}
 
 #ifdef DEBUG_COLORING
 		info() << "Made " << links << " link" << (links == 1? "" : "s") << ".\n";
