@@ -48,7 +48,7 @@ namespace LL2X::Passes {
 						->setDebug(*instruction, false)->setSecret()->extract();
 					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Operand8(offset, function.rbp),
 						Operand8(precolored)), "Unclobber " + x86_64::registerName(reg), false)
-						->setDebug(*instruction, false)->setSecret()->extract();
+						->setDebug(*instruction, false)->extract();
 
 				}
 
