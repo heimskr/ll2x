@@ -15,7 +15,7 @@ LLVMPARSEHDR	:= include/yyparse.h
 LLVMFLEXSRC		:= src/parser/lexer.l
 LLVMBISONSRC	:= src/parser/parser.y
 
-CLOC_OPTIONS	:= --exclude-dir=.vscode --not-match-f='^(yy)(lex|parse)'
+CLOC_OPTIONS	:= --exclude-dir=.vscode,asm,ll --not-match-f='^(yy)(lex|parse)|\.svg$$'
 BISON_OPTIONS	:= --color=always
 SOURCES			:= $(shell find src/**/*.cpp src/*.cpp)
 OBJECTS			:= $(SOURCES:.cpp=.o) $(LLVMLEXCPP:.cpp=.o) $(LLVMPARSECPP:.cpp=.o)
