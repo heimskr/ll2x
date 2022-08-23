@@ -66,7 +66,7 @@ namespace LL2X::Passes {
 				// TODO: Handle multireg in Register mode
 				OperandPtr operand = dynamic_cast<OperandValue *>(ret->value.get())->operand;
 				if (!operand->isRegisters({x86_64::rax})) {
-					function.insertBefore(instruction, std::make_shared<Mov>(operand, OperandX(operand->width, rax)),
+					function.insertBefore(instruction, std::make_shared<Mov>(operand, OperandX(operand->bitWidth, rax)),
 						false)->setDebug(llvm, true);
 				}
 			} else if (ret->value->valueType() != ValueType::Void)

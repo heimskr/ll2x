@@ -28,6 +28,7 @@ namespace LL2X {
 
 		Mode mode;
 		x86_64::Width width;
+		int bitWidth = -1;
 		Variant displacement = 0;
 		Number scale = 1;
 		VariablePtr reg;
@@ -47,32 +48,46 @@ namespace LL2X {
 
 		Operand(x86_64::Width width_, const Operand &other): Operand(other) {
 			width = width_;
+			bitWidth = x86_64::getWidth(width_);
+		}
+
+		Operand(int bit_width, const Operand &other): Operand(other) {
+			width = x86_64::getWidth(bit_width);
+			bitWidth = bit_width;
 		}
 
 		Operand(x86_64::Width width_, Number number):
-			mode(Mode::Constant), width(width_), displacement(number) {}
+			mode(Mode::Constant), width(width_), bitWidth(x86_64::getWidth(width_)), displacement(number) {}
 
 		Operand(x86_64::Width width_, Number number, bool):
-			mode(Mode::Direct), width(width_), displacement(number) {}
+			mode(Mode::Direct), width(width_), bitWidth(x86_64::getWidth(width_)), displacement(number) {}
 
 		Operand(x86_64::Width width_, std::string label_, bool use_rip = true):
-			mode(Mode::Label), width(width_), label(std::move(label_)), useRip(use_rip) {}
+			mode(Mode::Label), width(width_), bitWidth(x86_64::getWidth(width_)), label(std::move(label_)),
+			useRip(use_rip) {}
 
 		Operand(x86_64::Width width_, VariablePtr reg_):
-			mode(Mode::Register), width(width_), reg(reg_) {}
+			mode(Mode::Register), width(width_), bitWidth(x86_64::getWidth(width_)), reg(reg_) {}
+
+		Operand(int bit_width, VariablePtr reg_):
+			mode(Mode::Register), width(x86_64::getWidth(bit_width)), bitWidth(bit_width), reg(reg_) {}
 
 		Operand(x86_64::Width width_, Number displacement_, VariablePtr reg_):
-			mode(Mode::Displaced), width(width_), displacement(displacement_), reg(reg_) {}
+			mode(Mode::Displaced), width(width_), bitWidth(x86_64::getWidth(width_)), displacement(displacement_),
+			reg(reg_) {}
 
 		Operand(x86_64::Width width_, Number displacement_, VariablePtr reg_, VariablePtr index_, Number scale_):
-			mode(Mode::Scaled), width(width_), displacement(displacement_), scale(scale_), reg(reg_), index(index_) {}
+			mode(Mode::Scaled), width(width_), bitWidth(x86_64::getWidth(width_)), displacement(displacement_),
+			scale(scale_), reg(reg_), index(index_) {}
 
 		Operand(x86_64::Width width_, std::string displacement_, VariablePtr reg_):
-			mode(Mode::Displaced), width(width_), displacement(std::move(displacement_)), reg(reg_) {}
+			mode(Mode::Displaced), width(width_), bitWidth(x86_64::getWidth(width_)),
+			displacement(std::move(displacement_)), reg(reg_) {}
 
 		Operand(x86_64::Width width_, std::string displacement_, VariablePtr reg_, VariablePtr index_, Number scale_):
 			mode(Mode::Scaled),
 			width(width_),
+			bitWidth(x86_64::getWidth(width_)),
 			displacement(std::move(displacement_)),
 			scale(scale_),
 			reg(reg_),
@@ -142,13 +157,13 @@ namespace LL2X {
 	}
 
 	template <typename... Args>
-	inline OperandPtr OperandX(int bits, Args &&...args) {
-		return Operand::make(x86_64::getWidth(bits), std::forward<Args>(args)...);
+	inline OperandPtr OperandX(x86_64::Width width, Args &&...args) {
+		return Operand::make(width, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	inline OperandPtr OperandX(x86_64::Width width, Args &&...args) {
-		return Operand::make(width, std::forward<Args>(args)...);
+	inline OperandPtr OperandX(int bit_width, Args &&...args) {
+		return Operand::make(bit_width, std::forward<Args>(args)...);
 	}
 
 	inline OperandPtr OperandV(const VariablePtr &var) {
