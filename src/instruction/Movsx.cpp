@@ -16,7 +16,7 @@ namespace LL2X {
 		switch (source->width) {
 			case x86_64::Width::Low:   mnemonic += 'b'; break;
 			case x86_64::Width::Two:   mnemonic += 'w'; break;
-			case x86_64::Width::Four:  mnemonic += 'd'; break;
+			case x86_64::Width::Four:  mnemonic += 'l'; break;
 			case x86_64::Width::Eight: mnemonic += 'q'; break;
 			default:
 				mnemonic += '?';
@@ -25,7 +25,7 @@ namespace LL2X {
 		switch (destination->width) {
 			case x86_64::Width::Low:   mnemonic += 'b'; break;
 			case x86_64::Width::Two:   mnemonic += 'w'; break;
-			case x86_64::Width::Four:  mnemonic += 'd'; break;
+			case x86_64::Width::Four:  mnemonic += 'l'; break;
 			case x86_64::Width::Eight: mnemonic += 'q'; break;
 			default:
 				mnemonic += '?';

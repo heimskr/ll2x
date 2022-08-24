@@ -13,7 +13,7 @@
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	int lowerRet(Function &function) {
+	size_t lowerRet(Function &function) {
 		Timer timer("LowerRet");
 		std::list<InstructionPtr> to_remove;
 		
@@ -55,19 +55,31 @@ namespace LL2X::Passes {
 					auto iter = var->registers.begin();
 					for (size_t i = 0; i < var->registers.size(); ++i) {
 						auto subvar = function.makePrecoloredVariable(*iter++, block);
-						auto mov = std::make_shared<Mov>(OperandV(subvar), Operand8(i == 0? rax : rdx));
-						function.insertBefore(instruction, mov, false)->setDebug(llvm, true);
+						function.insertBefore<Mov, false>(instruction, OperandV(subvar), Operand8(i == 0? rax : rdx));
 					}
 				} else {
-					function.insertBefore(instruction, std::make_shared<Mov>(OperandV(var), Operand8(rax)), false)
-						->setDebug(llvm, true);
+					function.insertBefore<Mov, false>(instruction, OperandV(var), Operand8(rax));
 				}
 			} else if (ret->value->valueType() == ValueType::Operand) {
-				// TODO: Handle multireg in Register mode
-				OperandPtr operand = dynamic_cast<OperandValue *>(ret->value.get())->operand;
+				OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(ret->value)->operand;
 				if (!operand->isRegisters({x86_64::rax})) {
-					function.insertBefore(instruction, std::make_shared<Mov>(operand, OperandX(operand->bitWidth, rax)),
-						false)->setDebug(llvm, true);
+					if (operand->isRegister() && 1 < operand->reg->registers.size()) {
+						const size_t reg_count = operand->reg->registers.size();
+						if (reg_count != 2)
+							throw std::runtime_error("Can't return a variable that requires three or more registers");
+						if (operand->bitWidth != 128)
+							throw std::runtime_error("Expected a bitwidth of 128 for a two-register return operand, "
+								"got " + std::to_string(operand->bitWidth));
+						VariablePtr rdx = function.makePrecoloredVariable(x86_64::rdx, block);
+						auto iter = operand->reg->registers.begin();
+						VariablePtr to_rax = function.makePrecoloredVariable(*iter, block);
+						VariablePtr to_rdx = function.makePrecoloredVariable(*++iter, block);
+						function.comment(instruction, "LowerRet: two-register return");
+						function.insertBefore<Mov, false>(instruction, Operand8(to_rax), Operand8(rax));
+						function.insertBefore<Mov, false>(instruction, Operand8(to_rdx), Operand8(rdx));
+					} else {
+						function.insertBefore<Mov, false>(instruction, operand, OperandX(operand->bitWidth, rax));
+					}
 				}
 			} else if (ret->value->valueType() != ValueType::Void)
 				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
@@ -78,19 +90,18 @@ namespace LL2X::Passes {
 			     iter != end; ++iter) {
 				VariablePtr variable = function.makePrecoloredVariable(*iter, block);
 				const auto &location = *function.calleeSaved.at(*iter);
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(-location.offset, rbp),
-					Operand8(variable)), false)->setDebug(llvm, true);
+				function.insertBefore<Mov, false>(instruction, Operand8(-location.offset, rbp), Operand8(variable));
 			}
 
 			// Insert the epilogue (minus the jump).
 			// movq %rbp, %rsp
-			function.insertBefore(instruction, std::make_shared<Mov>(Operand8(rbp), Operand8(rsp)), false)
-				->setDebug(llvm, true);
+			function.insertBefore<Mov, false>(instruction, Operand8(rbp), Operand8(rsp));
+
 			// popq %rbp
-			function.insertBefore(instruction, std::make_shared<Pop>(Operand8(rbp)), false)->setDebug(llvm, true);
+			function.insertBefore<Pop, false>(instruction, Operand8(rbp));
 
 			// Return from the function.
-			function.insertBefore(instruction, std::make_shared<Ret>(), false)->setDebug(llvm, true);
+			function.insertBefore<Ret>(instruction);
 
 			to_remove.push_back(instruction);
 		}

@@ -192,7 +192,9 @@ _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%rax), %rbx
 	movq 8(%rax), %rcx
-	movH <%hbx %hcx>, %hax
+	# LowerRet: two-register return
+	movq %rbx, %rax
+	movq %rcx, %rdx
 	movq -66(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
@@ -1773,7 +1775,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movb %al, (%r14)
 	# LowerMemory(load @ 2025:3): L2 (^9) into ^31
 	movb (%r14), %cl
-	movsbd %cl, %eax
+	movsbl %cl, %eax
 	# LowerMemory(load @ 2027:3): L2 (^4) into ^33
 	movq -1641(%rbp), %rcx
 	movq (%rcx), %rdx
@@ -1782,7 +1784,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	addq $8, %rcx
 	# LowerMemory(load @ 2029:3): L2 (^34) into ^35
 	movb (%rcx), %dl
-	movsbd %dl, %ecx
+	movsbl %dl, %ecx
 	cmpl %ecx, %eax
 	sete %al
 	cmpb $0, %al
@@ -1791,7 +1793,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M204:
 	# LowerMemory(load @ 2035:3): L2 (^9) into ^39
 	movb (%r14), %al
-	movsbd %al, %ecx
+	movsbl %al, %ecx
 	# LowerMemory(load @ 2037:3): L2 (^4) into ^41
 	movq -1641(%rbp), %rax
 	movq (%rax), %rdx
@@ -1800,7 +1802,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	addq $9, %rax
 	# LowerMemory(load @ 2039:3): L2 (^42) into ^43
 	movb (%rax), %dl
-	movsbd %dl, %eax
+	movsbl %dl, %eax
 	cmpl %eax, %ecx
 	sete %al
 	cmpb $0, %al
@@ -2872,8 +2874,8 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(456 + 0, 16)
-	subq $464, %rsp
+	# upalign(448 + 0, 16)
+	subq $448, %rsp
 	movq %rbx, -384(%rbp)
 	# LowerAlloca(670:3): size=8, type=i32**, var=^2
 	leaq -8(%rbp), -104(%rbp)
@@ -3114,11 +3116,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -304(%rbp), %rax
 	movl %ebx, (%rax)
 	# LowerMemory(load @ 763:3): L2 (^12) into ^65
-	movq -128(%rbp), %rbx
-	movl (%rbx), %eax
+	movq -128(%rbp), %rax
+	movl (%rax), %ebx
 	# LowerMemory.S9: mov ^65, (^19)
-	movq -120(%rbp), %rbx
-	movl %eax, (%rbx)
+	movq -120(%rbp), %rax
+	movl %ebx, (%rax)
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M234
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M209:
 	# LowerMemory(load @ 768:3): L2 (^20) into ^67
@@ -3759,7 +3761,9 @@ _ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_trait
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%rcx), %rax
 	movq 8(%rcx), %rbx
-	movH <%hax %hbx>, %hax
+	# LowerRet: two-register return
+	movq %rax, %rax
+	movq %rbx, %rdx
 	movq -40(%rbp), %r12
 	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
@@ -4632,7 +4636,9 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_:
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%rcx), %rax
 	movq 8(%rcx), %rbx
-	movH <%hax %hbx>, %hax
+	# LowerRet: two-register return
+	movq %rax, %rax
+	movq %rbx, %rdx
 	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
@@ -4683,7 +4689,9 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE17_S_to_string_viewESt17bas
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%rax), %rbx
 	movq 8(%rax), %rcx
-	movH <%hbx %hcx>, %hax
+	# LowerRet: two-register return
+	movq %rbx, %rax
+	movq %rcx, %rdx
 	movq -56(%rbp), %r12
 	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
@@ -5294,12 +5302,12 @@ _ZN9__gnu_cxx11char_traitsIcE2eqERKcS3_:
 	movq (%rax), %rcx
 	# LowerMemory(load @ 1388:3): L2 (^5) into ^6
 	movb (%rcx), %al
-	movsbd %al, %ecx
+	movsbl %al, %ecx
 	# LowerMemory(load @ 1390:3): L2 (^4) into ^8
 	movq (%rbx), %rax
 	# LowerMemory(load @ 1391:3): L2 (^8) into ^9
 	movb (%rax), %bl
-	movsbd %bl, %eax
+	movsbl %bl, %eax
 	cmpl %eax, %ecx
 	sete %al
 	movq -24(%rbp), %rbx
