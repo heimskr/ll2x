@@ -60,9 +60,11 @@ namespace LL2X::Passes {
 					function.insertBefore<Neg, false>(instruction, result);
 
 				if (result_used)
-					function.insertBefore<Xadd>(instruction, result, reg_mem->toDisplaced())->setLock();
+					function.insertBefore<Xadd>(instruction, result, reg_mem->toDisplaced(), result->bitWidth)
+						->setLock();
 				else
-					function.insertBefore<Add>(instruction, result, reg_mem->toDisplaced())->setLock();
+					function.insertBefore<Add>(instruction, result, reg_mem->toDisplaced(), result->bitWidth)
+						->setLock();
 			} else {
 				error() << atomicrmw->debugExtra() << " @ " << atomicrmw->location << '\n';
 				throw std::runtime_error("Unhandled atomicrmw instruction");
