@@ -52,6 +52,7 @@
 #include "pass/FillLocalValues.h"
 #include "pass/FillOperands.h"
 #include "pass/FinishMultireg.h"
+#include "pass/FixMemoryOperands.h"
 #include "pass/HackOperands.h"
 #include "pass/IgnoreIntrinsics.h"
 #include "pass/InsertLabels.h"
@@ -997,6 +998,7 @@ namespace LL2X {
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		// Passes::removeUselessBranches(*this);
+		Passes::fixMemoryOperands(*this);
 		Passes::mergeAllBlocks(*this);
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
@@ -1425,11 +1427,11 @@ namespace LL2X {
 				p->liveOut.insert(var);
 				upAndMark(p, var);
 			}
-		} catch (std::out_of_range &) {
-			std::cerr << "Couldn't find block " << *block->label << ".";
+		} catch (const std::out_of_range &) {
+			std::cerr << "Couldn't find block " << *block->label << ". Known blocks:";
 			for (const auto &pair: bbNodeMap)
-				std::cerr << " " << *pair.first->label;
-			std::cerr << "\n";
+				std::cerr << ' ' << *pair.first->label;
+			std::cerr << '\n';
 			debug();
 			throw;
 		}

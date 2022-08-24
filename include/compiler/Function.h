@@ -229,7 +229,7 @@ namespace LL2X {
 			/** Returns a pointer to the basic block following a given basic block. */
 			BasicBlockPtr after(BasicBlockPtr);
 
-			/** Inserts one instruction after another. Returns the inserted instructin=on. */
+			/** Inserts one instruction after another. Returns the inserted instruction. */
 			InstructionPtr insertAfter(InstructionPtr base,
 				InstructionPtr new_instruction, bool reindex = true);
 
@@ -427,6 +427,13 @@ namespace LL2X {
 			std::shared_ptr<Ins> insertBefore(const InstructionPtr &anchor, Args &&...args) {
 				auto out = std::make_shared<Ins>(std::forward<Args>(args)...);
 				insertBefore(anchor, out, Reindex)->setDebug(*anchor, true);
+				return out;
+			}
+
+			template <typename Ins, bool Reindex = true, typename... Args>
+			std::shared_ptr<Ins> insertAfter(const InstructionPtr &anchor, Args &&...args) {
+				auto out = std::make_shared<Ins>(std::forward<Args>(args)...);
+				insertAfter(anchor, out, Reindex)->setDebug(*anchor, true);
 				return out;
 			}
 
