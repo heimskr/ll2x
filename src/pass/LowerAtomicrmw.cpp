@@ -49,14 +49,20 @@ namespace LL2X::Passes {
 			OperandPtr &reg_only = std::dynamic_pointer_cast<OperandValue>(atomicrmw->value)->operand;
 			OperandPtr &result   = atomicrmw->operand;
 
+			assert(result->isRegister());
+
+			info() << result->ansiString() << '\n';
+			std::cerr << "    D" << result->reg->definitions.size() << " / U" << result->reg->uses.size() << '\n';
+
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
 				VariablePtr temp = function.newVariable(reg_only->reg->type, block);
 
 				function.insertBefore<Mov, false>(instruction, reg_only, result);
 
-				if (op == AtomicrmwNode::Op::Sub) {
+				if (op == AtomicrmwNode::Op::Sub)
 					function.insertBefore<Neg, false>(instruction, result);
-				}
+
+				// if (
 			}
 		}
 

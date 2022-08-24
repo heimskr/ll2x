@@ -200,12 +200,20 @@ namespace LL2X {
 				break;
 			}
 
-			case NodeType::Unreachable: {
+			case NodeType::Unreachable:
+				break;
+
+			case NodeType::Atomicrmw: {
+				CAST(AtomicrmwNode);
+				IFLV(cast->value, cast->type);
+				IFLV(cast->pointer, cast->pointerType);
+				write(cast->result, cast->type);
 				break;
 			}
 
 			default:
-				return {-1, -1};
+				node->debug();
+				throw std::runtime_error("Unhandled LLVM instruction");
 		}
 
 		return {read.size(), written.size()};

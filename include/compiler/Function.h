@@ -432,6 +432,8 @@ namespace LL2X {
 
 		private:
 
+			size_t precoloredCount = 0;
+
 			template <typename I, typename N>
 			void multiply_impl(const InstructionPtr &anchor, const OperandPtr &operand, N value, bool reindex,
 			                   int debug) {

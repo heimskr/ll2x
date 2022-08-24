@@ -189,12 +189,12 @@ namespace LL2X {
 			block->index = ++blockIndex;
 			bbLabels.insert(block->label);
 			bbMap.emplace(block->label, block);
-			for (std::shared_ptr<Instruction> &instruction: instructions) {
+			for (const std::shared_ptr<Instruction> &instruction: instructions) {
 				instruction->parent = block;
 				instruction->extract();
 				for (const std::unordered_set<VariablePtr> *variables: {&instruction->read, &instruction->written})
 					for (VariablePtr vptr: *variables)
-						variableStore.insert({vptr->id, vptr});
+						variableStore.emplace(vptr->id, vptr);
 			}
 		};
 
@@ -935,7 +935,7 @@ namespace LL2X {
 		Passes::fillLocalValues(*this);
 		Passes::lowerStacksave(*this);
 		for (BasicBlockPtr &block: blocks)
-			block->extract();
+			block->extract(true);
 		precolorArguments();
 		Passes::trimBlocks(*this);
 		Passes::splitBlocks(*this);
@@ -1090,7 +1090,8 @@ namespace LL2X {
 	VariablePtr Function::makePrecoloredVariable(unsigned char index, BasicBlockPtr definer) {
 		if (x86_64::totalRegisters <= index)
 			throw std::invalid_argument("Index too high: " + std::to_string(index));
-		VariablePtr new_var = newVariable(std::make_shared<IntType>(64), definer);
+		VariablePtr new_var = getVariable("pc" + std::to_string(precoloredCount++), std::make_shared<IntType>(64),
+			definer);
 		new_var->setRegisters({index});
 		return new_var;
 	}
@@ -1155,9 +1156,9 @@ namespace LL2X {
 	VariablePtr Function::getVariable(Variable::ID id, bool add_arguments) {
 		if (variableStore.count(id) != 0)
 			return variableStore.at(id);
-		else if (add_arguments && getCallingConvention() == CallingConvention::Reg6 && isArgument(id))
+		if (add_arguments && getCallingConvention() == CallingConvention::Reg6 && isArgument(id))
 			return getVariable(id, arguments->at(Util::parseLong(id)).type, getEntry());
-		else if (extraVariables.count(id) != 0)
+		if (extraVariables.count(id) != 0)
 			return extraVariables.at(id);
 		throw std::out_of_range("Couldn't find variable with ID " + *id + " in function " + *name);
 	}

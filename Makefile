@@ -49,7 +49,7 @@ $(LLVMPARSECPP:.cpp=.o): $(LLVMPARSECPP) $(LLVMPARSEHDR)
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
 test: $(OUTPUT)
-	./$(OUTPUT) ll/diriter0.ll
+	./$(OUTPUT) ll/atomicrmw.ll
 
 clean:
 	rm -f $(OUTPUT) src/*.o src/**/*.o graph_*.png \
