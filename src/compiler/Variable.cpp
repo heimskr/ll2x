@@ -95,7 +95,7 @@ namespace LL2X {
 		else {
 			out << "\e[92m";
 			if (1 < registers.size())
-				out << '(';
+				out << '<';
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
@@ -105,7 +105,7 @@ namespace LL2X {
 				out << '%' << x86_64::registerName(reg, width);
 			}
 			if (1 < registers.size())
-				out << ')';
+				out << '>';
 			out << "\e[39;2m:\e[32m" << *id << "\e[39;22m";
 		}
 #ifdef VARIABLE_EXTRA
@@ -128,7 +128,7 @@ namespace LL2X {
 
 	std::string Variable::toString(x86_64::Width width) const {
 		if (1 < registers.size()) {
-			std::string out = "(";
+			std::string out = "<";
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
@@ -137,7 +137,7 @@ namespace LL2X {
 					out += ' ';
 				out += '%' + x86_64::registerName(reg, width);
 			}
-			out += ')';
+			out += '>';
 			return out;
 		}
 
@@ -153,7 +153,7 @@ namespace LL2X {
 		else if (registers.size() == 1)
 			return '%' + x86_64::registerName(*registers.begin(), width) + ":" + *id;
 		else {
-			std::string out = "(";
+			std::string out = "<";
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
@@ -162,7 +162,7 @@ namespace LL2X {
 					out += ' ';
 				out += '%' + x86_64::registerName(reg, width);
 			}
-			out += "):" + *id;
+			out += ">:" + *id;
 			return out;
 		}
 	}

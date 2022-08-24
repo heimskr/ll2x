@@ -6,6 +6,8 @@
 #include "pass/FinishMultireg.h"
 #include "util/Timer.h"
 
+// #define DEBUG_MULTIREG_MOV
+
 namespace LL2X::Passes {
 	void finishMultireg(Function &function) {
 		Timer timer("FinishMultireg");
@@ -37,94 +39,87 @@ namespace LL2X::Passes {
 				function.insertBefore(instruction, move)->setDebug(*defdest, true);
 				to_remove.push_back(instruction);
 			} else if (auto mov = std::dynamic_pointer_cast<Mov>(instruction)) {
-				const bool multi_source = mov->source->isRegister() && 1 < mov->source->reg->registers.size();
-				const bool multi_dest = mov->destination->isRegister() && 1 < mov->destination->reg->registers.size();
-
-				if (multi_source && multi_dest) {
-					warn() << "Skipping mov instruction with register packs in both the source and destination: "
-					       << mov->debugExtra() << '\n';
-					continue;
-				}
-
+				auto source = mov->source;
+				auto dest   = mov->destination;
+				const bool multi_source = source->isRegister() && 1 < source->reg->registers.size();
+				const bool multi_dest   = dest->isRegister()   && 1 < dest->reg->registers.size();
 
 				if (!multi_source && !multi_dest)
 					continue;
 
-				info() << "Size of " << mov->debugExtra() << ": " << mov->size << " bits\n";
+#ifdef DEBUG_MULTIREG_MOV
+				info() << function.before(mov)->debugExtra() << '\n'
+				       << "    Size of " << mov->debugExtra() << ": " << mov->size << " bits\n"
+				       << "      Destination size: " << dest->bitWidth << '\n'
+				       << "      Source size:      " << source->bitWidth << '\n';
+#endif
+
+				if (multi_source && multi_dest) {
+					if (source->bitWidth != dest->bitWidth) {
+						error() << source->ansiString() << ", " << dest->ansiString() << '\n';
+						throw std::runtime_error("Register packs have different bit widths");
+					}
+
+					to_remove.push_back(instruction);
+					auto source_iter = source->reg->registers.begin();
+					auto dest_iter   = dest->reg->registers.begin();
+					BasicBlockPtr block = instruction->parent.lock();
+					function.comment(instruction, "Multireg move: " + source->toString() + " -> " + dest->toString());
+					while (source_iter != source->reg->registers.end()) {
+						VariablePtr source_var = function.makePrecoloredVariable(*source_iter++, block);
+						VariablePtr dest_var = function.makePrecoloredVariable(*dest_iter++, block);
+						function.insertBefore(instruction, std::make_shared<Mov>(Operand8(source_var),
+							Operand8(dest_var)))->setDebug(*instruction, true);
+					}
+				} else if (multi_source) { // mov <%pack...>, (%reg)
+					if (!dest->isIndirect()) {
+						error() << mov->debugExtra() << '\n';
+						throw std::runtime_error("Can't fix multireg-source mov with non-indirect destination");
+					}
+
+					int displacement = 0;
+					to_remove.push_back(mov);
+					BasicBlockPtr block = mov->parent.lock();
+					function.comment(mov, "FinishMultireg: mov <%pack...>, (%reg)");
+
+					for (const int reg: source->reg->registers) {
+						OperandPtr copy = dest->copy();
+						copy->displacement = displacement;
+						displacement += 8;
+						VariablePtr precolored = function.makePrecoloredVariable(reg, block);
+						function.insertBefore(mov, std::make_shared<Mov>(Operand8(precolored), copy), false)
+							->setDebug(*mov, true);
+					}
+				} else if (multi_dest) { // mov (%reg), <%pack...>
+					if (!source->isIndirect()) {
+						error() << mov->debugExtra() << '\n';
+						throw std::runtime_error("Can't fix multireg-destination mov with non-indirect source");
+					}
+
+					int displacement = 0;
+					to_remove.push_back(mov);
+					BasicBlockPtr block = mov->parent.lock();
+					function.comment(mov, "FinishMultireg: mov (%reg), <%pack...>");
+
+					for (const int reg: dest->reg->registers) {
+						OperandPtr copy = source->copy();
+						copy->displacement = displacement;
+						displacement += 8;
+						VariablePtr precolored = function.makePrecoloredVariable(reg, block);
+						function.insertBefore(mov, std::make_shared<Mov>(copy, Operand8(precolored)), false)
+							->setDebug(*mov, true);
+					}
+				} else {
+					error() << mov->debugExtra() << '\n';
+					throw std::runtime_error("Can't currently finish multireg move");
+				}
 			}
-				// if (multi_source) {
-				// 	auto bytes_remaining = mov->widt
-				// }
-			// } else if (auto *load = dynamic_cast<LoadRInstruction *>(instruction.get())) {
-			// 	if (load->rd->registers.size() < 2)
-			// 		continue;
-
-			// 	auto m4 = function.mx(4, instruction);
-			// 	auto move = std::make_shared<MoveInstruction>(load->rs, m4);
-			// 	function.insertBefore(instruction, move)->setDebug(load)->extract();
-			// 	auto iter = load->rd->registers.begin();
-			// 	auto bytes_remaining = load->size;
-
-			// 	while (8 <= bytes_remaining) {
-			// 		auto precolored = function.makePrecoloredVariable(*iter++, load->parent.lock());
-			// 		auto new_load = std::make_shared<LoadRInstruction>(m4, precolored, 8);
-			// 		function.insertBefore(instruction, new_load)->setDebug(load)->extract();
-			// 		bytes_remaining -= 8;
-			// 		if (0 < bytes_remaining)
-			// 			function.insertBefore(instruction, std::make_shared<AddIInstruction>(m4, 8, m4))
-			// 				->setDebug(load)->extract();
-			// 	}
-
-			// 	for (int size = 4; 0 < size; size /= 2) {
-			// 		if (size <= bytes_remaining) {
-			// 			auto precolored = function.makePrecoloredVariable(*iter++, load->parent.lock());
-			// 			auto new_load = std::make_shared<LoadRInstruction>(m4, precolored, size);
-			// 			function.insertBefore(instruction, new_load)->setDebug(load)->extract();
-			// 			bytes_remaining -= size;
-			// 			if (0 < bytes_remaining)
-			// 				function.insertBefore(instruction, std::make_shared<AddIInstruction>(m4, size, m4))
-			// 					->setDebug(load)->extract();
-			// 		}
-			// 	}
-
-			// 	to_remove.push_back(instruction);
-			// } else if (auto *store = dynamic_cast<StoreRInstruction *>(instruction.get())) {
-			// 	if (store->rs->registers.size() < 2)
-			// 		continue;
-
-			// 	auto m4 = function.mx(4, instruction);
-			// 	auto move = std::make_shared<MoveInstruction>(store->rt, m4);
-			// 	function.insertBefore(instruction, move)->setDebug(store)->extract();
-			// 	auto iter = store->rs->registers.begin();
-			// 	auto bytes_remaining = store->size;
-
-			// 	while (8 <= bytes_remaining) {
-			// 		auto precolored = function.makePrecoloredVariable(*iter++, store->parent.lock());
-			// 		auto new_store = std::make_shared<StoreRInstruction>(precolored, m4, 8);
-			// 		function.insertBefore(instruction, new_store)->setDebug(store)->extract();
-			// 		bytes_remaining -= 8;
-			// 		if (0 < bytes_remaining)
-			// 			function.insertBefore(instruction, std::make_shared<AddIInstruction>(m4, 8, m4))
-			// 				->setDebug(store)->extract();
-			// 	}
-
-			// 	for (int size = 4; 0 < size; size /= 2) {
-			// 		if (size <= bytes_remaining) {
-			// 			auto precolored = function.makePrecoloredVariable(*iter++, store->parent.lock());
-			// 			auto new_store = std::make_shared<StoreRInstruction>(precolored, m4, size);
-			// 			function.insertBefore(instruction, new_store)->setDebug(store)->extract();
-			// 			bytes_remaining -= size;
-			// 			if (0 < bytes_remaining)
-			// 				function.insertBefore(instruction, std::make_shared<AddIInstruction>(m4, size, m4))
-			// 					->setDebug(store)->extract();
-			// 		}
-			// 	}
-
-			// 	to_remove.push_back(instruction);
-			// }
 		}
 
-		for (InstructionPtr &instruction: to_remove)
-			function.remove(instruction);
+		if (!to_remove.empty()) {
+			for (InstructionPtr &instruction: to_remove)
+				function.remove(instruction);
+			function.reindexInstructions();
+		}
 	}
 }

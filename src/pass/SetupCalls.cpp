@@ -221,14 +221,26 @@ namespace LL2X::Passes {
 			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)
 			// and unclobber %rax. Or something.
 			if (call->result) {
-				if (return_size <= 128) {
+				if (return_size == 128) {
+					auto result = OperandV(function.getVariable(*call->result));
+					VariablePtr pack = function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock());
+					pack->registers.insert(x86_64::rdx);
+					pack->type = IntType::make(128);
+					// mov %pack, %result
+					auto move = std::make_shared<Mov>(OperandV(pack), result);
+					function.insertBefore(instruction, move, "SetupCalls(" + std::string(call->location) +
+						"): move large result from %rax", false)->setDebug(*llvm, false)
+						->setSecret(true, false)->extract();
+					function.categories["SetupCalls:MoveFromResult"].insert(move);
+				} else if (return_size <= 64) {
 					auto result = OperandV(function.getVariable(*call->result));
 					// mov %rax, %result
-					auto move = std::make_shared<Mov>(OperandX(result->bitWidth, rax), result);
-					function.insertBefore(instruction, move, "SetupCalls: move result from %rax", false)
-						->setDebug(*llvm, false)->setSecret(true, false)->extract();
+					auto move = std::make_shared<Mov>(OperandV(rax), result);
+					function.insertBefore(instruction, move, "SetupCalls(" + std::string(call->location) +
+						": move result from %rax", false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
-				}
+				} else
+					throw std::runtime_error("Unsupported return size: " + std::to_string(return_size));
 			}
 
 			// Unclobber caller-saved registers as necessary.

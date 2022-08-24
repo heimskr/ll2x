@@ -437,19 +437,24 @@ namespace LL2X {
 				if (written.empty())
 					continue;
 				
-				const std::string label = "__ll2x_pc" + std::to_string(precolored_added++);
-				Node &node = interference.addNode(label);
-				node.colors = {written.begin(), written.end()};
-				// Assumption: each basic block contains one instruction (i.e., they've all been minimized).
-				// Though does that assumption matter here?
-				// TODO: do we need to care about live-in too?
-				BasicBlockPtr block = intermediate->parent.lock();
-				for (const VariablePtr &var: block->liveOut) {
-					const auto &pid = *var->parentID();
-					if (interference.hasLabel(pid))
-						interference.link(label, pid, true);
+				for (const int color: written) {
+					const std::string label = "__ll2x_pc" + std::to_string(precolored_added++);
+					Node &node = interference.addNode(label);
+					// node.colors = {written.begin(), written.end()};
+					node.colors = {color};
+					// Assumption: each basic block contains one instruction (i.e., they've all been minimized).
+					// Though does that assumption matter here?
+					// TODO: do we need to care about live-in too?
+					BasicBlockPtr block = intermediate->parent.lock();
+					for (const VariablePtr &var: block->liveOut) {
+						const auto &pid = *var->parentID();
+						if (interference.hasLabel(pid))
+							interference.link(label, pid, true);
+					}
 				}
 			}
+
+		static int foo = 0;
 
 #ifdef DEBUG_COLORING
 		info() << "Made " << links << " link" << (links == 1? "" : "s") << ".\n";

@@ -574,14 +574,23 @@ namespace LL2X {
 		return nullptr;
 	}
 
+	InstructionPtr Function::before(InstructionPtr instruction) {
+		auto iter = std::find(linearInstructions.begin(), linearInstructions.end(), instruction);
+		return iter == linearInstructions.end() || iter == linearInstructions.begin()? nullptr : *--iter;
+	}
+
 	InstructionPtr Function::after(InstructionPtr instruction) {
 		auto iter = std::find(linearInstructions.begin(), linearInstructions.end(), instruction);
+		if (iter == linearInstructions.end())
+			return nullptr;
 		++iter;
 		return iter == linearInstructions.end()? nullptr : *iter;
 	}
 
 	BasicBlockPtr Function::after(BasicBlockPtr block) {
 		auto iter = std::find(blocks.begin(), blocks.end(), block);
+		if (iter == blocks.end())
+			return nullptr;
 		++iter;
 		return iter == blocks.end()? nullptr : *iter;
 	}
@@ -1015,31 +1024,29 @@ namespace LL2X {
 #endif
 	}
 
+	void Function::allocateRegisters() {
+		Timer timer("RegisterAllocation");
+#ifdef FN_CATCH_EXCEPTIONS
+		try {
+#endif
+			while (allocator->attempt() != Allocator::Result::Success);
+#ifdef FN_CATCH_EXCEPTIONS
+		} catch (std::exception &err) {
+			error() << err.what() << "\n";
+			if (parent)
+				LL2X::interactive(*parent, this);
+			throw;
+		}
+#endif
+	}
+
 	void Function::compile() {
 		initialCompile();
-
 #ifdef DEBUG_ALIASES
 		debug();
 #endif
-
-		{
-			Timer timer("RegisterAllocation");
-#ifdef FN_CATCH_EXCEPTIONS
-			try {
-#endif
-				while (allocator->attempt() != Allocator::Result::Success);
-#ifdef FN_CATCH_EXCEPTIONS
-			} catch (std::exception &err) {
-				error() << err.what() << "\n";
-				if (parent)
-					LL2X::interactive(*parent, this);
-				throw;
-			}
-#endif
-		}
-
+		allocateRegisters();
 		finalCompile();
-
 #ifdef DEBUG_SPILL
 		info() << "Total spills: \e[1m" << allocator->getSpillCount() << "\e[0m. Finished \e[1m" << *name
 		       << "\e[0m.\n\n";

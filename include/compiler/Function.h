@@ -220,6 +220,9 @@ namespace LL2X {
 			/** Returns the first instruction in the function that isn't a label or a comment. */
 			InstructionPtr firstInstruction(bool includeComments = false);
 
+			/** Returns a pointer to the instruction before a given instruction. */
+			InstructionPtr before(InstructionPtr);
+
 			/** Returns a pointer to the instruction following a given instruction. */
 			InstructionPtr after(InstructionPtr);
 
@@ -289,6 +292,9 @@ namespace LL2X {
 
 			/** Performs the first set of compiler passes on the function before register allocation. */
 			void initialCompile();
+
+			/** Performs register allocation, unsurprisingly. */
+			void allocateRegisters();
 
 			/** Performs the last set of compiler passes on the function after register allocation. */
 			void finalCompile();

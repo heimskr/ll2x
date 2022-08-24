@@ -4,6 +4,7 @@
 #include <thread>
 
 // #define COMPILE_MULTITHREADED
+// #define SINGLE_FUNCTION "@_ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE"
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"
@@ -165,6 +166,9 @@ namespace LL2X {
 		dataSection(out);
 		std::vector<Function *> startup;
 		for (std::pair<const std::string, Function *> &pair: functions) {
+#ifdef SINGLE_FUNCTION
+			if (*pair.second->name == SINGLE_FUNCTION)
+#endif
 			out << pair.second->toString() << "\n";
 			if (pair.second->section && *pair.second->section == ".text.startup")
 				startup.push_back(pair.second);
