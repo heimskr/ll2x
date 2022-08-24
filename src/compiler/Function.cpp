@@ -910,7 +910,8 @@ namespace LL2X {
 	void Function::resetRegisters(bool respectful) {
 		if (!respectful)
 			for (const auto &[id, var]: variableStore)
-				var->setRegisters({});
+				// TODO: should we force-reset the registers here?
+				var->resetRegisters();
 		else
 			for (const auto &[id, var]: variableStore) {
 				std::unordered_set<int> to_remove;
@@ -993,7 +994,6 @@ namespace LL2X {
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
 		// Passes::replaceStoresAndLoads(*this);
 		// Passes::lowerStack(*this);
-		// Passes::splitResultMoves(*this);
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		// Passes::removeUselessBranches(*this);
@@ -1090,9 +1090,9 @@ namespace LL2X {
 	VariablePtr Function::makePrecoloredVariable(unsigned char index, BasicBlockPtr definer) {
 		if (x86_64::totalRegisters <= index)
 			throw std::invalid_argument("Index too high: " + std::to_string(index));
-		VariablePtr new_var = getVariable("pc" + std::to_string(precoloredCount++), std::make_shared<IntType>(64),
-			definer);
+		VariablePtr new_var = getVariable("pc" + std::to_string(precoloredCount++), IntType::make(64), definer);
 		new_var->setRegisters({index});
+		new_var->fixed = true;
 		return new_var;
 	}
 

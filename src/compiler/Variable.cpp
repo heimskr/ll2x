@@ -442,6 +442,11 @@ namespace LL2X {
 		return out;
 	}
 
+	void Variable::resetRegisters() {
+		if (!fixed)
+			setRegisters({});
+	}
+
 	std::ostream & operator<<(std::ostream &os, const LL2X::Variable &var) {
 		return os << var.ansiString();
 	}

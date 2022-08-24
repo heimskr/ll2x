@@ -40,6 +40,9 @@ namespace LL2X {
 			std::unordered_set<Variable *> phiParents, phiChildren;
 			/** Whether the variable was defined by a ϕ-instruction. */
 			bool fromPhi = false;
+			/** Whether the variable's register assignment is important and shouldn't be cleared. Useful for precolored
+			 *  variables. */
+			bool fixed = false;
 
 			Variable *spilledFrom = nullptr; // Tentative.
 			std::list<Variable *> spilledTo; // Also tentative.
@@ -114,6 +117,7 @@ namespace LL2X {
 			/** Returns a string containing all the assigned registers.
 			 *  The string is of the form "$reg" or "($reg1 $reg2 ...)". */
 			std::string registersString() const;
+			void resetRegisters();
 
 			std::string toString(x86_64::Width = x86_64::Width::Eight) const;
 			std::string plainString(x86_64::Width = x86_64::Width::Eight) const;
