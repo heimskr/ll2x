@@ -14,12 +14,12 @@
 
 namespace LL2X::Passes {
 	size_t lowerAtomicrmw(Function &function) {
-		Timer timer("LowerAlloca");
+		Timer timer("LowerAtomicrmw");
 		std::list<InstructionPtr> to_remove;
 
 		size_t replaced_count = 0;
 
-		// Loop over all instructions, ignoring everything except allocas.
+		// Loop over all instructions, ignoring everything except atomicrmws.
 		for (InstructionPtr &instruction: function.linearInstructions) {
 			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
 
@@ -28,7 +28,7 @@ namespace LL2X::Passes {
 
 			auto *atomicrmw = dynamic_cast<AtomicrmwNode *>(llvm->node);
 
-			// First, mark the alloca instruction for removal.
+			// First, mark the atomicrmw instruction for removal.
 			to_remove.push_back(instruction);
 			++replaced_count;
 
