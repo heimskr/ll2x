@@ -11,7 +11,7 @@ namespace LL2X {
 		extracted = true;
 
 		if (!secretReads || !secretWrites)
-			if (!(destination->isDisplaced()? secretReads : secretWrites))
+			if (!(destination->isIndirect()? secretReads : secretWrites))
 				destination->extract(true, read, written);
 
 		return {read.size(), written.size()};

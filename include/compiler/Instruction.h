@@ -52,6 +52,8 @@ namespace LL2X {
 			 *  the number of registers read and the number of registers written. */
 			virtual ExtractionResult extract(bool force = false) = 0;
 
+			virtual std::vector<std::reference_wrapper<OperandPtr>> getOperands() { return {}; }
+
 			/** Returns whether this instruction comes before another instruction. */
 			bool operator<(const Instruction &) const;
 			/** Returns whether this instruction comes after another instruction. */

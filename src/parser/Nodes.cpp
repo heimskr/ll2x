@@ -172,6 +172,14 @@ namespace LL2X {
 		}
 	}
 
+	std::vector<std::reference_wrapper<OperandPtr>> Reader::allReadOperands() {
+		std::vector<std::reference_wrapper<OperandPtr>> out;
+		for (const ValuePtr &value: allValues())
+			if (auto operand_value = std::dynamic_pointer_cast<OperandValue>(value))
+				out.push_back(std::ref(operand_value->operand));
+		return out;
+	}
+
 // Writer
 
 	std::string Writer::getResult() const {

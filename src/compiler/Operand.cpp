@@ -144,11 +144,15 @@ namespace LL2X {
 	}
 
 	bool Operand::isHackable() const {
-		return !isNumeric() && !isDisplaced();
+		return !isNumeric() && !isIndirect();
 	}
 
-	bool Operand::isDisplaced() const {
+	bool Operand::isIndirect() const {
 		return mode == Mode::Displaced || mode == Mode::Scaled;
+	}
+
+	bool Operand::isDisplaced(const VariablePtr &variable) const {
+		return mode == Mode::Displaced && reg == variable;
 	}
 
 	void Operand::extract(bool is_write, std::unordered_set<VariablePtr> &read,

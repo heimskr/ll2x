@@ -82,12 +82,25 @@ namespace LL2X::Util {
 	/** Merges two sets. */
 	template <typename S>
 	S merge(const S &first, const S &second) {
-		S out;
-		for (const auto &item: first)
-			out.insert(item);
-		for (const auto &item: second)
-			out.insert(item);
+		S out = first;
+		out.insert(second.cbegin(), second.cend());
 		return out;
+	}
+
+	/** Returns a copy of a container with an item pushed to the back. */
+	template <typename T, template <typename...> typename C>
+	C<T> with(const C<T> &base, T &&item) {
+		C<T> copy = base;
+		copy.push_back(std::forward<T>(item));
+		return copy;
+	}
+
+	/** Returns a copy of a container with all items of another container pushed to the back. */
+	template <typename T, template <typename...> typename C>
+	C<T> combine(const C<T> &left, const C<T> &right) {
+		C<T> copy = left;
+		copy.insert(copy.end(), right.cbegin(), right.cend());
+		return copy;
 	}
 
 	/** Returns whether two sets have any items in common. */

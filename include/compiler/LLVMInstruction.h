@@ -25,6 +25,7 @@ namespace LL2X {
 			bool canReplaceWritten(const VariablePtr &) const override;
 			bool replaceOperand(const OperandPtr &, const OperandPtr &) override;
 			bool replaceSimilarOperand(const OperandPtr &, const OperandPtr &) override;
+			std::vector<std::reference_wrapper<OperandPtr>> getOperands() override;
 
 			bool replaceLabel(const std::string *, const std::string *) override;
 			std::vector<const std::string *> getLabels() const override;

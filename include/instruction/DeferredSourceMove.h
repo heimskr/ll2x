@@ -15,5 +15,9 @@ namespace LL2X {
 
 		std::string debugExtra() override;
 		std::string toString() const override;
+
+		std::vector<std::reference_wrapper<OperandPtr>> getOperands() override {
+			return {std::ref(source), std::ref(destination)};
+		}
 	};
 }

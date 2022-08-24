@@ -8,7 +8,7 @@
 // #define DEBUG_LINEAR
 #define DEBUG_VARS
 // #define DEBUG_RENDER
-#define DEBUG_SPILL
+// #define DEBUG_SPILL
 // #define DEBUG_SPLIT
 #define DEBUG_READ_WRITTEN
 // #define DISABLE_COMMENTS
@@ -274,7 +274,7 @@ namespace LL2X {
 						blocks.front()->written.insert(var);
 					} else if (!var->usingBlocks.empty()) {
 						BasicBlockPtr block = var->usingBlocks.begin()->lock();
-						info() << "Adding definer " << *block->label << " to " << var->ansiString() << '\n';
+						// info() << "Adding definer " << *block->label << " to " << var->ansiString() << '\n';
 						var->addDefiner(block);
 						block->written.insert(var);
 					}
@@ -400,9 +400,30 @@ namespace LL2X {
 				const bool replaced = instruction->canReplaceRead(variable);
 #endif
 				if (replaced) {
-					instruction->replaceSimilarOperand(OperandV(read), Operand8(-location.offset, rbp));
-					instruction->extract(true);
-					out = true;
+					OperandPtr replacement = Operand8(-location.offset, rbp);
+					if (!instruction->replaceSimilarOperand(OperandV(read), replacement)) {
+						const auto operands = instruction->getOperands();
+						VariablePtr new_var;
+						for (const auto &operand_wrapper: operands) {
+							OperandPtr &operand = operand_wrapper.get();
+							// If we have an operand like "(%v)", we can't replace %v directly. Instead, we have to move
+							// the value at the spill location into a new variable and replace the variable in the
+							// operand with the new variable.
+							if (operand->isIndirect() && operand->reg == read) {
+								if (!new_var)
+									new_var = newVariable(read->type, instruction->parent.lock());
+								insertBefore(instruction, std::make_shared<Mov>(replacement, OperandV(new_var)), true)
+									->setDebug(*instruction, true);
+								operand->reg = new_var;
+#ifdef DEBUG_SPILL
+								info() << "Hacked " << old_extra << " into " << instruction->debugExtra() << '\n';
+#endif
+							}
+						}
+					} else {
+						instruction->extract(true);
+						out = true;
+					}
 #ifdef DEBUG_SPILL
 					std::cerr << "      Replaced operand in " << instruction->debugExtra() << '\n';
 #endif

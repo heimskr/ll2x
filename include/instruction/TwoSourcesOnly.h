@@ -13,5 +13,9 @@ namespace LL2X {
 		bool canReplaceRead(const VariablePtr &) const override;
 		bool replaceOperand(const OperandPtr &, const OperandPtr &) override;
 		bool replaceSimilarOperand(const OperandPtr &, const OperandPtr &) override;
+
+		std::vector<std::reference_wrapper<OperandPtr>> getOperands() override {
+			return {std::ref(firstSource), std::ref(secondSource)};
+		}
 	};
 }

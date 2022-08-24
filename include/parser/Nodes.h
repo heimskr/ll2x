@@ -90,6 +90,7 @@ namespace LL2X {
 		void replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var);
 		virtual std::vector<ConstantPtr> allConstants() const { return {}; }
 		virtual std::vector<ConstantPtr *> allConstantPointers() { return {}; }
+		std::vector<std::reference_wrapper<OperandPtr>> allReadOperands();
 	};
 
 	struct Writer {

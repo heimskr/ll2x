@@ -111,7 +111,8 @@ namespace LL2X {
 		bool isNumeric() const;
 		bool isHackable() const;
 		/** Returns true iff the mode is Displaced or Scaled. */
-		bool isDisplaced() const;
+		bool isIndirect() const;
+		bool isDisplaced(const VariablePtr &) const;
 
 		void extract(bool is_write, std::unordered_set<VariablePtr> &read, std::unordered_set<VariablePtr> &written)
 			const;
@@ -125,6 +126,10 @@ namespace LL2X {
 		inline OperandPtr setType(const std::shared_ptr<Type> &new_type) {
 			type = new_type;
 			return shared_from_this();
+		}
+
+		OperandPtr copy() const {
+			return std::make_shared<Operand>(*this);
 		}
 
 		bool operator==(const Operand &) const;

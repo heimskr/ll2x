@@ -220,7 +220,7 @@ namespace LL2X {
 	}
 
 	bool LLVMInstruction::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
-		if (Reader *reader = dynamic_cast<Reader *>(node)) {
+		if (auto *reader = dynamic_cast<Reader *>(node)) {
 			reader->replaceRead(to_replace, new_var);
 			return true;
 		}
@@ -233,7 +233,7 @@ namespace LL2X {
 	}
 
 	bool LLVMInstruction::replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var) {
-		if (Writer *writer = dynamic_cast<Writer *>(node))
+		if (auto *writer = dynamic_cast<Writer *>(node))
 			return writer->replaceWritten(to_replace, new_var);
 		return false;
 	}
@@ -245,7 +245,7 @@ namespace LL2X {
 	bool LLVMInstruction::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
 		bool out = false;
 
-		if (Reader *reader = dynamic_cast<Reader *>(node))
+		if (auto *reader = dynamic_cast<Reader *>(node))
 			for (auto *value: reader->allValuePointers())
 				if (value && *value && (*value)->isOperand()) {
 					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
@@ -255,7 +255,7 @@ namespace LL2X {
 					}
 				}
 
-		if (Writer *writer = dynamic_cast<Writer *>(node))
+		if (auto *writer = dynamic_cast<Writer *>(node))
 			if (*writer->operand == *to_replace) {
 				writer->operand = replace_with;
 				out = true;
@@ -267,7 +267,7 @@ namespace LL2X {
 	bool LLVMInstruction::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
 		bool out = false;
 
-		if (Reader *reader = dynamic_cast<Reader *>(node))
+		if (auto *reader = dynamic_cast<Reader *>(node))
 			for (auto *value: reader->allValuePointers())
 				if (value && *value && (*value)->isOperand()) {
 					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
@@ -277,12 +277,21 @@ namespace LL2X {
 					}
 				}
 
-		if (Writer *writer = dynamic_cast<Writer *>(node))
+		if (auto *writer = dynamic_cast<Writer *>(node))
 			if (writer->operand && writer->operand->similarTo(*to_replace)) {
 				writer->operand = replace_with;
 				out = true;
 			}
 
+		return out;
+	}
+
+	std::vector<std::reference_wrapper<OperandPtr>> LLVMInstruction::getOperands() {
+		std::vector<std::reference_wrapper<OperandPtr>> out;
+		if (auto *reader = dynamic_cast<Reader *>(node))
+			out = reader->allReadOperands();
+		if (auto *writer = dynamic_cast<Writer *>(node))
+			out.push_back(std::ref(writer->operand));
 		return out;
 	}
 
