@@ -454,8 +454,6 @@ namespace LL2X {
 				}
 			}
 
-		static int foo = 0;
-
 #ifdef DEBUG_COLORING
 		info() << "Made " << links << " link" << (links == 1? "" : "s") << ".\n";
 #endif
