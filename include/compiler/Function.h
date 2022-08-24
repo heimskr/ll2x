@@ -288,7 +288,7 @@ namespace LL2X {
 
 			/** Removes the register assignments for all variables. If its argument is true, it won't reset variables
 			 *  that have been assigned special registers. */
-			void resetRegisters(bool respectful = true);
+			void resetRegisters(bool respectful);
 
 			/** Performs the first set of compiler passes on the function before register allocation. */
 			void initialCompile();

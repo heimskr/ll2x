@@ -1078,6 +1078,7 @@ namespace LL2X {
 				for (int j = 0; j < required; ++j)
 					registers.insert(regs[i++ + j]);
 				argument->setRegisters(registers);
+				argument->fixed = true;
 			}
 		} catch (const std::out_of_range &) {
 			warn() << "VariableStore (" << variableStore.size() << ") in " << *name << ":\n";
