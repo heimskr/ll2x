@@ -137,6 +137,8 @@ namespace LL2X {
 		 *  assignments to be the same instead of using Variable equality. Otherwise, it functions like operator==.
 		 *  In either case, width is not checked. */
 		bool similarTo(const Operand &) const;
+
+		OperandPtr setWidth(int);
 	};
 
 	using OperandPtr = std::shared_ptr<Operand>;

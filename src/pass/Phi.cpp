@@ -32,7 +32,6 @@ namespace LL2X::Passes {
 				throw std::runtime_error("phi_node is null in Function::coalescePhi");
 
 			const int phi_size = phi_node->type->width();
-			const auto phi_width = x86_64::getWidth(phi_size);
 
 			// Otherwise, get its written temporary. This is what the other temporaries will be merged to.
 			VariablePtr target = function.getVariable(*phi_node->result, phi_node->type);
@@ -64,12 +63,12 @@ namespace LL2X::Passes {
 							InstructionPtr new_instr;
 							
 							if (pair.first->isIntLike())
-								new_instr = std::make_shared<Mov>(Operand::make(phi_size,
-									pair.first->longValue()), Operand::make(phi_size, target), phi_width);
+								new_instr = std::make_shared<Mov>(OperandX(phi_size, pair.first->longValue()),
+									OperandX(phi_size, target), phi_size);
 							else
-								new_instr = std::make_shared<Mov>(Operand::make(phi_size,
+								new_instr = std::make_shared<Mov>(OperandX(phi_size,
 									*dynamic_cast<GlobalValue *>(pair.first.get())->name, function.rip),
-									OperandX(phi_size, target), phi_width);
+									OperandX(phi_size, target), phi_size);
 
 							new_instr->parent = block;
 							if (block->instructions.empty()) {
@@ -169,7 +168,6 @@ namespace LL2X::Passes {
 				throw std::runtime_error("phi_node is null in Function::movePhi");
 
 			const int phi_size = phi_node->type->width();
-			const auto phi_width = x86_64::getWidth(phi_size);
 
 			VariablePtr target = function.getVariable(*phi_node->result, phi_node->type);
 			target->fromPhi = true;
@@ -184,7 +182,7 @@ namespace LL2X::Passes {
 				if (local) {
 					comment = "MovePhi: " + local->variable->plainString() + " -> " + target->plainString();
 					new_instruction = std::make_shared<Mov>(OperandX(phi_size, local->variable),
-						OperandX(phi_size, target), phi_width);
+						OperandX(phi_size, target), phi_size);
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->isOperand()) {
 					OperandPtr operand = dynamic_cast<OperandValue *>(value.get())->operand;
@@ -197,13 +195,13 @@ namespace LL2X::Passes {
 				} else if (value->isIntLike() || value->isGlobal()) {
 					if (value->isIntLike()) {
 						comment = "MovePhi: intlike -> " + target->plainString();
-						new_instruction = std::make_shared<Mov>(Operand::make(phi_width, value->longValue()),
-							Operand::make(phi_width, target), phi_width);
+						new_instruction = std::make_shared<Mov>(OperandX(phi_size, value->longValue()),
+							OperandX(phi_size, target), phi_size);
 					} else {
 						comment = "MovePhi: global -> " + target->plainString();
-						new_instruction = std::make_shared<Mov>(Operand::make(phi_size,
+						new_instruction = std::make_shared<Mov>(OperandX(phi_size,
 							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OperandX(phi_size, target),
-							phi_width);
+							phi_size);
 					}
 				} else {
 					warn() << "Value " << std::string(*value) << " isn't intlike or global in "
@@ -433,14 +431,13 @@ namespace LL2X::Passes {
 					}
 					auto *phi = dynamic_cast<PhiNode *>(llvm->node);
 					const int phi_size = phi->type->width();
-					const auto phi_width = x86_64::getWidth(phi_size);
 					for (auto &[value, block_label]: phi->pairs)
 						if (value->isLocal()) {
 							auto *local = dynamic_cast<LocalValue *>(value.get());
 							if (local->variable && *local->variable == *source) {
 								auto block = function.bbMap.at(block_label);
-								auto mov = std::make_shared<Mov>(Operand::make(phi_width, source),
-									Operand::make(phi_width, destination), phi_width);
+								auto mov = std::make_shared<Mov>(OperandX(phi_size, source),
+									OperandX(phi_size, destination), phi_size);
 								const std::string comment = "CutPhi: " + source->plainString() + " -> " +
 									destination->plainString();
 								if (block->instructions.empty()) {

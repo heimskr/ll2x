@@ -5,7 +5,7 @@
 
 namespace LL2X {
 	struct SizedTwoSourcesOnly: TwoSourcesOnly, Sized {
-		SizedTwoSourcesOnly(OperandPtr first_source, OperandPtr second_source, x86_64::Width size_):
+		SizedTwoSourcesOnly(OperandPtr first_source, OperandPtr second_source, int size_):
 			TwoSourcesOnly(std::move(first_source), std::move(second_source)),
 			Sized(size_) {}
 

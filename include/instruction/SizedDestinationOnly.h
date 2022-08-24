@@ -5,7 +5,7 @@
 
 namespace LL2X {
 	struct SizedDestinationOnly: DestinationOnly, Sized {
-		SizedDestinationOnly(OperandPtr destination_, x86_64::Width size_):
+		SizedDestinationOnly(OperandPtr destination_, int size_):
 			DestinationOnly(std::move(destination_)),
 			Sized(size_) {}
 

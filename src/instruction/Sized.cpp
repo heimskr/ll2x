@@ -1,11 +1,12 @@
 #include "instruction/Sized.h"
 
 namespace LL2X {
-	Sized::Sized(x86_64::Width size_):
+	Sized::Sized(int size_):
 		size(size_) {}
 	
 	char Sized::suffix() const {
-		switch (size) {
+		switch (x86_64::getWidth(size)) {
+			case x86_64::Width::Huge:  return 'H';
 			case x86_64::Width::Eight: return 'q';
 			case x86_64::Width::Four:  return 'l';
 			case x86_64::Width::Two:   return 'w';

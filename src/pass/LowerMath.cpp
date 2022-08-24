@@ -33,7 +33,7 @@ namespace LL2X::Passes {
 		OperandPtr right = node->right->makeOperand();
 		OperandPtr rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
 		OperandPtr rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
-		const auto width = x86_64::getWidth(node->type->width());
+		const auto width = node->type->width();
 
 		function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rdx, width), false)
 			->setDebug(*instruction, true);
@@ -77,7 +77,7 @@ namespace LL2X::Passes {
 		OperandPtr left  = values.at(0)->makeOperand();
 		OperandPtr right = values.at(1)->makeOperand();
 		OperandPtr destination = node->operand;
-		const auto width = x86_64::getWidth(node->type->width());
+		const auto width = node->type->width();
 
 		function.insertBefore(instruction, std::make_shared<Mov>(left, destination, width))->setDebug(*node)->extract();
 		function.insertBefore(instruction, std::make_shared<Ins>(right, destination, width))
@@ -89,7 +89,7 @@ namespace LL2X::Passes {
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
 		OperandPtr destination = node->operand;
-		const auto width = x86_64::getWidth(node->type->width());
+		const auto width = node->type->width();
 
 		function.insertBefore(instruction, std::make_shared<Mov>(left, destination, width))->setDebug(*node)->extract();
 		function.insertBefore(instruction, std::make_shared<Ins>(right, destination, width))
@@ -122,7 +122,7 @@ namespace LL2X::Passes {
 		// mov %left, %rax
 		function.insertBefore(instruction, std::make_shared<Mov>(left, rax), false)->setDebug(*instruction, true);
 		// mul %right
-		function.insertBefore(instruction, std::make_shared<Mul>(right, destination->width), false)
+		function.insertBefore(instruction, std::make_shared<Mul>(right, destination->bitWidth), false)
 			->setDebug(*instruction, true);
 		// mov %rax, %dest
 		function.insertBefore(instruction, std::make_shared<Mov>(rax, destination), false)

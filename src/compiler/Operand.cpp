@@ -240,6 +240,12 @@ namespace LL2X {
 
 		return true;
 	}
+
+	OperandPtr Operand::setWidth(int new_width) {
+		width = x86_64::getWidth(new_width);
+		bitWidth = new_width;
+		return shared_from_this();
+	}
 }
 
 std::ostream & operator<<(std::ostream &stream, const LL2X::Operand &operand) {

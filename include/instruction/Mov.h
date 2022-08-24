@@ -5,7 +5,7 @@
 
 namespace LL2X {
 	struct Mov: SizedSourceToDest, HasCondition {
-		Mov(OperandPtr source_, OperandPtr destination_, x86_64::Width size_,
+		Mov(OperandPtr source_, OperandPtr destination_, int size_,
 			x86_64::Condition condition = x86_64::Condition::Unconditional);
 
 		Mov(OperandPtr source_, OperandPtr destination_,

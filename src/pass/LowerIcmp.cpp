@@ -67,7 +67,7 @@ namespace LL2X::Passes {
 		if (type2 == ValueType::Local || type2 == ValueType::Global) {
 
 			VariablePtr right;
-			const auto width = x86_64::getWidth(node->getType()->width());
+			const auto width = node->getType()->width();
 
 			if (type2 == ValueType::Local) {
 				right = dynamic_cast<LocalValue *>(value2.get())->variable;
@@ -87,7 +87,7 @@ namespace LL2X::Passes {
 
 		} else if (type2 == ValueType::Operand) {
 
-			const auto width = x86_64::getWidth(node->getType()->width());
+			const auto width = node->getType()->width();
 			// TODO: verify right operand width
 			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(width, left),
 				dynamic_cast<OperandValue *>(value2.get())->operand, width), false)->setDebug(node)->extract();
@@ -105,10 +105,9 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Unsupported value type in icmp instruction: " + value_map.at(type2));
 
 			const int size = node->getType()->width();
-			const auto width = x86_64::getWidth(size);
 
-			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(width, left), OperandX(width, imm),
-				width), false)->setDebug(node)->extract();
+			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(size, left), OperandX(size, imm), size),
+				false)->setDebug(node)->extract();
 			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
 				->setDebug(node)->extract();
 

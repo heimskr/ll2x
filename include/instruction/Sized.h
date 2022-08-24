@@ -6,8 +6,9 @@
 
 namespace LL2X {
 	struct Sized {
-		x86_64::Width size;
-		Sized(x86_64::Width);
+		int size = -1;
+		Sized() = delete;
+		Sized(int);
 		char suffix() const;
 	};
 }

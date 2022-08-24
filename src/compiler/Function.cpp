@@ -51,7 +51,7 @@
 // #include "pass/CopyArguments.h"
 #include "pass/FillLocalValues.h"
 #include "pass/FillOperands.h"
-// #include "pass/FinishMultireg.h"
+#include "pass/FinishMultireg.h"
 #include "pass/HackOperands.h"
 #include "pass/IgnoreIntrinsics.h"
 #include "pass/InsertLabels.h"
@@ -983,7 +983,7 @@ namespace LL2X {
 		// Passes::replaceStoresAndLoads(*this);
 		// Passes::lowerStack(*this);
 		// Passes::splitResultMoves(*this);
-		// Passes::finishMultireg(*this);
+		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		// Passes::removeUselessBranches(*this);
 		Passes::mergeAllBlocks(*this);
@@ -1132,9 +1132,9 @@ namespace LL2X {
 	VariablePtr Function::get64(std::shared_ptr<Instruction> before, unsigned long value, bool reindex) {
 		VariablePtr var = newVariable(IntType::make(64), before->parent.lock());
 		OperandPtr operand = Operand::make(var);
-		auto mov = std::make_shared<Mov>(Operand4(value >> 32), operand, x86_64::Width::Eight);
-		auto shl = std::make_shared<Shl>(operand, Operand4(32), x86_64::Width::Eight);
-		auto or_ = std::make_shared<Or>(operand, Operand4(value & 0xffffffff), x86_64::Width::Eight);
+		auto mov = std::make_shared<Mov>(Operand4(value >> 32), operand, 64);
+		auto shl = std::make_shared<Shl>(operand, Operand4(32), 64);
+		auto or_ = std::make_shared<Or>(operand, Operand4(value & 0xffffffff), 64);
 		insertBefore(before, mov, false)->setDebug(*before, true);
 		insertBefore(before, shl, false)->setDebug(*before, true);
 		insertBefore(before, or_, false)->setDebug(*before, true);
@@ -1788,8 +1788,8 @@ namespace LL2X {
 					->setDebug(*instruction, true);
 
 				if (offset != 0)
-					insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand,
-						x86_64::Width::Eight))->setDebug(*instruction, true);
+					insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand, 64))
+						->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);
 			}
@@ -1800,9 +1800,9 @@ namespace LL2X {
 
 				insertBefore(instruction, std::make_shared<Mov>(OperandV(
 					dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
-					operand, x86_64::Width::Eight))->setDebug(*instruction, true);
+					operand, 64))->setDebug(*instruction, true);
 
-				insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand, x86_64::Width::Eight))
+				insertBefore(instruction, std::make_shared<Add>(Operand4(offset), operand, 64))
 					->setDebug(*instruction, true);
 
 				return LocalValue::make(new_var);

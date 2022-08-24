@@ -6,13 +6,13 @@
 
 namespace LL2X {
 	struct Pop: TargetInstruction, OneDestination, Sized  {
-		Pop(OperandPtr destination_, x86_64::Width size_):
+		Pop(OperandPtr destination_, int size_):
 			OneDestination(std::move(destination_)),
 			Sized(size_) {}
 
 		Pop(OperandPtr destination_):
 			OneDestination(std::move(destination_)),
-			Sized(destination->width) {}
+			Sized(destination->bitWidth) {}
 
 		std::string debugExtra() override;
 		std::string toString() const override;

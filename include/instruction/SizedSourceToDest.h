@@ -5,7 +5,7 @@
 
 namespace LL2X {
 	struct SizedSourceToDest: public SourceToDest, public Sized {
-		SizedSourceToDest(OperandPtr source_, OperandPtr destination_, x86_64::Width size_):
+		SizedSourceToDest(OperandPtr source_, OperandPtr destination_, int size_):
 			SourceToDest(std::move(source_), std::move(destination_)),
 			Sized(size_) {}
 

@@ -10,7 +10,7 @@ namespace LL2X::Passes {
 		if (function.isNaked())
 			return;
 		BasicBlockPtr entry = function.getEntry();
-		auto sub = std::make_shared<Sub>(Operand4(0), Operand8(function.rsp), x86_64::Width::Eight);
+		auto sub = std::make_shared<Sub>(Operand4(0), Operand8(function.rsp));
 		function.insertBefore(function.linearInstructions.front(), sub, "InsertStackSkip")
 			->setDebug(function.initialDebugIndex)->extract();
 		function.categories["StackSkip"].insert(sub);

@@ -50,7 +50,7 @@ namespace LL2X::Passes {
 			node->debug();
 			throw;
 		}
-		const x86_64::Width width = x86_64::getWidth(size * 8);
+		const int width = size * 8;
 		const ValueType value_type = converted->value->valueType();
 
 		const std::string prefix = "LowerMemory(load @ " + std::string(node->location) + "): ";
@@ -153,7 +153,7 @@ namespace LL2X::Passes {
 		ValuePtr source_value = converted_source->value;
 		TypePtr source_type = converted_source->type;
 		const ValueType value_type = source_value->valueType();
-		const x86_64::Width width = x86_64::getWidth(size * 8);
+		const int width = size * 8;
 		const bool localish =
 			value_type == ValueType::Local || value_type == ValueType::Global || value_type == ValueType::Operand;
 
