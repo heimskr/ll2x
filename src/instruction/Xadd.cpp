@@ -84,10 +84,11 @@ namespace LL2X {
 	}
 
 	std::string Xadd::debugExtra() {
-		return std::string("\e[1mxadd") + suffix() + "\e[22m " + regOnly->ansiString() + ", " + regMem->ansiString();
+		return lockPrefixAnsi + "\e[1mxadd" + suffix() + "\e[22m " + regOnly->ansiString() + ", " +
+			regMem->ansiString();
 	}
 
 	std::string Xadd::toString() const {
-		return std::string("add") + suffix() + " " + regOnly->toString() + ", " + regMem->toString();
+		return lockPrefix + "add" + suffix() + " " + regOnly->toString() + ", " + regMem->toString();
 	}
 }

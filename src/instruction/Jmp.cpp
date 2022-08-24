@@ -3,11 +3,12 @@
 
 namespace LL2X {
 	std::string Jmp::debugExtra() {
-		return "\e[1m" + getMnemonic() + "\e[22m " + (source->isRegister()? "*" : "") + source->ansiString();
+		return lockPrefixAnsi + "\e[1m" + getMnemonic() + "\e[22m " + (source->isRegister()? "*" : "") +
+			source->ansiString();
 	}
 
 	std::string Jmp::toString() const {
-		return getMnemonic() + ' ' + (source->isRegister()? "*" : "") + source->toString();
+		return lockPrefix + getMnemonic() + ' ' + (source->isRegister()? "*" : "") + source->toString();
 	}
 
 	std::string Jmp::getMnemonic() const {

@@ -16,11 +16,11 @@ namespace LL2X {
 			Sized(multi->bitWidth) {}
 
 		std::string debugExtra() override {
-			return std::string("\e[1mneg") + suffix() + "\e[22m " + multi->ansiString();
+			return lockPrefixAnsi + std::string("\e[1mneg") + suffix() + "\e[22m " + multi->ansiString();
 		}
 
 		std::string toString() const override {
-			return std::string("neg") + suffix() + ' ' + multi->toString();
+			return lockPrefix + std::string("neg") + suffix() + ' ' + multi->toString();
 		}
 	};
 }

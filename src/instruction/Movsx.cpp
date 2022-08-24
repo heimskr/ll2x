@@ -2,11 +2,12 @@
 
 namespace LL2X {
 	std::string Movsx::debugExtra() {
-		return "\e[1m" + getMnemonic() + "\e[22m " + source->ansiString() + ", " + destination->ansiString();
+		return lockPrefixAnsi + "\e[1m" + getMnemonic() + "\e[22m " + source->ansiString() + ", " +
+			destination->ansiString();
 	}
 
 	std::string Movsx::toString() const {
-		return getMnemonic() + " " + source->toString() + ", " + destination->toString();
+		return lockPrefix + getMnemonic() + " " + source->toString() + ", " + destination->toString();
 	}
 
 	std::string Movsx::getMnemonic() const {

@@ -9,10 +9,11 @@ namespace LL2X {
 	constexpr static const char *underscore = "";
 #endif
 	std::string Call::debugExtra() {
-		return "\e[1mcallq\e[22m " + std::string(source->isLabel()? underscore : "*") + source->ansiString();
+		return lockPrefixAnsi + "\e[1mcallq\e[22m " + std::string(source->isLabel()? underscore : "*") +
+			source->ansiString();
 	}
 
 	std::string Call::toString() const {
-		return "callq " + std::string(source->isLabel()? underscore : "*") + source->toString();
+		return lockPrefix + "callq " + std::string(source->isLabel()? underscore : "*") + source->toString();
 	}
 }

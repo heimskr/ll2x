@@ -51,8 +51,7 @@ namespace LL2X::Passes {
 
 			assert(result->isRegister());
 
-			info() << result->ansiString() << '\n';
-			std::cerr << "    D" << result->reg->definitions.size() << " / U" << result->reg->uses.size() << '\n';
+			const bool result_used = !result->reg->uses.empty();
 
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
 				VariablePtr temp = function.newVariable(reg_only->reg->type, block);
@@ -62,7 +61,10 @@ namespace LL2X::Passes {
 				if (op == AtomicrmwNode::Op::Sub)
 					function.insertBefore<Neg, false>(instruction, result);
 
-				// if (
+				if (result_used)
+					function.insertBefore<Xadd>(instruction, result, reg_mem)->setLock();
+				else
+					function.insertBefore<Add>(instruction, result, reg_mem)->setLock();
 			}
 		}
 

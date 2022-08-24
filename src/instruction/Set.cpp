@@ -5,11 +5,11 @@ namespace LL2X {
 		DestinationOnly(destination_), HasCondition(condition_) {}
 
 	std::string Set::debugExtra() {
-		return "\e[1m" + getMnemonic() + "\e[22m " + destination->ansiString();
+		return lockPrefixAnsi + "\e[1m" + getMnemonic() + "\e[22m " + destination->ansiString();
 	}
 
 	std::string Set::toString() const {
-		return getMnemonic() + " " + destination->toString();
+		return lockPrefix + getMnemonic() + " " + destination->toString();
 	}
 
 	std::string Set::getMnemonic() const {

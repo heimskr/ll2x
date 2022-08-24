@@ -2,10 +2,10 @@
 
 namespace LL2X {
 	std::string SizedDestinationOnly::makeDebug(const char *mnemonic) const {
-		return "\e[1m" + std::string(mnemonic) + suffix() + "\e[22m " + destination->ansiString();
+		return lockPrefixAnsi + "\e[1m" + std::string(mnemonic) + suffix() + "\e[22m " + destination->ansiString();
 	}
 
 	std::string SizedDestinationOnly::makeString(const char *mnemonic) const {
-		return std::string(mnemonic) + suffix() + " " + destination->toString();
+		return lockPrefix + std::string(mnemonic) + suffix() + " " + destination->toString();
 	}
 }

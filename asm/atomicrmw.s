@@ -5,7 +5,6 @@
 	.type	atomique,@function
 atomique:                               # @atomique
 # %bb.0:
-	negq	%rdi
 	lock		xaddq	%rdi, (%rsi)
 	movq	%rdi, (%rsi)
 	retq
