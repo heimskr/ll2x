@@ -118,6 +118,16 @@ namespace LL2X::x86_64 {
 					default:
 						return baseName(reg);
 				}
+			case Width::Huge:
+				switch (reg) {
+					case rax:
+					case rbx:
+					case rcx:
+					case rdx:
+						return {'h', static_cast<char>('a' + (reg - rax)), 'x'};
+					default:
+						return 'h' + baseName(reg);
+				}
 			default:
 				throw std::runtime_error("Invalid width: " + std::to_string(static_cast<int>(width)));
 		}
