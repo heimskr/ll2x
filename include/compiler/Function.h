@@ -423,10 +423,10 @@ namespace LL2X {
 			VariablePtr rbp;
 			VariablePtr rip;
 
-			template <typename Ins, typename... Args>
+			template <typename Ins, bool Reindex = true, typename... Args>
 			std::shared_ptr<Ins> insertBefore(const InstructionPtr &anchor, Args &&...args) {
 				auto out = std::make_shared<Ins>(std::forward<Args>(args)...);
-				insertBefore(anchor, out)->setDebug(*anchor, true);
+				insertBefore(anchor, out, Reindex)->setDebug(*anchor, true);
 				return out;
 			}
 

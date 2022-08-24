@@ -52,10 +52,10 @@ namespace LL2X::Passes {
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
 				VariablePtr temp = function.newVariable(reg_only->reg->type, block);
 
-				function.insertBefore<Mov>(instruction, reg_only, result);
+				function.insertBefore<Mov, false>(instruction, reg_only, result);
 
 				if (op == AtomicrmwNode::Op::Sub) {
-					function.insertBefore<Neg>(instruction, result);
+					function.insertBefore<Neg, false>(instruction, result);
 				}
 			}
 		}
