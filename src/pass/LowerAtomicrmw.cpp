@@ -54,17 +54,18 @@ namespace LL2X::Passes {
 			const bool result_used = !result->reg->uses.empty();
 
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
-				VariablePtr temp = function.newVariable(reg_only->reg->type, block);
-
 				function.insertBefore<Mov, false>(instruction, reg_only, result);
 
 				if (op == AtomicrmwNode::Op::Sub)
 					function.insertBefore<Neg, false>(instruction, result);
 
 				if (result_used)
-					function.insertBefore<Xadd>(instruction, result, reg_mem)->setLock();
+					function.insertBefore<Xadd>(instruction, result, reg_mem->toDisplaced())->setLock();
 				else
-					function.insertBefore<Add>(instruction, result, reg_mem)->setLock();
+					function.insertBefore<Add>(instruction, result, reg_mem->toDisplaced())->setLock();
+			} else {
+				error() << atomicrmw->debugExtra() << " @ " << atomicrmw->location << '\n';
+				throw std::runtime_error("Unhandled atomicrmw instruction");
 			}
 		}
 
