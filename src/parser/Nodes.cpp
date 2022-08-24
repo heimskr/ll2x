@@ -1185,8 +1185,8 @@ namespace LL2X {
 		out << getResult() << "\e[2m = \e[22;91matomicrmw\e[39m";
 		if (volatile_)
 			out << " \e[38;5;202mvolatile\e[39m";
-		out << " \e[91m" << *opString << "\e[39m " << *pointerType << "\e[2m,\e[22m " << *pointer << "\e[2m,\e[22m ";
-		out << ' ' << *type << "\e[2m,\e[22m " << *value << "\e[2m,\e[22m ";
+		out << " \e[91m" << *opString << "\e[39m " << *pointerType << ' ' << *pointer << "\e[2m,\e[22m " << *type << ' '
+		    << *value;
 		if (syncscope)
 			out << " \e[34msyncscope\e[39;2m(\e[22m\"" << *syncscope << "\"\e[2m)\e[22m";
 		if (ordering != Ordering::None)
