@@ -60,6 +60,9 @@ namespace LL2X {
 
 			void computeLivenessUAM();
 
+			/** If a variable is defined in one block and used only in that block, mark it as not live anywhere. */
+			void hackLiveness();
+
 			bool isLiveInUsingMergeSet(const Node::Map &merges, Node *block, VariablePtr var);
 			bool isLiveOutUsingMergeSet(const Node::Map &merges, Node *block, VariablePtr var);
 

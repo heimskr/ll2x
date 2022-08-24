@@ -37,11 +37,14 @@ namespace LL2X {
 		if (uses.empty())
 			return *(spillCost_ = -1);
 
-		// If a variable has only one use and that use is right after its one definition, it has an (effectively)
-		// infinite spill cost.
 		if (definitions.size() == 1 && uses.size() == 1) {
+			// If a variable has only one use and that use is right after its one definition, it has an (effectively)
+			// infinite spill cost.
 			if (uses.begin()->lock()->index == definitions.begin()->lock()->index + 1)
 				return *(spillCost_ = INT_MAX);
+		} else if (definitions.empty()) {
+			// Variables with no definitions (such as argument registers) aren't spillable.
+			return *(spillCost_ = INT_MAX);
 		}
 
 		return *(spillCost_ = weight());

@@ -6,19 +6,19 @@
 
 #define DEBUG_BLOCKS
 // #define DEBUG_LINEAR
-// #define DEBUG_VARS
+#define DEBUG_VARS
 // #define DEBUG_RENDER
-// #define DEBUG_SPILL
+#define DEBUG_SPILL
 // #define DEBUG_SPLIT
 #define DEBUG_READ_WRITTEN
 // #define DISABLE_COMMENTS
 // #define DEBUG_ESTIMATIONS
-// #define DEBUG_BLOCK_LIVENESS
+#define DEBUG_BLOCK_LIVENESS
 #define DEBUG_VAR_LIVENESS
 // #define DEBUG_ALIASES
 // #define DEBUG_STACK
 // #define DEBUG_CANSPILL
-#define DEBUG_MINILABELS
+// #define DEBUG_MINILABELS
 // #define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
@@ -274,6 +274,7 @@ namespace LL2X {
 						blocks.front()->written.insert(var);
 					} else if (!var->usingBlocks.empty()) {
 						BasicBlockPtr block = var->usingBlocks.begin()->lock();
+						info() << "Adding definer " << *block->label << " to " << var->ansiString() << '\n';
 						var->addDefiner(block);
 						block->written.insert(var);
 					}
@@ -317,7 +318,7 @@ namespace LL2X {
 		if (variable->definitions.empty()) {
 			debug();
 			variable->debug();
-			throw std::runtime_error("Can't spill variable: no definitions");
+			throw std::runtime_error("Can't spill variable " + variable->toString() + ": no definitions");
 		}
 
 		const StackLocation &location = getSpill(variable, true);
@@ -331,7 +332,7 @@ namespace LL2X {
 				continue;
 #ifdef DEBUG_SPILL
 			std::cerr << "  Trying to spill " << *variable << " (definition: " << definition->debugExtra() << " at "
-			          << definition->index << ", OID: " << variable->originalID << ")\n";
+			          << definition->index << ", OID: " << *variable->originalID << ")\n";
 #endif
 			auto store = std::make_shared<Mov>(OperandV(variable), Operand8(-location.offset, rbp));
 			store->meta.insert(InstructionMeta::StackStore);
@@ -354,13 +355,8 @@ namespace LL2X {
 			}
 
 			if (should_insert) {
-				// insertAfter(definition, store, false);
-				// insertBefore(store, std::make_shared<Comment>("Spill: stack store for " + variable->plainString() +
-				// 	" into location=" + std::to_string(location.offset)));
-
 				definition->replaceSimilarOperand(OperandV(variable), Operand8(-location.offset, rbp));
 				definition->extract(true);
-
 
 				// Hopefully the blocks are minimized at this point.
 				// TODO: Do we need to reminimize after spilling?
@@ -397,18 +393,22 @@ namespace LL2X {
 #else
 			if (instruction->read.contains(variable)) {
 #endif
-				// VariablePtr new_var = newVariable(variable->type, instruction->parent.lock());
 				const std::string old_extra = instruction->debugExtra();
 #ifdef STRICT_READ_CHECK
-				// const bool replaced = instruction->replaceRead(read, new_var);
 				const bool replaced = instruction->canReplaceRead(read);
 #else
-				// const bool replaced = instruction->replaceRead(variable, new_var);
 				const bool replaced = instruction->canReplaceRead(variable);
 #endif
+				if (replaced) {
+					instruction->replaceSimilarOperand(OperandV(read), Operand8(-location.offset, rbp));
+					instruction->extract(true);
+					out = true;
+#ifdef DEBUG_SPILL
+					std::cerr << "      Replaced operand in " << instruction->debugExtra() << '\n';
+#endif
+				}
 #ifdef DEBUG_SPILL
 				BasicBlockPtr par = instruction->parent.lock();
-				std::cerr << "    Creating new variable: " << *new_var << "\n";
 				std::cerr << "    " << (replaced? "Replaced" : "Didn't replace")
 				          << " in " << old_extra;
 				if (par)
@@ -417,34 +417,6 @@ namespace LL2X {
 					std::cerr << " (now " << instruction->debugExtra() << ")";
 				std::cerr << "\n";
 #endif
-				if (replaced) {
-// #ifdef STRICT_READ_CHECK
-// 					instruction->read.erase(read);
-// #else
-// 					instruction->read.erase(variable);
-// #endif
-// 					instruction->read.insert(new_var);
-
-					instruction->replaceSimilarOperand(OperandV(read), Operand8(-location.offset, rbp));
-					instruction->extract(true);
-
-					// auto load = std::make_shared<Mov>(Operand8(-location.offset, rbp), OperandV(new_var));
-					// insertBefore(instruction, load, "Spill: stack load: location=" + std::to_string(location.offset));
-
-					// load->extract();
-					out = true;
-#ifdef DEBUG_SPILL
-					std::cerr << "      Inserting a stack load before " << instruction->debugExtra() << ": "
-							<< load->debugExtra() << "\n";
-					std::cerr << "      Replacing operand in " << instruction->debugExtra() << '\n';
-#endif
-					// markSpilled(new_var);
-				} else {
-#ifdef DEBUG_SPILL
-					// std::cerr << "      Removing variable " << *new_var << "\n";
-#endif
-					// variableStore.erase(new_var->id);
-				}
 			}
 		}
 #ifdef DEBUG_SPILL
@@ -1433,15 +1405,29 @@ namespace LL2X {
 
 	void Function::computeLivenessUAM() {
 		Timer timer("ComputeLivenessUAM");
-		for (BasicBlockPtr &block: blocks) {
+		for (const BasicBlockPtr &block: blocks) {
 			block->extractPhi();
 			block->extract();
-			for (VariablePtr var: block->phiUses) {
+			for (const VariablePtr &var: block->phiUses) {
 				block->liveOut.insert(var);
 				upAndMark(block, var);
 			}
-			for (VariablePtr var: block->nonPhiRead)
+			for (const VariablePtr &var: block->nonPhiRead)
 				upAndMark(block, var);
+		}
+
+		hackLiveness();
+	}
+
+	void Function::hackLiveness() {
+		for (const auto &[id, var]: variableStore) {
+			const auto &defines = var->definingBlocks;
+			const auto &uses = var->usingBlocks;
+			if (defines.size() == 1 && uses.size() == 1 && defines.begin()->lock() == uses.begin()->lock())
+				for (const BasicBlockPtr &block: blocks) {
+					block->liveIn.erase(var);
+					block->liveOut.erase(var);
+				}
 		}
 	}
 
@@ -1664,7 +1650,7 @@ namespace LL2X {
 				else
 					stream << "   ";
 				stream << " \e[2m; \e[1m%" << *id << "/" << *var->id << "/" << *var->originalID << "\e[0;2m  defs ("
-				       << var->definitions.size() << ") =";
+				       << var->definitions.size() << " inst) =";
 				for (const std::weak_ptr<BasicBlock> &def: var->definingBlocks)
 					stream << " \e[1;2m" << std::setw(2) << *def.lock()->label << "\e[0m";
 				stream << "  \e[0;2muses =";

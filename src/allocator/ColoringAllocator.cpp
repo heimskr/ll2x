@@ -17,7 +17,7 @@
 #include "util/Util.h"
 
 // #define DEBUG_COLORING
-#define DEBUG_SELECTMOSTLIVE
+// #define DEBUG_SELECTMOSTLIVE
 #define CONSTRUCT_BY_BLOCK
 // #define SELECT_LOWEST_COST
 #define SELECT_MOST_LIVE
@@ -184,8 +184,10 @@ namespace LL2X {
 			}
 		}
 
-		if (!ptr)
+		if (!ptr) {
+			function->debug();
 			throw NoChoiceError("Couldn't select lowest spill cost variable");
+		}
 
 		return ptr;
 	}
@@ -250,8 +252,10 @@ namespace LL2X {
 			}
 		}
 
-		if (!out)
+		if (!out) {
+			function->debug();
 			throw NoChoiceError("Couldn't select a variable in ColoringAllocator::selectChaitin.");
+		}
 
 		return out;
 	}
@@ -270,8 +274,8 @@ namespace LL2X {
 				std::cerr << " " << alias->ansiString();
 			std::cerr << "\n";
 #endif
-			// if (var->registers.empty()) {
-			if (true) {
+			if (var->registers.empty()) {
+			// if (true) {
 				const std::string *parent_id = var->parentID();
 				if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
 					Node &node = interference.addNode(*parent_id);
@@ -433,15 +437,18 @@ namespace LL2X {
 				if (written.empty())
 					continue;
 				
-				const std::string label = "__ll2x!precolored" + std::to_string(precolored_added++);
+				const std::string label = "__ll2x_pc" + std::to_string(precolored_added++);
 				Node &node = interference.addNode(label);
 				node.colors = {written.begin(), written.end()};
 				// Assumption: each basic block contains one instruction (i.e., they've all been minimized).
 				// Though does that assumption matter here?
 				// TODO: do we need to care about live-in too?
 				BasicBlockPtr block = intermediate->parent.lock();
-				for (const VariablePtr &var: block->liveOut)
-					interference.link(label, *var->parentID(), true);
+				for (const VariablePtr &var: block->liveOut) {
+					const auto &pid = *var->parentID();
+					if (interference.hasLabel(pid))
+						interference.link(label, pid, true);
+				}
 			}
 
 #ifdef DEBUG_COLORING
