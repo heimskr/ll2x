@@ -224,7 +224,7 @@ namespace LL2X::Passes {
 				if (return_size <= 128) {
 					auto result = OperandV(function.getVariable(*call->result));
 					// mov %rax, %result
-					auto move = std::make_shared<Mov>(OperandX(result->width, rax), result);
+					auto move = std::make_shared<Mov>(OperandX(result->bitWidth, rax), result);
 					function.insertBefore(instruction, move, "SetupCalls: move result from %rax", false)
 						->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);

@@ -444,7 +444,7 @@ namespace LL2X {
 				} else {
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
-					auto rax = OperandX(operand->width, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
+					auto rax = OperandX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
 					auto mov_in = std::make_shared<Mov>(operand, rax);
 					auto mul = std::make_shared<I>(Operand4(value));
 					auto mov_out = std::make_shared<Mov>(rax, operand);

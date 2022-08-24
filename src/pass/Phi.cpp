@@ -64,12 +64,12 @@ namespace LL2X::Passes {
 							InstructionPtr new_instr;
 							
 							if (pair.first->isIntLike())
-								new_instr = std::make_shared<Mov>(Operand::make(phi_width,
-									pair.first->longValue()), Operand::make(phi_width, target), phi_width);
+								new_instr = std::make_shared<Mov>(Operand::make(phi_size,
+									pair.first->longValue()), Operand::make(phi_size, target), phi_width);
 							else
-								new_instr = std::make_shared<Mov>(Operand::make(phi_width,
+								new_instr = std::make_shared<Mov>(Operand::make(phi_size,
 									*dynamic_cast<GlobalValue *>(pair.first.get())->name, function.rip),
-									OperandX(phi_width, target), phi_width);
+									OperandX(phi_size, target), phi_width);
 
 							new_instr->parent = block;
 							if (block->instructions.empty()) {
@@ -183,13 +183,13 @@ namespace LL2X::Passes {
 
 				if (local) {
 					comment = "MovePhi: " + local->variable->plainString() + " -> " + target->plainString();
-					new_instruction = std::make_shared<Mov>(OperandX(phi_width, local->variable),
-						OperandX(phi_width, target), phi_width);
+					new_instruction = std::make_shared<Mov>(OperandX(phi_size, local->variable),
+						OperandX(phi_size, target), phi_width);
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->isOperand()) {
 					OperandPtr operand = dynamic_cast<OperandValue *>(value.get())->operand;
 					comment = "MovePhi: " + operand->toString() + " -> " + target->plainString();
-					new_instruction = std::make_shared<Mov>(operand, OperandX(phi_width, target));
+					new_instruction = std::make_shared<Mov>(operand, OperandX(phi_size, target));
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->valueType() == ValueType::Undef) {
 					// Do nothing for undef values. This allows us to insert moves in cutPhi.
@@ -201,8 +201,8 @@ namespace LL2X::Passes {
 							Operand::make(phi_width, target), phi_width);
 					} else {
 						comment = "MovePhi: global -> " + target->plainString();
-						new_instruction = std::make_shared<Mov>(Operand::make(phi_width,
-							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OperandX(phi_width, target),
+						new_instruction = std::make_shared<Mov>(Operand::make(phi_size,
+							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OperandX(phi_size, target),
 							phi_width);
 					}
 				} else {
