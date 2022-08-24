@@ -7,6 +7,7 @@
 #include "instruction/Neg.h"
 #include "instruction/Or.h"
 #include "instruction/Sub.h"
+#include "instruction/Xadd.h"
 #include "instruction/Xor.h"
 #include "pass/LowerAtomicrmw.h"
 #include "util/Timer.h"
@@ -39,7 +40,7 @@ namespace LL2X::Passes {
 			// TODO: instead of copying variables, reuse them if they're not live-out.
 
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
-
+				// if (op == 
 			}
 		}
 
