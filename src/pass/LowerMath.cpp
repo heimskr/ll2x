@@ -24,25 +24,44 @@
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	template <typename Ins, bool Rem>
-	static void lowerDiv(Function &function, InstructionPtr &instruction, SimpleNode *node) {
+	static void
+	lowerDiv(Function &function, InstructionPtr &instruction, SimpleNode *node, bool is_rem, bool is_signed) {
+		OperandPtr left  = node->left->makeOperand();
+		OperandPtr right = node->right->makeOperand();
+		OperandPtr destination = node->operand;
+
+		if (right->isConstant()) {
+			const auto constant = right->getConstant();
+			if (constant == 0) {
+				warn() << "Division by zero at " << node->location << ". This is unadvisable.\n";
+			} else if (constant == 1) {
+				function.insertBefore<Mov>(instruction, left, destination);
+				return;
+			} else if (0 < constant && Util::isPowerOfTwo(constant)) {
+				auto new_right = Operand4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
+				function.insertBefore<Mov>(instruction, left, destination);
+				if (is_signed)
+					function.insertBefore<Sar>(instruction, new_right, destination);
+				else
+					function.insertBefore<Shr>(instruction, new_right, destination);
+				return;
+			}
+		}
+
 		auto rax_clobber = function.clobber(instruction, x86_64::rax);
 		auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 
-		OperandPtr left  = node->left->makeOperand();
-		OperandPtr right = node->right->makeOperand();
 		OperandPtr rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
 		OperandPtr rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
 		const auto width = node->type->width();
 
-		function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rdx, width), false)
-			->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Mov>(left, rax, width), false)
-			->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Ins>(right, width), false)
-			->setDebug(*instruction, true);
-		function.insertBefore(instruction, std::make_shared<Mov>(Rem? rdx : rax, node->operand, width), false)
-			->setDebug(*instruction, true);
+		function.insertBefore<Mov, false>(instruction, Operand4(0), rdx, width);
+		function.insertBefore<Mov, false>(instruction, left, rax, width);
+		if (is_signed)
+			function.insertBefore<Idiv, false>(instruction, right, width);
+		else
+			function.insertBefore<Div, false>(instruction, right, width);
+		function.insertBefore<Mov, false>(instruction, is_rem? rdx : rax, destination, width);
 
 		function.unclobber(instruction, rdx_clobber);
 		function.unclobber(instruction, rax_clobber);
@@ -79,9 +98,8 @@ namespace LL2X::Passes {
 		OperandPtr destination = node->operand;
 		const auto width = node->type->width();
 
-		function.insertBefore(instruction, std::make_shared<Mov>(left, destination, width))->setDebug(*node)->extract();
-		function.insertBefore(instruction, std::make_shared<Ins>(right, destination, width))
-			->setDebug(*node)->extract();
+		function.insertBefore<Mov, false>(instruction, left,  destination, width);
+		function.insertBefore<Ins>(instruction, right, destination, width);
 	}
 
 	template <typename Ins, typename N>
@@ -91,42 +109,60 @@ namespace LL2X::Passes {
 		OperandPtr destination = node->operand;
 		const auto width = node->type->width();
 
-		function.insertBefore(instruction, std::make_shared<Mov>(left, destination, width))->setDebug(*node)->extract();
-		function.insertBefore(instruction, std::make_shared<Ins>(right, destination, width))
-			->setDebug(*node)->extract();
+		function.insertBefore<Mov, false>(instruction, left, destination, width);
+		function.insertBefore<Ins>(instruction, right, destination, width);
 	}
 
 	void lowerMath(Function &function, InstructionPtr &instruction, BasicMathNode *node) {
-		if (*node->oper == "add") {
+		if (*node->oper == "add")
 			lowerCommutative<Add>(function, instruction, node);
-		} else if (*node->oper == "sub") {
+		else if (*node->oper == "sub")
 			lowerNoncommutative<Sub>(function, instruction, node);
-		} else if (*node->oper == "mul") {
+		else if (*node->oper == "mul")
 			lowerMult(function, instruction, node);
-		} else if (*node->oper == "shl") {
+		else if (*node->oper == "shl")
 			lowerNoncommutative<Shl>(function, instruction, node);
-		} else
+		else
 			throw std::runtime_error("Unknown math operation: " + *node->oper);
 	}
 
 	void lowerMult(Function &function, InstructionPtr &instruction, BasicMathNode *node) {
+		OperandPtr left  = node->left->makeOperand();
+		OperandPtr right = node->right->makeOperand();
+		OperandPtr destination = node->operand;
+
+		if (right->isConstant()) {
+			const auto constant = right->getConstant();
+			if (constant == 0) {
+				function.insertBefore<Xor>(instruction, destination, destination);
+				return;
+			}
+
+			if (constant == 1) {
+				function.insertBefore<Mov>(instruction, left, destination);
+				return;
+			}
+
+			if (0 < constant && Util::isPowerOfTwo(constant)) {
+				auto new_right = Operand4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
+				function.insertBefore<Mov>(instruction, left, destination);
+				function.insertBefore<Shl>(instruction, new_right, destination);
+				return;
+			}
+		}
+
 		auto rax_clobber = function.clobber(instruction, x86_64::rax);
 		auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 
-		OperandPtr left  = node->left->makeOperand();
-		OperandPtr right = node->right->makeOperand();
-		OperandPtr rax   = Operand::make(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
-		OperandPtr rdx   = Operand::make(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
-		OperandPtr destination = node->operand;
+		OperandPtr rax = Operand::make(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
+		OperandPtr rdx = Operand::make(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
 
 		// mov %left, %rax
-		function.insertBefore(instruction, std::make_shared<Mov>(left, rax), false)->setDebug(*instruction, true);
+		function.insertBefore<Mov, false>(instruction, left, rax);
 		// mul %right
-		function.insertBefore(instruction, std::make_shared<Mul>(right, destination->bitWidth), false)
-			->setDebug(*instruction, true);
+		function.insertBefore<Mul, false>(instruction, right, destination->bitWidth);
 		// mov %rax, %dest
-		function.insertBefore(instruction, std::make_shared<Mov>(rax, destination), false)
-			->setDebug(*instruction, true);
+		function.insertBefore<Mov, false>(instruction, rax, destination);
 
 		function.unclobber(instruction, rdx_clobber);
 		function.unclobber(instruction, rax_clobber);
@@ -165,15 +201,15 @@ namespace LL2X::Passes {
 			} else if (type == NodeType::Div) {
 				DivNode *div = dynamic_cast<DivNode *>(llvm->node);
 				if (div->divType == DivNode::DivType::Udiv)
-					lowerDiv<Div, false>(function, instruction, div);
+					lowerDiv(function, instruction, div, false, false);
 				else if (div->divType == DivNode::DivType::Sdiv)
-					lowerDiv<Idiv, false>(function, instruction, div);
+					lowerDiv(function, instruction, div, false, true);
 			} else if (type == NodeType::Rem) {
 				RemNode *rem = dynamic_cast<RemNode *>(llvm->node);
 				if (rem->remType == RemNode::RemType::Srem)
-					lowerDiv<Div, true>(function, instruction, rem);
+					lowerDiv(function, instruction, rem, true, false);
 				else
-					lowerDiv<Idiv, true>(function, instruction, rem);
+					lowerDiv(function, instruction, rem, true, true);
 			} else if (type == NodeType::Shr) {
 				ShrNode *shr = dynamic_cast<ShrNode *>(llvm->node);
 				if (shr->shrType == ShrNode::ShrType::Ashr)

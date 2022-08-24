@@ -143,6 +143,10 @@ namespace LL2X {
 		return mode == Mode::Constant || mode == Mode::Direct;
 	}
 
+	bool Operand::isConstant() const {
+		return mode == Mode::Constant;
+	}
+
 	bool Operand::isHackable() const {
 		return !isNumeric() && !isIndirect();
 	}
@@ -166,6 +170,10 @@ namespace LL2X {
 			set.insert(reg);
 		if (index)
 			set.insert(index);
+	}
+
+	Operand::Number Operand::getConstant() const {
+		return std::get<Number>(displacement);
 	}
 
 	std::shared_ptr<Operand> Operand::toDisplaced(int displacement) const {

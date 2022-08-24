@@ -356,9 +356,10 @@ _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE8max_sizeEv:
 	.___ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE8max_sizeEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(1798:3): size=8, type=%"class.std::__cxx11::basic_string"**, var=^2
 	leaq -8(%rbp), %rax
 	# LowerMemory.S9: mov %rdi, (^2)
@@ -372,19 +373,13 @@ _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE8max_sizeEv:
 	movq %rbx, %rdi
 	callq _ZNSt16allocator_traitsISaIcEE8max_sizeERKS0_
 	# SetupCalls(1802:3: move result from %rax
-	movq %rax, %rbx
+	movq %rax, %r12
+	movq %r12, %rbx
+	subq $1, %rbx
 	movq %rbx, %rax
-	subq $1, %rax
-	# Clobber rax
-	movq %rax, -16(%rbp)
-	movq $0, %rdx
-	movq %rax, %rax
-	divq $2
-	movq %rax, %rbx
-	# Unclobber rax
-	movq -16(%rbp), %rax
-	movq %rbx, %rax
-	movq -24(%rbp), %rbx
+	shrq $1, %rax
+	movq -32(%rbp), %r12
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2874,8 +2869,8 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(448 + 0, 16)
-	subq $448, %rsp
+	# upalign(456 + 0, 16)
+	subq $464, %rsp
 	movq %rbx, -384(%rbp)
 	# LowerAlloca(670:3): size=8, type=i32**, var=^2
 	leaq -8(%rbp), -104(%rbp)
@@ -3032,7 +3027,7 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -184(%rbp), %rdi
 	movl (%rdi), %ecx
 	movl %ecx, %edi
-	lock addq %edi, (%rax)
+	lock addl %edi, (%rax)
 	# LowerMemory.S9: mov ^43, (^9)
 	movq -176(%rbp), %rax
 	movl %edi, (%rax)
@@ -3116,11 +3111,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -304(%rbp), %rax
 	movl %ebx, (%rax)
 	# LowerMemory(load @ 763:3): L2 (^12) into ^65
-	movq -128(%rbp), %rax
-	movl (%rax), %ebx
+	movq -128(%rbp), %rbx
+	movl (%rbx), %eax
 	# LowerMemory.S9: mov ^65, (^19)
-	movq -120(%rbp), %rax
-	movl %ebx, (%rax)
+	movq -120(%rbp), %rbx
+	movl %eax, (%rbx)
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M234
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M209:
 	# LowerMemory(load @ 768:3): L2 (^20) into ^67
@@ -3148,7 +3143,7 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -88(%rbp), %rax
 	movl (%rax), %ecx
 	movl %ecx, %ebx
-	lock addq %ebx, (%rax)
+	lock addl %ebx, (%rax)
 	# LowerMemory.S9: mov ^72, (^5)
 	movq -80(%rbp), %rax
 	movl %ebx, (%rax)
@@ -4235,7 +4230,7 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE15_M_add_ref_copyEv:
 	# LowerMemory(load @ 628:3): L2 (^4) into ^27
 	movl (%rbx), %eax
 	movl %eax, %ebx
-	lock addq %ebx, (%rcx)
+	lock addl %ebx, (%rcx)
 	# LowerMemory.S9: mov ^28, (^5)
 	movl %ebx, (%r9)
 	# LowerMemory(load @ 631:3): L2 (^5) into ^29
@@ -4771,11 +4766,11 @@ _ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv:
 	.___ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
-	movq %r13, -72(%rbp)
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r13, -64(%rbp)
 	# LowerAlloca(1849:3): size=8, type=%"class.__gnu_cxx::new_allocator"**, var=^4
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1850:3): size=8, type=i64*, var=^5
@@ -4820,21 +4815,15 @@ _ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv:
 	.___ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv__M86:
 	# LowerMemory(load @ 1875:3): L2 (^5) into ^17
 	movq (%r12), %rax
-	# Clobber rax
-	movq %rax, -40(%rbp)
-	movq %rax, %rax
-	mulq $1
 	movq %rax, %rbx
-	# Unclobber rax
-	movq -40(%rbp), %rax
 	movq %rbx, %rdi
 	callq _Znwm
 	# SetupCalls(1877:3: move result from %rax
 	movq %rax, %rbx
 	movq %rbx, %rax
-	movq -72(%rbp), %r13
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -64(%rbp), %r13
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
