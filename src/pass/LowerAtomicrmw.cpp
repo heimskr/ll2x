@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "compiler/Function.h"
 #include "compiler/Instruction.h"
 #include "compiler/LLVMInstruction.h"
@@ -39,8 +41,22 @@ namespace LL2X::Passes {
 
 			// TODO: instead of copying variables, reuse them if they're not live-out.
 
+			// By now, the values should be OperandValues.
+			assert(atomicrmw->pointer->valueType() == ValueType::Operand);
+			assert(atomicrmw->value->valueType()   == ValueType::Operand);
+
+			OperandPtr &reg_mem  = std::dynamic_pointer_cast<OperandValue>(atomicrmw->pointer)->operand;
+			OperandPtr &reg_only = std::dynamic_pointer_cast<OperandValue>(atomicrmw->value)->operand;
+			OperandPtr &result   = atomicrmw->operand;
+
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
-				// if (op == 
+				VariablePtr temp = function.newVariable(reg_only->reg->type, block);
+
+				function.insertBefore<Mov>(instruction, reg_only, result);
+
+				if (op == AtomicrmwNode::Op::Sub) {
+					function.insertBefore<Neg>(instruction, result);
+				}
 			}
 		}
 
