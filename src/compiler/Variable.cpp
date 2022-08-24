@@ -128,7 +128,7 @@ namespace LL2X {
 
 	std::string Variable::toString(x86_64::Width width) const {
 		if (1 < registers.size()) {
-			std::string out('(', 1);
+			std::string out = "(";
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)
@@ -153,7 +153,7 @@ namespace LL2X {
 		else if (registers.size() == 1)
 			return '%' + x86_64::registerName(*registers.begin(), width) + ":" + *id;
 		else {
-			std::string out('(', 1);
+			std::string out = "(";
 			bool first = true;
 			for (const int reg: registers) {
 				if (first)

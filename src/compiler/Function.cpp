@@ -61,7 +61,7 @@
 #include "pass/LowerBranches.h"
 #include "pass/LowerClobber.h"
 #include "pass/LowerConversions.h"
-// #include "pass/LowerExtractvalue.h"
+#include "pass/LowerExtractvalue.h"
 // #include "pass/LowerFreeze.h"
 #include "pass/LowerGetelementptr.h"
 #include "pass/LowerIcmp.h"
@@ -953,7 +953,7 @@ namespace LL2X {
 		Passes::setupCalls(*this);
 		Passes::lowerMemory(*this);
 		// Passes::lowerInlineAsm(*this);
-		// Passes::lowerExtractvalue(*this);
+		Passes::lowerExtractvalue(*this);
 		// Passes::transformInstructions(*this);
 		// for (BasicBlockPtr &block: blocks)
 		// 	block->extract(true);

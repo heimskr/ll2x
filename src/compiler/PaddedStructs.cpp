@@ -30,12 +30,11 @@ namespace LL2X::PaddedStructs {
 		return offset;
 	}
 
-	int getOffset(std::shared_ptr<StructType> type, int index) {
+	int getOffset(const std::shared_ptr<StructType> &type, int index) {
 		return getOffset(*type, index);
 	}
 
-	VariablePtr extract(VariablePtr source, int index, Function &function, InstructionPtr instruction) {
-		throw std::runtime_error("PaddedStructs::extract is currently unimplemented.");
+	VariablePtr extract(const VariablePtr &source, int index, Function &function, const InstructionPtr &instruction) {
 		std::list<int> source_regs(source->registers.begin(), source->registers.end());
 
 		TypePtr type = source->type;
