@@ -7,6 +7,5 @@ namespace LL2X {
 
 	std::string Pop::toString() const {
 		return std::string("pop") + suffix() + ' ' + destination->toString();
-
 	}
 }

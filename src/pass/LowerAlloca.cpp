@@ -30,8 +30,10 @@ namespace LL2X::Passes {
 		// Loop over all instructions, ignoring everything except allocas.
 		for (InstructionPtr &instruction: function.linearInstructions) {
 			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+
 			if (!llvm || llvm->node->nodeType() != NodeType::Alloca)
 				continue;
+
 			AllocaNode *alloca = dynamic_cast<AllocaNode *>(llvm->node);
 
 			// First, mark the alloca instruction for removal.

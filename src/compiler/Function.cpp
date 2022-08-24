@@ -58,6 +58,7 @@
 #include "pass/InsertPrologue.h"
 // #include "pass/LoadArguments.h"
 #include "pass/LowerAlloca.h"
+#include "pass/LowerAtomicrmw.h"
 #include "pass/LowerBranches.h"
 #include "pass/LowerClobber.h"
 #include "pass/LowerConversions.h"
@@ -948,6 +949,7 @@ namespace LL2X {
 		// Passes::lowerObjectsize(*this);
 		Passes::lowerIcmp(*this);
 		Passes::lowerMath(*this);
+		Passes::lowerAtomicrmw(*this);
 		Passes::lowerConversions(*this);
 		Passes::lowerGetelementptr(*this);
 		// Passes::lowerFreeze(*this);
