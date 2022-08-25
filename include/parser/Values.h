@@ -77,7 +77,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return value; }
 		std::string compile() const override { return std::to_string(value); }
-		OperandPtr makeOperand() const override { return Operand4(value); }
+		OperandPtr makeOperand() const override { return Op4(value); }
 	};
 
 	struct NullValue: IntValue {
@@ -88,7 +88,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return 0; }
 		std::string compile() const override { return "0"; }
-		OperandPtr makeOperand() const override { return Operand1(0); }
+		OperandPtr makeOperand() const override { return Op1(0); }
 	};
 
 	struct VectorValue: Value {
@@ -113,7 +113,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return value? 1 : 0; }
 		std::string compile() const override { return std::to_string(longValue()); }
-		OperandPtr makeOperand() const override { return Operand1(longValue()); }
+		OperandPtr makeOperand() const override { return Op1(longValue()); }
 
 	};
 
@@ -160,7 +160,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<GlobalValue>(name); }
 		operator std::string() override { return "\e[32m@" + *name + "\e[39m"; }
 		std::string compile() const override { return *name; }
-		OperandPtr makeOperand() const override { return Operand8(*name, true); }
+		OperandPtr makeOperand() const override { return Op8(*name, true); }
 	};
 
 	struct GetelementptrValue: Value {
@@ -215,7 +215,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<VoidValue>(); }
 		operator std::string() override { return "void"; }
 		std::string compile() const override { return "0"; }
-		OperandPtr makeOperand() const override { return Operand8(0); }
+		OperandPtr makeOperand() const override { return Op8(0); }
 	};
 
 	struct StructValue: Value {
@@ -258,7 +258,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<ZeroinitializerValue>(); }
 		operator std::string() override { return "zeroinitializer"; }
 		std::string compile() const override { return "0"; }
-		OperandPtr makeOperand() const override { return Operand8(0); }
+		OperandPtr makeOperand() const override { return Op8(0); }
 	};
 
 	struct UndefValue: Value {
@@ -269,7 +269,7 @@ namespace LL2X {
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return 0; }
 		std::string compile() const override { return "0"; }
-		OperandPtr makeOperand() const override { return Operand8(0); }
+		OperandPtr makeOperand() const override { return Op8(0); }
 	};
 
 	ValuePtr getValue(ASTNode *);

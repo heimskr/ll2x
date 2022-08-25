@@ -63,12 +63,12 @@ namespace LL2X::Passes {
 							InstructionPtr new_instr;
 							
 							if (pair.first->isIntLike())
-								new_instr = std::make_shared<Mov>(OperandX(phi_size, pair.first->longValue()),
-									OperandX(phi_size, target), phi_size);
+								new_instr = std::make_shared<Mov>(OpX(phi_size, pair.first->longValue()),
+									OpX(phi_size, target), phi_size);
 							else
-								new_instr = std::make_shared<Mov>(OperandX(phi_size,
+								new_instr = std::make_shared<Mov>(OpX(phi_size,
 									*dynamic_cast<GlobalValue *>(pair.first.get())->name, function.rip),
-									OperandX(phi_size, target), phi_size);
+									OpX(phi_size, target), phi_size);
 
 							new_instr->parent = block;
 							if (block->instructions.empty()) {
@@ -181,13 +181,13 @@ namespace LL2X::Passes {
 
 				if (local) {
 					comment = "MovePhi: " + local->variable->plainString() + " -> " + target->plainString();
-					new_instruction = std::make_shared<Mov>(OperandX(phi_size, local->variable),
-						OperandX(phi_size, target), phi_size);
+					new_instruction = std::make_shared<Mov>(OpX(phi_size, local->variable),
+						OpX(phi_size, target), phi_size);
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->isOperand()) {
 					OperandPtr operand = dynamic_cast<OperandValue *>(value.get())->operand;
 					comment = "MovePhi: " + operand->toString() + " -> " + target->plainString();
-					new_instruction = std::make_shared<Mov>(operand, OperandX(phi_size, target));
+					new_instruction = std::make_shared<Mov>(operand, OpX(phi_size, target));
 					function.categories["MovePhi"].insert(new_instruction);
 				} else if (value->valueType() == ValueType::Undef) {
 					// Do nothing for undef values. This allows us to insert moves in cutPhi.
@@ -195,12 +195,12 @@ namespace LL2X::Passes {
 				} else if (value->isIntLike() || value->isGlobal()) {
 					if (value->isIntLike()) {
 						comment = "MovePhi: intlike -> " + target->plainString();
-						new_instruction = std::make_shared<Mov>(OperandX(phi_size, value->longValue()),
-							OperandX(phi_size, target), phi_size);
+						new_instruction = std::make_shared<Mov>(OpX(phi_size, value->longValue()),
+							OpX(phi_size, target), phi_size);
 					} else {
 						comment = "MovePhi: global -> " + target->plainString();
-						new_instruction = std::make_shared<Mov>(OperandX(phi_size,
-							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OperandX(phi_size, target),
+						new_instruction = std::make_shared<Mov>(OpX(phi_size,
+							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OpX(phi_size, target),
 							phi_size);
 					}
 				} else {
@@ -436,8 +436,8 @@ namespace LL2X::Passes {
 							auto *local = dynamic_cast<LocalValue *>(value.get());
 							if (local->variable && *local->variable == *source) {
 								auto block = function.bbMap.at(block_label);
-								auto mov = std::make_shared<Mov>(OperandX(phi_size, source),
-									OperandX(phi_size, destination), phi_size);
+								auto mov = std::make_shared<Mov>(OpX(phi_size, source),
+									OpX(phi_size, destination), phi_size);
 								const std::string comment = "CutPhi: " + source->plainString() + " -> " +
 									destination->plainString();
 								if (block->instructions.empty()) {

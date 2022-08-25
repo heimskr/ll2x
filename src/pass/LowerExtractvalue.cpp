@@ -23,7 +23,7 @@ namespace LL2X::Passes {
 			ValueType aggregate_type = ev->aggregateValue->valueType();
 
 			if (aggregate_type == ValueType::Undef) {
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), ev->operand),
+				function.insertBefore(instruction, std::make_shared<Mov>(Op4(0), ev->operand),
 					"ExtractValue: undef == 0")->setDebug(ev)->extract();
 				to_remove.push_back(instruction);
 				++changed;

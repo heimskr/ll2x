@@ -9,8 +9,11 @@
 namespace LL2X {
 	Constant::Constant(TypePtr type_, ValuePtr value_, const ParAttrs &parattrs_, Conversion conversion_,
 	                   ConstantPtr conversion_source, TypePtr conversion_type):
-		type(type_), value(value_), parattrs(parattrs_), conversion(conversion_),
-		conversionSource(conversion_source), conversionType(conversion_type) {}
+		type(std::move(type_)), value(std::move(value_)), parattrs(parattrs_), conversion(conversion_),
+		conversionSource(std::move(conversion_source)), conversionType(std::move(conversion_type)) {}
+
+	Constant::Constant(TypePtr type_, ValuePtr value_, const ParAttrs &parattrs_):
+		type(std::move(type_)), value(std::move(value_)), parattrs(parattrs_) {}
 
 	Constant::Constant(const ASTNode *node, TypePtr type_hint) {
 		if (node->symbol == LLVMTOK_DECIMAL) {

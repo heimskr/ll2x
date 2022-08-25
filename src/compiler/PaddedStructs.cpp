@@ -85,7 +85,7 @@ namespace LL2X::PaddedStructs {
 		while (0 < width_remaining) {
 			int to_take = std::min({64 - skip, target_remaining, width_remaining});
 			auto from_pack = function.newVariable(std::make_shared<OpaqueType>());
-			auto move_from_pack = std::make_shared<DeferredSourceMove>(OperandV(source), OperandV(from_pack),
+			auto move_from_pack = std::make_shared<DeferredSourceMove>(OpV(source), OpV(from_pack),
 				source_reg_index);
 			function.insertBefore(instruction, move_from_pack, false);
 			function.comment(move_from_pack, "PaddedStructs(out = " + out_var->type->toString() + "): move from pack");
@@ -95,10 +95,10 @@ namespace LL2X::PaddedStructs {
 				// Normally I'd use a mask and an AndIInstruction, but our mask would often be larger than the 32 bits
 				// allowed in an I-type instruction's immediate value. What we're doing here is removing the bits we
 				// skipped in the source register.
-				auto left = std::make_shared<Shl>(Operand4(skip), OperandV(from_pack));
+				auto left = std::make_shared<Shl>(Op4(skip), OpV(from_pack));
 				function.insertBefore(instruction, left, false);
 				left->setDebug(*instruction)->extract();
-				auto right = std::make_shared<Shr>(Operand4(skip), OperandV(from_pack));
+				auto right = std::make_shared<Shr>(Op4(skip), OpV(from_pack));
 				function.insertBefore(instruction, right, false);
 				right->setDebug(*instruction)->extract();
 			}
@@ -106,26 +106,26 @@ namespace LL2X::PaddedStructs {
 			if (skip + to_take < 64) {
 				// Same applies here; instead of masking, we have to use two shifts. This time, we're removing the extra
 				// bits to the right of the data we want.
-				auto right = std::make_shared<Shr>(Operand4(64 - skip - to_take), OperandV(from_pack));
+				auto right = std::make_shared<Shr>(Op4(64 - skip - to_take), OpV(from_pack));
 				function.insertBefore(instruction, right, false);
 				right->setDebug(*instruction)->extract();
 
 				// If the output is, say, an i16 type, then we want the data to be right-aligned without the left
 				// alignment we use for structs. We can accomplish that by simply not shifting it back to the left here.
 				if (out_var->type->typeType() == TypeType::Struct) {
-					auto left = std::make_shared<Shl>(Operand4(64 - skip - to_take), OperandV(from_pack));
+					auto left = std::make_shared<Shl>(Op4(64 - skip - to_take), OpV(from_pack));
 					function.insertBefore(instruction, left, false);
 					left->setDebug(*instruction)->extract();
 				}
 			}
 
 			if (skip != 0) {
-				auto left = std::make_shared<Shl>(Operand4(skip), OperandV(from_pack));
+				auto left = std::make_shared<Shl>(Op4(skip), OpV(from_pack));
 				function.insertBefore(instruction, left, false);
 				left->setDebug(*instruction)->extract();
 			}
 
-			auto move = std::make_shared<DeferredDestinationMove>(OperandV(from_pack), OperandV(out_var),
+			auto move = std::make_shared<DeferredDestinationMove>(OpV(from_pack), OpV(out_var),
 				target_reg_index);
 			function.insertBefore(instruction, move, false);
 			move->setDebug(*instruction)->extract();

@@ -147,36 +147,36 @@ namespace LL2X {
 	using OperandPtr = std::shared_ptr<Operand>;
 
 	template <typename... Args>
-	inline OperandPtr Operand8(Args &&...args) {
+	inline OperandPtr Op8(Args &&...args) {
 		return Operand::make(x86_64::Width::Eight, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	inline OperandPtr Operand4(Args &&...args) {
+	inline OperandPtr Op4(Args &&...args) {
 		return Operand::make(x86_64::Width::Four, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	inline OperandPtr Operand2(Args &&...args) {
+	inline OperandPtr Op2(Args &&...args) {
 		return Operand::make(x86_64::Width::Two, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	inline OperandPtr Operand1(Args &&...args) {
+	inline OperandPtr Op1(Args &&...args) {
 		return Operand::make(x86_64::Width::Low, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	inline OperandPtr OperandX(x86_64::Width width, Args &&...args) {
+	inline OperandPtr OpX(x86_64::Width width, Args &&...args) {
 		return Operand::make(width, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	inline OperandPtr OperandX(int bit_width, Args &&...args) {
+	inline OperandPtr OpX(int bit_width, Args &&...args) {
 		return Operand::make(bit_width, std::forward<Args>(args)...);
 	}
 
-	inline OperandPtr OperandV(const VariablePtr &var) {
+	inline OperandPtr OpV(const VariablePtr &var) {
 		return Operand::make(var);
 	}
 }

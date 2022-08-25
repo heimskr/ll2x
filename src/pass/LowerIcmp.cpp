@@ -73,14 +73,14 @@ namespace LL2X::Passes {
 				right = dynamic_cast<LocalValue *>(value2.get())->variable;
 			} else {
 				right = function.newVariable(node->getType(), instruction->parent.lock());
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(right),
-					OperandX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.rip)), false)
+				function.insertBefore(instruction, std::make_shared<Mov>(Op8(right),
+					OpX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.rip)), false)
 					->setDebug(node)->extract();
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(right), OperandX(width, 0, right),
+				function.insertBefore(instruction, std::make_shared<Mov>(Op8(right), OpX(width, 0, right),
 					width), false)->setDebug(node)->extract();
 			}
 
-			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(width, left), OperandX(width, right),
+			function.insertBefore(instruction, std::make_shared<Cmp>(OpX(width, left), OpX(width, right),
 				width), false)->setDebug(node)->extract();
 			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
 				->setDebug(node)->extract();
@@ -89,7 +89,7 @@ namespace LL2X::Passes {
 
 			const auto width = node->getType()->width();
 			// TODO: verify right operand width
-			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(width, left),
+			function.insertBefore(instruction, std::make_shared<Cmp>(OpX(width, left),
 				dynamic_cast<OperandValue *>(value2.get())->operand, width), false)->setDebug(node)->extract();
 			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
 				->setDebug(node)->extract();
@@ -106,7 +106,7 @@ namespace LL2X::Passes {
 
 			const int size = node->getType()->width();
 
-			function.insertBefore(instruction, std::make_shared<Cmp>(OperandX(size, left), OperandX(size, imm), size),
+			function.insertBefore(instruction, std::make_shared<Cmp>(OpX(size, left), OpX(size, imm), size),
 				false)->setDebug(node)->extract();
 			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
 				->setDebug(node)->extract();

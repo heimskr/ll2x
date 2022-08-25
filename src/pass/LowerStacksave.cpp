@@ -20,7 +20,7 @@ namespace LL2X::Passes {
 			if (!call->name->isGlobal())
 				continue;
 			if (*dynamic_cast<GlobalValue *>(call->name.get())->name == "llvm.stacksave") {
-				auto mov = std::make_shared<Mov>(Operand8(function.rsp), Operand8(function.getVariable(*call->result)));
+				auto mov = std::make_shared<Mov>(Op8(function.rsp), Op8(function.getVariable(*call->result)));
 				function.insertBefore(instruction, mov)->setDebug(llvm)->extract();
 				to_remove.push_back(instruction);
 			}

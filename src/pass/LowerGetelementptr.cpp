@@ -52,13 +52,13 @@ namespace LL2X::Passes {
 
 			OperandPtr pointer;
 			if (constant_value->isLocal()) {
-				pointer = OperandV(std::dynamic_pointer_cast<LocalValue>(constant_value)->variable);
+				pointer = OpV(std::dynamic_pointer_cast<LocalValue>(constant_value)->variable);
 			} else if (constant_value->isOperand()) {
 				pointer = std::dynamic_pointer_cast<OperandValue>(constant_value)->operand;
 			} else {
 				GlobalValue *global = dynamic_cast<GlobalValue *>(constant_value.get());
-				pointer = OperandV(function.newVariable(constant_type));
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(*global->name), pointer))
+				pointer = OpV(function.newVariable(constant_type));
+				function.insertBefore(instruction, std::make_shared<Mov>(Op8(*global->name), pointer))
 					->setDebug(node)->extract();
 			}
 
@@ -90,11 +90,11 @@ namespace LL2X::Passes {
 							function.comment(instruction, "LowerGetelementptr(" + std::string(node->location)
 								+ "): pointer/array, pvar -> " + operand->toString());
 							auto temp = function.newVariable(IntType::make(64), instruction->parent.lock());
-							function.insertBefore(instruction, std::make_shared<Mov>(OperandV(pvar), OperandV(temp)),
+							function.insertBefore(instruction, std::make_shared<Mov>(OpV(pvar), OpV(temp)),
 								false)->setDebug(*instruction, true);
-							function.multiply(instruction, OperandV(temp), static_cast<uint64_t>(type->width()), true,
+							function.multiply(instruction, OpV(temp), static_cast<uint64_t>(type->width()), true,
 								node->debugIndex);
-							function.insertBefore(instruction, std::make_shared<Add>(OperandV(temp), operand))
+							function.insertBefore(instruction, std::make_shared<Add>(OpV(temp), operand))
 								->setDebug(*instruction, true);
 						} else if (tt == TypeType::Struct) {
 							throw std::runtime_error("pvar indices are invalid for struct types @ " +
@@ -102,7 +102,7 @@ namespace LL2X::Passes {
 						}
 					} else if (tt == TypeType::Pointer || tt == TypeType::Array) {
 						type = dynamic_cast<HasSubtype *>(type.get())->subtype;
-						auto add = std::make_shared<Add>(Operand4(type->width() * std::get<long>(index.value)),
+						auto add = std::make_shared<Add>(Op4(type->width() * std::get<long>(index.value)),
 							operand);
 						function.insertBefore(instruction, add, "LowerGetelementptr(" + std::string(node->location) +
 							"): pointer/array, number -> " + operand->toString())->setDebug(node)->extract();
@@ -125,7 +125,7 @@ namespace LL2X::Passes {
 						assert(operand->isRegister());
 						operand->reg->setType(out_type);
 
-						auto add = std::make_shared<Add>(Operand4(offset), operand);
+						auto add = std::make_shared<Add>(Op4(offset), operand);
 						function.insertBefore(instruction, add, "LowerGetelementptr(" + std::string(node->location) +
 							"): struct, number -> " + operand->toString())->setDebug(node)->extract();
 						type = snode->types.at(std::get<long>(index.value));
@@ -147,15 +147,15 @@ namespace LL2X::Passes {
 					throw std::runtime_error("Type " + std::string(*node->type) + " has no subtype");
 
 				VariablePtr temp = function.newVariable(IntType::make(64), instruction->parent.lock());
-				auto mov = std::make_shared<Mov>(OperandV(index), OperandV(temp));
+				auto mov = std::make_shared<Mov>(OpV(index), OpV(temp));
 				function.insertBefore(instruction, mov, "LowerGetelementptr(" + std::string(node->location) +
 					"): array/pointer-type, dynamic index -> " + node->operand->toString(), false)
 					->setDebug(node)->extract();
-				function.multiply(instruction, OperandV(temp), static_cast<uint64_t>(subwidth), false,
+				function.multiply(instruction, OpV(temp), static_cast<uint64_t>(subwidth), false,
 					node->debugIndex);
-				auto movmul = std::make_shared<Mov>(OperandV(temp), node->operand);
+				auto movmul = std::make_shared<Mov>(OpV(temp), node->operand);
 				// result += skip
-				auto addskip = std::make_shared<Add>(Operand4(skip), node->operand);
+				auto addskip = std::make_shared<Add>(Op4(skip), node->operand);
 				// result += base pointer (not %rbp)
 				auto addbase = std::make_shared<Add>(pointer, node->operand);
 				function.insertBefore(instruction, movmul)->setDebug(node)->extract();
@@ -193,7 +193,7 @@ namespace LL2X::Passes {
 					source = dynamic_cast<LocalValue *>(node->constant->value.get())->getVariable(function);
 				else
 					source = function.makeVariable(node->constant->value, instruction, node->constant->type);
-				function.insertBefore(instruction, std::make_shared<Mov>(OperandV(source), node->operand));
+				function.insertBefore(instruction, std::make_shared<Mov>(OpV(source), node->operand));
 
 				Getelementptr::insert(function, node->pointerType, indices, instruction, node->operand, &out_type);
 				node->operand->reg->setType(out_type);
@@ -206,7 +206,7 @@ namespace LL2X::Passes {
 				VariablePtr index = function.getVariable(std::get<Variable::ID>(node->indices.at(0).value));
 				const int width = Util::updiv(node->type->width(), 8);
 
-				auto mov = std::make_shared<Mov>(OperandV(index), node->operand);
+				auto mov = std::make_shared<Mov>(OpV(index), node->operand);
 				function.insertBefore(instruction, mov, "LowerGetelementptr(" + std::string(node->location) +
 					"): pointer-type -> " + node->operand->toString(), false)->setDebug(node)->extract();
 				function.multiply(instruction, node->operand, static_cast<int64_t>(width), false, node->debugIndex);

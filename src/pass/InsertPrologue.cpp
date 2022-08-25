@@ -23,11 +23,11 @@ namespace LL2X::Passes {
 		// Start by pushing %rbp to the stack.
 		const VariablePtr &rbp = function.rbp;
 		const VariablePtr &rsp = function.rsp;
-		function.insertBefore(first, std::make_shared<Push>(Operand8(rbp)), false)->setDebug(*first, true);
+		function.insertBefore(first, std::make_shared<Push>(Op8(rbp)), false)->setDebug(*first, true);
 		function.initialPushedBytes = 8;
 
 		// Move %rsp into %rbp.
-		function.insertBefore(first, std::make_shared<Mov>(Operand8(rsp), Operand8(rbp)), false)->setDebug(*first,
+		function.insertBefore(first, std::make_shared<Mov>(Op8(rsp), Op8(rbp)), false)->setDebug(*first,
 			true);
 
 		// Next, we need to save to the stack any registers that are written to. Start by finding the registers.
@@ -45,8 +45,8 @@ namespace LL2X::Passes {
 
 		// Move %rsp down to make room for stack allocations if necessary.
 		if (0 < function.stackSize) {
-			auto sub = std::make_shared<Sub>(Operand4(Util::upalign(function.stackSize + function.maxPushedForCalls,
-				16)), Operand8(rsp));
+			auto sub = std::make_shared<Sub>(Op4(Util::upalign(function.stackSize + function.maxPushedForCalls,
+				16)), Op8(rsp));
 			function.insertBefore(first, sub, "upalign(" + std::to_string(function.stackSize) + " + " +
 				std::to_string(function.maxPushedForCalls) + ", 16)", false)->setDebug(*first, true);
 			// function.categories["StackSkip"].insert(sub);
@@ -57,7 +57,7 @@ namespace LL2X::Passes {
 			function.savedRegisters.push_back(reg);
 			VariablePtr variable = function.makePrecoloredVariable(reg, front_block);
 			const auto &location = *function.calleeSaved.at(reg);
-			auto save = std::make_shared<Mov>(Operand8(variable), Operand8(-location.offset, rbp));
+			auto save = std::make_shared<Mov>(Op8(variable), Op8(-location.offset, rbp));
 			function.insertBefore(first, save, false)->setDebug(*first, true);
 			function.categories["PrologueSave"].insert(save);
 		}

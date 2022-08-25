@@ -457,7 +457,7 @@ namespace LL2X {
 					return;
 
 				if (Util::isPowerOfTwo(value)) {
-					auto shl = std::make_shared<Shl>(Operand4(std::bit_width(static_cast<uint64_t>(value)) - 1),
+					auto shl = std::make_shared<Shl>(Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
 						operand);
 					insertBefore(anchor, shl, reindex);
 					if (debug != -1)
@@ -466,9 +466,9 @@ namespace LL2X {
 				} else {
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
-					auto rax = OperandX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
+					auto rax = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
 					auto mov_in = std::make_shared<Mov>(operand, rax);
-					auto mul = std::make_shared<I>(Operand4(value));
+					auto mul = std::make_shared<I>(Op4(value));
 					auto mov_out = std::make_shared<Mov>(rax, operand);
 					insertBefore(anchor, mov_in, reindex);
 					insertBefore(anchor, mul, reindex);

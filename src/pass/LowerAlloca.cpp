@@ -54,9 +54,9 @@ namespace LL2X::Passes {
 					VariablePtr destination = function.getVariable(*alloca->result);
 					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size);
 
-					// function.replaceSimilarOperand(OperandV(destination), Operand8(-location.offset, rbp));
+					// function.replaceSimilarOperand(OpV(destination), Op8(-location.offset, rbp));
 
-					auto lea = std::make_shared<Lea>(Operand8(-location.offset, rbp), Operand8(destination));
+					auto lea = std::make_shared<Lea>(Op8(-location.offset, rbp), Op8(destination));
 					function.insertBefore(instruction, lea, "LowerAlloca(" + std::string(alloca->location) + "): size="
 						+ std::to_string(size) + ", type=" + (destination->type? destination->type->toString() : "?") +
 						", var=" + destination->toString(), false)->setDebug(*instruction, true);
@@ -66,13 +66,13 @@ namespace LL2X::Passes {
 
 			// Move the stack pointer down to get the alignment right.
 			if (alloca->align == 16 || alloca->align == 8 || alloca->align == 4 || alloca->align == 2) {
-				auto and_ = std::make_shared<And>(Operand4(-alloca->align), Operand8(rsp));
+				auto and_ = std::make_shared<And>(Op4(-alloca->align), Op8(rsp));
 				function.insertBefore(instruction, and_, false)->setDebug(llvm, true);
 			} else if (0 < alloca->align) {
 				const int   align = Util::upalign(alloca->align, 8);
 				VariablePtr temp  = function.newVariable(IntType::make(64), block);
-				OperandPtr  rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, block));
-				OperandPtr  rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, block));
+				OperandPtr  rax   = Op8(function.makePrecoloredVariable(x86_64::rax, block));
+				OperandPtr  rdx   = Op8(function.makePrecoloredVariable(x86_64::rdx, block));
 
 				// I hope this part is never run.
 
@@ -81,21 +81,21 @@ namespace LL2X::Passes {
 				// clobber %rdx
 				auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 				// mov %rsp, %temp
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand8(rsp), Operand8(temp)), false)
+				function.insertBefore(instruction, std::make_shared<Mov>(Op8(rsp), Op8(temp)), false)
 					->setDebug(llvm, true);
 				// mov $align, %rax
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand4(align), rax), false)
+				function.insertBefore(instruction, std::make_shared<Mov>(Op4(align), rax), false)
 					->setDebug(llvm, true);
 				// mov $0, %rdx
-				function.insertBefore(instruction, std::make_shared<Mov>(Operand4(0), rdx), false)
+				function.insertBefore(instruction, std::make_shared<Mov>(Op4(0), rdx), false)
 					->setDebug(llvm, true);
 				// div %temp
-				function.insertBefore(instruction, std::make_shared<Div>(Operand8(rsp)), false)->setDebug(llvm, true);
+				function.insertBefore(instruction, std::make_shared<Div>(Op8(rsp)), false)->setDebug(llvm, true);
 				// mov %rdx, %temp
-				function.insertBefore(instruction, std::make_shared<Mov>(rdx, Operand8(temp)), false)
+				function.insertBefore(instruction, std::make_shared<Mov>(rdx, Op8(temp)), false)
 					->setDebug(llvm, true);
 				// sub %temp, %rsp
-				function.insertBefore(instruction, std::make_shared<Sub>(Operand8(temp), Operand8(rsp)), false)
+				function.insertBefore(instruction, std::make_shared<Sub>(Op8(temp), Op8(rsp)), false)
 					->setDebug(llvm, true);
 				// unclobber %rdx
 				function.unclobber(instruction, rdx_clobber);
@@ -117,27 +117,27 @@ namespace LL2X::Passes {
 				} else if (value->isLocal()) {
 					// If it's a local variable instead, we can't do the multiplication at compile time.
 					LocalValue *local = dynamic_cast<LocalValue *>(value);
-					auto mov = std::make_shared<Mov>(OperandV(alloca_reg), alloca->operand);
+					auto mov = std::make_shared<Mov>(OpV(alloca_reg), alloca->operand);
 					function.insertBefore(instruction, mov, "LowerAlloca: mov %rsp, %var", false)
 						->setDebug(llvm, true);
 					if (width != 0) {
 						// TODO: use shifts for widths that are powers of two
 
-						OperandPtr rax = Operand8(function.makePrecoloredVariable(x86_64::rax, block));
-						OperandPtr rdx = Operand8(function.makePrecoloredVariable(x86_64::rdx, block));
+						OperandPtr rax = Op8(function.makePrecoloredVariable(x86_64::rax, block));
+						OperandPtr rdx = Op8(function.makePrecoloredVariable(x86_64::rdx, block));
 
 						// clobber %rax
 						auto rax_clobber = function.clobber(instruction, x86_64::rax);
 						// clobber %rdx
 						auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 						// mov $width, %rax
-						function.insertBefore(instruction, std::make_shared<Mov>(Operand4(width), rax), false)
+						function.insertBefore(instruction, std::make_shared<Mov>(Op4(width), rax), false)
 							->setDebug(llvm, true);
 						// mul %var
-						function.insertBefore(instruction, std::make_shared<Mul>(Operand8(local->variable)), false)
+						function.insertBefore(instruction, std::make_shared<Mul>(Op8(local->variable)), false)
 							->setDebug(llvm, true);
 						// sub %rax, %rsp
-						function.insertBefore(instruction, std::make_shared<Sub>(rax, Operand8(rsp)), false)
+						function.insertBefore(instruction, std::make_shared<Sub>(rax, Op8(rsp)), false)
 							->setDebug(llvm, true);
 						// unclobber %rdx
 						function.unclobber(instruction, rdx_clobber);
@@ -153,11 +153,11 @@ namespace LL2X::Passes {
 
 			if (num_elements != -1) {
 				// %rsp -> %var
-				auto mov = std::make_shared<Mov>(Operand8(alloca_reg), alloca->operand);
+				auto mov = std::make_shared<Mov>(Op8(alloca_reg), alloca->operand);
 				function.insertBefore(instruction, mov)->setDebug(llvm, true);
 				const int to_sub = Util::upalign(num_elements * width, 8);
 				if (0 < to_sub) {
-					auto sub = std::make_shared<Sub>(Operand4(to_sub), Operand8(alloca_reg));
+					auto sub = std::make_shared<Sub>(Op4(to_sub), Op8(alloca_reg));
 					function.insertBefore(mov, sub, "LowerAlloca: %rsp -= to_sub")->setDebug(llvm, true);
 				}
 				function.comment(mov, "LowerAlloca: mov %rsp, " + alloca->operand->toString());

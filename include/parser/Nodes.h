@@ -94,10 +94,16 @@ namespace LL2X {
 	};
 
 	struct Writer {
-		const std::string *result = nullptr;
-		OperandPtr operand;
-		bool replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var);
-		std::string getResult() const;
+		protected:
+			Writer() = default;
+			Writer(const std::string *result_): result(result_) {}
+			Writer(OperandPtr operand_): result(operand_->reg->id), operand(std::move(operand_)) {}
+
+		public:
+			const std::string *result = nullptr;
+			OperandPtr operand;
+			bool replaceWritten(const VariablePtr &to_replace, const VariablePtr &new_var);
+			std::string getResult() const;
 	};
 
 	struct CachedConstantValue {
@@ -226,6 +232,11 @@ namespace LL2X {
 			               ASTNode *return_type, ASTNode *_args, ASTNode *function_name, ASTNode *_constants,
 			               ASTNode *attribute_list, ASTNode *unibangs);
 
+			CallInvokeNode(const std::string *result_, TypePtr return_type, const std::string *name_,
+			               std::vector<ConstantPtr>);
+
+			CallInvokeNode(OperandPtr result_, TypePtr return_type, const std::string *name_, std::vector<ConstantPtr>);
+
 		public:
 			const std::string *cconv = nullptr;
 			std::unordered_set<RetAttr> retattrs;
@@ -241,11 +252,17 @@ namespace LL2X {
 
 			TypePtr returnType;
 			ValuePtr name;
+			bool usePLT = false;
 
 			std::vector<ValuePtr> allValues() override;
 			std::vector<ValuePtr *> allValuePointers() override;
 			std::vector<ConstantPtr> allConstants() const override { return constants; }
 			std::vector<ConstantPtr *> allConstantPointers() override;
+
+			CallInvokeNode * setUsePLT(bool use = true) {
+				usePLT = use;
+				return this;
+			}
 	};
 
 	struct CallNode: public CallInvokeNode {
@@ -255,6 +272,8 @@ namespace LL2X {
 		CallNode(ASTNode *_result, ASTNode *_tail, ASTNode *fastmath_flags, ASTNode *_cconv, ASTNode *_retattrs,
 		         ASTNode *_addrspace, ASTNode *return_type, ASTNode *_args, ASTNode *constant, ASTNode *_constants,
 		         ASTNode *attribute_list, ASTNode *unibangs);
+		CallNode(const std::string *result_, TypePtr return_type, const std::string *name_, std::vector<ConstantPtr>);
+		CallNode(OperandPtr result_, TypePtr return_type, const std::string *name_, std::vector<ConstantPtr>);
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Call; }
 	};

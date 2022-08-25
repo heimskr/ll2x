@@ -550,6 +550,20 @@ namespace LL2X {
 				attributeIndices.push_back(child->atoi());
 	}
 
+	CallInvokeNode::CallInvokeNode(const std::string *result_, TypePtr return_type, const std::string *name_,
+	                               std::vector<ConstantPtr> constants_):
+		Writer(result_),
+		constants(std::move(constants_)),
+		returnType(std::move(return_type)),
+		name(std::make_shared<GlobalValue>(name_)) {}
+
+	CallInvokeNode::CallInvokeNode(OperandPtr result_, TypePtr return_type, const std::string *name_,
+	                               std::vector<ConstantPtr> constants_):
+		Writer(std::move(result_)),
+		constants(std::move(constants_)),
+		returnType(std::move(return_type)),
+		name(std::make_shared<GlobalValue>(name_)) {}
+
 	std::vector<ValuePtr> CallInvokeNode::allValues() {
 		std::vector<ValuePtr> out;
 		out.reserve(constants.size() + 1);
@@ -589,6 +603,14 @@ namespace LL2X {
 			tail = _tail->lexerInfo;
 		getFastmath(fastmath, fastmath_flags);
 	}
+
+	CallNode::CallNode(const std::string *result_, TypePtr return_type, const std::string *name_,
+	                   std::vector<ConstantPtr> constants_):
+		CallInvokeNode(result_, std::move(return_type), name_, std::move(constants_)) {}
+
+	CallNode::CallNode(OperandPtr result_, TypePtr return_type, const std::string *name_,
+	                   std::vector<ConstantPtr> constants_):
+		CallInvokeNode(std::move(result_), std::move(return_type), name_, std::move(constants_)) {}
 
 	std::string CallNode::debugExtra() const {
 		std::stringstream out;

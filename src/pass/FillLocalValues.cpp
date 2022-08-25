@@ -18,7 +18,7 @@ namespace LL2X::Passes {
 
 			if (Writer *writer = dynamic_cast<Writer *>(node))
 				if (writer->result)
-					writer->operand = OperandV(function.getVariable(*writer->result));
+					writer->operand = OpV(function.getVariable(*writer->result));
 		}
 	}
 }

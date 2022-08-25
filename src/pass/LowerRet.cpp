@@ -41,9 +41,9 @@ namespace LL2X::Passes {
 				int64_t long_value = ret->value->longValue();
 				InstructionPtr mov;
 				if (UINT32_MAX < static_cast<uint64_t>(long_value))
-					mov = std::make_shared<Movabs>(Operand8(long_value), Operand8(rax));
+					mov = std::make_shared<Movabs>(Op8(long_value), Op8(rax));
 				else
-					mov = std::make_shared<Mov>(Operand4(long_value), Operand8(rax));
+					mov = std::make_shared<Mov>(Op4(long_value), Op8(rax));
 				function.insertBefore(instruction, mov, false)->setDebug(llvm, true);
 			} else if (ret->value->isLocal()) {
 				VariablePtr var = dynamic_cast<LocalValue *>(ret->value.get())->variable;
@@ -55,10 +55,10 @@ namespace LL2X::Passes {
 					auto iter = var->registers.begin();
 					for (size_t i = 0; i < var->registers.size(); ++i) {
 						auto subvar = function.makePrecoloredVariable(*iter++, block);
-						function.insertBefore<Mov, false>(instruction, OperandV(subvar), Operand8(i == 0? rax : rdx));
+						function.insertBefore<Mov, false>(instruction, OpV(subvar), Op8(i == 0? rax : rdx));
 					}
 				} else {
-					function.insertBefore<Mov, false>(instruction, OperandV(var), Operand8(rax));
+					function.insertBefore<Mov, false>(instruction, OpV(var), Op8(rax));
 				}
 			} else if (ret->value->valueType() == ValueType::Operand) {
 				OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(ret->value)->operand;
@@ -75,10 +75,10 @@ namespace LL2X::Passes {
 						VariablePtr to_rax = function.makePrecoloredVariable(*iter, block);
 						VariablePtr to_rdx = function.makePrecoloredVariable(*++iter, block);
 						function.comment(instruction, "LowerRet: two-register return");
-						function.insertBefore<Mov, false>(instruction, Operand8(to_rax), Operand8(rax));
-						function.insertBefore<Mov, false>(instruction, Operand8(to_rdx), Operand8(rdx));
+						function.insertBefore<Mov, false>(instruction, Op8(to_rax), Op8(rax));
+						function.insertBefore<Mov, false>(instruction, Op8(to_rdx), Op8(rdx));
 					} else {
-						function.insertBefore<Mov, false>(instruction, operand, OperandX(operand->bitWidth, rax));
+						function.insertBefore<Mov, false>(instruction, operand, OpX(operand->bitWidth, rax));
 					}
 				}
 			} else if (ret->value->valueType() != ValueType::Void)
@@ -90,15 +90,15 @@ namespace LL2X::Passes {
 			     iter != end; ++iter) {
 				VariablePtr variable = function.makePrecoloredVariable(*iter, block);
 				const auto &location = *function.calleeSaved.at(*iter);
-				function.insertBefore<Mov, false>(instruction, Operand8(-location.offset, rbp), Operand8(variable));
+				function.insertBefore<Mov, false>(instruction, Op8(-location.offset, rbp), Op8(variable));
 			}
 
 			// Insert the epilogue (minus the jump).
 			// movq %rbp, %rsp
-			function.insertBefore<Mov, false>(instruction, Operand8(rbp), Operand8(rsp));
+			function.insertBefore<Mov, false>(instruction, Op8(rbp), Op8(rsp));
 
 			// popq %rbp
-			function.insertBefore<Pop, false>(instruction, Operand8(rbp));
+			function.insertBefore<Pop, false>(instruction, Op8(rbp));
 
 			// Return from the function.
 			function.insertBefore<Ret>(instruction);

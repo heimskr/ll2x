@@ -14,8 +14,8 @@ namespace LL2X::Passes {
 				if (source_to_dest->source->isIndirect() && source_to_dest->destination->isIndirect()) {
 					VariablePtr temp = function.newVariable(IntType::make(source_to_dest->destination->bitWidth), 
 						instruction->parent.lock());
-					function.insertAfter<Mov, false>(instruction, OperandV(temp), source_to_dest->destination);
-					source_to_dest->destination = OperandV(temp);
+					function.insertAfter<Mov, false>(instruction, OpV(temp), source_to_dest->destination);
+					source_to_dest->destination = OpV(temp);
 					++num_changed;
 				}
 			}

@@ -38,7 +38,7 @@ namespace LL2X::Passes {
 				function.insertBefore<Mov>(instruction, left, destination);
 				return;
 			} else if (0 < constant && Util::isPowerOfTwo(constant)) {
-				auto new_right = Operand4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
+				auto new_right = Op4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
 				function.insertBefore<Mov>(instruction, left, destination);
 				if (is_signed)
 					function.insertBefore<Sar>(instruction, new_right, destination);
@@ -51,11 +51,11 @@ namespace LL2X::Passes {
 		auto rax_clobber = function.clobber(instruction, x86_64::rax);
 		auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
 
-		OperandPtr rax   = Operand8(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
-		OperandPtr rdx   = Operand8(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
+		OperandPtr rax   = Op8(function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock()));
+		OperandPtr rdx   = Op8(function.makePrecoloredVariable(x86_64::rdx, instruction->parent.lock()));
 		const auto width = node->type->width();
 
-		function.insertBefore<Mov, false>(instruction, Operand4(0), rdx, width);
+		function.insertBefore<Mov, false>(instruction, Op4(0), rdx, width);
 		function.insertBefore<Mov, false>(instruction, left, rax, width);
 		if (is_signed)
 			function.insertBefore<Idiv, false>(instruction, right, width);
@@ -144,7 +144,7 @@ namespace LL2X::Passes {
 			}
 
 			if (0 < constant && Util::isPowerOfTwo(constant)) {
-				auto new_right = Operand4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
+				auto new_right = Op4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
 				function.insertBefore<Mov>(instruction, left, destination);
 				function.insertBefore<Shl>(instruction, new_right, destination);
 				return;

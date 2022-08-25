@@ -23,7 +23,7 @@ namespace LL2X::Passes {
 					throw std::runtime_error("Deferred-source move has no registers allocated to its source");
 				const int reg = *std::next(defsource->source->reg->registers.begin(), defsource->registerIndex);
 				auto var = function.makePrecoloredVariable(reg, defsource->parent.lock());
-				function.insertBefore<Mov>(instruction, OperandV(var), defsource->destination);
+				function.insertBefore<Mov>(instruction, OpV(var), defsource->destination);
 				to_remove.push_back(instruction);
 			} else if (auto defdest = std::dynamic_pointer_cast<DeferredDestinationMove>(instruction)) {
 				if (!defdest->source->isRegister()) {
@@ -34,7 +34,7 @@ namespace LL2X::Passes {
 					throw std::runtime_error("Deferred-destination move has no registers allocated to its destination");
 				const int reg = *std::next(defdest->destination->reg->registers.begin(), defdest->registerIndex);
 				VariablePtr var = function.makePrecoloredVariable(reg, defdest->parent.lock());
-				function.insertBefore<Mov>(instruction, defdest->source, OperandV(var));
+				function.insertBefore<Mov>(instruction, defdest->source, OpV(var));
 				to_remove.push_back(instruction);
 			} else if (auto mov = std::dynamic_pointer_cast<Mov>(instruction)) {
 				auto source = mov->source;
@@ -66,7 +66,7 @@ namespace LL2X::Passes {
 					while (source_iter != source->reg->registers.end()) {
 						VariablePtr source_var = function.makePrecoloredVariable(*source_iter++, block);
 						VariablePtr dest_var   = function.makePrecoloredVariable(*dest_iter++,   block);
-						function.insertBefore<Mov>(instruction, Operand8(source_var), Operand8(dest_var));
+						function.insertBefore<Mov>(instruction, Op8(source_var), Op8(dest_var));
 					}
 				} else if (multi_source) { // mov <%pack...>, (%reg)
 					if (!dest->isIndirect()) {
@@ -84,7 +84,7 @@ namespace LL2X::Passes {
 						copy->displacement = displacement;
 						displacement += 8;
 						VariablePtr precolored = function.makePrecoloredVariable(reg, block);
-						function.insertBefore<Mov, false>(mov, Operand8(precolored), copy);
+						function.insertBefore<Mov, false>(mov, Op8(precolored), copy);
 					}
 				} else if (multi_dest) { // mov (%reg), <%pack...>
 					if (!source->isIndirect()) {
@@ -102,7 +102,7 @@ namespace LL2X::Passes {
 						copy->displacement = displacement;
 						displacement += 8;
 						VariablePtr precolored = function.makePrecoloredVariable(reg, block);
-						function.insertBefore<Mov, false>(mov, copy, Operand8(precolored));
+						function.insertBefore<Mov, false>(mov, copy, Op8(precolored));
 					}
 				} else {
 					error() << mov->debugExtra() << '\n';

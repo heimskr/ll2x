@@ -37,19 +37,19 @@ namespace LL2X::Passes {
 		if (condition_type == ValueType::Bool) {
 			const BoolValue *boolval = dynamic_cast<BoolValue *>(br->condition->value.get());
 			const std::string transformed = function.transformLabel(boolval->value? *br->ifTrue : *br->ifFalse);
-			auto jmp = std::make_shared<Jmp>(Operand8(transformed, false));
+			auto jmp = std::make_shared<Jmp>(Op8(transformed, false));
 			function.insertBefore(instruction, jmp)->setDebug(*br)->extract();
 		} else if (condition_type == ValueType::Local || condition_type == ValueType::Operand) {
 			TypePtr type = br->condition->type;
 			OperandPtr condition;
 			if (condition_type == ValueType::Local)
-				condition = OperandV(dynamic_cast<LocalValue *>(br->condition->value.get())->variable);
+				condition = OpV(dynamic_cast<LocalValue *>(br->condition->value.get())->variable);
 			else
 				condition = dynamic_cast<OperandValue *>(br->condition->value.get())->operand;
-			auto cmp = std::make_shared<Cmp>(condition, Operand4(0), type->width());
-			auto jmp_true = std::make_shared<Jmp>(Operand8(function.transformLabel(*br->ifTrue), false),
+			auto cmp = std::make_shared<Cmp>(condition, Op4(0), type->width());
+			auto jmp_true = std::make_shared<Jmp>(Op8(function.transformLabel(*br->ifTrue), false),
 				x86_64::Condition::IfNotEqual);
-			auto jmp_false = std::make_shared<Jmp>(Operand8(function.transformLabel(*br->ifFalse), false));
+			auto jmp_false = std::make_shared<Jmp>(Op8(function.transformLabel(*br->ifFalse), false));
 			function.insertBefore(instruction, cmp)->setDebug(*br)->extract();
 			function.insertBefore(instruction, jmp_true)->setDebug(*br)->extract();
 			function.insertBefore(instruction, jmp_false)->setDebug(*br)->extract();
@@ -62,7 +62,7 @@ namespace LL2X::Passes {
 
 	void lowerBranch(Function &function, InstructionPtr &instruction, BrUncondNode *br) {
 		function.insertBefore(instruction,
-			std::make_shared<Jmp>(Operand8(function.transformLabel(*br->destination), false)))
+			std::make_shared<Jmp>(Op8(function.transformLabel(*br->destination), false)))
 			->setDebug(*br)->extract();
 	}
 }

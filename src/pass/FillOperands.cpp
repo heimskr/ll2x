@@ -12,7 +12,7 @@ namespace LL2X::Passes {
 				if (Reader *reader = dynamic_cast<Reader *>(node))
 					for (ValuePtr *value: reader->allValuePointers())
 						if (value && *value && (*value)->isLocal())
-							*value = OperandValue::make(OperandV(dynamic_cast<LocalValue *>(value->get())->variable));
+							*value = OperandValue::make(OpV(dynamic_cast<LocalValue *>(value->get())->variable));
 			} else {
 				
 			}
