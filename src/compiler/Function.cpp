@@ -989,7 +989,6 @@ namespace LL2X {
 
 	void Function::finalCompile() {
 		Timer timer("FinalCompile");
-		Passes::lowerClobber(*this);
 		// Passes::lowerInsertvalue(*this);
 		// Passes::readjustStackSkip(*this);
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
@@ -1002,6 +1001,8 @@ namespace LL2X {
 		Passes::mergeAllBlocks(*this);
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
+		Passes::hackOperands(*this);
+		Passes::lowerClobber(*this);
 		const bool naked = isNaked();
 		if (!naked)
 			Passes::insertPrologue(*this);
@@ -1012,7 +1013,6 @@ namespace LL2X {
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
 		hackVariables();
-		Passes::hackOperands(*this);
 		// for (InstructionPtr &instruction: linearInstructions) {
 		// 	if (instruction->debugIndex != -1) {
 		// 		auto lock = parent.getLock();
