@@ -19,6 +19,8 @@
 // #define DEBUG_STACK
 // #define DEBUG_CANSPILL
 // #define DEBUG_MINILABELS
+// #define DEBUG_BEFORE_ALLOC
+// #define DEBUG_BEFORE_FINAL
 // #define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
@@ -336,7 +338,7 @@ namespace LL2X {
 			std::cerr << "  Trying to spill " << *variable << " (definition: " << definition->debugExtra() << " at "
 			          << definition->index << ", OID: " << *variable->originalID << ")\n";
 #endif
-			auto store = std::make_shared<Mov>(OpV(variable), Op8(-location.offset, rbp));
+			auto store = std::make_shared<Mov>(OpV(variable), Op8(-location.offset, pcRbp));
 			store->meta.insert(InstructionMeta::StackStore);
 
 			auto next = after(definition);
@@ -357,7 +359,7 @@ namespace LL2X {
 			}
 
 			if (should_insert) {
-				definition->replaceSimilarOperand(OpV(variable), Op8(-location.offset, rbp));
+				definition->replaceSimilarOperand(OpV(variable), Op8(-location.offset, pcRbp));
 				definition->extract(true);
 
 				// Hopefully the blocks are minimized at this point.
@@ -402,7 +404,7 @@ namespace LL2X {
 				const bool replaced = instruction->canReplaceRead(variable);
 #endif
 				if (replaced) {
-					OperandPtr replacement = Op8(-location.offset, rbp);
+					OperandPtr replacement = Op8(-location.offset, pcRbp);
 					if (!instruction->replaceSimilarOperand(OpV(read), replacement)) {
 						const auto operands = instruction->getOperands();
 						VariablePtr new_var;
@@ -501,7 +503,7 @@ namespace LL2X {
 
 			bool created = false;
 			const StackLocation &location = getSpill(variable, true, &created);
-			auto store = std::make_shared<Mov>(OpV(variable), Op8(-location.offset, rbp));
+			auto store = std::make_shared<Mov>(OpV(variable), Op8(-location.offset, pcRbp));
 			store->meta.insert(InstructionMeta::StackStore);
 
 			auto next = after(definition);
@@ -929,9 +931,11 @@ namespace LL2X {
 		extractBlocks();
 		makeInitialDebugIndex();
 		BasicBlockPtr entry = getEntry();
-		rsp = makePrecoloredVariable(x86_64::rsp, entry);
-		rbp = makePrecoloredVariable(x86_64::rbp, entry);
-		rip = makePrecoloredVariable(x86_64::rip, entry);
+		pcRax = makePrecoloredVariable(x86_64::rax, entry);
+		pcRdx = makePrecoloredVariable(x86_64::rdx, entry);
+		pcRsp = makePrecoloredVariable(x86_64::rsp, entry);
+		pcRbp = makePrecoloredVariable(x86_64::rbp, entry);
+		pcRip = makePrecoloredVariable(x86_64::rip, entry);
 		Passes::ignoreIntrinsics(*this);
 		// Passes::insertStackSkip(*this);
 		Passes::fillLocalValues(*this);
@@ -984,11 +988,16 @@ namespace LL2X {
 		reindexBlocks();
 		initialDone = true;
 
-		// debug();
+#ifdef DEBUG_BEFORE_ALLOC
+		debug();
+#endif
 	}
 
 	void Function::finalCompile() {
 		Timer timer("FinalCompile");
+#ifdef DEBUG_BEFORE_FINAL
+		debug();
+#endif
 		// Passes::lowerInsertvalue(*this);
 		// Passes::readjustStackSkip(*this);
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
@@ -1025,6 +1034,7 @@ namespace LL2X {
 		finalDone = true;
 #ifdef FINAL_DEBUG
 		debug();
+		// allocator->interference.renderTo("interference_final_" + *name + ".png");
 #endif
 	}
 
@@ -1625,6 +1635,19 @@ namespace LL2X {
 					stream << " %" << **iter;
 				}
 				if (blockLiveness) {
+					std::set<std::string> uses;
+					for (const InstructionPtr &instruction: block->instructions)
+						for (const VariablePtr &var: instruction->written)
+							uses.insert(*var->id);
+					if (!uses.empty()) {
+						stream << "; writes =";
+						for (auto begin = uses.begin(), iter = begin, end = uses.end(); iter != end; ++iter) {
+							if (iter != begin)
+								stream << ',';
+							stream << " %" << *iter;
+						}
+					}
+
 					if (!block->liveIn.empty()) {
 						stream << "; live-in =";
 						const auto &liveIn = block->liveIn;
@@ -1634,6 +1657,7 @@ namespace LL2X {
 							stream << " %" << *(*iter)->id;
 						}
 					}
+
 					if (!block->liveOut.empty()) {
 						stream << "; live-out =";
 						const auto &liveOut = block->liveOut;

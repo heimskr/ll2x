@@ -491,7 +491,7 @@ namespace LL2X {
 
 		for (const Node *node: nodes_)
 			if (node->colors.size() == 1 && static_cast<size_t>(*node->colors.begin()) < colors.size())
-				out << "\t" << node->label() << " [fillcolor=" << colors.at(*node->colors.begin()) << "];\n";
+				out << "\t" << node->label() << " [fillcolor=\"" << colors.at(*node->colors.begin()) << "\"];\n";
 
 		for (const Node *node: nodes_)
 			for (const Node *neighbor: node->out_)

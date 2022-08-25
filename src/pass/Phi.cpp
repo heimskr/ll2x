@@ -67,7 +67,7 @@ namespace LL2X::Passes {
 									OpX(phi_size, target), phi_size);
 							else
 								new_instr = std::make_shared<Mov>(OpX(phi_size,
-									*dynamic_cast<GlobalValue *>(pair.first.get())->name, function.rip),
+									*dynamic_cast<GlobalValue *>(pair.first.get())->name, function.pcRip),
 									OpX(phi_size, target), phi_size);
 
 							new_instr->parent = block;
@@ -200,7 +200,7 @@ namespace LL2X::Passes {
 					} else {
 						comment = "MovePhi: global -> " + target->plainString();
 						new_instruction = std::make_shared<Mov>(OpX(phi_size,
-							*dynamic_cast<GlobalValue *>(value.get())->name, function.rip), OpX(phi_size, target),
+							*dynamic_cast<GlobalValue *>(value.get())->name, function.pcRip), OpX(phi_size, target),
 							phi_size);
 					}
 				} else {

@@ -74,7 +74,7 @@ namespace LL2X::Passes {
 			} else {
 				right = function.newVariable(node->getType(), instruction->parent.lock());
 				function.insertBefore(instruction, std::make_shared<Mov>(Op8(right),
-					OpX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.rip)), false)
+					OpX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.pcRip)), false)
 					->setDebug(node)->extract();
 				function.insertBefore(instruction, std::make_shared<Mov>(Op8(right), OpX(width, 0, right),
 					width), false)->setDebug(node)->extract();

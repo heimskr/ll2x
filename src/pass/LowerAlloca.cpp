@@ -22,8 +22,8 @@ namespace LL2X::Passes {
 
 		int  replaced_count = 0;
 		BasicBlockPtr entry = function.getEntry();
-		const VariablePtr &rbp = function.rbp;
-		const VariablePtr &rsp = function.rsp;
+		const VariablePtr &rbp = function.pcRbp;
+		const VariablePtr &rsp = function.pcRsp;
 
 		VariablePtr alloca_reg = rsp;
 

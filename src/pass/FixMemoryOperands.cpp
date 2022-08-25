@@ -1,4 +1,6 @@
 #include "compiler/Function.h"
+#include "instruction/Pop.h"
+#include "instruction/Push.h"
 #include "instruction/SourceToDest.h"
 #include "pass/FixMemoryOperands.h"
 #include "util/Timer.h"
@@ -12,20 +14,19 @@ namespace LL2X::Passes {
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			if (auto source_to_dest = std::dynamic_pointer_cast<SourceToDest>(instruction)) {
 				if (source_to_dest->source->isIndirect() && source_to_dest->destination->isIndirect()) {
-					VariablePtr temp = function.newVariable(IntType::make(source_to_dest->destination->bitWidth), 
-						instruction->parent.lock());
-					function.insertAfter<Mov, false>(instruction, OpV(temp), source_to_dest->destination);
-					source_to_dest->destination = OpV(temp);
+					function.insertBefore<Push, false>(instruction, Op8(function.pcRax));
+					VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock());
+					rax->setType(IntType::make(source_to_dest->destination->bitWidth));
+					auto mov = function.insertAfter<Mov, false>(instruction, OpV(rax), source_to_dest->destination);
+					function.insertAfter<Pop, false>(mov, Op8(function.pcRax));
+					source_to_dest->destination = OpV(rax);
 					++num_changed;
 				}
 			}
 		}
 
-		if (0 < num_changed) {
+		if (0 < num_changed)
 			function.reindexInstructions();
-			function.resetRegisters(false);
-			function.allocateRegisters();
-		}
 
 		return num_changed;
 	}

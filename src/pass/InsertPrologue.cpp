@@ -21,8 +21,8 @@ namespace LL2X::Passes {
 			first->debugIndex = function.initialDebugIndex;
 
 		// Start by pushing %rbp to the stack.
-		const VariablePtr &rbp = function.rbp;
-		const VariablePtr &rsp = function.rsp;
+		const VariablePtr &rbp = function.pcRbp;
+		const VariablePtr &rsp = function.pcRsp;
 		function.insertBefore(first, std::make_shared<Push>(Op8(rbp)), false)->setDebug(*first, true);
 		function.initialPushedBytes = 8;
 

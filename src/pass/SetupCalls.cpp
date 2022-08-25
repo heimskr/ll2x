@@ -159,7 +159,7 @@ namespace LL2X::Passes {
 			if (call->result && 128 < return_size) {
 				big_result = function.newVariable(call->returnType, block);
 				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
-				OperandPtr pointer = Op8(-location.offset, function.rbp);
+				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
 				OperandPtr rdi = Op8(function.makePrecoloredVariable(x86_64::rdi, block));
 				auto lea = std::make_shared<Lea>(pointer, rdi);
 				function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
@@ -210,7 +210,7 @@ namespace LL2X::Passes {
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {
 				function.comment(llvm, "SetupCalls: readjust stack pointer");
-				function.insertBefore<Add, false>(instruction, Op4(bytes_pushed), Op8(function.rsp), 64);
+				function.insertBefore<Add, false>(instruction, Op4(bytes_pushed), Op8(function.pcRsp), 64);
 			}
 
 			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)
@@ -339,7 +339,7 @@ namespace LL2X::Passes {
 
 			VariablePtr var = signext? function.newVariable(IntType::make(64)) : local->variable;
 			insert_exts(local->variable, var);
-			function.insertBefore<Mov, false>(instruction, Op8(var), Op8(pushed, function.rsp));
+			function.insertBefore<Mov, false>(instruction, Op8(var), Op8(pushed, function.pcRsp));
 			return size;
 		} else if (value_type == ValueType::Global) {
 			// Global variables
@@ -348,7 +348,7 @@ namespace LL2X::Passes {
 			auto mov = std::make_shared<Mov>(Op8(*global->name), OpV(new_var));
 			insert_exts(new_var, new_var);
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.rsp));
+			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
 		} else if (value_type == ValueType::Int) {
 			// Integer-like values
@@ -356,7 +356,7 @@ namespace LL2X::Passes {
 			auto mov = std::make_shared<Mov>(Op4(constant->value->longValue()), OpV(new_var));
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
 			insert_exts(new_var, new_var);
-			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.rsp));
+			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
 		} else if (value_type == ValueType::Bool) {
 			// Booleans
@@ -365,14 +365,14 @@ namespace LL2X::Passes {
 			auto mov = std::make_shared<Mov>(Op4(bval->value? 1 : 0), OpV(new_var), 64);
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
 			insert_exts(new_var, new_var);
-			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.rsp));
+			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
 		} else if (value_type == ValueType::Null || value_type == ValueType::Undef) {
 			// Null and undef values
 			VariablePtr new_var = function.newVariable(constant->type);
 			auto mov = std::make_shared<Mov>(Op4(0), OpV(new_var));
 			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.rsp));
+			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
 		} else if (value_type == ValueType::Getelementptr) {
 			// Getelementptr expressions
@@ -393,7 +393,7 @@ namespace LL2X::Passes {
 				if (offset != 0)
 					function.insertBefore<Add, false>(instruction, Op4(offset), OpV(new_var));
 				insert_exts(new_var, new_var);
-				function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.rsp));
+				function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 				return size;
 			}
 		} else if (constant->conversionSource) {

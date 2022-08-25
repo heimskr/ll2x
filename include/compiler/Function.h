@@ -419,9 +419,11 @@ namespace LL2X {
 			void multiply(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
 			              int debug = -1);
 
-			VariablePtr rsp;
-			VariablePtr rbp;
-			VariablePtr rip;
+			VariablePtr pcRax;
+			VariablePtr pcRdx;
+			VariablePtr pcRsp;
+			VariablePtr pcRbp;
+			VariablePtr pcRip;
 
 			template <typename Ins, bool Reindex = true, typename... Args>
 			std::shared_ptr<Ins> insertBefore(const InstructionPtr &anchor, Args &&...args) {

@@ -29,7 +29,23 @@ namespace LL2X {
 			enum class ColoringAlgorithm {Bad, Greedy};
 
 			std::string name = "Graph";
-			std::vector<std::string> colors = {"red", "orange", "yellow", "green", "blue", "purple"};
+			// std::vector<std::string> colors = {"red", "orange", "yellow", "green", "blue", "purple"};
+			std::vector<std::string> colors = {
+				"#ff0000",
+				"#aaaa00",
+				"#ffff00",
+				"#00ff00",
+				"#0000ff",
+				"#ff00ff",
+				"#770000",
+				"#007700",
+				"#777700",
+				"#000077",
+				"#770077",
+				"#007777",
+				"#777777",
+				"#ffffff",
+			};
 
 			/** Constructs a graph with no nodes. */
 			Graph();

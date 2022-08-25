@@ -44,9 +44,9 @@ namespace LL2X::Passes {
 					const int offset = -location->offset;
 
 					function.insertBefore(clobber, std::make_shared<Mov>(Op8(precolored), Op8(offset,
-						function.rbp)), "Clobber " + x86_64::registerName(reg), false)
+						function.pcRbp)), "Clobber " + x86_64::registerName(reg), false)
 						->setDebug(*instruction, false)->setSecret()->extract();
-					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Op8(offset, function.rbp),
+					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Op8(offset, function.pcRbp),
 						Op8(precolored)), "Unclobber " + x86_64::registerName(reg), false)
 						->setDebug(*instruction, true);
 				}

@@ -10,7 +10,7 @@ namespace LL2X::Passes {
 		if (function.isNaked())
 			return;
 		BasicBlockPtr entry = function.getEntry();
-		auto sub = std::make_shared<Sub>(Op4(0), Op8(function.rsp));
+		auto sub = std::make_shared<Sub>(Op4(0), Op8(function.pcRsp));
 		function.insertBefore(function.linearInstructions.front(), sub, "InsertStackSkip")
 			->setDebug(function.initialDebugIndex)->extract();
 		function.categories["StackSkip"].insert(sub);
@@ -28,6 +28,6 @@ namespace LL2X::Passes {
 				std::to_string(set.size()));
 		// We need to add an offset of 8 because spush subtracts and then writes to memory.
 		// TODO: the above was ll2w-specific; does this still apply in x86_64?
-		dynamic_cast<Sub *>(set.begin()->get())->sourceOnly = Op4(function.spillSize + 8);
+		std::dynamic_pointer_cast<Sub>(*set.begin())->sourceOnly = Op4(function.spillSize + 8);
 	}
 }

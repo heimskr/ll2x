@@ -74,10 +74,8 @@ void compile(const std::string &filename, bool show_debug) {
 	LL2X::interactive(*prog);
 	std::cout << "Done.\n";
 #else
-	std::cerr << '\n';
 	prog.analyze();
 	prog.compile();
-	std::cerr << '\n';
 #ifdef DEBUGMODE
 	prog.debug();
 #else
