@@ -40,6 +40,8 @@ namespace LL2X {
 			}
 		}
 
+		declareBuiltins();
+
 		for (ASTNode *node: root) {
 			if (!node)
 				continue;
@@ -453,5 +455,23 @@ namespace LL2X {
 
 	int Program::newDebugIndex() {
 		return ++highestIndex;
+	}
+
+	void Program::declareBuiltins() {
+		auto memcpy_args = std::make_shared<FunctionArgs>(std::vector<FunctionArgument> {
+			{PointerType::make(VoidType::make()), "dest"},
+			{PointerType::make(VoidType::make()), "src"},
+			{IntType::make(64), "n"},
+		}, false);
+
+		declarations.emplace("memcpy", new FunctionHeader("memcpy", PointerType::make(VoidType::make()), memcpy_args));
+
+		auto memset_args = std::make_shared<FunctionArgs>(std::vector<FunctionArgument> {
+			{PointerType::make(VoidType::make()), "s"},
+			{IntType::make(32), "c"},
+			{IntType::make(64), "n"},
+		}, false);
+
+		declarations.emplace("memset", new FunctionHeader("memset", PointerType::make(VoidType::make()), memset_args));
 	}
 }

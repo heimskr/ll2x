@@ -1512,7 +1512,7 @@ _ZNSt11char_traitsIcE4copyEPcPKcm:
 	movq (%rsi), %rax
 	# LowerMemory.S9: mov ^11, (^4)
 	movq %rax, (%rbx)
-	jmp .___ZNSt11char_traitsIcE4copyEPcPKcm__M56
+	jmp .___ZNSt11char_traitsIcE4copyEPcPKcm__M55
 	.___ZNSt11char_traitsIcE4copyEPcPKcm__M24:
 	# LowerMemory(load @ 1959:3): L2 (^5) into ^13
 	movq (%rsi), %r12
@@ -1527,16 +1527,15 @@ _ZNSt11char_traitsIcE4copyEPcPKcm:
 	movq %r12, %rdi
 	movq %rax, %rsi
 	movq %rdx, %rdx
-	movq $0, %rcx
-	callq llvm.memcpy.p0i8.p0i8.i64
+	callq memcpy@PLT
 	# Unclobber rax
 	movq -48(%rbp), %rax
 	# Unclobber rdx
 	movq -40(%rbp), %rdx
 	# LowerMemory.S9: mov ^13, (^4)
 	movq %r12, (%rbx)
-	jmp .___ZNSt11char_traitsIcE4copyEPcPKcm__M56
-	.___ZNSt11char_traitsIcE4copyEPcPKcm__M56:
+	jmp .___ZNSt11char_traitsIcE4copyEPcPKcm__M55
+	.___ZNSt11char_traitsIcE4copyEPcPKcm__M55:
 	# LowerMemory(load @ 1967:3): L2 (^4) into ^17
 	movq (%rbx), %rax
 	movq -64(%rbp), %r12
@@ -2875,7 +2874,7 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(472 + 0, 16)
+	# upalign(480 + 0, 16)
 	subq $480, %rsp
 	movq %rbx, -392(%rbp)
 	movq %r14, -384(%rbp)
@@ -2983,17 +2982,17 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M109
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M80:
 	# LowerMemory(load @ 701:3): L2 (^17) into ^28
-	movq -232(%rbp), %rcx
-	movq (%rcx), %rax
-	movq %rax, -320(%rbp)
+	movq -232(%rbp), %rax
+	movq (%rax), %rcx
+	movq %rcx, -320(%rbp)
 	# LowerMemory(load @ 702:3): L2 (^18) into ^29
 	movq -240(%rbp), %rcx
 	movl (%rcx), %eax
 	movq %rax, -328(%rbp)
 	# LowerMemory.S9: mov ^28, (^13)
-	movq -216(%rbp), %rax
-	movq -320(%rbp), %rcx
-	movq %rcx, (%rax)
+	movq -216(%rbp), %rcx
+	movq -320(%rbp), %rax
+	movq %rax, (%rcx)
 	# LowerMemory.S9: mov ^29, (^14)
 	movq -224(%rbp), %rcx
 	movl -328(%rbp), %eax
@@ -3007,9 +3006,9 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -208(%rbp), %rcx
 	movl %eax, (%rcx)
 	# LowerMemory(load @ 708:3): L2 (^14) into ^32
-	movq -224(%rbp), %rcx
-	movl (%rcx), %eax
-	movq %rax, -280(%rbp)
+	movq -224(%rbp), %rax
+	movl (%rax), %ecx
+	movq %rcx, -280(%rbp)
 	# LowerMemory(load @ 709:3): L2 (^13) into ^33
 	movq -216(%rbp), %rax
 	movq (%rax), %rcx
@@ -3023,33 +3022,33 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -288(%rbp), %rax
 	movl %ecx, (%rax)
 	# LowerMemory(load @ 713:3): L2 (^15) into ^36
-	movq -208(%rbp), %rax
-	movl (%rax), %ecx
+	movq -208(%rbp), %rcx
+	movl (%rcx), %eax
 	# LowerMemory.S9: mov ^36, (^16)
-	movq -168(%rbp), %rax
-	movl %ecx, (%rax)
+	movq -168(%rbp), %rcx
+	movl %eax, (%rcx)
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M134
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M109:
 	# LowerMemory(load @ 718:3): L2 (^17) into ^38
-	movq -232(%rbp), %r9
-	movq (%r9), %rcx
-	movq %rcx, -336(%rbp)
+	movq -232(%rbp), %rcx
+	movq (%rcx), %r9
+	movq %r9, -336(%rbp)
 	# LowerMemory(load @ 719:3): L2 (^18) into ^39
 	movq -240(%rbp), %rcx
 	movl (%rcx), %r9d
 	movq %r9, -344(%rbp)
 	# LowerMemory.S9: mov ^38, (^6)
-	movq -200(%rbp), %rcx
-	movq -336(%rbp), %r9
-	movq %r9, (%rcx)
+	movq -200(%rbp), %r9
+	movq -336(%rbp), %rcx
+	movq %rcx, (%r9)
 	# LowerMemory.S9: mov ^39, (^7)
 	movq -192(%rbp), %r9
 	movl -344(%rbp), %ecx
 	movq %rcx, (%r9)
 	# LowerMemory(load @ 722:3): L2 (^6) into ^40
-	movq -200(%rbp), %rcx
-	movq (%rcx), %r9
-	movq %r9, -264(%rbp)
+	movq -200(%rbp), %r9
+	movq (%r9), %rcx
+	movq %rcx, -264(%rbp)
 	# LowerMemory(load @ 723:3): L2 (^7) into ^41
 	movq -192(%rbp), %r10
 	movl (%r10), %r9d
@@ -3115,17 +3114,17 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq (%rax), %rbx
 	movq %rbx, -352(%rbp)
 	# LowerMemory(load @ 752:3): L2 (^21) into ^58
-	movq -160(%rbp), %rax
-	movl (%rax), %ebx
-	movq %rbx, -360(%rbp)
+	movq -160(%rbp), %rbx
+	movl (%rbx), %eax
+	movq %rax, -360(%rbp)
 	# LowerMemory.S9: mov ^57, (^10)
 	movq -136(%rbp), %rax
 	movq -352(%rbp), %rbx
 	movq %rbx, (%rax)
 	# LowerMemory.S9: mov ^58, (^11)
-	movq -144(%rbp), %rax
-	movl -360(%rbp), %ebx
-	movq %rbx, (%rax)
+	movq -144(%rbp), %rbx
+	movl -360(%rbp), %eax
+	movq %rax, (%rbx)
 	# LowerMemory(load @ 755:3): L2 (^10) into ^59
 	movq -136(%rbp), %rcx
 	movq (%rcx), %rbx
@@ -3139,9 +3138,9 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movl (%rax), %ebx
 	movq %rbx, -296(%rbp)
 	# LowerMemory(load @ 759:3): L2 (^10) into ^62
-	movq -136(%rbp), %rbx
-	movq (%rbx), %rax
-	movq %rax, -304(%rbp)
+	movq -136(%rbp), %rax
+	movq (%rax), %rbx
+	movq %rbx, -304(%rbp)
 	# LowerMemory(load @ 760:3): L2 (^62) into ^63
 	movq -304(%rbp), %rbx
 	movl (%rbx), %eax
@@ -3159,13 +3158,13 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M234
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M209:
 	# LowerMemory(load @ 768:3): L2 (^20) into ^67
-	movq -152(%rbp), %rcx
-	movq (%rcx), %rax
-	movq %rax, -368(%rbp)
+	movq -152(%rbp), %rax
+	movq (%rax), %rcx
+	movq %rcx, -368(%rbp)
 	# LowerMemory(load @ 769:3): L2 (^21) into ^68
-	movq -160(%rbp), %rax
-	movl (%rax), %ecx
-	movq %rcx, -376(%rbp)
+	movq -160(%rbp), %rcx
+	movl (%rcx), %eax
+	movq %rax, -376(%rbp)
 	# LowerMemory.S9: mov ^67, (^2)
 	movq -104(%rbp), %rax
 	movq -368(%rbp), %rcx
@@ -3592,8 +3591,7 @@ _ZNSt10filesystem7__cxx113endENS0_18directory_iteratorE:
 	movq %rax, %rdi
 	movq $0, %rsi
 	movq $16, %rdx
-	movq $0, %rcx
-	callq llvm.memset.p0i8.i64
+	callq memset@PLT
 	# Unclobber rax
 	movq -24(%rbp), %rax
 	# Unclobber rdi
@@ -3786,8 +3784,7 @@ _ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_trait
 	movq %rcx, %rdi
 	movq %rbx, %rsi
 	movq $16, %rdx
-	movq $0, %rcx
-	callq llvm.memcpy.p0i8.p0i8.i64
+	callq memcpy@PLT
 	# Unclobber rcx
 	movq -32(%rbp), %rcx
 	movq %r12, %rcx
@@ -4017,8 +4014,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	movq %rdi, %rdi
 	movq %rbx, %rsi
 	movq $16, %rdx
-	movq $0, %rcx
-	callq llvm.memcpy.p0i8.p0i8.i64
+	callq memcpy@PLT
 	# Unclobber rax
 	movq -96(%rbp), %rax
 	# Unclobber rcx
@@ -4031,8 +4027,8 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# LowerGetelementptr(1269:3): struct-type: {i64, i8*}* -> ^17, indices=0,1
 	movq %rsi, %rdi
 	addq $8, %rdi
-	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M56
-	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M56:
+	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M55
+	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M55:
 	# LowerMemory(load @ 1270:3): L2 (^17) into ^18
 	movq (%rdi), %rsi
 	# Clobber rcx
@@ -4088,8 +4084,8 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	movq -88(%rbp), %rcx
 	# LowerMemory(load @ 1285:3): L2 (^6) into ^30
 	movq (%rdx), %rbx
-	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M134
-	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M134:
+	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M133
+	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M133:
 	movq %rcx, %rdx
 	# LowerGetelementptr(1287:3): struct-type: {i64, i8*}* -> ^32, indices=0,0
 	movq %rdx, %rax
@@ -4709,8 +4705,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE17_S_to_string_viewESt17bas
 	movq %rax, %rdi
 	movq %rcx, %rsi
 	movq $16, %rdx
-	movq $0, %rcx
-	callq llvm.memcpy.p0i8.p0i8.i64
+	callq memcpy@PLT
 	# Unclobber rax
 	movq -48(%rbp), %rax
 	# Unclobber rcx
@@ -5083,8 +5078,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12__sv_wrapperC2ESt17basic_
 	movq %rax, %rdi
 	movq %rcx, %rsi
 	movq $16, %rdx
-	movq $0, %rcx
-	callq llvm.memcpy.p0i8.p0i8.i64
+	callq memcpy@PLT
 	# Unclobber rax
 	movq -40(%rbp), %rax
 	# Unclobber rcx

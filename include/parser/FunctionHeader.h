@@ -8,7 +8,7 @@
 #include "Constant.h"
 
 namespace LL2X {
-	struct FunctionHeader: public ASTNode {
+	struct FunctionHeader: ASTNode {
 		const std::string *name;
 		Linkage linkage = Linkage::Default;
 		Preemption preemption = Preemption::Default;
@@ -31,6 +31,9 @@ namespace LL2X {
 		FunctionHeader(N _linkage, N _preemption, N _visibility, N _dll_storage_class, N _cconv, N _retattrs, N type,
 		               N function_name, N function_args, N unnamed_addr, N _fnattrs, N _section, N _comdat, N _align,
 		               N _personality, N debug);
+
+		FunctionHeader(const std::string *name_, TypePtr return_type, std::shared_ptr<FunctionArgs> arguments_);
+		FunctionHeader(const std::string &name_, TypePtr return_type, std::shared_ptr<FunctionArgs> arguments_);
 
 		std::string debugExtra() const override;
 		virtual std::string style() const override { return "\e[38;5;202m"; }

@@ -131,6 +131,17 @@ namespace LL2X {
 			personality = std::make_shared<Constant>(_personality->at(0));
 	}
 
+	FunctionHeader::FunctionHeader(const std::string *name_, TypePtr return_type,
+	                               std::shared_ptr<FunctionArgs> arguments_):
+		ASTNode(llvmParser, LLVM_FUNCTION_HEADER, name_),
+		name(name_),
+		returnType(std::move(return_type)),
+		arguments(std::move(arguments_)) {}
+
+	FunctionHeader::FunctionHeader(const std::string &name_, TypePtr return_type,
+	                               std::shared_ptr<FunctionArgs> arguments_):
+		FunctionHeader(StringSet::intern(name_), std::move(return_type), std::move(arguments_)) {}
+
 	std::string FunctionHeader::debugExtra() const {
 		std::stringstream out;
 		out << " \e[0;33m" << std::string(*returnType);

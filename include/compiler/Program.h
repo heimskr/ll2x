@@ -82,6 +82,8 @@ namespace LL2X {
 
 			int newDebugIndex();
 
+			void declareBuiltins();
+
 			std::unique_lock<std::mutex> getLock() { return std::unique_lock(mutex); }
 	};
 }

@@ -36,12 +36,12 @@ namespace LL2X::Passes {
 			}
 
 			if (name == "llvm.memcpy.p0i8.p0i8.i64") {
-				auto *new_call = new CallNode(nullptr, PointerType::make(VoidType::make()),
-					StringSet::intern("memcpy@PLT"), {
+				auto *new_call = (new CallNode(nullptr, PointerType::make(VoidType::make()),
+					StringSet::intern("memcpy"), {
 						call->constants[0]->convert(),
 						call->constants[1]->convert(),
 						call->constants[2]->convert(),
-					});
+					}))->setUsePLT();
 
 				function.insertBefore<LLVMInstruction>(instruction, new_call, -1, true);
 				to_remove.push_back(instruction);

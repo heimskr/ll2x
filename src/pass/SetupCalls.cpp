@@ -506,11 +506,11 @@ namespace LL2X::Passes {
 			// TODO, maybe: reduce duplication
 			if (!gep_global) {
 				std::shared_ptr<LocalValue> local;
-				if (auto *gep_local = dynamic_cast<LocalValue *>(gep->variable.get()))
+				if (auto *gep_local = dynamic_cast<LocalValue *>(gep->variable.get())) {
 					local = std::make_shared<LocalValue>(gep_local->getVariable(function));
-				else if (auto subgep = std::dynamic_pointer_cast<GetelementptrValue>(gep->variable))
+				} else if (auto subgep = std::dynamic_pointer_cast<GetelementptrValue>(gep->variable)) {
 					local = function.replaceGetelementptrValue(subgep, instruction);
-				else {
+				} else {
 					warn() << "Not sure what to do when the argument of getelementptr isn't a global or getelementptr."
 					          "\n    " << std::string(*gep->variable);
 					if (auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get()))
@@ -526,18 +526,14 @@ namespace LL2X::Passes {
 					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 
 				InstructionPtr out;
+
 				if (offset == 0) {
-					auto mov = std::make_shared<Mov>(OpV(local->getVariable(function)), new_operand);
-					function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-					out = mov;
+					out = function.insertBefore<Mov>(instruction, OpV(local->getVariable(function)), new_operand);
 				} else {
-					VariablePtr var = local->getVariable(function);
-					auto mov = std::make_shared<Mov>(OpV(var), new_operand);
-					function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-					auto add = std::make_shared<Add>(Op4(offset), new_operand);
-					function.insertBefore(instruction, add)->setDebug(*instruction, true);
-					out = add;
+					function.insertBefore<Mov, false>(instruction, OpV(local->getVariable(function)), new_operand);
+					out = function.insertBefore<Add>(instruction, Op4(offset), new_operand);
 				}
+
 				insert_exts();
 				return out;
 			} else {
@@ -547,13 +543,10 @@ namespace LL2X::Passes {
 				if (Util::outOfRange(offset))
 					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 
-				auto movsym = std::make_shared<Mov>(Op8(*gep_global->name), new_operand);
-				auto out = function.insertBefore(instruction, movsym);
+				auto out = function.insertBefore<Mov>(instruction, Op8(*gep_global->name), new_operand);
 				out->setDebug(*instruction, true);
-				if (offset != 0) {
-					auto add = std::make_shared<Add>(Op4(offset), new_operand);
-					function.insertBefore(instruction, add)->setDebug(*instruction, true);
-				}
+				if (offset != 0)
+					function.insertBefore<Add>(instruction, Op4(offset), new_operand);
 				insert_exts();
 				return out;
 			}
