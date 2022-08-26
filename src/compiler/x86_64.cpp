@@ -192,4 +192,25 @@ namespace LL2X::x86_64 {
 				throw std::runtime_error("Invalid IcmpCond: " + std::to_string(static_cast<int>(icmp)));
 		}
 	}
+
+	Condition invert(Condition condition) {
+		switch (condition) {
+			case Condition::Unconditional:
+				throw std::invalid_argument("Unconditional condition has no inverse");
+			case Condition::IfEqual: return Condition::IfNotEqual;
+			case Condition::IfNotEqual: return Condition::IfEqual;
+			case Condition::IfNegative: return Condition::IfNonnegative;
+			case Condition::IfNonnegative: return Condition::IfNegative;
+			case Condition::IfGreaterSigned: return Condition::IfLessOrEqualSigned;
+			case Condition::IfGreaterOrEqualSigned: return Condition::IfLessSigned;
+			case Condition::IfLessSigned: return Condition::IfGreaterOrEqualSigned;
+			case Condition::IfLessOrEqualSigned: return Condition::IfGreaterSigned;
+			case Condition::IfGreaterUnsigned: return Condition::IfLessOrEqualUnsigned;
+			case Condition::IfGreaterOrEqualUnsigned: return Condition::IfLessUnsigned;
+			case Condition::IfLessUnsigned: return Condition::IfGreaterOrEqualUnsigned;
+			case Condition::IfLessOrEqualUnsigned: return Condition::IfGreaterUnsigned;
+			default:
+				throw std::invalid_argument("Unknown condition " + std::to_string(static_cast<int>(condition)));
+		}
+	}
 }

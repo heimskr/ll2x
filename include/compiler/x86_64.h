@@ -66,6 +66,7 @@ namespace LL2X::x86_64 {
 	std::string conditionSuffix(Condition);
 	std::string widthSuffix(Width);
 	Condition getCondition(IcmpCond);
+	Condition invert(Condition);
 
 	constexpr inline Width getWidth(int bits) {
 		if (64 < bits)

@@ -90,6 +90,7 @@
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
 // #include "pass/RemoveUselessBranches.h"
+#include "pass/ReplaceCmov.h"
 #include "pass/ReplaceConstants.h"
 // #include "pass/ReplaceStoresAndLoads.h"
 #include "pass/SetupCalls.h"
@@ -1026,6 +1027,7 @@ namespace LL2X {
 		// Passes::lowerVarargsSecond(*this);
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
+		Passes::replaceCmov(*this);
 		Passes::transformLabels(*this);
 		hackVariables();
 		// for (InstructionPtr &instruction: linearInstructions) {
