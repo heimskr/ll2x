@@ -12,8 +12,6 @@ namespace LL2X::Passes {
 		Timer timer("LowerSwitch");
 		std::list<InstructionPtr> to_remove;
 
-		// VariablePtr m0 = function.m0(function.getEntry());
-
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
 			if (!llvm || llvm->node->nodeType() != NodeType::Switch)
@@ -39,14 +37,13 @@ namespace LL2X::Passes {
 					error() << instruction->debugExtra() << '\n';
 					throw TypeError("Expected int constant in table of switch instruction", type);
 				}
-				const std::string transformed = function.transformLabel(*label);
 
 				function.insertBefore<Cmp, false>(instruction, switch_operand, Op4(value->longValue()));
-				function.insertBefore<Jmp, false>(instruction, Op8(transformed, false), x86_64::Condition::IfEqual);
+				function.insertBefore<Jmp, false>(instruction, OpL(*label), x86_64::Condition::IfEqual);
 			}
 
 			function.comment(instruction, "LowerSwitch(" + std::string(sw->location) + "): default");
-			function.insertBefore<Jmp, false>(instruction, Op8(function.transformLabel(*sw->label), false));
+			function.insertBefore<Jmp, false>(instruction, OpL(*sw->label));
 			to_remove.push_back(instruction);
 		}
 

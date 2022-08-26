@@ -38,6 +38,7 @@ namespace LL2X {
 
 		Number originalConstant = 0;
 		bool useRip = false;
+		bool labelNeedsTransformation = false;
 
 		Operand() = delete;
 
@@ -108,6 +109,7 @@ namespace LL2X {
 		bool isRegisters(const std::set<int> &check_regs) const;
 		bool isAliasOf(const Variable &) const;
 		bool isLabel() const;
+		bool isLabel(const std::string &) const;
 		bool isNumeric() const;
 		bool isConstant() const;
 		bool isHackable() const;
@@ -178,6 +180,12 @@ namespace LL2X {
 
 	inline OperandPtr OpV(const VariablePtr &var) {
 		return Operand::make(var);
+	}
+
+	inline OperandPtr OpL(const std::string &label) {
+		auto out = Op8(label, false);
+		out->labelNeedsTransformation = true;
+		return out;
 	}
 }
 

@@ -89,7 +89,7 @@ namespace LL2X {
 			}
 
 			if (!w) {
-				graph.renderTo("w_null.png");
+				graph.renderTo("w_null.svg");
 				throw std::runtime_error("w is null (1)");
 			}
 

@@ -33,7 +33,6 @@ namespace LL2X::Passes {
 			auto new_block = std::make_shared<BasicBlock>(new_label);
 			new_block->parent = &function;
 			added_blocks.emplace(index, new_block);
-			// new_parents.emplace(instruction, new_block);
 
 			// Emplacing won't overwrite a preexisting key's value. This is important here.
 			label_replacements.emplace(instruction->parent.lock()->label, new_label);
@@ -46,9 +45,12 @@ namespace LL2X::Passes {
 			if (labels.empty()) {
 				if (index < instruction_count - 1)
 					predecessors[index + 1].emplace_back(index);
-			} else
+			} else {
+				if (instruction->canFallThrough())
+					predecessors[index + 1].emplace_back(index);
 				for (const std::string *label: labels)
 					predecessors[function.getBlock(label)->instructions.front()->index].emplace_back(index);
+			}
 		}
 
 		function.bbLabels.clear();

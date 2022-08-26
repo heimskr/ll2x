@@ -139,6 +139,10 @@ namespace LL2X {
 		return mode == Mode::Label;
 	}
 
+	bool Operand::isLabel(const std::string &check) const {
+		return mode == Mode::Label && label == check;
+	}
+
 	bool Operand::isNumeric() const {
 		return mode == Mode::Constant || mode == Mode::Direct;
 	}

@@ -13,5 +13,10 @@ namespace LL2X {
 		std::string toString() const override;
 
 		std::string getMnemonic() const;
+
+		bool holdsLabels() const override { return true; }
+		bool replaceLabel(const std::string *, const std::string *) override;
+		std::vector<const std::string *> getLabels() const override;
+		bool canFallThrough() const override;
 	};
 }

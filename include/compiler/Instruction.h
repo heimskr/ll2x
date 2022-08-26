@@ -102,6 +102,12 @@ namespace LL2X {
 				return {};
 			}
 
+			/** Returns true if the instruction might (depending on run-time conditions) jump elsewhere or might just
+			 *  continue to the next instruction. */
+			virtual bool canFallThrough() const {
+				return false;
+			}
+
 			virtual bool holdsLabels() const {
 				return false;
 			}

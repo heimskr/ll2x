@@ -97,6 +97,7 @@
 // #include "pass/SplitResultMoves.h"
 #include "pass/StackSkip.h"
 // #include "pass/TransformInstructions.h"
+#include "pass/TransformLabels.h"
 #include "pass/TrimBlocks.h"
 // #include "pass/UpdateArgumentLoads.h"
 #include "util/CompilerUtil.h"
@@ -231,9 +232,9 @@ namespace LL2X {
 		label = StringSet::unquote(label);
 		if (bbMap.count(label) == 0) {
 			if (can_throw) {
-				std::cerr << "Want: " << *label << '\n';
+				std::cerr << "Want: \"" << *label << "\"\n";
 				for (const auto &[bname, block]: bbMap)
-					std::cerr << "- " << *bname << '\n';
+					std::cerr << "- \"" << *bname << "\"\n";
 				throw std::runtime_error("Couldn't find block " + *label + " in function " + *name);
 			}
 			return nullptr;
@@ -978,7 +979,12 @@ namespace LL2X {
 			block->extract(true);
 		Passes::lowerSwitch(*this);
 		Passes::minimizeBlocks(*this);
-		Passes::makeCFG(*this);
+		try {
+			Passes::makeCFG(*this);
+		} catch (const std::runtime_error &) {
+			debug();
+			throw;
+		}
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		extractVariables(true);
@@ -1020,6 +1026,7 @@ namespace LL2X {
 		// Passes::lowerVarargsSecond(*this);
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
+		Passes::transformLabels(*this);
 		hackVariables();
 		// for (InstructionPtr &instruction: linearInstructions) {
 		// 	if (instruction->debugIndex != -1) {
