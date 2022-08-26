@@ -77,7 +77,7 @@
 #include "pass/LowerMemset.h"
 // #include "pass/LowerObjectsize.h"
 #include "pass/LowerRet.h"
-// #include "pass/LowerSelect.h"
+#include "pass/LowerSelect.h"
 // #include "pass/LowerStack.h"
 // #include "pass/LowerStackrestore.h"
 #include "pass/LowerStacksave.h"
@@ -959,7 +959,7 @@ namespace LL2X {
 		Passes::lowerConversions(*this);
 		Passes::lowerGetelementptr(*this);
 		// Passes::lowerFreeze(*this);
-		// Passes::lowerSelect(*this);
+		Passes::lowerSelect(*this);
 		// initialStackSize = stackSize;
 		// extractVariables();
 		// Passes::lowerStackrestore(*this);
