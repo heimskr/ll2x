@@ -416,8 +416,7 @@ namespace LL2X {
 							if (operand->isIndirect() && operand->reg == read) {
 								if (!new_var)
 									new_var = newVariable(read->type, instruction->parent.lock());
-								insertBefore(instruction, std::make_shared<Mov>(replacement, OpV(new_var)), true)
-									->setDebug(*instruction, true);
+								insertBefore<Mov>(instruction, replacement, OpV(new_var));
 								operand->reg = new_var;
 #ifdef DEBUG_SPILL
 								info() << "Hacked " << old_extra << " into " << instruction->debugExtra() << '\n';
@@ -1155,12 +1154,9 @@ namespace LL2X {
 	VariablePtr Function::get64(std::shared_ptr<Instruction> before, unsigned long value, bool reindex) {
 		VariablePtr var = newVariable(IntType::make(64), before->parent.lock());
 		OperandPtr operand = Operand::make(var);
-		auto mov = std::make_shared<Mov>(Op4(value >> 32), operand, 64);
-		auto shl = std::make_shared<Shl>(operand, Op4(32), 64);
-		auto or_ = std::make_shared<Or>(operand, Op4(value & 0xffffffff), 64);
-		insertBefore(before, mov, false)->setDebug(*before, true);
-		insertBefore(before, shl, false)->setDebug(*before, true);
-		insertBefore(before, or_, false)->setDebug(*before, true);
+		insertBefore<Mov, false>(before, Op4(value >> 32), operand, 64);
+		insertBefore<Shl, false>(before, operand, Op4(32), 64);
+		insertBefore<Or,  false>(before, operand, Op4(value & 0xffffffff), 64);
 		if (reindex)
 			reindexInstructions();
 		return var;
@@ -1820,13 +1816,10 @@ namespace LL2X {
 				VariablePtr new_var = newVariable(out_type);
 				OperandPtr operand = OpV(new_var);
 
-				insertBefore(instruction, std::make_shared<Mov>(
-					Op4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand))
-					->setDebug(*instruction, true);
+				insertBefore<Mov>(instruction, Op4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand);
 
 				if (offset != 0)
-					insertBefore(instruction, std::make_shared<Add>(Op4(offset), operand, 64))
-						->setDebug(*instruction, true);
+					insertBefore<Add>(instruction, Op4(offset), operand, 64);
 
 				return LocalValue::make(new_var);
 			}
@@ -1834,14 +1827,9 @@ namespace LL2X {
 			case ValueType::Local: {
 				VariablePtr new_var(newVariable(out_type));
 				OperandPtr operand = Operand::make(64, new_var);
-
-				insertBefore(instruction, std::make_shared<Mov>(OpV(
-					dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
-					operand, 64))->setDebug(*instruction, true);
-
-				insertBefore(instruction, std::make_shared<Add>(Op4(offset), operand, 64))
-					->setDebug(*instruction, true);
-
+				insertBefore<Mov>(instruction, OpV(dynamic_cast<LocalValue *>(gep->variable.get())->getVariable(*this)),
+					operand, 64);
+				insertBefore<Add>(instruction, Op4(offset), operand, 64);
 				return LocalValue::make(new_var);
 			}
 
@@ -1851,10 +1839,7 @@ namespace LL2X {
 		if (gep->variable->isIntLike()) {
 			VariablePtr new_var(newVariable(out_type));
 			OperandPtr operand = Operand::make(64, new_var);
-
-			insertBefore(instruction, std::make_shared<Mov>(Op4(gep->variable->intValue() + int(offset)), operand))
-				->setDebug(*instruction, true);
-
+			insertBefore<Mov>(instruction, Op4(gep->variable->longValue() + offset), operand);
 			return LocalValue::make(new_var);
 		}
 
@@ -1916,7 +1901,7 @@ namespace LL2X {
 			throw std::runtime_error("new_var is null at the end of Function::makeVariable");
 
 		if (mov)
-			insertBefore(instruction, mov)->setDebug(*instruction)->extract();
+			insertBefore(instruction, mov)->setDebug(*instruction, true);
 
 		return new_var;
 	}

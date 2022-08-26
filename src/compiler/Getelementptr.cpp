@@ -66,18 +66,14 @@ namespace LL2X::Getelementptr {
 				const long subbytes = Util::updiv(subtype->width(), 8);
 				if (std::holds_alternative<long>(front)) {
 					const long offset = std::get<long>(front) * subbytes;
-					if (offset != 0) {
-						auto add = std::make_shared<Add>(Op4(offset), out_operand);
-						function.insertBefore(instruction, add)->setDebug(*instruction, true);
-					}
+					if (offset != 0)
+						function.insertBefore<Add>(instruction, Op4(offset), out_operand);
 				} else {
 					VariablePtr temp = function.newVariable(IntType::make(64), instruction->parent.lock());
-					function.insertBefore(instruction,
-						std::make_shared<Mov>(OpV(function.getVariable(std::get<const std::string *>(front),
-						false)), OpV(temp)), false)->setDebug(*instruction, true);
+					function.insertBefore<Mov, false>(instruction,
+						OpV(function.getVariable(std::get<const std::string *>(front), false)), OpV(temp));
 					function.multiply(instruction, OpV(temp), subbytes, false, instruction->debugIndex);
-					function.insertBefore(instruction, std::make_shared<Add>(OpV(temp), out_operand), true)
-						->setDebug(*instruction, true);
+					function.insertBefore<Add>(instruction, OpV(temp), out_operand);
 				}
 				insert_mutating(function, subtype, indices, instruction, out_operand, out_type);
 				break;
@@ -98,8 +94,7 @@ namespace LL2X::Getelementptr {
 					warn() << "PaddedStructs offset " << offset << " is out of the integer range. Incorrect code will "
 					          "be produced.\n";
 				if (offset != 0)
-					function.insertBefore(instruction, std::make_shared<Add>(Op4(offset), out_operand))
-						->setDebug(*instruction, true);
+					function.insertBefore<Add>(instruction, Op4(offset), out_operand);
 				insert_mutating(function, snode->types.at(index), indices, instruction, out_operand, out_type);
 				break;
 			}

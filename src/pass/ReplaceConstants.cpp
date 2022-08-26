@@ -35,7 +35,7 @@ namespace LL2X::Passes {
 					std::shared_ptr<GlobalValue> gep_global = std::dynamic_pointer_cast<GlobalValue>(gep->variable);
 					if (!gep_global) {
 						warn() << "Not sure what to do when the argument of getelementptr isn't a global.\n";
-						function.insertBefore(instruction, std::make_shared<InvalidInstruction>());
+						function.insertBefore<InvalidInstruction>(instruction);
 					} else {
 						TypePtr out_type;
 						const long offset = Util::updiv(Getelementptr::compute(gep, &out_type), 8l);
@@ -46,10 +46,8 @@ namespace LL2X::Passes {
 						auto mov_addr = std::make_shared<Mov>(Op8(*gep_global->name), OpV(new_var));
 						function.insertBefore(instruction, mov_addr)->setDebug(*llvm)->extract();
 
-						if (offset != 0) {
-							auto add = std::make_shared<Add>(Op4(offset), OpV(new_var));
-							function.insertAfter(mov_addr, add)->setDebug(*llvm)->extract();
-						}
+						if (offset != 0)
+							function.insertAfter<Add>(mov_addr, Op4(offset), OpV(new_var));
 
 						*value = LocalValue::make(new_var);
 					}

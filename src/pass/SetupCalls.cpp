@@ -163,8 +163,7 @@ namespace LL2X::Passes {
 				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
 				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
 				OperandPtr rdi = Op8(function.makePrecoloredVariable(x86_64::rdi, block));
-				auto lea = std::make_shared<Lea>(pointer, rdi);
-				function.insertBefore(instruction, lea, false)->setDebug(*instruction, true);
+				function.insertBefore<Lea, false>(instruction, pointer, rdi);
 			}
 
 			// Move variables into the argument registers.
@@ -192,7 +191,7 @@ namespace LL2X::Passes {
 				for (const auto &constant: call->constants)
 					if (constant->type->typeType() == TypeType::Float)
 						++floating;
-				function.insertBefore(instruction, std::make_shared<Mov>(Op8(floating), Op8(rax)), false);
+				function.insertBefore<Mov, false>(instruction, Op8(floating), Op8(rax));
 			}
 
 			// Once we're done putting the arguments in the proper place, remove the variables from the call
@@ -330,9 +329,9 @@ namespace LL2X::Passes {
 			insert_zeroext(source, destination);
 		};
 
+		// Local variables
 		if (value_type == ValueType::Local) {
-			// Local variables
-			std::shared_ptr<LocalValue> local = std::dynamic_pointer_cast<LocalValue>(constant->value);
+			auto local = std::dynamic_pointer_cast<LocalValue>(constant->value);
 
 			if (constant->type->typeType() == TypeType::Struct) {
 				// Some notes based on seeing what clang -S emits:
@@ -346,46 +345,52 @@ namespace LL2X::Passes {
 			insert_exts(local->variable, var);
 			function.insertBefore<Mov, false>(instruction, Op8(var), Op8(pushed, function.pcRsp));
 			return size;
-		} else if (value_type == ValueType::Global) {
-			// Global variables
-			std::shared_ptr<GlobalValue> global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
+		}
+
+		// Global variables
+		if (value_type == ValueType::Global) {
+			auto global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov = std::make_shared<Mov>(Op8(*global->name), OpV(new_var));
 			insert_exts(new_var, new_var);
-			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
+			function.insertBefore<Mov, false>(instruction, Op8(*global->name), OpV(new_var));
 			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
-		} else if (value_type == ValueType::Int) {
-			// Integer-like values
+		}
+
+		// Integer-like values
+		if (value_type == ValueType::Int) {
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov = std::make_shared<Mov>(Op4(constant->value->longValue()), OpV(new_var));
-			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
-			insert_exts(new_var, new_var);
-			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
-			return size;
-		} else if (value_type == ValueType::Bool) {
-			// Booleans
-			std::shared_ptr<BoolValue> bval = std::dynamic_pointer_cast<BoolValue>(constant->value);
-			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov = std::make_shared<Mov>(Op4(bval->value? 1 : 0), OpV(new_var), 64);
-			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
+			function.insertBefore<Mov, false>(instruction, Op4(constant->value->longValue()), OpV(new_var));
 			insert_exts(new_var, new_var);
 			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
-		} else if (value_type == ValueType::Null || value_type == ValueType::Undef) {
-			// Null and undef values
+		}
+
+		// Booleans
+		if (value_type == ValueType::Bool) {
+			const bool bval = std::dynamic_pointer_cast<BoolValue>(constant->value)->value;
 			VariablePtr new_var = function.newVariable(constant->type);
-			auto mov = std::make_shared<Mov>(Op4(0), OpV(new_var));
-			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
+			function.insertBefore<Mov, false>(instruction, Op4(bval? 1 : 0), OpV(new_var), 64);
+			insert_exts(new_var, new_var);
 			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
-		} else if (value_type == ValueType::Getelementptr) {
+		}
+
+		// Null and undef values
+		if (value_type == ValueType::Null || value_type == ValueType::Undef) {
+			VariablePtr new_var = function.newVariable(constant->type);
+			function.insertBefore<Mov, false>(instruction, Op4(0), OpV(new_var));
+			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
+			return size;
+		}
+
+		if (value_type == ValueType::Getelementptr) {
 			// Getelementptr expressions
-			std::shared_ptr<GetelementptrValue> gep = std::dynamic_pointer_cast<GetelementptrValue>(constant->value);
-			std::shared_ptr<GlobalValue> gep_global = std::dynamic_pointer_cast<GlobalValue>(gep->variable);
+			auto gep        = std::dynamic_pointer_cast<GetelementptrValue>(constant->value);
+			auto gep_global = std::dynamic_pointer_cast<GlobalValue>(gep->variable);
 			if (!gep_global) {
 				warn() << "Not sure what to do when the argument of getelementptr isn't a global.\n";
-				function.insertBefore(instruction, InvalidInstruction::make());
+				function.insertBefore<InvalidInstruction>(instruction);
 				return 0;
 			} else {
 				const std::list<long> indices = Getelementptr::getLongIndices(*gep);
@@ -393,22 +398,24 @@ namespace LL2X::Passes {
 				if (Util::outOfRange(offset))
 					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 				VariablePtr new_var = function.newVariable(constant->type);
-				auto movsym = std::make_shared<Mov>(Op8(*gep_global->name), OpV(new_var));
-				function.insertBefore(instruction, movsym)->setDebug(*instruction, true);
+				function.insertBefore<Mov, false>(instruction, Op8(*gep_global->name), OpV(new_var));
 				if (offset != 0)
 					function.insertBefore<Add, false>(instruction, Op4(offset), OpV(new_var));
 				insert_exts(new_var, new_var);
 				function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 				return size;
 			}
-		} else if (constant->conversionSource) {
-			return pushCallValue(function, instruction, constant->conversionSource, pushed);
-		} else {
-			warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
-			       << __LINE__ << '\n';
-			function.insertBefore<InvalidInstruction>(instruction);
-			return 0;
 		}
+
+		if (constant->conversionSource)
+			return pushCallValue(function, instruction, constant->conversionSource, pushed);
+
+		warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
+				<< __LINE__ << '\n';
+
+		function.insertBefore<InvalidInstruction>(instruction);
+
+		return 0;
 	}
 
 	InstructionPtr setupCallValue(Function &function, const OperandPtr &new_operand, const InstructionPtr &instruction,
@@ -478,55 +485,55 @@ namespace LL2X::Passes {
 		if (value_type == ValueType::Local) {
 			// If it's a variable, move it into the argument register.
 			auto local = std::dynamic_pointer_cast<LocalValue>(constant->value);
-			auto mov = std::make_shared<Mov>(OpV(local->variable), new_operand, 64);
-			auto out = function.insertBefore(instruction, mov);
-			out->setDebug(*instruction, true);
+			auto out = function.insertBefore<Mov>(instruction, OpV(local->variable), new_operand, 64);
 			insert_exts();
 			return out;
-		} else if (value_type == ValueType::Int) {
+		}
+
+		if (value_type == ValueType::Int) {
 			// If it's an integer constant, set the argument register to it.
-			auto mov = std::make_shared<Mov>(Op4(constant->value->longValue()), new_operand);
-			auto out = function.insertBefore(instruction, mov);
-			out->setDebug(*instruction, true);
+			auto out = function.insertBefore<Mov>(instruction, Op4(constant->value->longValue()), new_operand);
 			insert_exts();
 			return out;
-		} else if (value_type == ValueType::Bool) {
+		}
+
+		if (value_type == ValueType::Bool) {
 			// If it's a boolean constant, convert it to an integer and do the same.
-			auto bval = std::dynamic_pointer_cast<BoolValue>(constant->value);
-			auto mov = std::make_shared<Mov>(Op4(bval->value? 1 : 0), new_operand);
-			auto out = function.insertBefore(instruction, mov);
-			out->setDebug(*instruction, true);
+			const bool bval = std::dynamic_pointer_cast<BoolValue>(constant->value)->value;
+			auto out = function.insertBefore<Mov>(instruction, Op4(bval? 1 : 0), new_operand);
 			insert_exts();
 			return out;
-		} else if (value_type == ValueType::Null || value_type == ValueType::Undef) {
+		}
+
+		if (value_type == ValueType::Null || value_type == ValueType::Undef) {
 			// If it's a null or undef constant, just use zero. No need to sign extend.
-			auto mov = std::make_shared<Mov>(Op4(0), new_operand);
-			auto out = function.insertBefore(instruction, mov);
-			out->setDebug(*instruction, true);
-			return out;
-		} else if (value_type == ValueType::Getelementptr) {
+			return function.insertBefore<Mov>(instruction, Op4(0), new_operand);
+		}
+
+		if (value_type == ValueType::Getelementptr) {
 			// If it's a getelementptr expression, things are a little more difficult.
-			auto *gep = dynamic_cast<GetelementptrValue *>(constant->value.get());
-			auto *gep_global = dynamic_cast<GlobalValue *>(gep->variable.get());
+			auto gep        = std::dynamic_pointer_cast<GetelementptrValue>(constant->value);
+			auto gep_global = std::dynamic_pointer_cast<GlobalValue>(gep->variable);
 			// TODO, maybe: reduce duplication
 			if (!gep_global) {
 				std::shared_ptr<LocalValue> local;
-				if (auto *gep_local = dynamic_cast<LocalValue *>(gep->variable.get())) {
+
+				if (auto gep_local = std::dynamic_pointer_cast<LocalValue>(gep->variable)) {
 					local = std::make_shared<LocalValue>(gep_local->getVariable(function));
 				} else if (auto subgep = std::dynamic_pointer_cast<GetelementptrValue>(gep->variable)) {
 					local = function.replaceGetelementptrValue(subgep, instruction);
 				} else {
 					warn() << "Not sure what to do when the argument of getelementptr isn't a global or getelementptr."
 					          "\n    " << std::string(*gep->variable);
-					if (auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get()))
+					if (auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction))
 						std::cerr << " (" << llvm->node->location << ")";
 					std::cerr << "\n";
-					return function.insertBefore(instruction, InvalidInstruction::make());
+					return function.insertBefore<InvalidInstruction>(instruction);
 				}
 
 				const std::list<long> indices = Getelementptr::getLongIndices(*gep);
-
 				const long offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
+
 				if (Util::outOfRange(offset))
 					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 
@@ -541,43 +548,46 @@ namespace LL2X::Passes {
 
 				insert_exts();
 				return out;
-			} else {
-				const std::list<long> indices = Getelementptr::getLongIndices(*gep);
-
-				const long offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
-				if (Util::outOfRange(offset))
-					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
-
-				auto out = function.insertBefore<Mov>(instruction, Op8(*gep_global->name), new_operand);
-				out->setDebug(*instruction, true);
-				if (offset != 0)
-					function.insertBefore<Add>(instruction, Op4(offset), new_operand);
-				insert_exts();
-				return out;
 			}
-		} else if (value_type == ValueType::Global) {
-			auto *global = dynamic_cast<GlobalValue *>(constant->value.get());
-			auto mov = std::make_shared<Mov>(Op8(*global->name), new_operand);
-			function.insertBefore(instruction, mov)->setDebug(*instruction, true);
+
+			const std::list<long> indices = Getelementptr::getLongIndices(*gep);
+			const long offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
+
+			if (Util::outOfRange(offset))
+				warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
+
+			auto out = function.insertBefore<Mov>(instruction, Op8(*gep_global->name), new_operand);
+			if (offset != 0)
+				function.insertBefore<Add>(instruction, Op4(offset), new_operand);
+			insert_exts();
+			return out;
+		}
+
+		if (value_type == ValueType::Global) {
+			auto global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
+			auto mov = function.insertBefore<Mov>(instruction, Op8(*global->name), new_operand);
 			insert_exts();
 			return mov;
-		} else if (value_type == ValueType::Icmp) {
-			auto *icmp = dynamic_cast<IcmpValue *>(constant->value.get());
+		}
+
+		if (value_type == ValueType::Icmp) {
+			auto icmp = std::dynamic_pointer_cast<IcmpValue>(constant->value);
 			auto node = IcmpNode::make(new_operand, icmp->cond, icmp->left, icmp->right);
 			Passes::lowerIcmp(function, instruction, node.get());
 			insert_exts();
 			return nullptr; // Whatever.
-		} else if (value_type == ValueType::Operand) {
+		}
+
+		if (value_type == ValueType::Operand) {
 			auto operand_value = std::dynamic_pointer_cast<OperandValue>(constant->value);
-			auto mov = std::make_shared<Mov>(operand_value->operand, new_operand);
-			auto out = function.insertBefore(instruction, mov);
-			out->setDebug(*instruction, true);
+			auto out = function.insertBefore<Mov>(instruction, operand_value->operand, new_operand);
 			insert_exts();
 			return out;
-		} else {
-			warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
-			       << __LINE__ << '\n';
-			return function.insertBefore(instruction, InvalidInstruction::make());
 		}
+
+		warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
+			   << __LINE__ << '\n';
+
+		return function.insertBefore<InvalidInstruction>(instruction);
 	}
 }

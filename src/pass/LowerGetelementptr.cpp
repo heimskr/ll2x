@@ -58,14 +58,14 @@ namespace LL2X::Passes {
 			} else {
 				GlobalValue *global = dynamic_cast<GlobalValue *>(constant_value.get());
 				pointer = OpV(function.newVariable(constant_type));
-				function.insertBefore(instruction, std::make_shared<Mov>(Op8(*global->name), pointer))
-					->setDebug(node)->extract();
+				function.insertBefore<Mov>(instruction, Op8(*global->name), pointer);
 			}
 
 			const TypeType tt = constant_type->typeType();
 			const bool one_pvar = node->indices.size() == 1 && node->indices.at(0).isPvar;
 			const bool any_pvar = anyPvarInIndices(node->indices);
 			const bool dynamic_index = node->indices.size() == 2 && !node->indices[0].isPvar && node->indices[1].isPvar;
+			const std::string prefix = "LowerGetelementptr(" + std::string(node->location) + "): ";
 
 			if (tt == TypeType::Struct && any_pvar) {
 				// If there are any pvars in the index list, we can't combine all the indices into a single constant and
@@ -74,9 +74,8 @@ namespace LL2X::Passes {
 				std::deque<GetelementptrNode::Index> indices(node->indices.begin(), node->indices.end());
 				TypePtr type = constant_type;
 				OperandPtr operand = node->operand;
-				auto move = std::make_shared<Mov>(pointer, operand);
-				function.insertBefore(instruction, move, "LowerGetelementptr(" + std::string(node->location) +
-					"): initial move -> " + operand->toString())->setDebug(node)->extract();
+				function.comment(instruction, prefix + "initial move -> " + operand->toString());
+				function.insertBefore<Mov>(instruction, pointer, operand);
 				while (!indices.empty()) {
 					const auto &index = indices.front();
 					indices.pop_front();
@@ -87,25 +86,21 @@ namespace LL2X::Passes {
 							: function.getVariable(std::to_string(std::get<long>(index.value)));
 						if (tt == TypeType::Pointer || tt == TypeType::Array) {
 							type = dynamic_cast<HasSubtype *>(type.get())->subtype;
-							function.comment(instruction, "LowerGetelementptr(" + std::string(node->location)
-								+ "): pointer/array, pvar -> " + operand->toString());
+							function.comment(instruction, prefix + "pointer/array, pvar -> " + operand->toString());
 							auto temp = function.newVariable(IntType::make(64), instruction->parent.lock());
-							function.insertBefore(instruction, std::make_shared<Mov>(OpV(pvar), OpV(temp)),
-								false)->setDebug(*instruction, true);
+							function.insertBefore<Mov, false>(instruction, OpV(pvar), OpV(temp));
 							function.multiply(instruction, OpV(temp), static_cast<uint64_t>(type->width()), true,
 								node->debugIndex);
-							function.insertBefore(instruction, std::make_shared<Add>(OpV(temp), operand))
-								->setDebug(*instruction, true);
+							function.insertBefore<Add>(instruction, OpV(temp), operand);
 						} else if (tt == TypeType::Struct) {
 							throw std::runtime_error("pvar indices are invalid for struct types @ " +
 								std::string(node->location));
 						}
 					} else if (tt == TypeType::Pointer || tt == TypeType::Array) {
 						type = dynamic_cast<HasSubtype *>(type.get())->subtype;
-						auto add = std::make_shared<Add>(Op4(type->width() * std::get<long>(index.value)),
+						function.comment(instruction, prefix + "pointer/array, number -> " + operand->toString());
+						function.insertBefore<Add>(instruction, Op4(type->width() * std::get<long>(index.value)),
 							operand);
-						function.insertBefore(instruction, add, "LowerGetelementptr(" + std::string(node->location) +
-							"): pointer/array, number -> " + operand->toString())->setDebug(node)->extract();
 					} else if (tt == TypeType::Struct) {
 						std::shared_ptr<StructType> stype = std::dynamic_pointer_cast<StructType>(type);
 						std::shared_ptr<StructNode> snode = stype->node;
@@ -125,9 +120,8 @@ namespace LL2X::Passes {
 						assert(operand->isRegister());
 						operand->reg->setType(out_type);
 
-						auto add = std::make_shared<Add>(Op4(offset), operand);
-						function.insertBefore(instruction, add, "LowerGetelementptr(" + std::string(node->location) +
-							"): struct, number -> " + operand->toString())->setDebug(node)->extract();
+						function.comment(instruction, prefix + "struct, number -> " + operand->toString());
+						function.insertBefore<Add>(instruction, Op4(offset), operand);
 						type = snode->types.at(std::get<long>(index.value));
 					} else
 						throw std::runtime_error("Invalid type in GetelementPtr: " + std::string(*type));
@@ -147,20 +141,15 @@ namespace LL2X::Passes {
 					throw std::runtime_error("Type " + std::string(*node->type) + " has no subtype");
 
 				VariablePtr temp = function.newVariable(IntType::make(64), instruction->parent.lock());
-				auto mov = std::make_shared<Mov>(OpV(index), OpV(temp));
-				function.insertBefore(instruction, mov, "LowerGetelementptr(" + std::string(node->location) +
-					"): array/pointer-type, dynamic index -> " + node->operand->toString(), false)
-					->setDebug(node)->extract();
-				function.multiply(instruction, OpV(temp), static_cast<uint64_t>(subwidth), false,
-					node->debugIndex);
-				auto movmul = std::make_shared<Mov>(OpV(temp), node->operand);
+				function.comment(instruction, prefix + "array/pointer-type, dynamic index -> " +
+					node->operand->toString());
+				function.insertBefore<Mov, false>(instruction, OpV(index), OpV(temp));
+				function.multiply(instruction, OpV(temp), static_cast<uint64_t>(subwidth), false, node->debugIndex);
+				function.insertBefore<Mov, false>(instruction, OpV(temp), node->operand);
 				// result += skip
-				auto addskip = std::make_shared<Add>(Op4(skip), node->operand);
+				function.insertBefore<Add>(instruction, Op4(skip), node->operand);
 				// result += base pointer (not %rbp)
-				auto addbase = std::make_shared<Add>(pointer, node->operand);
-				function.insertBefore(instruction, movmul)->setDebug(node)->extract();
-				function.insertBefore(instruction, addskip)->setDebug(node)->extract();
-				function.insertBefore(instruction, addbase)->setDebug(node)->extract();
+				function.insertBefore<Add>(instruction, pointer, node->operand);
 			} else if (tt == TypeType::Struct || ((tt == TypeType::Array || tt == TypeType::Pointer) && !one_pvar)) {
 				std::list<std::variant<long, const std::string *>> indices;
 				std::stringstream indices_str;
@@ -193,7 +182,8 @@ namespace LL2X::Passes {
 					source = dynamic_cast<LocalValue *>(node->constant->value.get())->getVariable(function);
 				else
 					source = function.makeVariable(node->constant->value, instruction, node->constant->type);
-				function.insertBefore(instruction, std::make_shared<Mov>(OpV(source), node->operand));
+
+				function.insertBefore<Mov>(instruction, OpV(source), node->operand);
 
 				Getelementptr::insert(function, node->pointerType, indices, instruction, node->operand, &out_type);
 				node->operand->reg->setType(out_type);

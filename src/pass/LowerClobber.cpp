@@ -31,6 +31,7 @@ namespace LL2X::Passes {
 				const int reg = clobber->reg;
 				assert(reg == clobber->unclobber->reg);
 				if (isLive(instruction, reg)) {
+					// TODO: check liveness of register at unclobber location?
 					VariablePtr precolored = function.makePrecoloredVariable(reg, instruction->parent.lock());
 					const StackLocation *location = nullptr;
 
@@ -43,12 +44,11 @@ namespace LL2X::Passes {
 
 					const int offset = -location->offset;
 
-					function.insertBefore(clobber, std::make_shared<Mov>(Op8(precolored), Op8(offset,
-						function.pcRbp)), "Clobber " + x86_64::registerName(reg), false)
-						->setDebug(*instruction, false)->setSecret()->extract();
-					function.insertBefore(clobber->unclobber, std::make_shared<Mov>(Op8(offset, function.pcRbp),
-						Op8(precolored)), "Unclobber " + x86_64::registerName(reg), false)
-						->setDebug(*instruction, true);
+					auto mov = std::make_shared<Mov>(Op8(precolored), Op8(offset, function.pcRbp));
+					function.comment(clobber, "Clobber " + x86_64::registerName(reg));
+					function.insertBefore(clobber, mov, false)->setDebug(*instruction, false)->setSecret()->extract();
+					function.comment(clobber->unclobber, "Unclobber " + x86_64::registerName(reg));
+					function.insertBefore<Mov, false>(clobber->unclobber, Op8(offset, function.pcRbp), Op8(precolored));
 				}
 
 				to_remove.push_back(clobber);

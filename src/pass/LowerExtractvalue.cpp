@@ -21,10 +21,11 @@ namespace LL2X::Passes {
 			ExtractValueNode *ev = dynamic_cast<ExtractValueNode *>(llvm->node);
 
 			ValueType aggregate_type = ev->aggregateValue->valueType();
+			const std::string prefix = "LowerExtractvalue(" + std::string(ev->location) + ")";
 
 			if (aggregate_type == ValueType::Undef) {
-				function.insertBefore(instruction, std::make_shared<Mov>(Op4(0), ev->operand),
-					"ExtractValue: undef == 0")->setDebug(ev)->extract();
+				function.comment(instruction, prefix + ": undef == 0");
+				function.insertBefore<Mov>(instruction, Op4(0), ev->operand);
 				to_remove.push_back(instruction);
 				++changed;
 				continue;
@@ -58,8 +59,8 @@ namespace LL2X::Passes {
 				continue;
 			}
 
-			function.comment(instruction, "LowerExtractvalue(" + std::string(ev->location) + ")");
-			auto result = PaddedStructs::extract(variable, ev->decimals.front(), function, instruction);
+			function.comment(instruction, prefix);
+			PaddedStructs::extract(variable, ev->decimals.front(), function, instruction);
 			to_remove.push_back(instruction);
 			++changed;
 		}

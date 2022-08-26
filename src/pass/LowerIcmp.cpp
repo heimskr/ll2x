@@ -73,26 +73,21 @@ namespace LL2X::Passes {
 				right = dynamic_cast<LocalValue *>(value2.get())->variable;
 			} else {
 				right = function.newVariable(node->getType(), instruction->parent.lock());
-				function.insertBefore(instruction, std::make_shared<Mov>(Op8(right),
-					OpX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.pcRip)), false)
-					->setDebug(node)->extract();
-				function.insertBefore(instruction, std::make_shared<Mov>(Op8(right), OpX(width, 0, right),
-					width), false)->setDebug(node)->extract();
+				function.insertBefore<Mov, false>(instruction, Op8(right),
+					OpX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.pcRip));
+				function.insertBefore<Mov, false>(instruction, Op8(right), OpX(width, 0, right), width);
 			}
 
-			function.insertBefore(instruction, std::make_shared<Cmp>(OpX(width, left), OpX(width, right),
-				width), false)->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
-				->setDebug(node)->extract();
+			function.insertBefore<Cmp, false>(instruction, OpX(width, left), OpX(width, right), width);
+			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 
 		} else if (type2 == ValueType::Operand) {
 
 			const auto width = node->getType()->width();
 			// TODO: verify right operand width
-			function.insertBefore(instruction, std::make_shared<Cmp>(OpX(width, left),
-				dynamic_cast<OperandValue *>(value2.get())->operand, width), false)->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
-				->setDebug(node)->extract();
+			function.insertBefore<Cmp, false>(instruction, OpX(width, left),
+				dynamic_cast<OperandValue *>(value2.get())->operand, width);
+			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 
 		} else {
 
@@ -105,12 +100,8 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Unsupported value type in icmp instruction: " + value_map.at(type2));
 
 			const int size = node->getType()->width();
-
-			function.insertBefore(instruction, std::make_shared<Cmp>(OpX(size, left), OpX(size, imm), size),
-				false)->setDebug(node)->extract();
-			function.insertBefore(instruction, std::make_shared<Set>(destination, x86_64::getCondition(cond)), false)
-				->setDebug(node)->extract();
-
+			function.insertBefore<Cmp, false>(instruction, OpX(size, left), OpX(size, imm), size);
+			function.insertBefore<Set>(instruction, destination, x86_64::getCondition(cond));
 		}
 	}
 }

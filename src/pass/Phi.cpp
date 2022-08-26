@@ -243,7 +243,7 @@ namespace LL2X::Passes {
 								       << *function.name << "'s linear instructions.\n";
 						}
 
-						function.insertBefore(new_instruction, std::make_shared<Comment>(comment));
+						function.comment(new_instruction, comment);
 					} else {
 						middle_made = block_made = true;
 						const std::string *new_label = function.newLabel();

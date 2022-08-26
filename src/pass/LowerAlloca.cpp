@@ -68,8 +68,7 @@ namespace LL2X::Passes {
 
 			// Move the stack pointer down to get the alignment right.
 			if (alloca->align == 16 || alloca->align == 8 || alloca->align == 4 || alloca->align == 2) {
-				auto and_ = std::make_shared<And>(Op4(-alloca->align), Op8(rsp));
-				function.insertBefore(instruction, and_, false)->setDebug(llvm, true);
+				function.insertBefore<And, false>(instruction, Op4(-alloca->align), Op8(rsp));
 			} else if (0 < alloca->align) {
 				const int   align = Util::upalign(alloca->align, 8);
 				VariablePtr temp  = function.newVariable(IntType::make(64), block);
@@ -114,11 +113,11 @@ namespace LL2X::Passes {
 				} else if (value->isLocal()) {
 					// If it's a local variable instead, we can't do the multiplication at compile time.
 					LocalValue *local = dynamic_cast<LocalValue *>(value);
-					auto mov = std::make_shared<Mov>(OpV(alloca_reg), alloca->operand);
-					function.insertBefore(instruction, mov, prefix + "mov %rsp, %var", false)
-						->setDebug(llvm, true);
+					function.comment(instruction, prefix + "mov %rsp, %var");
+					function.insertBefore<Mov, false>(instruction, OpV(alloca_reg), alloca->operand);
+
 					if (width != 0) {
-						// TODO: use shifts for widths that are powers of two
+						// TODO: use shifts for widths that are powers of two.
 
 						OperandPtr rax = Op8(function.makePrecoloredVariable(x86_64::rax, block));
 						OperandPtr rdx = Op8(function.makePrecoloredVariable(x86_64::rdx, block));

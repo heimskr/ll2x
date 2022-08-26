@@ -23,12 +23,11 @@ namespace LL2X::Passes {
 		// Start by pushing %rbp to the stack.
 		const VariablePtr &rbp = function.pcRbp;
 		const VariablePtr &rsp = function.pcRsp;
-		function.insertBefore(first, std::make_shared<Push>(Op8(rbp)), false)->setDebug(*first, true);
+		function.insertBefore<Push, false>(first, Op8(rbp));
 		function.initialPushedBytes = 8;
 
 		// Move %rsp into %rbp.
-		function.insertBefore(first, std::make_shared<Mov>(Op8(rsp), Op8(rbp)), false)->setDebug(*first,
-			true);
+		function.insertBefore<Mov, false>(first, Op8(rsp), Op8(rbp));
 
 		// Next, we need to save to the stack any registers that are written to. Start by finding the registers.
 		std::set<int> written;
@@ -45,10 +44,10 @@ namespace LL2X::Passes {
 
 		// Move %rsp down to make room for stack allocations if necessary.
 		if (0 < function.stackSize) {
-			auto sub = std::make_shared<Sub>(Op4(Util::upalign(function.stackSize + function.maxPushedForCalls,
+			function.comment(first, "upalign(" + std::to_string(function.stackSize) + " + " +
+				std::to_string(function.maxPushedForCalls) + ", 16)");
+			function.insertBefore<Sub, false>(first, Op4(Util::upalign(function.stackSize + function.maxPushedForCalls,
 				16)), Op8(rsp));
-			function.insertBefore(first, sub, "upalign(" + std::to_string(function.stackSize) + " + " +
-				std::to_string(function.maxPushedForCalls) + ", 16)", false)->setDebug(*first, true);
 			// function.categories["StackSkip"].insert(sub);
 		}
 
@@ -56,10 +55,8 @@ namespace LL2X::Passes {
 		for (const int reg: written) {
 			function.savedRegisters.push_back(reg);
 			VariablePtr variable = function.makePrecoloredVariable(reg, front_block);
-			const auto &location = *function.calleeSaved.at(reg);
-			auto save = std::make_shared<Mov>(Op8(variable), Op8(-location.offset, rbp));
-			function.insertBefore(first, save, false)->setDebug(*first, true);
-			function.categories["PrologueSave"].insert(save);
+			const StackLocation &location = *function.calleeSaved.at(reg);
+			function.insertBefore<Mov, false>(first, Op8(variable), Op8(-location.offset, rbp));
 		}
 
 		function.reindexInstructions();

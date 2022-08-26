@@ -59,57 +59,56 @@ namespace LL2X::Passes {
 
 			auto local = std::dynamic_pointer_cast<LocalValue>(converted->value);
 			VariablePtr localvar = local->getVariable(function);
-			auto mov = std::make_shared<Mov>(Op8(0, localvar), node->operand, width);
-			function.insertBefore(instruction, mov, prefix + ".1: (" + localvar->plainString() + ") into " +
-				node->operand->toString())->setDebug(llvm, true);
+			function.comment(instruction, prefix + ".1: (" + localvar->plainString() + ") into " +
+				node->operand->toString());
+			function.insertBefore<Mov>(instruction, Op8(0, localvar), node->operand, width);
 
 		} else if (value_type == ValueType::Operand) {
 
 			OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(converted->value)->operand;
 			if (operand->isRegister()) {
-				auto mov = std::make_shared<Mov>(Op8(0, operand->reg), node->operand, width);
-				function.insertBefore(instruction, mov, prefix + ".2: (" + operand->toString() + ") into " +
-					node->operand->toString())->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".2: (" + operand->toString() + ") into " +
+					node->operand->toString());
+				function.insertBefore<Mov>(instruction, Op8(0, operand->reg), node->operand, width);
 			} else {
-				function.insertBefore(instruction, std::make_shared<Mov>(operand, node->operand, width), prefix +
-					".3: " + operand->toString() + " into " + node->operand->toString(), false)->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".3: " + operand->toString() + " into " +
+					node->operand->toString());
+				function.insertBefore<Mov>(instruction, operand, node->operand, width);
 			}
 
 		} else if (value_type == ValueType::Global) {
 
 			auto global = std::dynamic_pointer_cast<GlobalValue>(converted->value);
-			auto mov = std::make_shared<Mov>(OpX(width, *global->name), node->operand, width);
-			function.insertBefore(instruction, mov, prefix + ".4: " + *global->name + " into " +
-				node->operand->toString())->setDebug(llvm, true);
+			function.comment(instruction, prefix + ".4: " + *global->name + " into " + node->operand->toString());
+			function.insertBefore<Mov>(instruction, OpX(width, *global->name), node->operand, width);
 
 		} else if (value_type == ValueType::Null) { // In case you're begging for a segfault.
 
-			function.insertBefore(instruction, std::make_shared<Mov>(Op4(0), node->operand, width),
-				"Guaranteed segfault.", false)->setDebug(llvm, true);
-			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
-				false)->setDebug(llvm, true);
+			function.comment(instruction, "Guaranteed segfault.");
+			function.insertBefore<Mov, false>(instruction, Op4(0), node->operand, width);
+			function.insertBefore<Mov>(instruction, node->operand->toDisplaced(), node->operand);
 
 		} else if (value_type == ValueType::Int) {
 
 			const int64_t long_value = converted->value->longValue();
-			// mov $imm, %dest
-			function.insertBefore(instruction, std::make_shared<Mov>(Op4(long_value), node->operand, width),
-				prefix + ".5: " + std::to_string(long_value) + " into " + node->operand->toString(),
-				false)->setDebug(llvm, true);
-			// mov (%dest), %dest
-			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
-				false)->setDebug(llvm, true);
 
-		} else if (value_type == ValueType::Bool) {
-
-			const int64_t bool_value = dynamic_cast<BoolValue *>(converted->value.get())->value? 1 : 0;
 			// mov $imm, %dest
-			function.insertBefore(instruction, std::make_shared<Mov>(Op4(bool_value), node->operand, width),
-				prefix + ".6: " + std::to_string(bool_value) + " into " + node->operand->toString(),
-				false)->setDebug(llvm, true);
+			function.comment(instruction, prefix + ".5: " + std::to_string(long_value) + " into " +
+				node->operand->toString());
+			function.insertBefore<Mov, false>(instruction, Op4(long_value), node->operand, width);
+
 			// mov (%dest), %dest
-			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
-				false)->setDebug(llvm, true);
+			function.insertBefore<Mov>(instruction, node->operand->toDisplaced(), node->operand);
+
+		} else if (value_type == ValueType::Bool) { // Another segfault scenario.
+
+			const bool bool_value = dynamic_cast<BoolValue *>(converted->value.get())->value;
+			// mov $imm, %dest
+			function.comment(instruction, prefix + ".6: " + (bool_value? "true" : "false") + " into " +
+				node->operand->toString());
+			function.insertBefore<Mov, false>(instruction, Op4(bool_value? 1 : 0), node->operand, width);
+			// mov (%dest), %dest
+			function.insertBefore<Mov>(instruction, node->operand->toDisplaced(), node->operand);
 
 		} else
 			throw std::runtime_error("Unexpected ValueType in load instruction: " + value_map.at(value_type));
@@ -160,6 +159,7 @@ namespace LL2X::Passes {
 			value_type == ValueType::Local || value_type == ValueType::Global || value_type == ValueType::Operand;
 
 		if (source_value->isIntLike()) {
+
 			int64_t long_value = 0;
 			ValuePtr value;
 
@@ -169,54 +169,57 @@ namespace LL2X::Passes {
 			}
 
 			if (local) {
-				auto lvar = local->getVariable(function);
+
+				VariablePtr lvar = local->getVariable(function);
 				// mov $imm, (%var)
-				function.insertBefore(instruction, std::make_shared<Mov>(Op4(long_value),
-					OpV(lvar)->toDisplaced(), width), prefix + ".1: mov $imm, (" + lvar->plainString() + ")",
-					false)->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".1: mov $imm, (" + lvar->plainString() + ")");
+				function.insertBefore<Mov>(instruction, Op4(long_value), OpV(lvar)->toDisplaced(), width);
+
 			} else if (global) {
-				auto temp = function.newVariable(source_type, instruction->parent.lock());
+
+				VariablePtr temp = function.newVariable(source_type, instruction->parent.lock());
 				// mov $imm, %temp
-				auto mov_imm = std::make_shared<Mov>(Op4(long_value), OpV(temp), width);
+				function.comment(instruction, prefix + ".2a: mov $imm, %temp");
+				function.insertBefore<Mov>(instruction, Op4(long_value), OpV(temp), width);
 				// mov %temp, (global)
-				auto mov_global = std::make_shared<Mov>(OpV(temp), OpX(width, *global->name, true), width);
-				function.insertBefore(instruction, mov_imm, prefix + ".2a: mov $imm, %temp", false)
-					->setDebug(llvm, true);
-				function.insertBefore(instruction, mov_global, prefix + ".2b: mov %temp, (global)", false)
-					->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".2b: mov %temp, (global)");
+				function.insertBefore<Mov>(instruction, OpV(temp), OpX(width, *global->name, true), width);
+
 			} else if (operand_value) {
+
 				OperandPtr operand = operand_value->operand;
 				if (operand->isRegister()) {
 					// mov $imm, (operand)
-					function.insertBefore(instruction, std::make_shared<Mov>(Op4(long_value),
-						operand->toDisplaced(), width), prefix + ".3: mov $imm, " + operand->toString(), false)
-						->setDebug(llvm, true);
+					function.comment(instruction, prefix + ".3: mov $imm, " + operand->toString());
+					function.insertBefore<Mov>(instruction, Op4(long_value), operand->toDisplaced(), width);
 				} else {
 					// mov $imm, operand
-					auto mov = std::make_shared<Mov>(Op4(long_value), operand, width);
-					function.insertBefore(instruction, mov, prefix + ".4: mov $imm, operand", false)
-						->setDebug(llvm, true);
+					function.comment(instruction, prefix + ".4: mov $imm, operand");
+					function.insertBefore<Mov>(instruction, Op4(long_value), operand, width);
 				}
+
 			} else if (converted->value->isIntLike()) {
+
 				const int64_t longptr = converted->value->longValue();
 				VariablePtr temp = function.newVariable(source_type, instruction->parent.lock());
 				// mov $imm, %temp
-				auto mov_imm = std::make_shared<Mov>(Op4(long_value), OpV(temp), width);
+				function.comment(instruction, prefix + ".5a: mov $imm, %temp");
+				function.insertBefore<Mov, false>(instruction, Op4(long_value), OpV(temp), width);
 				// mov %temp, addr
-				auto mov_longptr = std::make_shared<Mov>(OpV(temp), OpX(width, longptr, true), width);
-				function.insertBefore(instruction, mov_imm, prefix + ".5a: mov $imm, %temp", false)
-					->setDebug(llvm, true);
-				function.insertBefore(instruction, mov_longptr, prefix + ".5b: mov %temp, addr", false)
-					->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".5b: mov %temp, addr");
+				function.insertBefore<Mov>(instruction, OpV(temp), OpX(width, longptr, true), width);
+
 			}
+
 		} else if (localish) {
+
 			OperandPtr soperand;
 
 			if (value_type == ValueType::Global) {
 				soperand = OpV(function.newVariable(node->source->type));
 				const std::string &global_name = *dynamic_cast<GlobalValue *>(source_value.get())->name;
-				auto mov = std::make_shared<Mov>(Op4(global_name, true), soperand, width);
-				function.insertBefore(instruction, mov, prefix + ".6: load global")->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".6: load global");
+				function.insertBefore<Mov, false>(instruction, Op4(global_name, true), soperand, width);
 			} else if (value_type == ValueType::Local) {
 				soperand = OpV(dynamic_cast<LocalValue *>(source_value.get())->getVariable(function));
 			} else {
@@ -224,47 +227,55 @@ namespace LL2X::Passes {
 			}
 
 			if (local) {
+
 				auto lvar = local->getVariable(function);
 				// mov %src, (%dest)
-				auto mov = std::make_shared<Mov>(soperand, Op8(0, lvar), width);
-				function.insertBefore(instruction, mov, prefix + ".7: mov " + soperand->toString() + ", (" +
-					lvar->plainString() + ")", false)->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".7: mov " + soperand->toString() + ", (" + lvar->plainString() +
+					")");
+				function.insertBefore<Mov>(instruction, soperand, Op8(0, lvar), width);
+
 			} else if (global) {
+
 				// %src -> [global]
 				int symsize = function.parent.symbolSize("@" + *global->name);
 				symsize = symsize / 8 + (symsize % 8? 1 : 0);
 
 				VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
 				// movq var@GOTPCREL(%rip), %temp
-				auto mov_global = std::make_shared<Mov>(Op8(*global->name, true), Op8(new_var));
+				function.comment(instruction, prefix + ".8a: movq var, %temp");
+				function.insertBefore<Mov, false>(instruction, Op8(*global->name, true), Op8(new_var));
 				// mov %src, (%temp)
-				auto mov_source = std::make_shared<Mov>(soperand, Op8(0, new_var), width);
-				function.insertBefore(instruction, mov_global, prefix + ".8a: movq var, %temp", false)
-					->setDebug(llvm, true);
-				function.insertBefore(instruction, mov_source, prefix + ".8b: movq " + soperand->toString() +
-					", (%temp)", false)->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".8b: movq " + soperand->toString() + ", (%temp)");
+				function.insertBefore<Mov>(instruction, soperand, Op8(0, new_var), width);
+
 			} else if (operand_value) {
+
 				OperandPtr doperand = operand_value->operand;
+
 				if (doperand->isRegister()) {
 					// mov %src, (dest)
-					auto mov = std::make_shared<Mov>(soperand, doperand->toDisplaced(), width);
-					function.insertBefore(instruction, mov, prefix + ".9: mov " + soperand->toString() + ", (" +
-						doperand->toString() + ")", false)->setDebug(llvm, true);
+					function.comment(instruction, prefix + ".9: mov " + soperand->toString() + ", (" +
+						doperand->toString() + ")");
+					function.insertBefore<Mov>(instruction, soperand, doperand->toDisplaced(), width);
 				} else {
 					// mov %src, dest
-					auto mov = std::make_shared<Mov>(soperand, doperand, width);
-					function.insertBefore(instruction, mov, prefix + ".10: mov " + soperand->toString() + ", " +
-						doperand->toString(), false)->setDebug(llvm, true);
+					function.comment(instruction, prefix + ".10: mov " + soperand->toString() + ", " +
+						doperand->toString());
+					function.insertBefore<Mov>(instruction, soperand, doperand, width);
 				}
+
 			} else if (converted->value->isIntLike()) {
+
 				const int64_t longptr = converted->value->longValue();
 				// mov %src, addr
-				auto mov = std::make_shared<Mov>(soperand, Op8(longptr, true), width);
-				function.insertBefore(instruction, mov, prefix + ".11: mov " + soperand->toString() + ", " +
-					std::to_string(longptr))->setDebug(llvm, true);
+				function.comment(instruction, prefix + ".11: mov " + soperand->toString() + ", " +
+					std::to_string(longptr));
+				function.insertBefore<Mov>(instruction, soperand, Op8(longptr, true), width);
+
 			} else
 				throw std::runtime_error("Unexpected destination ValueType in store instruction: " +
 					value_map.at(converted->value->valueType()));
+
 		} else {
 			node->debug();
 			throw std::runtime_error("Unexpected source ValueType in store instruction: " + value_map.at(value_type));
@@ -272,24 +283,27 @@ namespace LL2X::Passes {
 	}
 
 	int getLoadStoreSize(ConstantPtr &constant, const InstructionPtr &instruction) {
-		PointerType *constant_ptr = dynamic_cast<PointerType *>(constant->type.get());
+		auto constant_ptr = std::dynamic_pointer_cast<PointerType>(constant->type);
+
 		if (!constant_ptr)
 			throw std::runtime_error("Expected a PointerType in the constant of a load/store instruction");
 
-		Type *subtype = constant_ptr->subtype.get();
-		if (IntType *constant_int = dynamic_cast<IntType *>(subtype)) {
+		TypePtr subtype = constant_ptr->subtype;
+
+		if (auto constant_int = std::dynamic_pointer_cast<IntType>(subtype)) {
 			const int width = constant_int->width();
-			if (width < 8)
-				return 1;
-			return constant_int->width() / 8;
-		} else if (dynamic_cast<PointerType *>(subtype) || dynamic_cast<FunctionType *>(subtype)) {
-			return x86_64::pointerWidth;
-		} else if (StructType *constant_struct = dynamic_cast<StructType *>(subtype)) {
-			return constant_struct->width() / 8;
-		} else {
-			warn() << "getLoadStoreSize: Unexpected pointer subtype " + std::string(*constant_ptr->subtype)
-			       << " in " << instruction->debugExtra() << "\n";
-			return constant_ptr->subtype->width() / 8;
+			return width < 8? 1 : width / 8;
 		}
+
+		if (std::dynamic_pointer_cast<PointerType>(subtype) || std::dynamic_pointer_cast<FunctionType>(subtype))
+			return x86_64::pointerWidth;
+
+		if (auto constant_struct = std::dynamic_pointer_cast<StructType>(subtype))
+			return constant_struct->width() / 8;
+
+		warn() << "getLoadStoreSize: Unexpected pointer subtype " + std::string(*constant_ptr->subtype) << " in "
+		       << instruction->debugExtra() << '\n';
+
+		return constant_ptr->subtype->width() / 8;
 	}
 }

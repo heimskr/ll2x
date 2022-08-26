@@ -38,16 +38,18 @@ namespace LL2X::Passes {
 
 			// Put the return value into %rax (and possibly also %rdx).
 			if (ret->value->isIntLike()) {
-				int64_t long_value = ret->value->longValue();
-				InstructionPtr mov;
+
+				const int64_t long_value = ret->value->longValue();
 				if (UINT32_MAX < static_cast<uint64_t>(long_value))
-					mov = std::make_shared<Movabs>(Op8(long_value), Op8(rax));
+					function.insertBefore<Movabs, false>(instruction, Op8(long_value), Op8(rax));
 				else
-					mov = std::make_shared<Mov>(Op4(long_value), Op8(rax));
-				function.insertBefore(instruction, mov, false)->setDebug(llvm, true);
+					function.insertBefore<Mov, false>(instruction, Op4(long_value), Op8(rax));
+
 			} else if (ret->value->isLocal()) {
+
 				VariablePtr var = dynamic_cast<LocalValue *>(ret->value.get())->variable;
 				function.extraVariables.emplace(var->id, var);
+
 				if (var->multireg()) {
 					VariablePtr rdx = function.makePrecoloredVariable(x86_64::rdx, block);
 					if (2 < var->registers.size())
@@ -57,10 +59,11 @@ namespace LL2X::Passes {
 						auto subvar = function.makePrecoloredVariable(*iter++, block);
 						function.insertBefore<Mov, false>(instruction, OpV(subvar), Op8(i == 0? rax : rdx));
 					}
-				} else {
+				} else
 					function.insertBefore<Mov, false>(instruction, OpV(var), Op8(rax));
-				}
+
 			} else if (ret->value->valueType() == ValueType::Operand) {
+
 				OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(ret->value)->operand;
 				if (!operand->isRegisters({x86_64::rax})) {
 					if (operand->isRegister() && 1 < operand->reg->registers.size()) {
@@ -81,6 +84,7 @@ namespace LL2X::Passes {
 						function.insertBefore<Mov, false>(instruction, operand, OpX(operand->bitWidth, rax));
 					}
 				}
+
 			} else if (ret->value->valueType() != ValueType::Void)
 				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
 					std::string(*ret->value));
