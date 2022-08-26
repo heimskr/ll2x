@@ -42,13 +42,30 @@ namespace LL2X::Passes {
 			// TODO: instead of copying variables, reuse them if they're not live-out.
 
 			// By now, the values should be OperandValues.
-			assert(atomicrmw->pointer->valueType() == ValueType::Operand);
-			assert(atomicrmw->value->valueType()   == ValueType::Operand);
 
-			OperandPtr &reg_mem  = std::dynamic_pointer_cast<OperandValue>(atomicrmw->pointer)->operand;
-			OperandPtr &reg_only = std::dynamic_pointer_cast<OperandValue>(atomicrmw->value)->operand;
-			OperandPtr &result   = atomicrmw->operand;
 
+			OperandPtr reg_mem;
+			OperandPtr reg_only;
+
+			if (atomicrmw->pointer->valueType() == ValueType::Operand) {
+				reg_mem = std::dynamic_pointer_cast<OperandValue>(atomicrmw->pointer)->operand;
+			} else if (atomicrmw->pointer->isIntLike()) {
+				reg_mem = Op4(atomicrmw->pointer->longValue());
+			} else {
+				error() << *atomicrmw->pointer << '\n';
+				throw std::runtime_error("atomicrmw pointer should be an operand or intlike");
+			}
+
+			if (atomicrmw->value->valueType() == ValueType::Operand) {
+				reg_only = std::dynamic_pointer_cast<OperandValue>(atomicrmw->value)->operand;
+			} else if (atomicrmw->value->isIntLike()) {
+				reg_only = Op4(atomicrmw->value->longValue());
+			} else {
+				error() << *atomicrmw->value << '\n';
+				throw std::runtime_error("atomicrmw value should be an operand");
+			}
+
+			OperandPtr result = atomicrmw->operand;
 			assert(result->isRegister());
 
 			const bool result_used = !result->reg->uses.empty();
