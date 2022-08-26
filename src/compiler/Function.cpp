@@ -81,7 +81,7 @@
 // #include "pass/LowerStack.h"
 // #include "pass/LowerStackrestore.h"
 #include "pass/LowerStacksave.h"
-// #include "pass/LowerSwitch.h"
+#include "pass/LowerSwitch.h"
 // #include "pass/LowerVarargs.h"
 #include "pass/MakeCFG.h"
 #include "pass/MergeAllBlocks.h"
@@ -976,7 +976,7 @@ namespace LL2X {
 		Passes::movePhi(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
-		// Passes::lowerSwitch(*this);
+		Passes::lowerSwitch(*this);
 		Passes::minimizeBlocks(*this);
 		Passes::makeCFG(*this);
 		for (BasicBlockPtr &block: blocks)

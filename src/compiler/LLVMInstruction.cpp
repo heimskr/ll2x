@@ -211,6 +211,12 @@ namespace LL2X {
 				break;
 			}
 
+			case NodeType::Switch: {
+				CAST(SwitchNode);
+				IFLV(cast->value, cast->type);
+				break;
+			}
+
 			default:
 				node->debug();
 				throw std::runtime_error("Unhandled LLVM instruction");
