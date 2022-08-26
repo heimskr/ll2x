@@ -228,7 +228,7 @@ namespace LL2X::Passes {
 					pack->type = IntType::make(128);
 					// mov %pack, %result
 					auto move = std::make_shared<Mov>(OpV(pack), result);
-					function.comment(llvm, prefix + "move large result from %rax");
+					function.comment(llvm, prefix + "move 128-bit result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
 				} else if (return_size <= 64) {
 					auto result = OpV(function.getVariable(*call->result));

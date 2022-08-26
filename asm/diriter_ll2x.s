@@ -3198,7 +3198,7 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(464 + 0, 16)
+	# upalign(456 + 0, 16)
 	subq $464, %rsp
 	movq %rbx, -392(%rbp)
 	# LowerAlloca(670:3): size = 8, type = i32**, var = ^2
@@ -3544,11 +3544,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -304(%rbp), %rax
 	movl %ebx, (%rax)
 	# LowerLoad(763:3).2: (^12) into ^65
-	movq -128(%rbp), %rbx
-	movl (%rbx), %eax
+	movq -128(%rbp), %rax
+	movl (%rax), %ebx
 	# LowerStore(764:3).9: mov ^65, (^19)
-	movq -120(%rbp), %rbx
-	movl %eax, (%rbx)
+	movq -120(%rbp), %rax
+	movl %ebx, (%rax)
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M235
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M210:
 	# LowerLoad(768:3).2: (^20) into ^67
@@ -3784,7 +3784,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# SetupCalls(366:3): move argument ^12
 	movq %rax, %rsi
 	callq _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_
-	# SetupCalls(366:3): move large result from %rax
+	# SetupCalls(366:3): move 128-bit result from %rax
 	# Multireg move: <%hax %hdx> -> <%hr13 %hr14>
 	movq %rax, %r13
 	movq %rdx, %r14
@@ -3798,7 +3798,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerGetelementptr(368:3): struct-type: {i64, i8*}* -> ^15, indices=0,0
 	movq %rcx, %rdx
 	# LowerExtractvalue(370:3)
-	# PaddedStructs(out = i64): move from pack ^13
+	# PaddedStructs({i64, i8*} -> i64): move from pack ^13
 	movq %r13, %rsi
 	movq %rsi, %rax
 	# LowerStore(370:3).9: mov ^16, (^15)
@@ -3809,7 +3809,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	movq %rcx, %rax
 	addq $8, %rax
 	# LowerExtractvalue(373:3)
-	# PaddedStructs(out = i8*): move from pack ^13
+	# PaddedStructs({i64, i8*} -> i8*): move from pack ^13
 	movq %r14, %rdx
 	movq %rdx, %rcx
 	# LowerStore(373:3).9: mov ^18, (^17)
@@ -3819,7 +3819,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# SetupCalls(374:3): move argument ^8
 	movq %rbx, %rsi
 	callq _ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_
-	# SetupCalls(374:3): move large result from %rax
+	# SetupCalls(374:3): move 128-bit result from %rax
 	# Multireg move: <%hax %hdx> -> <%hbx %hr13>
 	movq %rax, %rbx
 	movq %rdx, %r13
@@ -3829,7 +3829,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerGetelementptr(376:3): struct-type: {i64, i8*}* -> ^21, indices=0,0
 	movq %rax, %rcx
 	# LowerExtractvalue(378:3)
-	# PaddedStructs(out = i64): move from pack ^19
+	# PaddedStructs({i64, i8*} -> i64): move from pack ^19
 	movq %rbx, %rsi
 	movq %rsi, %rdx
 	# LowerStore(378:3).9: mov ^22, (^21)
@@ -3838,7 +3838,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	movq %rax, %rcx
 	addq $8, %rcx
 	# LowerExtractvalue(381:3)
-	# PaddedStructs(out = i8*): move from pack ^19
+	# PaddedStructs({i64, i8*} -> i8*): move from pack ^19
 	movq %r13, %rdx
 	movq %rdx, %rax
 	# LowerStore(381:3).9: mov ^24, (^23)
@@ -4113,11 +4113,11 @@ _ZNSt10filesystem7__cxx113endENS0_18directory_iteratorE:
 	movq %rdi, %rax
 	# Clobber rdi
 	movq %rdi, -16(%rbp)
-	# SetupCalls(2323:0): move argument ^5
+	# SetupCalls(442:3): move argument ^5
 	movq %rax, %rdi
-	# SetupCalls(2323:0): move argument 0
+	# SetupCalls(442:3): move argument 0
 	movq $0, %rsi
-	# SetupCalls(2323:0): move argument 16
+	# SetupCalls(442:3): move argument 16
 	movq $16, %rdx
 	callq memset@PLT
 	# Unclobber rdi
@@ -4215,7 +4215,7 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	movq $92, %rcx
 	movsbq %cl, %rcx
 	callq _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_S5_
-	# SetupCalls(478:3): move large result from %rax
+	# SetupCalls(478:3): move 128-bit result from %rax
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
@@ -4227,7 +4227,7 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	# LowerGetelementptr(480:3): struct-type: {%"class.std::__cxx11::basic_string"*, i64}* -> ^12, indices=0,0
 	movq %rcx, %rdx
 	# LowerExtractvalue(482:3)
-	# PaddedStructs(out = %"class.std::__cxx11::basic_string"*): move from pack ^10
+	# PaddedStructs({%"class.std::__cxx11::basic_string"*, i64} -> %"class.std::__cxx11::basic_string"*): move from pack ^10
 	movq %r14, %rsi
 	movq %rsi, %rax
 	# LowerStore(482:3).9: mov ^13, (^12)
@@ -4236,7 +4236,7 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	movq %rcx, %rax
 	addq $8, %rax
 	# LowerExtractvalue(485:3)
-	# PaddedStructs(out = i64): move from pack ^10
+	# PaddedStructs({%"class.std::__cxx11::basic_string"*, i64} -> i64): move from pack ^10
 	movq %r15, %rdx
 	movq %rdx, %rcx
 	# LowerStore(485:3).9: mov ^15, (^14)
@@ -4634,7 +4634,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# SetupCalls(1271:3): move argument ^18
 	movq %rcx, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE17_S_to_string_viewESt17basic_string_viewIcS2_E
-	# SetupCalls(1271:3): move large result from %rax
+	# SetupCalls(1271:3): move 128-bit result from %rax
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
@@ -4646,7 +4646,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# LowerGetelementptr(1273:3): struct-type: {i64, i8*}* -> ^21, indices=0,0
 	movq %rax, %rcx
 	# LowerExtractvalue(1275:3)
-	# PaddedStructs(out = i64): move from pack ^19
+	# PaddedStructs({i64, i8*} -> i64): move from pack ^19
 	movq %r14, %rsi
 	movq %rsi, %rdx
 	# LowerStore(1275:3).9: mov ^22, (^21)
@@ -4655,7 +4655,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	movq %rax, %rcx
 	addq $8, %rcx
 	# LowerExtractvalue(1278:3)
-	# PaddedStructs(out = i8*): move from pack ^19
+	# PaddedStructs({i64, i8*} -> i8*): move from pack ^19
 	movq %r15, %rdx
 	movq %rdx, %rax
 	# LowerStore(1278:3).9: mov ^24, (^23)
