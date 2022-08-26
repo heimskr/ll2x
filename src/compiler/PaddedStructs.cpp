@@ -85,7 +85,8 @@ namespace LL2X::PaddedStructs {
 		while (0 < width_remaining) {
 			int to_take = std::min({64 - skip, target_remaining, width_remaining});
 			auto from_pack = function.newVariable(OpaqueType::make());
-			function.comment(instruction, "PaddedStructs(out = " + out_var->type->toString() + "): move from pack");
+			function.comment(instruction, "PaddedStructs(out = " + out_var->type->toString() + "): move from pack " +
+				source->toString());
 			function.insertBefore<DeferredSourceMove, false>(instruction, OpV(source), OpV(from_pack),
 				source_reg_index);
 

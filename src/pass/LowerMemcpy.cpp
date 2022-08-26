@@ -43,6 +43,8 @@ namespace LL2X::Passes {
 						call->constants[2]->convert(),
 					}))->setUsePLT();
 
+				new_call->locate(call);
+
 				function.insertBefore<LLVMInstruction>(instruction, new_call, -1, true);
 				to_remove.push_back(instruction);
 				++iter;

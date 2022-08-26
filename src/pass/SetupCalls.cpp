@@ -230,14 +230,12 @@ namespace LL2X::Passes {
 					auto move = std::make_shared<Mov>(OpV(pack), result);
 					function.comment(llvm, prefix + "move large result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
-					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				} else if (return_size <= 64) {
 					auto result = OpV(function.getVariable(*call->result));
 					// mov %rax, %result
 					auto move = std::make_shared<Mov>(OpV(rax), result);
 					function.comment(llvm, prefix + "move result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
-					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				} else
 					throw std::runtime_error("Unsupported return size: " + std::to_string(return_size));
 			}

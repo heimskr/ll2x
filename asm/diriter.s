@@ -1580,19 +1580,12 @@ _ZN9__gnu_cxx13new_allocatorIcE10deallocateEPcm: # @_ZN9__gnu_cxx13new_allocator
 .Lfunc_end50:
 	.size	_ZN9__gnu_cxx13new_allocatorIcE10deallocateEPcm, .Lfunc_end50-_ZN9__gnu_cxx13new_allocatorIcE10deallocateEPcm
 	.cfi_endproc
-                                        # -- End function
-	.section	.text._ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_,"axG",@progbits,_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_,comdat
-	.weak	_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_ # -- Begin function _ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_
-	.p2align	4, 0x90
-	.type	_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_,@function
-_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_: # @_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_
-	.cfi_startproc
-# %bb.0:
+
+
+.p2align	4, 0x90
+_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_:
 	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset %rbp, -16
 	movq	%rsp, %rbp
-	.cfi_def_cfa_register %rbp
 	movq	%rdi, -24(%rbp)
 	movq	-24(%rbp), %rax
 	movups	(%rax), %xmm0
@@ -1600,12 +1593,9 @@ _ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_trait
 	movq	-16(%rbp), %rax
 	movq	-8(%rbp), %rdx
 	popq	%rbp
-	.cfi_def_cfa %rsp, 8
 	retq
-.Lfunc_end51:
-	.size	_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_, .Lfunc_end51-_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_
-	.cfi_endproc
-                                        # -- End function
+
+
 	.section	.text._ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_,"axG",@progbits,_ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_,comdat
 	.weak	_ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_ # -- Begin function _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_
 	.p2align	4, 0x90
