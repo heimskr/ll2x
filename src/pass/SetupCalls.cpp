@@ -231,7 +231,7 @@ namespace LL2X::Passes {
 					auto result = OpV(function.getVariable(*call->result));
 					// mov %rax, %result
 					auto move = std::make_shared<Mov>(OpV(rax), result);
-					function.comment(llvm, "SetupCalls(" + std::string(call->location) + ": move result from %rax");
+					function.comment(llvm, "SetupCalls(" + std::string(call->location) + "): move result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				} else
