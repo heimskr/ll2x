@@ -1820,39 +1820,39 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %r14, -1697(%rbp)
 	movq %r15, -1705(%rbp)
 	# LowerAlloca(1986:3): size = 8, type = %"class.std::basic_ostream"**, var = ^3
-	pushq %rax
-	leaq -8(%rbp), %rax
-	movq %rax, -1633(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -8(%rbp), %r15
+	movq %r15, -1633(%rbp)
+	popq %r15
 	# LowerAlloca(1987:3): size = 8, type = %"struct.std::__detail::_Quoted_string"**, var = ^4
-	pushq %rax
-	leaq -16(%rbp), %rax
-	movq %rax, -1641(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -16(%rbp), %r15
+	movq %r15, -1641(%rbp)
+	popq %r15
 	# LowerAlloca(1988:3): size = 1536, type = %"class.std::__cxx11::basic_ostringstream"*, var = ^5
-	pushq %rax
-	leaq -1552(%rbp), %rax
-	movq %rax, -1617(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -1552(%rbp), %r15
+	movq %r15, -1617(%rbp)
+	popq %r15
 	# LowerAlloca(1989:3): size = 8, type = %"class.std::__cxx11::basic_string"**, var = ^6
 	leaq -1560(%rbp), %r12
 	# LowerAlloca(1990:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^7
-	pushq %rax
-	leaq -1568(%rbp), %rax
-	movq %rax, -1649(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -1568(%rbp), %r15
+	movq %r15, -1649(%rbp)
+	popq %r15
 	# LowerAlloca(1991:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^8
-	pushq %rax
-	leaq -1576(%rbp), %rax
-	movq %rax, -1657(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -1576(%rbp), %r15
+	movq %r15, -1657(%rbp)
+	popq %r15
 	# LowerAlloca(1992:3): size = 1, type = i8*, var = ^9
 	leaq -1577(%rbp), %r14
 	# LowerAlloca(1993:3): size = 32, type = %"class.std::__cxx11::basic_string"*, var = ^10
-	pushq %rax
-	leaq -1609(%rbp), %rax
-	movq %rax, -1625(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -1609(%rbp), %r15
+	movq %r15, -1625(%rbp)
+	popq %r15
 	# LowerStore(1994:3).9: mov %rdi, (^3)
 	movq -1633(%rbp), %rax
 	movq %rdi, (%rax)
@@ -2487,49 +2487,49 @@ main:
 	movq %rbx, -240(%rbp)
 	movq %r12, -248(%rbp)
 	# LowerAlloca(293:3): size = 4, type = i32*, var = ^1
-	pushq %rax
-	leaq -4(%rbp), %rax
-	movq %rax, -176(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -4(%rbp), %r15
+	movq %r15, -176(%rbp)
+	popq %r15
 	# LowerAlloca(294:3): size = 64, type = %"class.std::filesystem::__cxx11::path"*, var = ^2
-	pushq %rax
-	leaq -68(%rbp), %rax
-	movq %rax, -184(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -68(%rbp), %r15
+	movq %r15, -184(%rbp)
+	popq %r15
 	# LowerAlloca(295:3): size = 4, type = i32*, var = ^3
-	pushq %rax
-	leaq -72(%rbp), %rax
-	movq %rax, -216(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -72(%rbp), %r15
+	movq %r15, -216(%rbp)
+	popq %r15
 	# LowerAlloca(296:3): size = 8, type = %"class.std::filesystem::__cxx11::directory_iterator"**, var = ^4
 	leaq -80(%rbp), %rbx
 	# LowerAlloca(297:3): size = 16, type = %"class.std::filesystem::__cxx11::directory_iterator"*, var = ^5
-	pushq %rax
-	leaq -96(%rbp), %rax
-	movq %rax, -192(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -96(%rbp), %r15
+	movq %r15, -192(%rbp)
+	popq %r15
 	# LowerAlloca(298:3): size = 16, type = %"class.std::filesystem::__cxx11::directory_iterator"*, var = ^6
-	pushq %rax
-	leaq -112(%rbp), %rax
-	movq %rax, -200(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -112(%rbp), %r15
+	movq %r15, -200(%rbp)
+	popq %r15
 	# LowerAlloca(299:3): size = 16, type = %"class.std::filesystem::__cxx11::directory_iterator"*, var = ^7
 	leaq -128(%rbp), %r12
 	# LowerAlloca(300:3): size = 16, type = %"class.std::filesystem::__cxx11::directory_iterator"*, var = ^8
-	pushq %rax
-	leaq -144(%rbp), %rax
-	movq %rax, -208(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -144(%rbp), %r15
+	movq %r15, -208(%rbp)
+	popq %r15
 	# LowerAlloca(301:3): size = 16, type = %"class.std::filesystem::__cxx11::directory_iterator"*, var = ^9
-	pushq %rax
-	leaq -160(%rbp), %rax
-	movq %rax, -232(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -160(%rbp), %r15
+	movq %r15, -232(%rbp)
+	popq %r15
 	# LowerAlloca(302:3): size = 8, type = %"class.std::filesystem::__cxx11::directory_entry"**, var = ^10
-	pushq %rax
-	leaq -168(%rbp), %rax
-	movq %rax, -224(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -168(%rbp), %r15
+	movq %r15, -224(%rbp)
+	popq %r15
 	# LowerStore(303:3).3: mov $imm, ^1
 	movq -176(%rbp), %rax
 	movl $0, (%rax)
@@ -2550,10 +2550,10 @@ main:
 	movq -184(%rbp), %rsi
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathE
 	# LowerStore(307:3).9: mov ^5, (^4)
-	pushq %rax
-	movq -192(%rbp), %rax
-	movq %rax, (%rbx)
-	popq %rax
+	pushq %r15
+	movq -192(%rbp), %r15
+	movq %r15, (%rbx)
+	popq %r15
 	# LowerLoad(308:3).2: (^4) into ^11
 	movq (%rbx), %rax
 	# SetupCalls(309:3): move argument ^7
@@ -3202,75 +3202,75 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	subq $464, %rsp
 	movq %rbx, -392(%rbp)
 	# LowerAlloca(670:3): size = 8, type = i32**, var = ^2
-	pushq %rax
-	leaq -8(%rbp), %rax
-	movq %rax, -104(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -8(%rbp), %r15
+	movq %r15, -104(%rbp)
+	popq %r15
 	# LowerAlloca(671:3): size = 4, type = i32*, var = ^3
-	pushq %rax
-	leaq -12(%rbp), %rax
-	movq %rax, -112(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -12(%rbp), %r15
+	movq %r15, -112(%rbp)
+	popq %r15
 	# LowerAlloca(672:3): size = 4, type = i32*, var = ^4
-	pushq %rax
-	leaq -16(%rbp), %rax
-	movq %rax, -88(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -16(%rbp), %r15
+	movq %r15, -88(%rbp)
+	popq %r15
 	# LowerAlloca(673:3): size = 4, type = i32*, var = ^5
-	pushq %rax
-	leaq -20(%rbp), %rax
-	movq %rax, -80(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -20(%rbp), %r15
+	movq %r15, -80(%rbp)
+	popq %r15
 	# LowerAlloca(674:3): size = 8, type = i32**, var = ^6
-	pushq %rax
-	leaq -28(%rbp), %rax
-	movq %rax, -200(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -28(%rbp), %r15
+	movq %r15, -200(%rbp)
+	popq %r15
 	# LowerAlloca(675:3): size = 4, type = i32*, var = ^7
-	pushq %rax
-	leaq -32(%rbp), %rax
-	movq %rax, -192(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -32(%rbp), %r15
+	movq %r15, -192(%rbp)
+	popq %r15
 	# LowerAlloca(676:3): size = 4, type = i32*, var = ^8
-	pushq %rax
-	leaq -36(%rbp), %rax
-	movq %rax, -184(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -36(%rbp), %r15
+	movq %r15, -184(%rbp)
+	popq %r15
 	# LowerAlloca(677:3): size = 4, type = i32*, var = ^9
-	pushq %rax
-	leaq -40(%rbp), %rax
-	movq %rax, -176(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -40(%rbp), %r15
+	movq %r15, -176(%rbp)
+	popq %r15
 	# LowerAlloca(678:3): size = 8, type = i32**, var = ^10
-	pushq %rax
-	leaq -48(%rbp), %rax
-	movq %rax, -136(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -48(%rbp), %r15
+	movq %r15, -136(%rbp)
+	popq %r15
 	# LowerAlloca(679:3): size = 4, type = i32*, var = ^11
-	pushq %rax
-	leaq -52(%rbp), %rax
-	movq %rax, -144(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -52(%rbp), %r15
+	movq %r15, -144(%rbp)
+	popq %r15
 	# LowerAlloca(680:3): size = 4, type = i32*, var = ^12
-	pushq %rax
-	leaq -56(%rbp), %rax
-	movq %rax, -128(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -56(%rbp), %r15
+	movq %r15, -128(%rbp)
+	popq %r15
 	# LowerAlloca(681:3): size = 8, type = i32**, var = ^13
-	pushq %rax
-	leaq -64(%rbp), %rax
-	movq %rax, -216(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -64(%rbp), %r15
+	movq %r15, -216(%rbp)
+	popq %r15
 	# LowerAlloca(682:3): size = 4, type = i32*, var = ^14
-	pushq %rax
-	leaq -68(%rbp), %rax
-	movq %rax, -224(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -68(%rbp), %r15
+	movq %r15, -224(%rbp)
+	popq %r15
 	# LowerAlloca(683:3): size = 4, type = i32*, var = ^15
-	pushq %rax
-	leaq -72(%rbp), %rax
-	movq %rax, -208(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -72(%rbp), %r15
+	movq %r15, -208(%rbp)
+	popq %r15
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M29
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M29:
 	andq $-4, %rsp
@@ -3313,10 +3313,10 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq %rdi, (%r10)
 	# LowerLoad(692:3).2: (^22) into ^23
 	movq -312(%rbp), %rdi
-	pushq %rax
-	movq (%rdi), %rax
-	movq %rax, -96(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rdi), %r15
+	movq %r15, -96(%rbp)
+	popq %r15
 	# LowerGetelementptr(693:3): struct-type: %"class.std::_Sp_counted_base"* -> ^24, indices=0,1
 	movq -96(%rbp), %rcx
 	addq $8, %rcx
@@ -3336,28 +3336,28 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M80:
 	# LowerLoad(701:3).2: (^17) into ^28
 	movq -232(%rbp), %rax
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -320(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -320(%rbp)
+	popq %r15
 	# LowerLoad(702:3).2: (^18) into ^29
 	movq -240(%rbp), %rax
-	pushq %rax
-	movl (%rax), %eax
-	movq %rax, -328(%rbp)
-	popq %rax
+	pushq %r15
+	movl (%rax), %r15d
+	movl %r15d, -328(%rbp)
+	popq %r15
 	# LowerStore(703:3).9: mov ^28, (^13)
 	movq -216(%rbp), %rax
-	pushq %rax
-	movq -320(%rbp), %rax
-	movq %rax, (%rax)
-	popq %rax
+	pushq %r15
+	movq -320(%rbp), %r15
+	movq %r15, (%rax)
+	popq %r15
 	# LowerStore(704:3).9: mov ^29, (^14)
 	movq -224(%rbp), %rax
-	pushq %rax
-	movl -328(%rbp), %eax
-	movq %rax, (%rax)
-	popq %rax
+	pushq %r15
+	movl -328(%rbp), %r15d
+	movl %r15d, (%rax)
+	popq %r15
 	# LowerLoad(705:3).2: (^13) into ^30
 	movq -216(%rbp), %rdx
 	movq (%rdx), %rcx
@@ -3368,16 +3368,16 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movl %eax, (%rcx)
 	# LowerLoad(708:3).2: (^14) into ^32
 	movq -224(%rbp), %rax
-	pushq %rax
-	movl (%rax), %eax
-	movq %rax, -280(%rbp)
-	popq %rax
+	pushq %r15
+	movl (%rax), %r15d
+	movl %r15d, -280(%rbp)
+	popq %r15
 	# LowerLoad(709:3).2: (^13) into ^33
 	movq -216(%rbp), %rax
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -288(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -288(%rbp)
+	popq %r15
 	# LowerLoad(710:3).2: (^33) into ^34
 	movq -288(%rbp), %rcx
 	movl (%rcx), %eax
@@ -3396,34 +3396,34 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M109:
 	# LowerLoad(718:3).2: (^17) into ^38
 	movq -232(%rbp), %rcx
-	pushq %rax
-	movq (%rcx), %rax
-	movq %rax, -336(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rcx), %r15
+	movq %r15, -336(%rbp)
+	popq %r15
 	# LowerLoad(719:3).2: (^18) into ^39
 	movq -240(%rbp), %rcx
-	pushq %rax
-	movl (%rcx), %eax
-	movq %rax, -344(%rbp)
-	popq %rax
+	pushq %r15
+	movl (%rcx), %r15d
+	movl %r15d, -344(%rbp)
+	popq %r15
 	# LowerStore(720:3).9: mov ^38, (^6)
 	movq -200(%rbp), %rcx
-	pushq %rax
-	movq -336(%rbp), %rax
-	movq %rax, (%rcx)
-	popq %rax
+	pushq %r15
+	movq -336(%rbp), %r15
+	movq %r15, (%rcx)
+	popq %r15
 	# LowerStore(721:3).9: mov ^39, (^7)
 	movq -192(%rbp), %rcx
-	pushq %rax
-	movl -344(%rbp), %eax
-	movq %rax, (%rcx)
-	popq %rax
+	pushq %r15
+	movl -344(%rbp), %r15d
+	movl %r15d, (%rcx)
+	popq %r15
 	# LowerLoad(722:3).2: (^6) into ^40
 	movq -200(%rbp), %rcx
-	pushq %rax
-	movq (%rcx), %rax
-	movq %rax, -264(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rcx), %r15
+	movq %r15, -264(%rbp)
+	popq %r15
 	# LowerLoad(723:3).2: (^7) into ^41
 	movq -192(%rbp), %r8
 	movl (%r8), %edi
@@ -3462,10 +3462,10 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq %rcx, %rax
 	addq $16, %rax
 	# LowerLoad(741:3).2: (^51) into ^52
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -248(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -248(%rbp)
+	popq %r15
 	# Clobber rax
 	movq %rax, -384(%rbp)
 	# SetupCalls(742:3): move argument ^23
@@ -3493,28 +3493,28 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M181:
 	# LowerLoad(751:3).2: (^20) into ^57
 	movq -152(%rbp), %rax
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -352(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -352(%rbp)
+	popq %r15
 	# LowerLoad(752:3).2: (^21) into ^58
 	movq -160(%rbp), %rax
-	pushq %rax
-	movl (%rax), %eax
-	movq %rax, -360(%rbp)
-	popq %rax
+	pushq %r15
+	movl (%rax), %r15d
+	movl %r15d, -360(%rbp)
+	popq %r15
 	# LowerStore(753:3).9: mov ^57, (^10)
 	movq -136(%rbp), %rax
-	pushq %rax
-	movq -352(%rbp), %rax
-	movq %rax, (%rax)
-	popq %rax
+	pushq %r15
+	movq -352(%rbp), %r15
+	movq %r15, (%rax)
+	popq %r15
 	# LowerStore(754:3).9: mov ^58, (^11)
 	movq -144(%rbp), %rax
-	pushq %rax
-	movl -360(%rbp), %eax
-	movq %rax, (%rax)
-	popq %rax
+	pushq %r15
+	movl -360(%rbp), %r15d
+	movl %r15d, (%rax)
+	popq %r15
 	# LowerLoad(755:3).2: (^10) into ^59
 	movq -136(%rbp), %rcx
 	movq (%rcx), %rbx
@@ -3525,24 +3525,24 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movl %eax, (%rbx)
 	# LowerLoad(758:3).2: (^11) into ^61
 	movq -144(%rbp), %rax
-	pushq %rax
-	movl (%rax), %eax
-	movq %rax, -296(%rbp)
-	popq %rax
+	pushq %r15
+	movl (%rax), %r15d
+	movl %r15d, -296(%rbp)
+	popq %r15
 	# LowerLoad(759:3).2: (^10) into ^62
 	movq -136(%rbp), %rax
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -304(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -304(%rbp)
+	popq %r15
 	# LowerLoad(760:3).2: (^62) into ^63
-	movq -304(%rbp), %rbx
-	movl (%rbx), %eax
-	movl %eax, %ebx
-	addl -296(%rbp), %ebx
-	# LowerStore(762:3).9: mov ^64, (^62)
 	movq -304(%rbp), %rax
-	movl %ebx, (%rax)
+	movl (%rax), %ebx
+	movl %ebx, %eax
+	addl -296(%rbp), %eax
+	# LowerStore(762:3).9: mov ^64, (^62)
+	movq -304(%rbp), %rbx
+	movl %eax, (%rbx)
 	# LowerLoad(763:3).2: (^12) into ^65
 	movq -128(%rbp), %rbx
 	movl (%rbx), %eax
@@ -3553,34 +3553,34 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M210:
 	# LowerLoad(768:3).2: (^20) into ^67
 	movq -152(%rbp), %rax
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -368(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -368(%rbp)
+	popq %r15
 	# LowerLoad(769:3).2: (^21) into ^68
 	movq -160(%rbp), %rax
-	pushq %rax
-	movl (%rax), %eax
-	movq %rax, -376(%rbp)
-	popq %rax
+	pushq %r15
+	movl (%rax), %r15d
+	movl %r15d, -376(%rbp)
+	popq %r15
 	# LowerStore(770:3).9: mov ^67, (^2)
 	movq -104(%rbp), %rax
-	pushq %rax
-	movq -368(%rbp), %rax
-	movq %rax, (%rax)
-	popq %rax
+	pushq %r15
+	movq -368(%rbp), %r15
+	movq %r15, (%rax)
+	popq %r15
 	# LowerStore(771:3).9: mov ^68, (^3)
 	movq -112(%rbp), %rax
-	pushq %rax
-	movl -376(%rbp), %eax
-	movq %rax, (%rax)
-	popq %rax
+	pushq %r15
+	movl -376(%rbp), %r15d
+	movl %r15d, (%rax)
+	popq %r15
 	# LowerLoad(772:3).2: (^2) into ^69
 	movq -104(%rbp), %rax
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -272(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -272(%rbp)
+	popq %r15
 	# LowerLoad(773:3).2: (^3) into ^70
 	movq -112(%rbp), %rdx
 	movl (%rdx), %ecx
@@ -3619,10 +3619,10 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq %rbx, %rax
 	addq $24, %rax
 	# LowerLoad(791:3).2: (^80) into ^81
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -256(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -256(%rbp)
+	popq %r15
 	# Clobber rax
 	movq %rax, -384(%rbp)
 	# SetupCalls(792:3): move argument ^23
@@ -3756,10 +3756,10 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerAlloca(358:3): size = 16, type = %"class.std::basic_string_view"*, var = ^8
 	leaq -49(%rbp), %rbx
 	# LowerAlloca(359:3): size = 1, type = %"class.std::allocator"*, var = ^9
-	pushq %rax
-	leaq -50(%rbp), %rax
-	movq %rax, -66(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -50(%rbp), %r15
+	movq %r15, -66(%rbp)
+	popq %r15
 	# LowerStore(360:3).9: mov %rdi, (^4)
 	movq %rdi, (%rax)
 	# LowerStore(361:3).9: mov %rsi, (^5)
@@ -3767,10 +3767,10 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerStore(362:3).9: mov %dl, (^6)
 	movb %dl, (%rcx)
 	# LowerLoad(363:3).2: (^4) into ^10
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -58(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -58(%rbp)
+	popq %r15
 	# LowerGetelementptr(364:3): struct-type: %"class.std::filesystem::__cxx11::path"* -> ^11, indices=0,0
 	movq -58(%rbp), %r15
 	# LowerLoad(365:3).2: (^5) into ^12
@@ -3925,10 +3925,10 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2EPKcmRKS3_:
 	# LowerStore(2276:3).9: mov %rcx, (^8)
 	movq %rcx, (%rbx)
 	# LowerLoad(2277:3).2: (^5) into ^9
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -40(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -40(%rbp)
+	popq %r15
 	# LowerGetelementptr(2278:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^10, indices=0,0
 	movq -40(%rbp), %r14
 	# Clobber rdi
@@ -4148,24 +4148,24 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	movq %r14, -145(%rbp)
 	movq %r15, -161(%rbp)
 	# LowerAlloca(467:3): size = 8, type = %"class.std::basic_ostream"**, var = ^3
-	pushq %rax
-	leaq -8(%rbp), %rax
-	movq %rax, -81(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -8(%rbp), %r15
+	movq %r15, -81(%rbp)
+	popq %r15
 	# LowerAlloca(468:3): size = 8, type = %"class.std::filesystem::__cxx11::path"**, var = ^4
 	leaq -16(%rbp), %rax
 	# LowerAlloca(469:3): size = 24, type = %"struct.std::__detail::_Quoted_string"*, var = ^5
 	leaq -40(%rbp), %r13
 	# LowerAlloca(470:3): size = 32, type = %"class.std::__cxx11::basic_string"*, var = ^6
-	pushq %rax
-	leaq -72(%rbp), %rax
-	movq %rax, -97(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -72(%rbp), %r15
+	movq %r15, -97(%rbp)
+	popq %r15
 	# LowerAlloca(471:3): size = 1, type = %"class.std::allocator"*, var = ^7
-	pushq %rax
-	leaq -73(%rbp), %rax
-	movq %rax, -89(%rbp)
-	popq %rax
+	pushq %r15
+	leaq -73(%rbp), %r15
+	movq %r15, -89(%rbp)
+	popq %r15
 	# LowerStore(472:3).9: mov %rdi, (^3)
 	movq -81(%rbp), %rbx
 	movq %rdi, (%rbx)
@@ -4586,10 +4586,10 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# LowerStore(1260:3).9: mov %rdx, (^6)
 	movq %rdx, (%r13)
 	# LowerLoad(1261:3).2: (^4) into ^10
-	pushq %rax
-	movq (%rax), %rax
-	movq %rax, -80(%rbp)
-	popq %rax
+	pushq %r15
+	movq (%rax), %r15
+	movq %r15, -80(%rbp)
+	popq %r15
 	# LowerLoad(1262:3).2: (^5) into ^11
 	movq (%rcx), %rdx
 	movq %r14, %rcx
