@@ -170,7 +170,7 @@ namespace LL2X {
 		TypePtr extractType(std::list<int> indices) const override;
 		std::string barename() const;
 		bool operator==(const Type &) const override;
-		/** Assumes that each member in a struct has a width that's a multiple of 8. */
+		/** Assumes that each member in a struct has a width that's a multiple of 8 bits. */
 		std::shared_ptr<StructType> pad();
 	};
 

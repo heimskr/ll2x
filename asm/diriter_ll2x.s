@@ -3198,7 +3198,7 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(456 + 0, 16)
+	# upalign(464 + 0, 16)
 	subq $464, %rsp
 	movq %rbx, -392(%rbp)
 	# LowerAlloca(670:3): size = 8, type = i32**, var = ^2
@@ -3544,11 +3544,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -304(%rbp), %rax
 	movl %ebx, (%rax)
 	# LowerLoad(763:3).2: (^12) into ^65
-	movq -128(%rbp), %rax
-	movl (%rax), %ebx
+	movq -128(%rbp), %rbx
+	movl (%rbx), %eax
 	# LowerStore(764:3).9: mov ^65, (^19)
-	movq -120(%rbp), %rax
-	movl %ebx, (%rax)
+	movq -120(%rbp), %rbx
+	movl %eax, (%rbx)
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M235
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M210:
 	# LowerLoad(768:3).2: (^20) into ^67
@@ -3782,9 +3782,9 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# Clobber rdx
 	movq %rdx, -90(%rbp)
 	# SetupCalls(366:3): move argument ^12
-	movq %rax, %rsi
+	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_
-	# SetupCalls(366:3): move 128-bit result from %rax
+	# SetupCalls(366:3): move 128-bit result from %rax and %rdx
 	# Multireg move: <%hax %hdx> -> <%hr13 %hr14>
 	movq %rax, %r13
 	movq %rdx, %r14
@@ -3817,9 +3817,9 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# Clobber rcx
 	movq %rcx, -98(%rbp)
 	# SetupCalls(374:3): move argument ^8
-	movq %rbx, %rsi
+	movq %rbx, %rdi
 	callq _ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaRKT_
-	# SetupCalls(374:3): move 128-bit result from %rax
+	# SetupCalls(374:3): move 128-bit result from %rax and %rdx
 	# Multireg move: <%hax %hdx> -> <%hbx %hr13>
 	movq %rax, %rbx
 	movq %rdx, %r13
@@ -4207,15 +4207,15 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	# Clobber rsi
 	movq %rsi, -113(%rbp)
 	# SetupCalls(478:3): move argument ^6
-	movq -97(%rbp), %rsi
+	movq -97(%rbp), %rdi
 	# SetupCalls(478:3): move argument 34
-	movq $34, %rdx
-	movsbq %dl, %rdx
+	movq $34, %rsi
+	movsbq %sil, %rsi
 	# SetupCalls(478:3): move argument 92
-	movq $92, %rcx
-	movsbq %cl, %rcx
+	movq $92, %rdx
+	movsbq %dl, %rdx
 	callq _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_S5_
-	# SetupCalls(478:3): move 128-bit result from %rax
+	# SetupCalls(478:3): move 128-bit result from %rax and %rdx
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
@@ -4630,11 +4630,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# Clobber rax
 	movq %rax, -112(%rbp)
 	# SetupCalls(1271:3): move argument ^16
-	movq %rax, %rsi
+	movq %rax, %rdi
 	# SetupCalls(1271:3): move argument ^18
-	movq %rcx, %rdx
+	movq %rcx, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE17_S_to_string_viewESt17basic_string_viewIcS2_E
-	# SetupCalls(1271:3): move 128-bit result from %rax
+	# SetupCalls(1271:3): move 128-bit result from %rax and %rdx
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15

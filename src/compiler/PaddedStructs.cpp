@@ -41,15 +41,15 @@ namespace LL2X::PaddedStructs {
 		if (!type)
 			throw std::runtime_error("PaddedStructs::extract: source variable has dno type");
 		
-		StructType *initial_struct_type = dynamic_cast<StructType *>(type.get());
+		auto *initial_struct_type = dynamic_cast<StructType *>(type.get());
 		if (!initial_struct_type)
 			throw std::runtime_error("PaddedStructs::extract: source variable type isn't StructType");
 
-		LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+		auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
 		if (!llvm)
 			throw std::runtime_error("PaddedStructs::extract not called on an LLVM instruction");
 
-		ExtractValueNode *evnode = dynamic_cast<ExtractValueNode *>(llvm->node);
+		auto *evnode = dynamic_cast<ExtractValueNode *>(llvm->node);
 		if (!evnode)
 			throw std::runtime_error("PaddedStructs::extract not called on an extractvalue node");
 
@@ -83,15 +83,16 @@ namespace LL2X::PaddedStructs {
 		int target_reg_index = 0;
 
 		while (0 < width_remaining) {
-			int to_take = std::min({64 - skip, target_remaining, width_remaining});
-			auto from_pack = function.newVariable(OpaqueType::make());
+			const int to_take = std::min({64 - skip, target_remaining, width_remaining});
+			VariablePtr from_pack = function.newVariable(OpaqueType::make(), instruction->parent.lock());
+
 			function.comment(instruction, "PaddedStructs(" + source->type->toString() + " -> " +
 				out_var->type->toString() + "): move from pack " + source->toString());
 			function.insertBefore<DeferredSourceMove, false>(instruction, OpV(source), OpV(from_pack),
 				source_reg_index);
 
 			if (skip != 0) {
-				// Normally I'd use a mask and an AndIInstruction, but our mask would often be larger than the 32 bits
+				// Normally I'd use a mask and an `and` instruction, but our mask would often be larger than the 32 bits
 				// allowed in an instruction's immediate value. What we're doing here is removing the bits we skipped in
 				// the source register.
 				function.insertBefore<Shl, false>(instruction, Op4(skip), OpV(from_pack));
@@ -116,7 +117,7 @@ namespace LL2X::PaddedStructs {
 				target_reg_index);
 
 			target_remaining -= to_take;
-			width_remaining -= to_take;
+			width_remaining  -= to_take;
 			if (target_remaining < 0)
 				warn() << "target_remaining (" << target_remaining << ") is less than zero!\n";
 

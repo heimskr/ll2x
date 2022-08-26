@@ -125,8 +125,9 @@ namespace LL2X::Passes {
 				ellipsis = false;
 			}
 
-			const bool big_return = 64 < call->returnType->width();
-			const int arg_offset = big_return? 1 : 0; 
+			const auto return_size = call->returnType->width();
+			const bool huge_return = 128 < return_size;
+			const int  arg_offset  = huge_return? 1 : 0;
 
 			constexpr int reg_max = 6;
 			const int arg_count = argument_types.size();
@@ -153,12 +154,10 @@ namespace LL2X::Passes {
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 
-			const int return_size = call->returnType->width();
-
 			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
 			// the stack for the struct and pass a pointer to it in %rdi.
 			VariablePtr big_result;
-			if (call->result && 128 < return_size) {
+			if (call->result && huge_return) {
 				big_result = function.newVariable(call->returnType, block);
 				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
 				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
