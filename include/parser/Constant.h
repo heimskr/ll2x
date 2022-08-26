@@ -33,6 +33,7 @@ namespace LL2X {
 		/** Applies ptrtoint/inttoptr conversions and returns a new Constant. */
 		ConstantPtr convert() const;
 		operator std::string() const;
+		std::string toString() const;
 	};
 
 	std::ostream & operator<<(std::ostream &, const Constant &);

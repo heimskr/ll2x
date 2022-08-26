@@ -57,13 +57,30 @@ namespace LL2X {
 		std::stringstream out;
 		for (ParAttr attribute: attributes)
 			if (attribute != ParAttr::Byval || !byvalType)
-				out << parattr_map.at(attribute) << " ";
+				out << parattr_map.at(attribute) << ' ';
 		if (byvalType)
 			out << "byval(" << std::string(*byvalType) << ") ";
 		if (dereferenceable != -1)
-			out << "dereferenceable" << (orNull? "_or_null" : "") << "(" << dereferenceable << ") ";
+			out << "dereferenceable" << (orNull? "_or_null" : "") << '(' << dereferenceable << ") ";
 		if (align != -1)
-			out << "align " << align << " ";
+			out << "align " << align << ' ';
+		std::string str = out.str();
+		if (!str.empty())
+			str.pop_back(); // Remove the extra space at the end
+		return str;
+	}
+
+	std::string ParAttrs::toString() const {
+		std::stringstream out;
+		for (ParAttr attribute: attributes)
+			if (attribute != ParAttr::Byval || !byvalType)
+				out << parattr_map.at(attribute) << ' ';
+		if (byvalType)
+			out << "byval(" << byvalType->toString() << ") ";
+		if (dereferenceable != -1)
+			out << "dereferenceable" << (orNull? "_or_null" : "") << '(' << dereferenceable << ") ";
+		if (align != -1)
+			out << "align " << align << ' ';
 		std::string str = out.str();
 		if (!str.empty())
 			str.pop_back(); // Remove the extra space at the end

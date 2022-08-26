@@ -1929,29 +1929,18 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4dataEv: # @_ZNKSt17basic_string_v
 .Lfunc_end61:
 	.size	_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4dataEv, .Lfunc_end61-_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4dataEv
 	.cfi_endproc
-                                        # -- End function
-	.section	.text._ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv,"axG",@progbits,_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv,comdat
-	.weak	_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv # -- Begin function _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv
-	.p2align	4, 0x90
-	.type	_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv,@function
-_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv: # @_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv
-	.cfi_startproc
-# %bb.0:
+
+
+_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv:
 	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset %rbp, -16
 	movq	%rsp, %rbp
-	.cfi_def_cfa_register %rbp
 	movq	%rdi, -8(%rbp)
 	movq	-8(%rbp), %rax
 	movq	(%rax), %rax
 	popq	%rbp
-	.cfi_def_cfa %rsp, 8
 	retq
-.Lfunc_end62:
-	.size	_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv, .Lfunc_end62-_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv
-	.cfi_endproc
-                                        # -- End function
+
+
 	.section	.text._ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv,"axG",@progbits,_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv,comdat
 	.weak	_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv # -- Begin function _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv
 	.p2align	4, 0x90

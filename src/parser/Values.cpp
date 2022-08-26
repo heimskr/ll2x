@@ -83,15 +83,29 @@ namespace LL2X {
 
 	VectorValue::operator std::string() {
 		std::stringstream out;
-		out << "\e[2m<\e[0m";
+		out << "\e[2m<\e[22m";
 		auto begin = values.cbegin();
 		for (auto iter = begin, end = values.cend(); iter != end; ++iter) {
 			const std::pair<TypePtr, ValuePtr> &pair = *iter;
 			if (iter != begin)
-				out << "\e[2m,\e[0m ";
-			out << std::string(*pair.first) << " " << std::string(*pair.second);
+				out << "\e[2m,\e[22m ";
+			out << std::string(*pair.first) << ' ' << std::string(*pair.second);
 		}
-		out << "\e[2m>\e[0m";
+		out << "\e[2m>\e[22m";
+		return out.str();
+	}
+
+	std::string VectorValue::toString() const {
+		std::stringstream out;
+		out << "<";
+		auto begin = values.cbegin();
+		for (auto iter = begin, end = values.cend(); iter != end; ++iter) {
+			const std::pair<TypePtr, ValuePtr> &pair = *iter;
+			if (iter != begin)
+				out << ", ";
+			out << std::string(*pair.first) << ' ' << std::string(*pair.second);
+		}
+		out << ">";
 		return out.str();
 	}
 
@@ -113,6 +127,11 @@ namespace LL2X {
 			: 64)) : "%" + *name) + "\e[39m";
 	}
 
+	std::string LocalValue::toString() const {
+		return variable? variable->plainString(x86_64::getWidth(variable->type? variable->type->width() : 64)) :
+			"%" + *name;
+	}
+
 	VariablePtr LocalValue::getVariable(Function &function) {
 		if (variable)
 			return variable;
@@ -127,6 +146,10 @@ namespace LL2X {
 
 	OperandValue::operator std::string() {
 		return operand? operand->ansiString() : "\e[31mNULL\e[39m";
+	}
+
+	std::string OperandValue::toString() const {
+		return compile();
 	}
 
 	std::string OperandValue::compile() const {
@@ -180,20 +203,36 @@ namespace LL2X {
 
 	GetelementptrValue::operator std::string() {
 		std::stringstream out;
-		out << "\e[91mgetelementptr\e[0m";
+		out << "\e[91mgetelementptr\e[39m";
 		if (inbounds)
-			out << " \e[91minbounds\e[0m";
-		out << " \e[2m(\e[0m" << std::string(*type) << "\e[2m,\e[0m " << std::string(*ptrType) << " "
-		    << std::string(*variable);
+			out << " \e[91minbounds\e[39m";
+		out << " \e[2m(\e[22m" << *type << "\e[2m,\e[22m " << *ptrType << ' ' << *variable;
 		for (const auto &decimal: decimals) {
-			out << "\e[2m,\e[0m \e[33mi" << decimal.first << " \e[32m";
+			out << "\e[2m,\e[22m \e[33mi" << decimal.first << " \e[32m";
 			if (std::holds_alternative<Variable::ID>(decimal.second))
 				out << *std::get<Variable::ID>(decimal.second);
 			else
 				out << std::get<long>(decimal.second);
-			out << "\e[0m";
+			out << "\e[39m";
 		}
-		out << "\e[2m)\e[0m";
+		out << "\e[2m)\e[22m";
+		return out.str();
+	}
+
+	std::string GetelementptrValue::toString() const {
+		std::stringstream out;
+		out << "getelementptr";
+		if (inbounds)
+			out << " inbounds";
+		out << " (" << *type << ", " << *ptrType << ' ' << *variable;
+		for (const auto &decimal: decimals) {
+			out << ", i" << decimal.first << ' ';
+			if (std::holds_alternative<Variable::ID>(decimal.second))
+				out << *std::get<Variable::ID>(decimal.second);
+			else
+				out << std::get<long>(decimal.second);
+		}
+		out << ')';
 		return out.str();
 	}
 
@@ -214,6 +253,10 @@ namespace LL2X {
 		return "\e[31micmp " + cond_map.at(cond) + "\e[39m (" + std::string(*left) + ", " + std::string(*right) + ")";
 	}
 
+	std::string IcmpValue::toString() const {
+		return "icmp " + cond_map.at(cond) + " (" + left->toString() + ", " + right->toString() + ")";
+	}
+
 	std::shared_ptr<IcmpNode> IcmpValue::makeNode(VariablePtr variable) const {
 		return IcmpNode::make(Operand::make(variable), cond, left, right);
 	}
@@ -227,19 +270,16 @@ namespace LL2X {
 		type(logic_inv_map.at(*node->lexerInfo)),
 		left(Constant::make(node->at(0))), right(Constant::make(node->at(1))) {}
 
-	// LogicValue::LogicValue(const ASTNode *node) {
-	// 	node->debug();
-	// 	type = logic_inv_map.at(*node->at(0)->lexerInfo);
-	// 	left = Constant::make(node->at(1));
-	// 	right = Constant::make(node->at(2));
-	// }
-
 	ValuePtr LogicValue::copy() const {
 		return LogicValue::make(type, left->copy(), right->copy());
 	}
 
 	LogicValue::operator std::string() {
-		return "\e[31m" + logic_map.at(type) + "\e[39m (" + std::string(*left) + ", " + std::string(*right) + ")";
+		return "\e[31m" + logic_map.at(type) + "\e[39m (" + std::string(*left) + ", " + std::string(*right) + ')';
+	}
+
+	std::string LogicValue::toString() const {
+		return logic_map.at(type) + " (" + left->toString() + ", " + right->toString() + ')';
 	}
 
 	std::shared_ptr<LogicNode> LogicValue::makeNode(VariablePtr variable) const {
@@ -279,6 +319,22 @@ namespace LL2X {
 		return out.str();
 	}
 
+	std::string StructValue::toString() const {
+		std::stringstream out;
+		if (packed)
+			out << '<';
+		out << '{';
+		for (auto begin = constants.cbegin(), iter = begin, end = constants.cend(); iter != end; ++iter) {
+			if (iter != begin)
+				out << ", ";
+			out << (*iter)->toString();
+		}
+		out << '}';
+		if (packed)
+			out << '>';
+		return out.str();
+	}
+
 	ArrayValue::ArrayValue(const ASTNode *node) {
 		for (const ASTNode *sub: *node)
 			constants.push_back(std::make_shared<Constant>(sub));
@@ -294,13 +350,25 @@ namespace LL2X {
 
 	ArrayValue::operator std::string() {
 		std::stringstream out;
-		out << "\e[2m[\e[0m";
+		out << "\e[2m[\e[22m";
 		for (auto begin = constants.cbegin(), iter = begin, end = constants.cend(); iter != end; ++iter) {
 			if (iter != begin)
-				out << "\e[2m,\e[0m ";
+				out << "\e[2m,\e[22m ";
 			out << std::string(**iter);
 		}
-		out << "\e[2m]\e[0m";
+		out << "\e[2m]\e[22m";
+		return out.str();
+	}
+
+	std::string ArrayValue::toString() const {
+		std::stringstream out;
+		out << '[';
+		for (auto begin = constants.cbegin(), iter = begin, end = constants.cend(); iter != end; ++iter) {
+			if (iter != begin)
+				out << ", ";
+			out << (*iter)->toString();
+		}
+		out << ']';
 		return out.str();
 	}
 

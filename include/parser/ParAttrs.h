@@ -29,5 +29,6 @@ namespace LL2X {
 		ParAttrs & operator=(ParAttrs &&) = default;
 
 		operator std::string() const;
+		std::string toString() const;
 	};
 }

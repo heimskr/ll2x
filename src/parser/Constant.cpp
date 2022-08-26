@@ -120,13 +120,26 @@ namespace LL2X {
 		out << std::string(*type);
 		const std::string parattrs_str = parattrs;
 		if (!parattrs_str.empty())
-			out << " " << parattrs_str;
-		if (value) {
-			out << " " << std::string(*value);
-		} else if (conversion != Conversion::None) {
-			out << " \e[91m" << conversion_map.at(conversion) << "\e[0m \e[2m(\e[0m" << std::string(*conversionSource)
-			    << " to " << std::string(*conversionType) << "\e[2m)\e[0m";
-		}
+			out << ' ' << parattrs_str;
+		if (value)
+			out << ' ' << std::string(*value);
+		else if (conversion != Conversion::None)
+			out << " \e[91m" << conversion_map.at(conversion) << "\e[39m \e[2m(\e[22m" << std::string(*conversionSource)
+			    << " to " << std::string(*conversionType) << "\e[2m)\e[22m";
+		return out.str();
+	}
+
+	std::string Constant::toString() const {
+		std::stringstream out;
+		out << type->toString();
+		const std::string parattrs_str = parattrs.toString();
+		if (!parattrs_str.empty())
+			out << ' ' << parattrs_str;
+		if (value)
+			out << ' ' << value->toString();
+		else if (conversion != Conversion::None)
+			out << ' ' << conversion_map.at(conversion) << " (" << conversionSource->toString() << " to "
+			    << conversionType->toString() << ')';
 		return out.str();
 	}
 

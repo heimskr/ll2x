@@ -73,7 +73,7 @@ namespace LL2X::Passes {
 		int i;
 		std::list<InstructionPtr> to_remove;
 
-		for (InstructionPtr &instruction: function.linearInstructions) {
+		for (const InstructionPtr &instruction: function.linearInstructions) {
 			// Look for a call instruction.
 			std::shared_ptr<LLVMInstruction> llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
 			if (!llvm || llvm->node->nodeType() != NodeType::Call)
@@ -83,6 +83,8 @@ namespace LL2X::Passes {
 
 			GlobalValue *global_name = dynamic_cast<GlobalValue *>(call->name.get());
 			std::unique_ptr<GlobalValue> global_uptr;
+
+			const std::string prefix = "SetupCalls(" + std::string(call->location) + "): ";
 
 			if (global_name) {
 				global_uptr = std::make_unique<GlobalValue>(*global_name);
@@ -101,9 +103,9 @@ namespace LL2X::Passes {
 					} else {
 						auto out = setupCallValue(function, call->operand, instruction, call->constants[simple_index]);
 						if (out)
-							function.comment(out, "SetupCallValue: simple function elision for " + name);
+							function.comment(out, prefix + "simple function elision for " + name);
 						else
-							function.comment(instruction, "SetupCallValue: simple function elision for " + name +
+							function.comment(instruction, prefix + "simple function elision for " + name +
 								" somewhere around here");
 						to_remove.push_back(instruction);
 						continue;
@@ -168,13 +170,17 @@ namespace LL2X::Passes {
 			// Move variables into the argument registers.
 			for (i = arg_offset; i < reg_max && i < arg_count + arg_offset; ++i) {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
-				setupCallValue(function, OpV(precolored), instruction, call->constants[i - arg_offset]);
+				ConstantPtr constant = call->constants[i - arg_offset];
+				function.comment(instruction, prefix + "move argument " + constant->convert()->value->toString());
+				setupCallValue(function, OpV(precolored), instruction, constant);
 			}
 
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
-			for (i = arg_count + arg_offset - 1; reg_max <= i; --i)
+			for (i = arg_count + arg_offset - 1; reg_max <= i; --i) {
+				function.comment(instruction, prefix + "push " + call->constants[i - arg_offset]->toString());
 				bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset], bytes_pushed);
+			}
 
 			function.maxPushedForCalls = std::max(function.maxPushedForCalls, bytes_pushed);
 
@@ -198,18 +204,18 @@ namespace LL2X::Passes {
 				function.insertBefore<Call>(llvm, Op8(*global_uptr->name + (call->usePLT? "@PLT" : ""), false));
 			} else if (call->name->isLocal()) {
 				auto jump_var = std::dynamic_pointer_cast<LocalValue>(call->name)->variable;
-				function.comment(llvm, "SetupCalls: jump to function pointer " + jump_var->plainString());
+				function.comment(llvm, prefix + "jump to function pointer " + jump_var->plainString());
 				function.insertBefore<Call, false>(llvm, Op8(jump_var));
 			} else if (call->name->isOperand()) {
 				auto operand = std::dynamic_pointer_cast<OperandValue>(call->name)->operand;
-				function.comment(llvm, "SetupCalls: jump to function operand " + operand->toString());
+				function.comment(llvm, prefix + "jump to function operand " + operand->toString());
 				function.insertBefore<Call, false>(llvm, operand);
 			} else
 				throw std::runtime_error("Unsupported call destination: " + std::string(*call->name));
 
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {
-				function.comment(llvm, "SetupCalls: readjust stack pointer");
+				function.comment(llvm, prefix + "readjust stack pointer");
 				function.insertBefore<Add, false>(instruction, Op4(bytes_pushed), Op8(function.pcRsp), 64);
 			}
 
@@ -223,15 +229,14 @@ namespace LL2X::Passes {
 					pack->type = IntType::make(128);
 					// mov %pack, %result
 					auto move = std::make_shared<Mov>(OpV(pack), result);
-					function.comment(llvm, "SetupCalls(" + std::string(call->location) +
-						"): move large result from %rax");
+					function.comment(llvm, prefix + "move large result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				} else if (return_size <= 64) {
 					auto result = OpV(function.getVariable(*call->result));
 					// mov %rax, %result
 					auto move = std::make_shared<Mov>(OpV(rax), result);
-					function.comment(llvm, "SetupCalls(" + std::string(call->location) + "): move result from %rax");
+					function.comment(llvm, prefix + "move result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
 					function.categories["SetupCalls:MoveFromResult"].insert(move);
 				} else

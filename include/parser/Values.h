@@ -30,10 +30,11 @@ namespace LL2X {
 	using ConstantPtr = std::shared_ptr<Constant>;
 
 	struct Value {
-		virtual operator std::string() = 0;
 		virtual ~Value() = default;
 		virtual ValueType valueType() const = 0;
 		virtual ValuePtr copy() const = 0;
+		virtual operator std::string() = 0;
+		virtual std::string toString() const = 0;
 		bool isInt() const;
 		bool isBool() const;
 		bool isNull() const;
@@ -62,6 +63,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Double; }
 		ValuePtr copy() const override { return std::make_shared<DoubleValue>(value); }
 		operator std::string() override { return *original; }
+		std::string toString() const override { return *original; }
 		std::string compile() const override { return std::to_string(value); }
 	};
 
@@ -74,6 +76,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Int; }
 		ValuePtr copy() const override { return std::make_shared<IntValue>(value); }
 		operator std::string() override { return "\e[92m" + std::to_string(value) + "\e[0m"; }
+		std::string toString() const override { return std::to_string(value); }
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return value; }
 		std::string compile() const override { return std::to_string(value); }
@@ -85,6 +88,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Null; }
 		ValuePtr copy() const override { return std::make_shared<NullValue>(); }
 		operator std::string() override { return "null"; }
+		std::string toString() const override { return "null"; }
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return 0; }
 		std::string compile() const override { return "0"; }
@@ -98,6 +102,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Vector; }
 		ValuePtr copy() const override;
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNIMPLEMENTED (Vector)"; }
 	};
 
@@ -110,6 +115,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Bool; }
 		ValuePtr copy() const override { return std::make_shared<BoolValue>(value); }
 		operator std::string() override { return value? "true" : "false"; }
+		std::string toString() const override { return value? "true" : "false"; }
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return value? 1 : 0; }
 		std::string compile() const override { return std::to_string(longValue()); }
@@ -135,6 +141,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Local; }
 		ValuePtr copy() const override;
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Local)"; }
 		VariablePtr getVariable(Function &);
 		OperandPtr makeOperand() const override;
@@ -148,6 +155,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Operand; }
 		ValuePtr copy() const override { return std::make_shared<OperandValue>(operand); }
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override;
 		OperandPtr makeOperand() const override { return operand; }
 	};
@@ -159,6 +167,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Global; }
 		ValuePtr copy() const override { return std::make_shared<GlobalValue>(name); }
 		operator std::string() override { return "\e[32m@" + *name + "\e[39m"; }
+		std::string toString() const override { return "@" + *name; }
 		std::string compile() const override { return *name; }
 		OperandPtr makeOperand() const override { return Op8(*name, true); }
 	};
@@ -181,6 +190,7 @@ namespace LL2X {
 				decimals);
 		}
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Getelementptr)"; }
 	};
 
@@ -193,6 +203,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Icmp; }
 		ValuePtr copy() const override;
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Icmp)"; }
 		std::shared_ptr<IcmpNode> makeNode(VariablePtr) const;
 	};
@@ -206,6 +217,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Logic; }
 		ValuePtr copy() const override;
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Logic)"; }
 		std::shared_ptr<LogicNode> makeNode(VariablePtr) const;
 	};
@@ -214,6 +226,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Void; }
 		ValuePtr copy() const override { return std::make_shared<VoidValue>(); }
 		operator std::string() override { return "void"; }
+		std::string toString() const override { return "void"; }
 		std::string compile() const override { return "0"; }
 		OperandPtr makeOperand() const override { return Op8(0); }
 	};
@@ -227,6 +240,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Struct; }
 		ValuePtr copy() const override;
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Struct)"; }
 	};
 
@@ -237,6 +251,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Array; }
 		ValuePtr copy() const override;
 		operator std::string() override;
+		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Array)"; }
 	};
 
@@ -247,6 +262,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::CString; }
 		ValuePtr copy() const override { return std::make_shared<CStringValue>(value); }
 		operator std::string() override { return "\e[34mc\e[33m\"" + *value + "\"\e[0m"; }
+		std::string toString() const override { return "c\"" + *value + '"'; }
 		// Replaces LLVM-style escapes (e.g., "\1B") with WASM-style escapes (e.g., "\x1B").
 		std::string reescape() const;
 		std::string compile() const override { return "\"" + reescape() + "\""; }
@@ -257,6 +273,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Zeroinitializer; }
 		ValuePtr copy() const override { return std::make_shared<ZeroinitializerValue>(); }
 		operator std::string() override { return "zeroinitializer"; }
+		std::string toString() const override { return "zeroinitializer"; }
 		std::string compile() const override { return "0"; }
 		OperandPtr makeOperand() const override { return Op8(0); }
 	};
@@ -266,6 +283,7 @@ namespace LL2X {
 		ValueType valueType() const override { return ValueType::Undef; }
 		ValuePtr copy() const override { return std::make_shared<UndefValue>(); }
 		operator std::string() override { return "undef"; }
+		std::string toString() const override { return "undef"; }
 		bool isIntLike() const override { return true; }
 		long longValue() const override { return 0; }
 		std::string compile() const override { return "0"; }

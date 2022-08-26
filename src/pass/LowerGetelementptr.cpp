@@ -205,13 +205,11 @@ namespace LL2X::Passes {
 				// result = (base pointer) + (width * index value)
 				VariablePtr index = function.getVariable(std::get<Variable::ID>(node->indices.at(0).value));
 				const int width = Util::updiv(node->type->width(), 8);
-
-				auto mov = std::make_shared<Mov>(OpV(index), node->operand);
-				function.insertBefore(instruction, mov, "LowerGetelementptr(" + std::string(node->location) +
-					"): pointer-type -> " + node->operand->toString(), false)->setDebug(node)->extract();
+				function.comment(instruction, "LowerGetelementptr(" + std::string(node->location) +
+					"): pointer-type -> " + node->operand->toString());
+				function.insertBefore<Mov, false>(instruction, OpV(index), node->operand);
 				function.multiply(instruction, node->operand, static_cast<int64_t>(width), false, node->debugIndex);
-				auto add = std::make_shared<Add>(pointer, node->operand);
-				function.insertBefore(instruction, add)->setDebug(node)->extract();
+				function.insertBefore<Add>(instruction, pointer, node->operand);
 			} else throw std::runtime_error("Unsupported type in getelementptr instruction: " + type_map.at(tt));
 
 			to_remove.push_back(instruction);

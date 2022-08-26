@@ -53,14 +53,14 @@ namespace LL2X::Passes {
 		const int width = size * 8;
 		const ValueType value_type = converted->value->valueType();
 
-		const std::string prefix = "LowerMemory(load @ " + std::string(node->location) + "): ";
+		const std::string prefix = "LowerLoad(" + std::string(node->location) + ")";
 
 		if (value_type == ValueType::Local) {
 
 			auto local = std::dynamic_pointer_cast<LocalValue>(converted->value);
 			VariablePtr localvar = local->getVariable(function);
 			auto mov = std::make_shared<Mov>(Op8(0, localvar), node->operand, width);
-			function.insertBefore(instruction, mov, prefix + "L1 (" + localvar->plainString() + ") into " +
+			function.insertBefore(instruction, mov, prefix + ".1: (" + localvar->plainString() + ") into " +
 				node->operand->toString())->setDebug(llvm, true);
 
 		} else if (value_type == ValueType::Operand) {
@@ -68,18 +68,18 @@ namespace LL2X::Passes {
 			OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(converted->value)->operand;
 			if (operand->isRegister()) {
 				auto mov = std::make_shared<Mov>(Op8(0, operand->reg), node->operand, width);
-				function.insertBefore(instruction, mov, prefix + "L2 (" + operand->toString() + ") into " +
+				function.insertBefore(instruction, mov, prefix + ".2: (" + operand->toString() + ") into " +
 					node->operand->toString())->setDebug(llvm, true);
 			} else {
 				function.insertBefore(instruction, std::make_shared<Mov>(operand, node->operand, width), prefix +
-					"L3 " + operand->toString() + " into " + node->operand->toString(), false)->setDebug(llvm, true);
+					".3: " + operand->toString() + " into " + node->operand->toString(), false)->setDebug(llvm, true);
 			}
 
 		} else if (value_type == ValueType::Global) {
 
 			auto global = std::dynamic_pointer_cast<GlobalValue>(converted->value);
 			auto mov = std::make_shared<Mov>(OpX(width, *global->name), node->operand, width);
-			function.insertBefore(instruction, mov, prefix + "L4 " + *global->name + " into " +
+			function.insertBefore(instruction, mov, prefix + ".4: " + *global->name + " into " +
 				node->operand->toString())->setDebug(llvm, true);
 
 		} else if (value_type == ValueType::Null) { // In case you're begging for a segfault.
@@ -94,7 +94,7 @@ namespace LL2X::Passes {
 			const int64_t long_value = converted->value->longValue();
 			// mov $imm, %dest
 			function.insertBefore(instruction, std::make_shared<Mov>(Op4(long_value), node->operand, width),
-				prefix + "L5 " + std::to_string(long_value) + " into " + node->operand->toString(),
+				prefix + ".5: " + std::to_string(long_value) + " into " + node->operand->toString(),
 				false)->setDebug(llvm, true);
 			// mov (%dest), %dest
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
@@ -105,7 +105,7 @@ namespace LL2X::Passes {
 			const int64_t bool_value = dynamic_cast<BoolValue *>(converted->value.get())->value? 1 : 0;
 			// mov $imm, %dest
 			function.insertBefore(instruction, std::make_shared<Mov>(Op4(bool_value), node->operand, width),
-				prefix + "L6 " + std::to_string(bool_value) + " into " + node->operand->toString(),
+				prefix + ".6: " + std::to_string(bool_value) + " into " + node->operand->toString(),
 				false)->setDebug(llvm, true);
 			// mov (%dest), %dest
 			function.insertBefore(instruction, std::make_shared<Mov>(node->operand->toDisplaced(), node->operand),
@@ -122,6 +122,8 @@ namespace LL2X::Passes {
 		ConstantPtr converted = node->destination->convert();
 		if (!converted->value)
 			throw std::runtime_error("Constant lacks value in lowerStore: " + std::string(*converted));
+
+		const std::string prefix = "LowerStore(" + std::string(node->location) + ")";
 
 		std::shared_ptr<LocalValue> local;
 		std::shared_ptr<GlobalValue> global;
@@ -170,7 +172,7 @@ namespace LL2X::Passes {
 				auto lvar = local->getVariable(function);
 				// mov $imm, (%var)
 				function.insertBefore(instruction, std::make_shared<Mov>(Op4(long_value),
-					OpV(lvar)->toDisplaced(), width), "LowerMemory.S1: mov $imm, (" + lvar->plainString() + ")",
+					OpV(lvar)->toDisplaced(), width), prefix + ".1: mov $imm, (" + lvar->plainString() + ")",
 					false)->setDebug(llvm, true);
 			} else if (global) {
 				auto temp = function.newVariable(source_type, instruction->parent.lock());
@@ -178,21 +180,21 @@ namespace LL2X::Passes {
 				auto mov_imm = std::make_shared<Mov>(Op4(long_value), OpV(temp), width);
 				// mov %temp, (global)
 				auto mov_global = std::make_shared<Mov>(OpV(temp), OpX(width, *global->name, true), width);
-				function.insertBefore(instruction, mov_imm, "LowerMemory.S2a: mov $imm, %temp", false)
+				function.insertBefore(instruction, mov_imm, prefix + ".2a: mov $imm, %temp", false)
 					->setDebug(llvm, true);
-				function.insertBefore(instruction, mov_global, "LowerMemory.S2b: mov %temp, (global)", false)
+				function.insertBefore(instruction, mov_global, prefix + ".2b: mov %temp, (global)", false)
 					->setDebug(llvm, true);
 			} else if (operand_value) {
 				OperandPtr operand = operand_value->operand;
 				if (operand->isRegister()) {
 					// mov $imm, (operand)
 					function.insertBefore(instruction, std::make_shared<Mov>(Op4(long_value),
-						operand->toDisplaced(), width), "LowerMemory.S3: mov $imm, " + operand->toString(), false)
+						operand->toDisplaced(), width), prefix + ".3: mov $imm, " + operand->toString(), false)
 						->setDebug(llvm, true);
 				} else {
 					// mov $imm, operand
 					auto mov = std::make_shared<Mov>(Op4(long_value), operand, width);
-					function.insertBefore(instruction, mov, "LowerMemory.S4: mov $imm, operand", false)
+					function.insertBefore(instruction, mov, prefix + ".4: mov $imm, operand", false)
 						->setDebug(llvm, true);
 				}
 			} else if (converted->value->isIntLike()) {
@@ -202,9 +204,9 @@ namespace LL2X::Passes {
 				auto mov_imm = std::make_shared<Mov>(Op4(long_value), OpV(temp), width);
 				// mov %temp, addr
 				auto mov_longptr = std::make_shared<Mov>(OpV(temp), OpX(width, longptr, true), width);
-				function.insertBefore(instruction, mov_imm, "LowerMemory.S5a: mov $imm, %temp", false)
+				function.insertBefore(instruction, mov_imm, prefix + ".5a: mov $imm, %temp", false)
 					->setDebug(llvm, true);
-				function.insertBefore(instruction, mov_longptr, "LowerMemory.S5b: mov %temp, addr", false)
+				function.insertBefore(instruction, mov_longptr, prefix + ".5b: mov %temp, addr", false)
 					->setDebug(llvm, true);
 			}
 		} else if (localish) {
@@ -214,7 +216,7 @@ namespace LL2X::Passes {
 				soperand = OpV(function.newVariable(node->source->type));
 				const std::string &global_name = *dynamic_cast<GlobalValue *>(source_value.get())->name;
 				auto mov = std::make_shared<Mov>(Op4(global_name, true), soperand, width);
-				function.insertBefore(instruction, mov, "LowerMemory.S6: load global")->setDebug(llvm, true);
+				function.insertBefore(instruction, mov, prefix + ".6: load global")->setDebug(llvm, true);
 			} else if (value_type == ValueType::Local) {
 				soperand = OpV(dynamic_cast<LocalValue *>(source_value.get())->getVariable(function));
 			} else {
@@ -225,7 +227,7 @@ namespace LL2X::Passes {
 				auto lvar = local->getVariable(function);
 				// mov %src, (%dest)
 				auto mov = std::make_shared<Mov>(soperand, Op8(0, lvar), width);
-				function.insertBefore(instruction, mov, "LowerMemory.S7: mov " + soperand->toString() + ", (" +
+				function.insertBefore(instruction, mov, prefix + ".7: mov " + soperand->toString() + ", (" +
 					lvar->plainString() + ")", false)->setDebug(llvm, true);
 			} else if (global) {
 				// %src -> [global]
@@ -237,28 +239,28 @@ namespace LL2X::Passes {
 				auto mov_global = std::make_shared<Mov>(Op8(*global->name, true), Op8(new_var));
 				// mov %src, (%temp)
 				auto mov_source = std::make_shared<Mov>(soperand, Op8(0, new_var), width);
-				function.insertBefore(instruction, mov_global, "LowerMemory.S8a: movq var, %temp", false)
+				function.insertBefore(instruction, mov_global, prefix + ".8a: movq var, %temp", false)
 					->setDebug(llvm, true);
-				function.insertBefore(instruction, mov_source, "LowerMemory.S8b: movq " + soperand->toString() +
+				function.insertBefore(instruction, mov_source, prefix + ".8b: movq " + soperand->toString() +
 					", (%temp)", false)->setDebug(llvm, true);
 			} else if (operand_value) {
 				OperandPtr doperand = operand_value->operand;
 				if (doperand->isRegister()) {
 					// mov %src, (dest)
 					auto mov = std::make_shared<Mov>(soperand, doperand->toDisplaced(), width);
-					function.insertBefore(instruction, mov, "LowerMemory.S9: mov " + soperand->toString() + ", (" +
+					function.insertBefore(instruction, mov, prefix + ".9: mov " + soperand->toString() + ", (" +
 						doperand->toString() + ")", false)->setDebug(llvm, true);
 				} else {
 					// mov %src, dest
 					auto mov = std::make_shared<Mov>(soperand, doperand, width);
-					function.insertBefore(instruction, mov, "LowerMemory.S10: mov " + soperand->toString() +
-						", " + doperand->toString(), false)->setDebug(llvm, true);
+					function.insertBefore(instruction, mov, prefix + ".10: mov " + soperand->toString() + ", " +
+						doperand->toString(), false)->setDebug(llvm, true);
 				}
 			} else if (converted->value->isIntLike()) {
 				const int64_t longptr = converted->value->longValue();
 				// mov %src, addr
 				auto mov = std::make_shared<Mov>(soperand, Op8(longptr, true), width);
-				function.insertBefore(instruction, mov, "LowerMemory.S11: mov " + soperand->toString() + ", " +
+				function.insertBefore(instruction, mov, prefix + ".11: mov " + soperand->toString() + ", " +
 					std::to_string(longptr))->setDebug(llvm, true);
 			} else
 				throw std::runtime_error("Unexpected destination ValueType in store instruction: " +
