@@ -224,7 +224,7 @@ namespace LL2X {
 		out << "getelementptr";
 		if (inbounds)
 			out << " inbounds";
-		out << " (" << *type << ", " << *ptrType << ' ' << *variable;
+		out << " (" << type->toString() << ", " << ptrType->toString() << ' ' << variable->toString();
 		for (const auto &decimal: decimals) {
 			out << ", i" << decimal.first << ' ';
 			if (std::holds_alternative<Variable::ID>(decimal.second))
