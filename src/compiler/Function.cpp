@@ -74,6 +74,7 @@
 // #include "pass/LowerInsertvalue.h"
 #include "pass/LowerMath.h"
 #include "pass/LowerMemcpy.h"
+#include "pass/LowerMemmove.h"
 #include "pass/LowerMemory.h"
 #include "pass/LowerMemset.h"
 // #include "pass/LowerObjectsize.h"
@@ -969,6 +970,7 @@ namespace LL2X {
 		Passes::makeCFG(*this);
 		// Passes::lowerVarargsFirst(*this);
 		Passes::lowerMemcpy(*this);
+		Passes::lowerMemmove(*this);
 		Passes::lowerMemset(*this);
 		Passes::setupCalls(*this);
 		Passes::lowerMemory(*this);

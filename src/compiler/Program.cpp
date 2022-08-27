@@ -466,6 +466,15 @@ namespace LL2X {
 
 		declarations.emplace("memcpy", new FunctionHeader("memcpy", PointerType::make(VoidType::make()), memcpy_args));
 
+		auto memmove_args = std::make_shared<FunctionArgs>(std::vector<FunctionArgument> {
+			{PointerType::make(VoidType::make()), "dest"},
+			{PointerType::make(VoidType::make()), "src"},
+			{IntType::make(64), "n"},
+		}, false);
+
+		declarations.emplace("memmove", new FunctionHeader("memmove", PointerType::make(VoidType::make()),
+			memmove_args));
+
 		auto memset_args = std::make_shared<FunctionArgs>(std::vector<FunctionArgument> {
 			{PointerType::make(VoidType::make()), "s"},
 			{IntType::make(32), "c"},
