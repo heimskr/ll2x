@@ -25,7 +25,7 @@
 
 namespace LL2X::Passes {
 	static void
-	lowerDiv(Function &function, InstructionPtr &instruction, SimpleNode *node, bool is_rem, bool is_signed) {
+	lowerDiv(Function &function, const InstructionPtr &instruction, SimpleNode *node, bool is_rem, bool is_signed) {
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
 		OperandPtr destination = node->operand;
@@ -91,7 +91,7 @@ namespace LL2X::Passes {
 	}
 
 	template <typename Ins, typename N>
-	static void lowerCommutative(Function &function, InstructionPtr &instruction, N *node) {
+	static void lowerCommutative(Function &function, const InstructionPtr &instruction, N *node) {
 		const auto values = node->allValues();
 		OperandPtr left  = values.at(0)->makeOperand();
 		OperandPtr right = values.at(1)->makeOperand();
@@ -103,7 +103,7 @@ namespace LL2X::Passes {
 	}
 
 	template <typename Ins, typename N>
-	static void lowerNoncommutative(Function &function, InstructionPtr &instruction, N *node) {
+	static void lowerNoncommutative(Function &function, const InstructionPtr &instruction, N *node) {
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
 		OperandPtr destination = node->operand;
@@ -113,7 +113,7 @@ namespace LL2X::Passes {
 		function.insertBefore<Ins>(instruction, right, destination, width);
 	}
 
-	void lowerMath(Function &function, InstructionPtr &instruction, BasicMathNode *node) {
+	void lowerMath(Function &function, const InstructionPtr &instruction, BasicMathNode *node) {
 		if (*node->oper == "add")
 			lowerCommutative<Add>(function, instruction, node);
 		else if (*node->oper == "sub")
@@ -126,7 +126,7 @@ namespace LL2X::Passes {
 			throw std::runtime_error("Unknown math operation: " + *node->oper);
 	}
 
-	void lowerMult(Function &function, InstructionPtr &instruction, BasicMathNode *node) {
+	void lowerMult(Function &function, const InstructionPtr &instruction, BasicMathNode *node) {
 		OperandPtr left  = node->left->makeOperand();
 		OperandPtr right = node->right->makeOperand();
 		OperandPtr destination = node->operand;
@@ -168,7 +168,7 @@ namespace LL2X::Passes {
 		function.unclobber(instruction, rax_clobber);
 	}
 
-	void lowerLogic(Function &function, InstructionPtr &instruction, LogicNode *node) {
+	void lowerLogic(Function &function, const InstructionPtr &instruction, LogicNode *node) {
 		switch (node->logicType) {
 			case LogicType::And:
 				lowerCommutative<And>(function, instruction, node);

@@ -36,7 +36,7 @@ namespace LL2X {
 			Node *node = nullptr;
 			Function *parent = nullptr;
 			/** The total number of instructions in all basic blocks preceding this one. */
-			int offset = -1;
+			size_t offset = -1;
 			int estimatedExecutions = 0;
 
 			BasicBlock(Label, const std::vector<Label> & = {}, const std::list<std::shared_ptr<Instruction>> & = {});

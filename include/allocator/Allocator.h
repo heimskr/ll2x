@@ -14,7 +14,7 @@ namespace LL2X {
 			int attempts = 0;
 
 		public:
-			enum class Result: int {Spilled = 1, NotSpilled = 2, Success = 3};
+			enum class Result: int {Invalid = 0, Spilled = 1, NotSpilled = 2, Success = 3};
 
 			std::shared_ptr<Variable> lastSpill, lastSpillAttempt;
 

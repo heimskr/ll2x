@@ -63,8 +63,8 @@ namespace LL2X {
 			/** If a variable is defined in one block and used only in that block, mark it as not live anywhere. */
 			void hackLiveness();
 
-			bool isLiveInUsingMergeSet(const Node::Map &merges, Node *block, VariablePtr var);
-			bool isLiveOutUsingMergeSet(const Node::Map &merges, Node *block, VariablePtr var);
+			bool isLiveInUsingMergeSet(const Node::Map &merges, Node *block, const VariablePtr &var);
+			bool isLiveOutUsingMergeSet(const Node::Map &merges, Node *block, const VariablePtr &var);
 
 			/** Computes liveness using merge sets. Seems to be broken? */
 			void computeLivenessMS();
@@ -72,11 +72,11 @@ namespace LL2X {
 			/** Computes liveness using a traditional, non-SSA method. Broken. Do not use. */
 			void computeLivenessTraditional();
 
-			void upAndMark(BasicBlockPtr, VariablePtr);
+			void upAndMark(const BasicBlockPtr &, const VariablePtr &);
 
-			std::unordered_set<std::shared_ptr<BasicBlock>> getLive(std::shared_ptr<Variable>,
-				std::function<std::unordered_set<std::shared_ptr<Variable>> &(const std::shared_ptr<BasicBlock> &)>)
-				const;
+			std::unordered_set<std::shared_ptr<BasicBlock>> getLive(const VariablePtr &,
+				const std::function<std::unordered_set<std::shared_ptr<Variable>> &
+				(const std::shared_ptr<BasicBlock> &)> &) const;
 
 		public:
 			Program &parent;
@@ -176,7 +176,7 @@ namespace LL2X {
 
 			bool initialDone = false, allocationDone = false, finalDone = false;
 
-			Allocator::Result lastAllocationResult;
+			Allocator::Result lastAllocationResult = Allocator::Result::Invalid;
 
 			Function(const Function &) = delete;
 			Function(Function &&) = delete;
@@ -185,7 +185,7 @@ namespace LL2X {
 			Allocator::Result attemptAllocation();
 
 			/** Analyzes the function's type. */
-			Type analyze(ValuePtr *value_out = nullptr, long *simple_index_out = nullptr);
+			Type analyze(ValuePtr *value_out = nullptr, int64_t *simple_index_out = nullptr);
 
 			/** Scans through the function AST for block headers and populates the list of BasicBlocks accordingly. */
 			void extractBlocks();
@@ -204,16 +204,16 @@ namespace LL2X {
 			Variable::ID newLabel() const;
 
 			/** Produces a new variable with an as yet unused label. */
-			VariablePtr newVariable(TypePtr = nullptr, BasicBlockPtr = nullptr);
+			VariablePtr newVariable(const TypePtr & = nullptr, const BasicBlockPtr & = nullptr);
 
 			/** Tries to spill a variable. Returns true if any instructions were inserted. */
-			bool spill(VariablePtr, bool doDebug = false);
+			bool spill(const VariablePtr &, bool doDebug = false);
 
-			void markSpilled(VariablePtr);
+			void markSpilled(const VariablePtr &);
 
-			bool isSpilled(VariablePtr) const;
+			bool isSpilled(const VariablePtr &) const;
 
-			bool canSpill(VariablePtr);
+			bool canSpill(const VariablePtr &);
 
 			bool isArgument(Variable::ID) const;
 
@@ -221,40 +221,39 @@ namespace LL2X {
 			InstructionPtr firstInstruction(bool includeComments = false);
 
 			/** Returns a pointer to the instruction before a given instruction. */
-			InstructionPtr before(InstructionPtr);
+			InstructionPtr before(const InstructionPtr &);
 
 			/** Returns a pointer to the instruction following a given instruction. */
-			InstructionPtr after(InstructionPtr);
+			InstructionPtr after(const InstructionPtr &);
 
 			/** Returns a pointer to the basic block following a given basic block. */
-			BasicBlockPtr after(BasicBlockPtr);
+			BasicBlockPtr after(const BasicBlockPtr &);
 
 			/** Inserts one instruction after another. Returns the inserted instruction. */
-			InstructionPtr insertAfter(InstructionPtr base,
-				InstructionPtr new_instruction, bool reindex = true);
+			InstructionPtr insertAfter(const InstructionPtr &base, const InstructionPtr &new_instruction,
+			                           bool reindex = true);
 
 			/** Inserts one instruction before another. Returns the inserted instruction. */
-			InstructionPtr insertBefore(InstructionPtr base,
-				InstructionPtr new_instruction, bool reindex = true, bool linear_warn = true,
-				bool *should_relinearize_out = nullptr);
+			InstructionPtr insertBefore(const InstructionPtr &base, const InstructionPtr &new_instruction,
+			                            bool reindex = true, bool linear_warn = true,
+			                            bool *should_relinearize_out = nullptr);
 
 			/** Inserts one instruction before another and adds a comment before the inserted instruction.
 			 *  Returns the inserted instruction. */
-			InstructionPtr insertBefore(InstructionPtr base,
-				InstructionPtr new_instruction, const std::string &, bool reindex = true);
+			InstructionPtr insertBefore(const InstructionPtr &base, const InstructionPtr &new_instruction,
+			                            const std::string &, bool reindex = true);
 
 			/** Inserts one instruction before another and adds a comment before the inserted instruction.
 			 *  Returns the inserted instruction. */
-			InstructionPtr insertBefore(InstructionPtr base,
-				InstructionPtr new_instruction, const char *, bool reindex = true);
+			InstructionPtr insertBefore(const InstructionPtr &base, const InstructionPtr &new_instruction, const char *,
+			                            bool reindex = true);
 
 			/** Inserts a comment before an instruction. */
-			InstructionPtr comment(InstructionPtr, const std::string &,
-				bool reindex = true);
+			InstructionPtr comment(const InstructionPtr &, const std::string &, bool reindex = true);
 
 			/** Removes in a given block a branch instruction that redundantly jumps to the immediately following block
 			 *  if such a branch instruction exists. */
-			void removeUselessBranch(BasicBlockPtr);
+			void removeUselessBranch(const BasicBlockPtr &);
 
 			/** Reassigns indices to all instructions. */
 			void reindexInstructions();
@@ -263,19 +262,19 @@ namespace LL2X {
 			void reindexBlocks();
 
 			/** Splits a basic block after a given instruction. */
-			BasicBlockPtr splitBlock(BasicBlockPtr, InstructionPtr);
+			BasicBlockPtr splitBlock(const BasicBlockPtr &, const InstructionPtr &);
 
 			/** Creates a precolored variable corresponding to any register. */
-			VariablePtr makePrecoloredVariable(unsigned char, BasicBlockPtr);
+			VariablePtr makePrecoloredVariable(unsigned char, const BasicBlockPtr &);
 
 			/** Creates a precolored variable corresponding to a given $mx (assembler-reserved) register. */
-			VariablePtr makeAssemblerVariable(unsigned char, BasicBlockPtr);
+			VariablePtr makeAssemblerVariable(unsigned char, const BasicBlockPtr &);
 
 			/** Returns a given basic block's CFG node. */
 			Node & operator[](const BasicBlock &) const;
 
 			/** Returns the number of arguments the function takes. */
-			int getArity() const;
+			size_t getArity() const;
 
 			/** Returns whether the function is variadic (i.e., whether it takes a variable number of arguments). */
 			bool isVariadic() const;
@@ -310,24 +309,24 @@ namespace LL2X {
 
 			/** Assigns or looks up a stack location for a given variable. The width and align parameters are in
 			 *  bytes. */
-			StackLocation & addToStack(VariablePtr, StackLocation::Purpose, int width = -1, int align = 1);
+			StackLocation & addToStack(const VariablePtr &, StackLocation::Purpose, int width = -1, int align = 1);
 
 			/** Removes an instruction from the function. */
-			void remove(InstructionPtr);
+			void remove(const InstructionPtr &);
 
 			/** Removes a basic block from the function. Any function that calls this should also be sure to relinearize
 			 *  instructions after calling this. */
-			void remove(BasicBlockPtr);
+			void remove(const BasicBlockPtr &);
 
 			/** Replaces the first instruction with the second. Not safe to call while iterating. */
-			void replace(InstructionPtr, InstructionPtr);
+			void replace(const InstructionPtr &, const InstructionPtr &);
 
 			/** Loads a 64-bit value into a new variable before an instruction by means of set and lui. */
-			VariablePtr get64(InstructionPtr before, unsigned long, bool reindex = false);
+			VariablePtr get64(const InstructionPtr &before, uint64_t, bool reindex = false);
 
 			/** Merges two basic blocks. The after-block is absorbed into the before-block. The caller of this function
 			 *  is responsible for recreating the CFG and reindexing all blocks. */
-			void mergeBlocks(BasicBlockPtr before, BasicBlockPtr after);
+			void mergeBlocks(const BasicBlockPtr &before, const BasicBlockPtr &after);
 
 			/** Returns the variable with a given label. If the variable doesn't exist, an exception will be thrown,
 			 *  unless the second argument is true and the variable is one of the argument variables, in which case
@@ -344,18 +343,14 @@ namespace LL2X {
 
 			/** Returns the variable with a given label. If the variable doesn't exist, it will be created with the
 			 *  given type and defining block options. */
-			VariablePtr getVariable(Variable::ID, const TypePtr, BasicBlockPtr = nullptr);
+			VariablePtr getVariable(Variable::ID, const TypePtr &, const BasicBlockPtr & = nullptr);
 
 			/** Returns the variable with a given label. If the variable doesn't exist, it will be created with the
 			 *  given type and defining block options. */
-			VariablePtr getVariable(const std::string &, const TypePtr, BasicBlockPtr = nullptr);
+			VariablePtr getVariable(const std::string &, const TypePtr &, const BasicBlockPtr & = nullptr);
 
 			/** Returns a pointer to the entry block. */
 			BasicBlockPtr getEntry();
-
-			/** Returns the calling convention of the function. It's chosen based on the number of arguments and whether
-			 *  the function is variadic. */
-			CallingConvention getCallingConvention() const;
 
 			/** Performs liveness analysis on all variables. Requires ϕ-instructions to still be present. */
 			void computeLiveness();
@@ -364,10 +359,10 @@ namespace LL2X {
 			void resetLiveness();
 
 			/** Returns a set of all blocks where a given variable or any of its aliases are live-in. */
-			std::unordered_set<std::shared_ptr<BasicBlock>> getLiveIn(std::shared_ptr<Variable>) const;
+			std::unordered_set<std::shared_ptr<BasicBlock>> getLiveIn(const VariablePtr &) const;
 
 			/** Returns a set of all blocks where a given variable or any of its aliases are live-out. */
-			std::unordered_set<std::shared_ptr<BasicBlock>> getLiveOut(std::shared_ptr<Variable>) const;
+			std::unordered_set<std::shared_ptr<BasicBlock>> getLiveOut(const VariablePtr &) const;
 
 			/** Returns the compiled assembly code. */
 			std::string toString();
@@ -388,13 +383,14 @@ namespace LL2X {
 			bool isNaked() const;
 
 			/** Finds a spill stack location for a variable. */
-			StackLocation & getSpill(VariablePtr, bool create = false, bool *created = nullptr);
+			StackLocation & getSpill(const VariablePtr &, bool create = false, bool *created = nullptr);
 
 			/** Computes a getelementptr value, places the result in a variable before the given instruction and returns
 			 *  the variable as a value. */
-			std::shared_ptr<LocalValue> replaceGetelementptrValue(std::shared_ptr<GetelementptrValue>, InstructionPtr);
+			std::shared_ptr<LocalValue> replaceGetelementptrValue(const std::shared_ptr<GetelementptrValue> &,
+			                                                      const InstructionPtr &);
 
-			VariablePtr makeVariable(ValuePtr, InstructionPtr, TypePtr = nullptr);
+			VariablePtr makeVariable(const ValuePtr &, const InstructionPtr &, const TypePtr & = nullptr);
 
 			/** Through questionable methods, this function ensures that all variables with the same numeric ID share
 			 *  the same register assignment. */
