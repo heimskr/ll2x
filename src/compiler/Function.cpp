@@ -1949,7 +1949,7 @@ namespace LL2X {
 							break;
 						}
 					if (var->registers.empty())
-						warn() << "hackVariables: last resort failed\n";
+						warn() << "hackVariables: last resort failed in " << *name << '\n';
 				}
 			} else
 				for (Variable *alias: var->getAliases())
