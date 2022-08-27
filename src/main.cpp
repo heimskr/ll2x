@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef DEBUGMODE
-	LL2X::Timer::summary();
 #endif
+	LL2X::Timer::summary();
 	LL2X::StructType::knownStructs.clear();
 }
 

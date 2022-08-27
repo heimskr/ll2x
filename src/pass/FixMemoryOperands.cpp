@@ -11,6 +11,17 @@ namespace LL2X::Passes {
 
 		size_t num_changed = 0;
 
+		const std::unordered_set<int> reg_choices {
+			x86_64::r8,
+			x86_64::r9,
+			x86_64::r10,
+			x86_64::r11,
+			x86_64::r12,
+			x86_64::r13,
+			x86_64::r14,
+			x86_64::r15
+		};
+
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			if (auto source_to_dest = std::dynamic_pointer_cast<SourceToDest>(instruction)) {
 				if (source_to_dest->source->isIndirect() && source_to_dest->destination->isIndirect()) {
@@ -23,16 +34,7 @@ namespace LL2X::Passes {
 					source_to_dest->source->extract(false, read_vars, written_vars);
 					source_to_dest->destination->extract(false, read_vars, written_vars);
 
-					std::unordered_set<int> regs {
-						x86_64::r8,
-						x86_64::r9,
-						x86_64::r10,
-						x86_64::r11,
-						x86_64::r12,
-						x86_64::r13,
-						x86_64::r14,
-						x86_64::r15
-					};
+					auto regs = reg_choices;
 
 					for (const auto &variable: read_vars)
 						for (const int reg: variable->registers)

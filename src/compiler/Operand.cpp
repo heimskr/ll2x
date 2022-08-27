@@ -156,7 +156,7 @@ namespace LL2X {
 	}
 
 	bool Operand::isIndirect() const {
-		return mode == Mode::Displaced || mode == Mode::Scaled;
+		return mode == Mode::Displaced || mode == Mode::Scaled || (mode == Mode::Label && useRip);
 	}
 
 	bool Operand::isDisplaced(const VariablePtr &variable) const {
@@ -176,7 +176,15 @@ namespace LL2X {
 			set.insert(index);
 	}
 
-	Operand::Number Operand::getConstant() const {
+	Operand::Number & Operand::getConstant() {
+		if (!isConstant())
+			throw std::runtime_error("Can't get operand constant: not a constant operand");
+		return std::get<Number>(displacement);
+	}
+
+	const Operand::Number & Operand::getConstant() const {
+		if (!isConstant())
+			throw std::runtime_error("Can't get operand constant: not a constant operand");
 		return std::get<Number>(displacement);
 	}
 

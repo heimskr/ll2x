@@ -54,6 +54,7 @@
 #include "pass/FillLocalValues.h"
 #include "pass/FillOperands.h"
 #include "pass/FinishMultireg.h"
+#include "pass/FixBigConstants.h"
 #include "pass/FixMemoryOperands.h"
 #include "pass/HackOperands.h"
 #include "pass/IgnoreIntrinsics.h"
@@ -90,6 +91,7 @@
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
 // #include "pass/RemoveUselessBranches.h"
+#include "pass/ReplaceBigMov.h"
 #include "pass/ReplaceCmov.h"
 #include "pass/ReplaceConstants.h"
 // #include "pass/ReplaceStoresAndLoads.h"
@@ -979,6 +981,7 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		Passes::lowerSwitch(*this);
+		Passes::fixBigConstants(*this);
 		Passes::minimizeBlocks(*this);
 		try {
 			Passes::makeCFG(*this);
@@ -1012,7 +1015,6 @@ namespace LL2X {
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		// Passes::removeUselessBranches(*this);
-		Passes::fixMemoryOperands(*this);
 		Passes::mergeAllBlocks(*this);
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
@@ -1028,7 +1030,9 @@ namespace LL2X {
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
 		Passes::replaceCmov(*this);
+		Passes::replaceBigMov(*this);
 		Passes::transformLabels(*this);
+		Passes::fixMemoryOperands(*this);
 		hackVariables();
 		// for (InstructionPtr &instruction: linearInstructions) {
 		// 	if (instruction->debugIndex != -1) {

@@ -38,7 +38,7 @@ namespace LL2X::Util {
 
 	bool isHex(const char);
 
-	/** Returns true if the argument is lower than INT_MIN or higher than INT_MAX. */
+	/** Returns true if the argument is lower than INT32_MIN or higher than INT32_MAX. */
 	bool outOfRange(long);
 
 	std::vector<std::string> split(const std::string &str, const std::string &delimiter, bool condense = true);

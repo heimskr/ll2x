@@ -40,7 +40,7 @@ namespace LL2X::Passes {
 			if (ret->value->isIntLike()) {
 
 				const int64_t long_value = ret->value->longValue();
-				if (UINT32_MAX < static_cast<uint64_t>(long_value))
+				if (long_value < INT32_MIN || INT32_MAX < long_value)
 					function.insertBefore<Movabs, false>(instruction, Op8(long_value), Op8(rax));
 				else
 					function.insertBefore<Mov, false>(instruction, Op4(long_value), Op8(rax));

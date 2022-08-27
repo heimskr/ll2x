@@ -45,7 +45,7 @@ namespace LL2X::Util {
 	}
 
 	bool outOfRange(long value) {
-		return value < INT_MIN || INT_MAX < value;
+		return value < INT32_MIN || INT32_MAX < value;
 	}
 
 	std::string escape(const std::string &str) {

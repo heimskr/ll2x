@@ -120,7 +120,8 @@ namespace LL2X {
 		void extract(bool is_write, std::unordered_set<VariablePtr> &read, std::unordered_set<VariablePtr> &written)
 			const;
 
-		Number getConstant() const;
+		Number & getConstant();
+		const Number & getConstant() const;
 
 		/** Returns a copy of a register operand (e.g. "%rax") that's displaced (e.g. "8(%rax)").
 		 *  Throws an exception if this isn't a register operand. */
