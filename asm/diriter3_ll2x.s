@@ -1650,7 +1650,10 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq -2028(%rbp), %r15
 	movq %r15, -1692(%rbp)
 	popq %r15
-	addq -1812(%rbp), -1692(%rbp)
+	pushq %r15
+	movq -1812(%rbp), %r15
+	addq %r15, -1692(%rbp)
+	popq %r15
 	cmpq $0, -2028(%rbp)
 	sete %al
 	cmpb $0, %al
