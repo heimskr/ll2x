@@ -106,9 +106,9 @@
 #include "pass/TrimBlocks.h"
 // #include "pass/UpdateArgumentLoads.h"
 #include "util/CompilerUtil.h"
-#include "util/strnatcmp.h"
 #include "util/Timer.h"
 #include "util/Util.h"
+#include "util/strnatcmp.h"
 
 namespace LL2X {
 	Function::Function(Program &program, const ASTNode &node): parent(program), name(node.lexerInfo) {
@@ -302,7 +302,7 @@ namespace LL2X {
 	}
 
 	Variable::ID Function::newLabel() const {
-		int label = getArity();
+		auto label = getArity();
 		const std::string *interned = nullptr;
 		for (;;) {
 			interned = StringSet::intern(std::to_string(label));
@@ -567,7 +567,7 @@ namespace LL2X {
 	}
 
 	bool Function::isArgument(Variable::ID id) const {
-		return Variable::isLess(id, getArity());
+		return Variable::isLess(id, static_cast<int64_t>(getArity()));
 	}
 
 	InstructionPtr Function::firstInstruction(bool includeComments) {
@@ -1099,8 +1099,8 @@ namespace LL2X {
 			throw std::runtime_error("Can't precolor arguments: arguments vector not present");
 
 		try {
-			int argument_index = 0;
-			const int arity = getArity();
+			size_t argument_index = 0;
+			const auto arity = getArity();
 			for (int i = 0; i < 6 && argument_index < arity;) {
 				VariablePtr argument = getVariable(std::to_string(argument_index++), true);
 				const int required = argument->registersRequired();
@@ -1694,8 +1694,8 @@ namespace LL2X {
 #endif
 				if (readWritten)
 					for (const InstructionPtr &instruction: block->instructions) {
-						int read;
-						int written;
+						int read = 0;
+						int written = 0;
 						std::tie(read, written) = instruction->extract();
 						stream << "\e[s    " << instruction->debugExtra() << "\e[u\e[2m" << read << " " << written
 						       << "\e[0m\n";
@@ -1708,8 +1708,8 @@ namespace LL2X {
 		}
 		if (linear)
 			for (const InstructionPtr &instruction: linearInstructions) {
-				int read;
-				int written;
+				int read = 0;
+				int written = 0;
 				std::tie(read, written) = instruction->extract();
 				stream << "\e[s    " << instruction->debugExtra() << "\e[u\e[2m" << read << " " << written << "\e[0m\n";
 			}
