@@ -5,7 +5,7 @@
 
 namespace LL2X::CompilerUtil {
 	bool isTerminator(InstructionPtr instruction) {
-		if (LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get())) {
+		if (auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction)) {
 			switch (llvm->node->nodeType()) {
 				case NodeType::BrUncond: return true;
 				case NodeType::BrCond: return true;
@@ -14,19 +14,19 @@ namespace LL2X::CompilerUtil {
 				case NodeType::Unreachable: return true;
 				default: return false;
 			}
-		} else if (TargetInstruction *why = dynamic_cast<TargetInstruction *>(instruction.get())) {
-			return why->alwaysTerminal();
 		}
+
+		if (auto target = std::dynamic_pointer_cast<TargetInstruction>(instruction))
+			return target->alwaysTerminal();
 
 		return false;
 	}
 
 #define CAST_METHOD(type, fn_name) \
 	type##Node * fn_name##Cast(InstructionPtr instruction) { \
-		if (LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get())) { \
+		if (auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction)) \
 			if (llvm->node->nodeType() == NodeType::type) \
 				return dynamic_cast<type##Node *>(llvm->node); \
-		} \
 		return nullptr; \
 	}
 

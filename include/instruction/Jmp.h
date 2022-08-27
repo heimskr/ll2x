@@ -14,6 +14,8 @@ namespace LL2X {
 
 		std::string getMnemonic() const;
 
+		bool alwaysTerminal() const override { return condition == x86_64::Condition::Unconditional; }
+
 		bool holdsLabels() const override { return true; }
 		bool replaceLabel(const std::string *, const std::string *) override;
 		std::vector<const std::string *> getLabels() const override;
