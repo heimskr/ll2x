@@ -1125,7 +1125,7 @@ namespace LL2X {
 		return new_var;
 	}
 
-	StackLocation & Function::addToStack(VariablePtr variable, StackLocation::Purpose purpose, int width) {
+	StackLocation & Function::addToStack(VariablePtr variable, StackLocation::Purpose purpose, int width, int align) {
 		for (auto &[offset, location]: stack)
 			if (*location.variable == *variable && location.purpose == purpose)
 				return location;
@@ -1135,8 +1135,8 @@ namespace LL2X {
 				variable->type->width() / 8, 8);
 		}
 
-		stackSize += width;
-		auto &added = stack.emplace(stackSize, StackLocation(this, variable, purpose, stackSize, width)).first->second;
+		stackSize = Util::upalign(stackSize + width, align);
+		auto &added = stack.try_emplace(stackSize, this, variable, purpose, stackSize, width).first->second;
 		if (purpose == StackLocation::Purpose::Spill)
 			spillSize += width;
 		return added;

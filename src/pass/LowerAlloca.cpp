@@ -29,12 +29,12 @@ namespace LL2X::Passes {
 
 		// Loop over all instructions, ignoring everything except allocas.
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
 
 			if (!llvm || llvm->node->nodeType() != NodeType::Alloca)
 				continue;
 
-			AllocaNode *alloca = dynamic_cast<AllocaNode *>(llvm->node);
+			auto *alloca = dynamic_cast<AllocaNode *>(llvm->node);
 
 			const std::string prefix = "LowerAlloca(" + std::string(alloca->location) + "): ";
 
@@ -49,9 +49,12 @@ namespace LL2X::Passes {
 				// stack for it instead of doing runtime stack pointer math.
 
 				if (!alloca->numelementsValue || alloca->numelementsValue->isIntLike()) {
-					int size = Util::upalign(alloca->type->width(), 8 * (alloca->align < 1? 1 : alloca->align)) / 8;
+					long size = Util::upalign(alloca->type->width(), 8) / 8;
 					if (alloca->numelementsValue)
-						size *= alloca->numelementsValue->intValue(true);
+						size *= alloca->numelementsValue->longValue();
+
+					if (Util::outOfRange(size))
+						warn() << "Alloca size at " << alloca->location << " is too large: " << size << '\n';
 
 					VariablePtr destination = function.getVariable(*alloca->result);
 					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size);
