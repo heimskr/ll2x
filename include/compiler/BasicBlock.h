@@ -21,7 +21,7 @@ namespace LL2X {
 	class BasicBlock: public std::enable_shared_from_this<BasicBlock> {
 		private:
 			bool extracted = false;
-			void extract(std::shared_ptr<Instruction> &);
+			void extract(const std::shared_ptr<Instruction> &);
 
 		public:
 			using Label = const std::string *;
@@ -53,7 +53,7 @@ namespace LL2X {
 
 			std::vector<std::shared_ptr<BasicBlock>> goesTo() const;
 
-			bool inPhiDefs(std::shared_ptr<Variable>) const;
+			bool inPhiDefs(const VariablePtr &) const;
 
 			/** Returns the number of instructions in the basic block. */
 			size_t size() const { return instructions.size(); }
@@ -61,13 +61,13 @@ namespace LL2X {
 			/** Inserts an instruction right before the basic block's terminal instruction.
 			 *  This function assumes that every basic block has exactly one terminal instruction, but this assumption
 			 *  is false after lowering of terminal instructions. */
-			void insertBeforeTerminal(std::shared_ptr<Instruction>);
+			void insertBeforeTerminal(const std::shared_ptr<Instruction> &);
 
 			/** Returns the number of instructions in the basic block that define a variable. */
 			int countDefinitions();
 
-			bool isLiveIn(std::shared_ptr<Variable>) const;
-			bool isLiveOut(std::shared_ptr<Variable>) const;
+			bool isLiveIn(const VariablePtr &) const;
+			bool isLiveOut(const VariablePtr &) const;
 	};
 
 	using BasicBlockPtr = std::shared_ptr<BasicBlock>;
