@@ -994,6 +994,7 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		extractVariables(true);
+		resetLiveness();
 		computeLiveness();
 		updateInstructionNodes();
 		reindexBlocks();
@@ -1049,6 +1050,7 @@ namespace LL2X {
 #ifdef FINAL_DEBUG
 		debug();
 		// allocator->interference.renderTo("interference_final_" + *name + ".png");
+		// allocator->interference.renderTo("interference_final_" + *name + ".svg");
 #endif
 	}
 
@@ -1487,7 +1489,7 @@ namespace LL2X {
 	}
 
 	void Function::resetLiveness() {
-		for (BasicBlockPtr &block: blocks) {
+		for (const BasicBlockPtr &block: blocks) {
 			block->liveIn.clear();
 			block->liveOut.clear();
 		}

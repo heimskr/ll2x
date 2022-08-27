@@ -4,7 +4,7 @@
 #include <thread>
 
 // #define COMPILE_MULTITHREADED
-// #define SINGLE_FUNCTION "@_ZNSt16allocator_traitsISaIcEE8allocateERS0_m"
+// #define SINGLE_FUNCTION "@_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm"
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"

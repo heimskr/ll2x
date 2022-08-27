@@ -338,8 +338,8 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %rdi, -32(%rbp)
 	addq $16, -32(%rbp)
 	# LowerLoad(948:3).2: (^17) into ^18
-	movq -32(%rbp), %rcx
-	movq (%rcx), %rbx
+	movq -32(%rbp), %rdi
+	movq (%rdi), %rbx
 	cmpq $0, %rax
 	movq $15, %r15
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__RC0
@@ -477,10 +477,10 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M142
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M137:
 	# LowerLoad(992:3).2: (^39) into ^42
-	movb (%rbx), %cl
+	movb (%rbx), %dil
 	# LowerStore(993:3).9: mov ^42, (^36)
 	movq -56(%rbp), %rax
-	movb %cl, (%rax)
+	movb %dil, (%rax)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M168
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M142:
 	# Clobber rsi
@@ -512,9 +512,9 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	setne %al
 	cmpq $0, %r8
 	setne %bl
-	movb %al, %cl
-	andb %bl, %cl
-	cmpb $0, %cl
+	movb %al, %dil
+	andb %bl, %dil
+	cmpb $0, %dil
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M175
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M212
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M175:
@@ -655,24 +655,24 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(200 + 0, 16)
+	# upalign(208 + 0, 16)
 	subq $208, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -80(%rbp)
-	movq %r14, -96(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -96(%rbp)
+	movq %r13, -88(%rbp)
+	movq %r14, -104(%rbp)
 	# LowerGetelementptr(730:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^6, indices=0,1
 	movq %rdi, -8(%rbp)
 	addq $8, -8(%rbp)
 	# LowerLoad(731:3).2: (^6) into ^7
-	movq -8(%rbp), %rcx
-	movq (%rcx), %rbx
+	movq -8(%rbp), %r9
+	movq (%r9), %rbx
 	movq %rdx, %rax
 	movabsq $9223372036854775807, %rax
 	addq %rax, %rax
-	movq %rax, %rcx
-	subq %rbx, %rcx
-	cmpq %r8, %rcx
+	movq %rax, %r9
+	subq %rbx, %r9
+	cmpq %r8, %r9
 	setb %al
 	cmpb $0, %al
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M13
@@ -709,22 +709,22 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	# LowerGetelementptr(744:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^15, indices=0,0,0
 	movq %rdi, %r13
 	# LowerLoad(745:3).2: (^15) into ^16
-	movq (%r13), %r8
+	movq (%r13), %r9
 	# LowerGetelementptr(746:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^17, indices=0,2
 	movq %rdi, %rax
 	addq $16, %rax
-	movq %rax, %rcx
-	cmpq %rcx, %r8
+	movq %rax, %r10
+	cmpq %r10, %r9
 	sete %al
 	# LowerGetelementptr(749:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^20, indices=0,2,0
-	movq %rdi, %rcx
-	addq $16, %rcx
+	movq %rdi, %r10
+	addq $16, %r10
 	# LowerLoad(750:3).2: (^20) into ^21
-	movq (%rcx), %rdx
+	movq (%r10), %r11
 	cmpq $0, %rax
 	movq $15, %rax
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__RC0
-	movq %rdx, %rax
+	movq %r11, %rax
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__RC0:
 	cmpq %rax, -16(%rbp)
 	seta %al
@@ -734,17 +734,17 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M60:
 	# LowerGetelementptr(756:3): pointer-type -> ^25
 	movq %rsi, %r12
-	addq %r8, %r12
+	addq %r9, %r12
 	movq %rdx, %rax
 	addq %rsi, %rax
 	movq %rbx, %r14
 	subq %rax, %r14
-	cmpq %rcx, %r8
+	cmpq %rcx, %r9
 	seta %al
 	# LowerGetelementptr(760:3): pointer-type -> ^29
-	movq %rbx, %rdx
-	addq %r8, %rdx
-	cmpq %rcx, %rdx
+	movq %rbx, %rsi
+	addq %r9, %rsi
+	cmpq %rcx, %rsi
 	setb %bl
 	cmpq $0, %rax
 	movb $1, %al
@@ -759,9 +759,9 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	sete %al
 	cmpq %rdx, %r8
 	sete %bl
-	movb %bl, %cl
-	orb %al, %cl
-	cmpb $0, %cl
+	movb %bl, %sil
+	orb %al, %sil
+	cmpb $0, %sil
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M125
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M85
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M85:
@@ -772,15 +772,15 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rdx, %rbx
 	addq %r12, %rbx
 	cmpq $1, %r14
-	sete %cl
-	cmpb $0, %cl
+	sete %dl
+	cmpb $0, %dl
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M94
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M99
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M94:
 	# LowerLoad(778:3).2: (^38) into ^41
-	movb (%rbx), %cl
+	movb (%rbx), %dl
 	# LowerStore(779:3).9: mov ^41, (^37)
-	movb %cl, (%rax)
+	movb %dl, (%rax)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M125
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M99:
 	# Clobber rdi
@@ -893,10 +893,10 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	cmpq $0, %r14
 	sete %al
 	cmpq %rdx, %r8
-	sete %cl
-	movb %cl, %dl
-	orb %al, %dl
-	cmpb $0, %dl
+	sete %sil
+	movb %sil, %r9b
+	orb %al, %r9b
+	cmpb $0, %r9b
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M251
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M211
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M211:
@@ -904,18 +904,18 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %r8, %rax
 	addq %r12, %rax
 	# LowerGetelementptr(828:3): pointer-type -> ^62
-	movq %rdx, %rcx
-	addq %r12, %rcx
+	movq %rdx, %r9
+	addq %r12, %r9
 	cmpq $1, %r14
-	sete %dl
-	cmpb $0, %dl
+	sete %sil
+	cmpb $0, %sil
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M220
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M225
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M220:
 	# LowerLoad(833:3).2: (^62) into ^65
-	movb (%rcx), %dl
+	movb (%r9), %sil
 	# LowerStore(834:3).9: mov ^65, (^61)
-	movb %dl, (%rax)
+	movb %sil, (%rax)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M251
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M225:
 	# Clobber rdi
@@ -926,17 +926,21 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -48(%rbp)
 	# Clobber r8
 	movq %r8, -56(%rbp)
+	# Clobber r9
+	movq %r9, -72(%rbp)
 	# Clobber rax
 	movq %rax, -64(%rbp)
 	# SetupCalls(838:3): move argument ^61
 	movq %rax, %rdi
 	# SetupCalls(838:3): move argument ^62
-	movq %rcx, %rsi
+	movq %r9, %rsi
 	# SetupCalls(838:3): move argument ^27
 	movq %r14, %rdx
 	callq memmove@PLT
 	# Unclobber rax
 	movq -64(%rbp), %rax
+	# Unclobber r9
+	movq -72(%rbp), %r9
 	# Unclobber r8
 	movq -56(%rbp), %r8
 	# Unclobber rcx
@@ -1175,10 +1179,10 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	# LowerStore(930:3).3: mov $imm, ^107
 	movb $0, (%rbx)
 	movq %rdi, %rax
-	movq -96(%rbp), %r14
-	movq -80(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -104(%rbp), %r14
+	movq -88(%rbp), %r13
+	movq -96(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq

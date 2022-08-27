@@ -3536,13 +3536,13 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq %r15, -304(%rbp)
 	popq %r15
 	# LowerLoad(760:3).2: (^62) into ^63
-	movq -304(%rbp), %rax
-	movl (%rax), %ebx
-	movl %ebx, %eax
-	addl -296(%rbp), %eax
-	# LowerStore(762:3).9: mov ^64, (^62)
 	movq -304(%rbp), %rbx
-	movl %eax, (%rbx)
+	movl (%rbx), %eax
+	movl %eax, %ebx
+	addl -296(%rbp), %ebx
+	# LowerStore(762:3).9: mov ^64, (^62)
+	movq -304(%rbp), %rax
+	movl %ebx, (%rax)
 	# LowerLoad(763:3).2: (^12) into ^65
 	movq -128(%rbp), %rbx
 	movl (%rbx), %eax
@@ -5734,7 +5734,7 @@ _ZNSt16allocator_traitsISaIcEE8max_sizeERKS0_:
 	leaq -8(%rbp), %rax
 	# LowerStore(1833:3).9: mov %rdi, (^2)
 	movq %rdi, (%rax)
-	movabsq $-1, %rax
+	movq $-1, %rax
 	movq %rbp, %rsp
 	popq %rbp
 	retq

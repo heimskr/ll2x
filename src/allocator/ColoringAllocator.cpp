@@ -283,10 +283,10 @@ namespace LL2X {
 					node.data = var;
 					node.colors = var->registers;
 #ifdef DEBUG_COLORING
-					// info() << *var << ": " << var->registersRequired() << " required.";
-					// if (var->type)
-					// 	std::cerr << " " << std::string(*var->type);
-					// std::cerr << "\n";
+					info() << *var << ": " << var->registersRequired() << " required.";
+					if (var->type)
+						std::cerr << " " << std::string(*var->type);
+					std::cerr << "\n";
 #endif
 					node.colorsNeeded = var->registersRequired();
 #ifdef DEBUG_COLORING
@@ -307,7 +307,7 @@ namespace LL2X {
 		std::map<Variable::ID, std::unordered_set<int>> live;
 
 		for (const auto &[id, var]: function->variableStore) {
-			if (var->hasRegister())
+			if (!var->registers.empty())
 				continue;
 #ifdef DEBUG_COLORING
 			info() << "Variable " << *var << ":\n";
@@ -332,14 +332,14 @@ namespace LL2X {
 				warn() << "block is null?\n";
 #endif
 			for (const VariablePtr &var: block->liveIn)
-				if (!var->hasRegister()) {
+				if (var->registers.empty()) {
 #ifdef DEBUG_COLORING
 					info() << "Variable " << *var << " is live-in at block " << *block->label << "\n";
 #endif
 					live[var->id].insert(block->index);
 				}
 			for (const VariablePtr &var: block->liveOut)
-				if (!var->hasRegister()) {
+				if (var->registers.empty()) {
 #ifdef DEBUG_COLORING
 					info() << "Variable " << *var << " is live-out at block " << *block->label << "\n";
 #endif
@@ -397,14 +397,14 @@ namespace LL2X {
 			auto &set = sets[block->index];
 			for (const VariablePtr &var: block->liveIn) {
 				const Variable::ID parent_id = var->parentID();
-				if (var->registers.empty() && !set.contains(parent_id)) {
+				if (!set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}
 			}
 			for (const VariablePtr &var: block->liveOut) {
 				const Variable::ID parent_id = var->parentID();
-				if (var->registers.empty() && !set.contains(parent_id)) {
+				if (!set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}
@@ -420,10 +420,11 @@ namespace LL2X {
 			if (size < 2)
 				continue;
 			for (size_t i = 0; i < size - 1; ++i)
-				for (size_t j = i + 1; j < size; ++j) {
-					interference.link(*vec[i], *vec[j], true);
-					++links;
-				}
+				for (size_t j = i + 1; j < size; ++j)
+					if (interference.hasLabel(*vec[i]) && interference.hasLabel(*vec[j])) {
+						interference.link(*vec[i], *vec[j], true);
+						++links;
+					}
 		}
 #endif
 
