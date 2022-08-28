@@ -34,7 +34,7 @@ namespace LL2X {
 			size_t max_length = 0;
 
 			for (const auto &[name, nanos]: times) {
-				if (nanos.count() / 1e9 < threshold)
+				if (static_cast<double>(nanos.count()) / 1e9 < threshold)
 					continue;
 				names.push_back(&name);
 				max_length = std::max(name.size(), max_length);
@@ -45,7 +45,7 @@ namespace LL2X {
 			});
 
 			for (const std::string *name: names) {
-				const double nanos = times.at(*name).count();
+				const auto nanos = static_cast<double>(times.at(*name).count());
 				std::cerr << "    \e[1m" << *name << std::string(max_length - name->size(), ' ') << "\e[22m took \e[32m"
 				          << (nanos / 1e9) << "\e[39m seconds";
 				const size_t count = counts.at(*name);

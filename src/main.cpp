@@ -18,9 +18,9 @@ void compile(const std::string &filename, bool show_debug);
 int main(int argc, char **argv) {
 	global_argc = argc;
 	global_argv = argv;
-	auto usage = [] { std::cerr << "Usage: ll2x [-d] <input>\n"; exit(1); };
+	auto usage = [] { std::cerr << "Usage: ll2x [-d] <input>\n"; return 1; };
 	if (argc < 2)
-		usage();
+		return usage();
 	LL2X::Lexer::init();
 #ifdef CATCH
 	try {
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 			LL2X::Timer timer("Compile");
 			compile(argv[1], false);
 		} else
-			usage();
+			return usage();
 #ifdef CATCH
 	} catch (...) {
 		LL2X::Timer::summary();
@@ -43,14 +43,12 @@ int main(int argc, char **argv) {
 	}
 #endif
 
-#ifdef DEBUGMODE
-#endif
 	LL2X::Timer::summary();
 	LL2X::StructType::knownStructs.clear();
 }
 
 bool hasArg(const char *arg) {
-	if (global_argv)
+	if (global_argv != nullptr)
 		for (int i = 0; i < global_argc; ++i)
 			if (strcmp(global_argv[i], arg) == 0)
 				return true;

@@ -15,9 +15,9 @@
 #include "util/WeakCompare.h"
 
 namespace LL2X::Util {
-	long parseLong(const std::string &, int base = 10);
-	long parseLong(const std::string *, int base = 10);
-	long parseLong(const char *, int base = 10);
+	int64_t parseLong(const std::string &, int base = 10);
+	int64_t parseLong(const std::string *, int base = 10);
+	int64_t parseLong(const char *, int base = 10);
 
 	template <typename T>
 	inline T upalign(T num, long alignment) {
@@ -26,20 +26,19 @@ namespace LL2X::Util {
 
 	template <typename T>
 	inline T alignToPower(T num) {
-		num--;
+		--num;
 		for (size_t i = 1; i < 8 * sizeof(T); ++i)
 			num |= num >> i;
 		return num + 1;
 	}
 
-	bool isNumeric(const std::string &);
+	bool isNumeric(std::string_view);
 	bool isNumeric(const std::string *);
-	bool isNumeric(const char *);
 
 	bool isHex(const char);
 
 	/** Returns true if the argument is lower than INT32_MIN or higher than INT32_MAX. */
-	bool outOfRange(long);
+	bool outOfRange(int64_t);
 
 	std::vector<std::string> split(const std::string &str, const std::string &delimiter, bool condense = true);
 
