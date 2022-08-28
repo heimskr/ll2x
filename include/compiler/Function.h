@@ -448,7 +448,7 @@ namespace LL2X {
 					insertBefore(anchor, xor_, reindex);
 					if (debug != -1)
 						xor_->setDebug(debug, false);
-					xor_->extract();
+					xor_->extract(false);
 					return;
 				}
 
@@ -461,7 +461,7 @@ namespace LL2X {
 					insertBefore(anchor, shl, reindex);
 					if (debug != -1)
 						shl->setDebug(debug, false);
-					shl->extract();
+					shl->extract(false);
 				} else {
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
@@ -477,9 +477,9 @@ namespace LL2X {
 						mul->setDebug(debug, false);
 						mov_out->setDebug(debug, false);
 					}
-					mov_in->extract();
-					mul->extract();
-					mov_out->extract();
+					mov_in->extract(false);
+					mul->extract(false);
+					mov_out->extract(false);
 					unclobber(anchor, rdx_clobber);
 					unclobber(anchor, rax_clobber);
 				}

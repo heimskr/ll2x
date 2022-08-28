@@ -17,13 +17,13 @@ namespace LL2X {
 		CConv cconv = CConv::Default;
 		Deref deref = Deref::Default;
 		std::unordered_set<RetAttr> retattrs;
-		int dereferenceableBytes = -1;
+		int64_t dereferenceableBytes = -1;
 		TypePtr returnType;
 		std::shared_ptr<FunctionArgs> arguments;
 		UnnamedAddr unnamedAddr = UnnamedAddr::Default;
 		std::unordered_set<FnAttr> fnattrs;
-		int align = -1;
-		int fnattrsIndex = -1; // When there's /#\d+/ instead of an inline list of function attributes
+		int64_t align = -1;
+		int64_t fnattrsIndex = -1; // When there's /#\d+/ instead of an inline list of function attributes
 		ConstantPtr personality;
 		const std::string *section = nullptr, *comdat = nullptr;
 

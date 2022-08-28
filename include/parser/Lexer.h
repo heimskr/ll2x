@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mutex>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -9,7 +10,6 @@
 #include "parser/ASTNode.h"
 
 #define LLVMSTYPE_IS_DECLARED
-#define WASMSTYPE_IS_DECLARED
 typedef LL2X::ASTNode * LLVMSTYPE;
 
 #ifndef NO_YYPARSE
@@ -28,18 +28,8 @@ extern yysize llvmleng;
 extern int llvm_flex_debug;
 extern int llvmdebug;
 
-extern FILE *wasmin;
-extern char *wasmtext;
-extern yysize wasmleng;
-extern int wasm_flex_debug;
-extern int wasmdebug;
-
-extern std::mutex wasmMutex;
-
 namespace LL2X {
 	class Parser;
-
-	std::unique_lock<std::mutex> lockWasm();
 
 	class Lexer {
 		private:
@@ -48,6 +38,8 @@ namespace LL2X {
 			ASTNode **lval;
 
 		public:
+			static void init();
+
 			ASTLocation location = {0, 1};
 			std::string line;
 			yysize lastYylength = 0;
@@ -63,17 +55,11 @@ namespace LL2X {
 			int token(const char *, int symbol);
 	};
 
-	extern Lexer llvmLexer, wasmLexer;
+	extern std::optional<Lexer> llvmLexer;
 }
 
 int llvmlex();
 int llvmlex_destroy();
 int llvmparse();
-int wasmlex();
-int wasmlex_destroy();
-int wasmparse();
 void llvmerror(const char *);
 void llvmerror(const std::string &, const LL2X::ASTLocation &);
-void wasmerror(const char *);
-void wasmerror(const std::string &);
-void wasmerror(const std::string &, const LL2X::ASTLocation &);

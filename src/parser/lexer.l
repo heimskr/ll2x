@@ -3,8 +3,8 @@
 #ifdef YY_USER_ACTION
 #error "YY_USER_ACTION is already defined"
 #endif
-#define YY_USER_ACTION { LL2X::llvmLexer.advance(llvmtext); }
-#define LLVMRTOKEN(x) return LL2X::llvmLexer.token(llvmtext, LLVMTOK_##x);
+#define YY_USER_ACTION { LL2X::llvmLexer->advance(llvmtext); }
+#define LLVMRTOKEN(x) return LL2X::llvmLexer->token(llvmtext, LLVMTOK_##x);
 
 // Disable PVS-Studio warnings about branches that do the same thing.
 //-V::1037
@@ -79,24 +79,24 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 <SGC>" No predecessors!"	{ LLVMRTOKEN(NO_PREDS) }
 <LABEL1>[0-9]+				{ LLVMRTOKEN(DECIMAL) }
 <LABEL1>":"					{ BEGIN(LABEL2); }
-<LABEL1>\n					{ LL2X::llvmLexer.newline(); BEGIN(INITIAL); }
+<LABEL1>\n					{ LL2X::llvmLexer->newline(); BEGIN(INITIAL); }
 <LABEL1>[ \t]+				{ }
-<LABEL1>.					{ LL2X::llvmLexer.badchar(*llvmtext); }
+<LABEL1>.					{ LL2X::llvmLexer->badchar(*llvmtext); }
 <LABEL2>"; preds ="			{ BEGIN(PREDS); LLVMRTOKEN(PREDS_COMMENT) }
 <LABEL2>[ \t]+				{ }
-<LABEL2>\n					{ LL2X::llvmLexer.newline(); BEGIN(INITIAL); }
-<LABEL2>.					{ LL2X::llvmLexer.badchar(*llvmtext); }
-<SGC>\n						{ LL2X::llvmLexer.newline(); BEGIN(INITIAL); }
+<LABEL2>\n					{ LL2X::llvmLexer->newline(); BEGIN(INITIAL); }
+<LABEL2>.					{ LL2X::llvmLexer->badchar(*llvmtext); }
+<SGC>\n						{ LL2X::llvmLexer->newline(); BEGIN(INITIAL); }
 <SGC>.						{ }
 <PREDS>{LLVM_PVAR}			{ LLVMRTOKEN(PVAR); }
 <PREDS>[ \t,]+				{ }
-<PREDS>\n					{ LL2X::llvmLexer.newline(); BEGIN(INITIAL); LLVMRTOKEN(NEWLINE) }
-<PREDS>.					{ LL2X::llvmLexer.badchar(*llvmtext); }
+<PREDS>\n					{ LL2X::llvmLexer->newline(); BEGIN(INITIAL); LLVMRTOKEN(NEWLINE) }
+<PREDS>.					{ LL2X::llvmLexer->badchar(*llvmtext); }
 
 ";"							{ BEGIN(SGC); }
 {LLVM_MLCOMMENT}			{ }
 [ \t]+						{ }
-\n							{ LL2X::llvmLexer.newline(); }
+\n							{ LL2X::llvmLexer->newline(); }
 
 "@llvm.dbg.value"			{ LLVMRTOKEN(DBG_VALUE) }
 "@llvm.dbg.declare"			{ LLVMRTOKEN(DBG_DECLARE) }
@@ -339,7 +339,7 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 
 {LLVM_IDENT}				{ LLVMRTOKEN(IDENT) }
 
-.							{ LL2X::llvmLexer.badchar(*llvmtext); }
+.							{ LL2X::llvmLexer->badchar(*llvmtext); }
 
 %%
 

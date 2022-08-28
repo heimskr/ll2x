@@ -1,9 +1,10 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 #include <sstream>
 
 #include "parser/GlobalVarDef.h"
 #include "parser/Parser.h"
+#include "util/Deleter.h"
 
 namespace LL2X {
 	GlobalVarDef::GlobalVarDef(ASTNode *gvar, ASTNode *linkage_, ASTNode *preemption_, ASTNode *visibility_,
@@ -11,42 +12,38 @@ namespace LL2X {
 	                           ASTNode *addrspace_, ASTNode *externally_initialized, ASTNode *global_or_constant,
 	                           ASTNode *type_or_constant, ASTNode *gdef_extras):
 	                           ASTNode(llvmParser, LLVM_GLOBAL_DEF, gvar->lexerInfo) {
-		delete gvar;
+		Deleter deleter(gvar, linkage_, preemption_, visibility_, dll_storage_class, thread_local_, unnamed_addr,
+		                addrspace_, externally_initialized, global_or_constant, type_or_constant, gdef_extras);
 
-		if (linkage_) {
+		if (linkage_ != nullptr) {
 			const std::string &link = *linkage_->lexerInfo;
-			for (const std::pair<const Linkage, std::string> &pair: linkage_map) {
+			for (const std::pair<const Linkage, std::string> &pair: linkage_map)
 				if (link == pair.second) {
 					linkage = pair.first;
 					break;
 				}
-			}
-			delete linkage_;
 		}
 
-		if (preemption_) {
+		if (preemption_ != nullptr) {
 			if (*preemption_->lexerInfo == "dso_preemptable")
 				preemption = Preemption::DsoPreemptable;
 			else if (*preemption_->lexerInfo == "dso_local")
 				preemption = Preemption::DsoLocal;
 			else
 				throw std::runtime_error("Invalid preemption in GlobalVarDef: \"" + *preemption_->lexerInfo + "\"");
-			delete preemption_;
 		}
 
-		if (visibility_) {
+		if (visibility_ != nullptr) {
 			visibility = *visibility_->lexerInfo == "hidden"? Visibility::Hidden :
 				(*visibility_->lexerInfo == "protected"? Visibility::Protected : Visibility::Default);
-			delete visibility_;
 		}
 
-		if (dll_storage_class) {
+		if (dll_storage_class != nullptr) {
 			dllStorageClass = *dll_storage_class->lexerInfo == "dllimport"?
 				DllStorageClass::Import : DllStorageClass::Export;
-			delete dll_storage_class;
 		}
 
-		if (thread_local_) {
+		if (thread_local_ != nullptr) {
 			const std::string &tl = *thread_local_->at(0)->lexerInfo;
 			if (tl == "localdynamic")
 				threadLocal = ThreadLocal::LocalDynamic;
@@ -54,37 +51,28 @@ namespace LL2X {
 				threadLocal = ThreadLocal::InitialExec;
 			else if (tl == "localexec")
 				threadLocal = ThreadLocal::LocalExec;
-			delete thread_local_;
 		}
 
-		if (unnamed_addr) {
+		if (unnamed_addr != nullptr) {
 			if (*unnamed_addr->lexerInfo == "unnamed_addr")
 				unnamedAddr = UnnamedAddr::Unnamed;
 			else if (*unnamed_addr->lexerInfo == "local_unnamed_addr")
 				unnamedAddr = UnnamedAddr::LocalUnnamed;
-			delete unnamed_addr;
 		}
 
-		if (addrspace_) {
+		if (addrspace_ != nullptr)
 			addrspace = addrspace_->children.front()->atoi();
-			delete addrspace_;
-		}
 
-		if (externally_initialized) {
+		if (externally_initialized != nullptr)
 			externallyInitialized = true;
-			delete externally_initialized;
-		}
 
-		if (global_or_constant) {
+		if (global_or_constant != nullptr)
 			isConstant = *global_or_constant->lexerInfo == "constant";
-			delete global_or_constant;
-		}
 
 		if (type_or_constant->symbol == LLVM_CONSTANT)
 			constant = std::make_shared<Constant>(type_or_constant);
 		else
 			type = getType(type_or_constant);
-		delete type_or_constant;
 
 		for (ASTNode *extra: *gdef_extras) {
 			if (extra->symbol == LLVMTOK_SECTION) {
@@ -96,15 +84,14 @@ namespace LL2X {
 						llvmerror("Comdat expected to begin with \"$\"");
 					comdat = str;
 				}
-			} else if (!extra) {
-				std::cout << "\e[91m!extra\e[0m\n";
+			} else if (extra == nullptr) {
+				warn() << "\e[91m!extra\e[0m\n";
 			} else {
 				// TODO
 				// std::cout << "[" << Parser::getName(extra->symbol) << "]\n";
 				// extra->debug();
 			}
 		}
-		delete gdef_extras;
 	}
 
 	std::string GlobalVarDef::debugExtra() const {

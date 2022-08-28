@@ -25,8 +25,8 @@ namespace LL2X {
 			Parser(Mode mode_): mode(mode_) {}
 			void open(const std::string &filename);
 			void in(const std::string &text);
-			void debug(bool flex, bool bison);
-			void parse();
+			void debug(bool flex, bool bison) const;
+			void parse() const;
 			void done();
 
 			const char * getName(int symbol);

@@ -44,7 +44,7 @@ namespace LL2X {
 		bool isGetelementptr() const;
 		virtual bool isIntLike() const { return false; }
 		virtual long longValue() const { throw std::runtime_error("Value isn't int-like"); }
-		int intValue(bool can_warn = true);
+		int intValue(bool can_warn = true) const;
 		bool overflows() const;
 		/* Stringifies the Value into something that can be put in a #data section. */
 		virtual std::string compile() const = 0;
@@ -177,7 +177,7 @@ namespace LL2X {
 		TypePtr type, ptrType;
 		ValuePtr variable;
 		// The first element represents the width of the integer type.
-		std::vector<std::pair<long, std::variant<long, const std::string *>>> decimals {};
+		std::vector<std::pair<int64_t, std::variant<int64_t, const std::string *>>> decimals {};
 
 		GetelementptrValue(ASTNode *inbounds_, ASTNode *type_, ASTNode *ptr_type, ASTNode *variable_,
 							ASTNode *decimal_list);
@@ -205,7 +205,7 @@ namespace LL2X {
 		operator std::string() override;
 		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Icmp)"; }
-		std::shared_ptr<IcmpNode> makeNode(VariablePtr) const;
+		std::shared_ptr<IcmpNode> makeNode(const VariablePtr &) const;
 	};
 
 	struct LogicValue: Value, Makeable<LogicValue> {
@@ -219,7 +219,7 @@ namespace LL2X {
 		operator std::string() override;
 		std::string toString() const override;
 		std::string compile() const override { return "UNSUPPORTED (Logic)"; }
-		std::shared_ptr<LogicNode> makeNode(VariablePtr) const;
+		std::shared_ptr<LogicNode> makeNode(const VariablePtr &) const;
 	};
 
 	struct VoidValue: Value {
@@ -263,7 +263,7 @@ namespace LL2X {
 		ValuePtr copy() const override { return std::make_shared<CStringValue>(value); }
 		operator std::string() override { return "\e[34mc\e[33m\"" + *value + "\"\e[0m"; }
 		std::string toString() const override { return "c\"" + *value + '"'; }
-		// Replaces LLVM-style escapes (e.g., "\1B") with WASM-style escapes (e.g., "\x1B").
+		// Replaces LLVM-style escapes (e.g., "\1B") with escapes like "\x1B".
 		std::string reescape() const;
 		std::string compile() const override { return "\"" + reescape() + "\""; }
 	};

@@ -15,7 +15,7 @@ namespace LL2X {
 	Constant::Constant(TypePtr type_, ValuePtr value_, const ParAttrs &parattrs_):
 		type(std::move(type_)), value(std::move(value_)), parattrs(parattrs_) {}
 
-	Constant::Constant(const ASTNode *node, TypePtr type_hint) {
+	Constant::Constant(const ASTNode *node, const TypePtr &type_hint) {
 		if (node->symbol == LLVMTOK_DECIMAL) {
 			if (!type_hint)
 				throw std::runtime_error("Constant::Constant: type hint expected for decimal node");
@@ -67,7 +67,7 @@ namespace LL2X {
 			type = getType(node->at(0));
 
 			ASTNode *value_node = node->at(1);
-			if (GetelementptrValue *gep_value = dynamic_cast<GetelementptrValue *>(value_node)) {
+			if (auto *gep_value = dynamic_cast<GetelementptrValue *>(value_node)) {
 				value = gep_value->copy();
 			} else if (value_node->symbol == LLVM_CONVERSION_EXPR) {
 				for (const std::pair<const Conversion, std::string> &pair: conversion_map) {

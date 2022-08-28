@@ -1,14 +1,14 @@
 #include <iostream>
 
-#include "parser/FunctionArgs.h"
-#include "parser/StringSet.h"
 #include "parser/Enums.h"
+#include "parser/FunctionArgs.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
+#include "parser/StringSet.h"
 
 namespace LL2X {
 	FunctionArgument::FunctionArgument(TypePtr type_, const std::string &name_):
-		type(type_), name(StringSet::intern(name_)) {}
+		type(std::move(type_)), name(StringSet::intern(name_)) {}
 
 	FunctionArgument::FunctionArgument(ASTNode *node): type(getType(node)) {
 		// Each function argument node can have PARATTR_LIST and TOK_PVAR/TOK_PSTRING children at the end.
@@ -32,7 +32,7 @@ namespace LL2X {
 
 	FunctionArgs::FunctionArgs(ASTNode *list, bool ellipsis_):
 	ASTNode(llvmParser, LLVM_FUNCTION_ARGS, ""), ellipsis(ellipsis_) {
-		if (list) {
+		if (list != nullptr) {
 			arguments.reserve(list->size());
 			for (ASTNode *child: list->children)
 				arguments.emplace_back(child);

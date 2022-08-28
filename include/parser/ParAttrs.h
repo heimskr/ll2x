@@ -13,7 +13,8 @@ namespace LL2X {
 	struct ParAttrs {
 		std::unordered_set<ParAttr> attributes;
 		std::shared_ptr<Type> byvalType = nullptr;
-		int align = -1, dereferenceable = -1;
+		int64_t align = -1;
+		int64_t dereferenceable = -1;
 		bool orNull = false;
 		bool signext = false;
 		bool zeroext = false;

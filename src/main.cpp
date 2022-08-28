@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
 	auto usage = [] { std::cerr << "Usage: ll2x [-d] <input>\n"; exit(1); };
 	if (argc < 2)
 		usage();
+	LL2X::Lexer::init();
 #ifdef CATCH
 	try {
 #endif

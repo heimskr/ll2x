@@ -1,10 +1,10 @@
-#include <iostream>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
-#include "parser/Parser.h"
 #include "parser/Lexer.h"
+#include "parser/Parser.h"
 #include "parser/StringSet.h"
 
 int llvmwrap() { return 1; }
@@ -18,7 +18,7 @@ namespace LL2X {
 		errorCount = 0;
 		filename = filename_;
 		if (mode == Mode::LLVM)
-			llvmin = fopen(filename.c_str(), "r");
+			llvmin = fopen(filename.c_str(), "re");
 	}
 
 	void Parser::in(const std::string &text) {
@@ -30,14 +30,14 @@ namespace LL2X {
 			bufferState = llvm_scan_buffer(buffer, text.size() + 2);
 	}
 
-	void Parser::debug(bool flex, bool bison) {
+	void Parser::debug(bool flex, bool bison) const {
 		if (mode == Mode::LLVM) {
-			llvm_flex_debug = flex;
-			llvmdebug = bison;
+			llvm_flex_debug = flex? 1 : 0;
+			llvmdebug = bison? 1 : 0;
 		}
 	}
 
-	void Parser::parse() {
+	void Parser::parse() const {
 		if (mode == Mode::LLVM)
 			llvmparse();
 	}
@@ -46,17 +46,17 @@ namespace LL2X {
 		if (mode == Mode::LLVM)
 			llvmlex_destroy();
 
-		if (root) {
+		if (root != nullptr) {
 			delete root;
 			root = nullptr;
 		}
 
-		if (buffer) {
+		if (buffer != nullptr) {
 			delete[] buffer;
 			buffer = nullptr;
 		}
 
-		if (bufferState) {
+		if (bufferState != nullptr) {
 			// Causes a double free—does llvmparse already do this?
 			// if (mode == Mode::LLVM)
 			// 	llvm_delete_buffer(bufferState);
@@ -71,7 +71,7 @@ namespace LL2X {
 	}
 
 	std::string Parser::getBuffer() const {
-		return buffer? buffer : "";
+		return buffer != nullptr? buffer : "";
 	}
 
 	Parser llvmParser(Parser::Mode::LLVM);

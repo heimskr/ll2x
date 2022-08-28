@@ -44,7 +44,7 @@ namespace LL2X {
 
 	struct MetadataDef: public BaseNode {
 		bool distinct;
-		MetadataDef(ASTNode *decvar, ASTNode *distinct, ASTNode *list);
+		MetadataDef(ASTNode *dotident_node, ASTNode *distinct, ASTNode *list);
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Metadata; }
 	};
@@ -60,9 +60,9 @@ namespace LL2X {
 	};
 
 	struct AttributesNode: public BaseNode {
-		int index;
-		int allocsizeSize = -1;
-		int allocsizeCount = -1;
+		int64_t index = -1;
+		int64_t allocsizeSize = -1;
+		int64_t allocsizeCount = -1;
 		std::unordered_set<ParAttr> parameterAttributes;
 		std::unordered_set<FnAttr> functionAttributes;
 		std::unordered_map<const std::string *, const std::string *> stringAttributes;
@@ -77,7 +77,7 @@ namespace LL2X {
 			void handleUnibangs(ASTNode *);
 
 		public:
-			int prof = -1, callees = -1;
+			int64_t prof = -1, callees = -1;
 			InstructionNode(const std::string *str);
 			InstructionNode();
 			std::string style() const override { return "\e[36m"; }
@@ -129,8 +129,8 @@ namespace LL2X {
 		bool inalloca = false;
 		TypePtr numelementsType = nullptr;
 		ValuePtr numelementsValue = nullptr;
-		int align = -1;
-		int addrspace = -1;
+		int64_t align = -1;
+		int64_t addrspace = -1;
 
 		AllocaNode(ASTNode *result_, ASTNode *inalloca_, ASTNode *type_, ASTNode *numelements_, ASTNode *align_,
 		           ASTNode *addrspace_, ASTNode *unibangs);
@@ -147,13 +147,13 @@ namespace LL2X {
 		public:
 			bool volatile_ = false, atomic = false;
 			ConstantPtr source, destination;
-			int align = -1, nontemporalIndex = -1, invariantGroupIndex = -1, tbaa = -1;
+			int64_t align = -1, nontemporalIndex = -1, invariantGroupIndex = -1, tbaa = -1;
 			const std::string *syncscope = nullptr;
 			Ordering ordering = Ordering::None;
 
-			StoreNode(ASTNode *volatile__, ASTNode *source_, ASTNode *destination_, ASTNode *align_, ASTNode *bangs);
-			StoreNode(ASTNode *volatile__, ASTNode *source_, ASTNode *destination_, ASTNode *syncscope_,
-					ASTNode *ordering_, ASTNode *align_, ASTNode *bangs);
+			StoreNode(ASTNode *_volatile_, ASTNode *source_, ASTNode *destination_, ASTNode *align_, ASTNode *bangs);
+			StoreNode(ASTNode *_volatile_, ASTNode *source_, ASTNode *destination_, ASTNode *syncscope_,
+			          ASTNode *ordering_, ASTNode *align_, ASTNode *bangs);
 			std::string debugExtra() const override;
 			NodeType nodeType() const override { return NodeType::Store; }
 			std::vector<ValuePtr> allValues() override;
@@ -170,16 +170,16 @@ namespace LL2X {
 			bool volatile_ = false, atomic = false;
 			TypePtr type;
 			ConstantPtr constant;
-			int align = -1, nontemporalIndex = -1, invariantLoadIndex = -1, invariantGroupIndex = -1,
+			int64_t align = -1, nontemporalIndex = -1, invariantLoadIndex = -1, invariantGroupIndex = -1,
 				nonnullIndex = -1, tbaa = -1;
 			const std::string *dereferenceable = nullptr, *dereferenceableOrNull = nullptr, *bangAlign = nullptr;
 			const std::string *syncscope = nullptr;
 			Ordering ordering = Ordering::None;
 
-			LoadNode(ASTNode *result_, ASTNode *volatile__, ASTNode *type_, ASTNode *constant_, ASTNode *align_,
+			LoadNode(ASTNode *result_, ASTNode *_volatile_, ASTNode *type_, ASTNode *constant_, ASTNode *align_,
 					ASTNode *bangs);
-			LoadNode(ASTNode *result_, ASTNode *volatile__, ASTNode *type_, ASTNode *constant_,
-					ASTNode *syncscope_, ASTNode *ordering_, ASTNode *align_, ASTNode *invariant_group);
+			LoadNode(ASTNode *result_, ASTNode *_volatile_, ASTNode *type_, ASTNode *constant_,
+					ASTNode *syncscope_, ASTNode *ordering_, ASTNode *align_, ASTNode *bangs);
 			std::string debugExtra() const override;
 			NodeType nodeType() const override { return NodeType::Load; }
 			std::vector<ValuePtr> allValues() override { return {constant->value}; }
@@ -193,8 +193,8 @@ namespace LL2X {
 		ConstantPtr left, right;
 
 		IcmpNode(ASTNode *result_, ASTNode *cond_, ASTNode *left_, ASTNode *right_, ASTNode *unibangs);
-		IcmpNode(const std::string *result_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_);
-		IcmpNode(const OperandPtr &, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_);
+		IcmpNode(const std::string *result_, IcmpCond cond_, const ConstantPtr &left_, const ConstantPtr &right_);
+		IcmpNode(const OperandPtr &, IcmpCond cond_, const ConstantPtr &left_, const ConstantPtr &right_);
 		TypePtr getType() const { return left->type; }
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Icmp; }
@@ -241,8 +241,8 @@ namespace LL2X {
 			const std::string *cconv = nullptr;
 			std::unordered_set<RetAttr> retattrs;
 			std::vector<ConstantPtr> constants;
-			std::vector<int> attributeIndices;
-			int dereferenceable = -1, addrspace = -1;
+			std::vector<int64_t> attributeIndices;
+			int64_t dereferenceable = -1, addrspace = -1;
 
 			// For functions with varargs (and optionally for non-varargs functions), the function argument types can be
 			// specified after the function return type.
@@ -283,7 +283,7 @@ namespace LL2X {
 		const std::string *constraints = nullptr;
 		bool sideeffect = false;
 		bool alignstack = false;
-		int srcloc = -1;
+		int64_t srcloc = -1;
 
 		AsmNode(ASTNode *_result, ASTNode *_retattrs, ASTNode *return_type, ASTNode *_args, ASTNode *_sideeffect,
 		        ASTNode *_alignstack, ASTNode *_inteldialect, ASTNode *asm_string, ASTNode *asm_constraints,
@@ -304,11 +304,11 @@ namespace LL2X {
 
 	struct GetelementptrNode: public InstructionNode, public Writer, public Reader, public CachedConstantValue {
 		struct Index {
-			long width;
-			std::variant<long, Variable::ID> value;
+			int64_t width;
+			std::variant<int64_t, Variable::ID> value;
 			bool hasMinrange;
 			bool isPvar;
-			Index(long width_, const decltype(value) &value_, bool has_minrange, bool is_pvar):
+			Index(int64_t width_, const decltype(value) &value_, bool has_minrange, bool is_pvar):
 				width(width_), value(value_), hasMinrange(has_minrange), isPvar(is_pvar) {}
 		};
 
@@ -372,7 +372,7 @@ namespace LL2X {
 
 	struct BasicMathNode: public InstructionNode, public Writer, public Reader {
 		const std::string *oper;
-		int operSymbol;
+		int64_t operSymbol;
 		bool nuw = false, nsw = false;
 		TypePtr type;
 		ValuePtr left, right;
@@ -433,8 +433,9 @@ namespace LL2X {
 		TypePtr type;
 
 		LogicNode(ASTNode *result_, ASTNode *logic_type, ASTNode *left_, ASTNode *right_, ASTNode *unibangs);
-		LogicNode(const std::string *result_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_);
-		LogicNode(const OperandPtr &, LogicType logic_type, ConstantPtr left_, ConstantPtr right_);
+		LogicNode(const std::string *result_, LogicType logic_type, const ConstantPtr &left_,
+		          const ConstantPtr &right_);
+		LogicNode(const OperandPtr &, LogicType logic_type, const ConstantPtr &left_, const ConstantPtr &right_);
 		TypePtr getType() const { return left->type; }
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Logic; }
@@ -481,7 +482,7 @@ namespace LL2X {
 	struct ExtractValueNode: public InstructionNode, public Writer, public Reader {
 		std::shared_ptr<AggregateType> aggregateType;
 		ValuePtr aggregateValue;
-		std::vector<int> decimals;
+		std::vector<int64_t> decimals;
 		ExtractValueNode(ASTNode *result_, ASTNode *aggregate_type, ASTNode *aggregate_value, ASTNode *decimals_,
 		                 ASTNode *unibangs);
 		std::string debugExtra() const override;
@@ -493,7 +494,7 @@ namespace LL2X {
 	struct InsertValueNode: public InstructionNode, public Writer, public Reader {
 		TypePtr aggregateType, type;
 		ValuePtr aggregateValue, value;
-		std::vector<int> decimals;
+		std::vector<int64_t> decimals;
 		InsertValueNode(ASTNode *result_, ASTNode *aggregate_type, ASTNode *aggregate_value, ASTNode *type_,
 		                ASTNode *value_, ASTNode *decimals_, ASTNode *unibangs);
 		std::string debugExtra() const override;
@@ -530,7 +531,6 @@ namespace LL2X {
 
 	struct AtomicrmwNode: InstructionNode, Writer, Reader {
 		enum class Op {Invalid, Xchg, Add, Sub, And, Nand, Or, Xor, Max, Min, Umax, Umin, Fadd, Fsub, Fmax, Fmin};
-		const std::string *oper;
 		Op op = Op::Invalid;
 		const std::string *opString = nullptr;
 		bool volatile_ = false;
@@ -539,9 +539,9 @@ namespace LL2X {
 		ValuePtr pointer, value;
 		const std::string *syncscope = nullptr;
 		Ordering ordering = Ordering::None;
-		int align = -1;
+		int64_t align = -1;
 
-		AtomicrmwNode(ASTNode *result_, ASTNode *volatile__, ASTNode *op_, ASTNode *pointer_type, ASTNode *pointer_,
+		AtomicrmwNode(ASTNode *result_, ASTNode *_volatile_, ASTNode *op_, ASTNode *pointer_type, ASTNode *pointer_,
 		              ASTNode *type_, ASTNode *value_, ASTNode *syncscope_, ASTNode *ordering_, ASTNode *align_,
 		              ASTNode *unibangs);
 		std::string debugExtra() const override;

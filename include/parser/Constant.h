@@ -27,7 +27,7 @@ namespace LL2X {
 		Constant(const Constant &) = delete;
 		Constant(TypePtr, ValuePtr, const ParAttrs &, Conversion, ConstantPtr, TypePtr);
 		Constant(TypePtr, ValuePtr, const ParAttrs & = {});
-		Constant(const ASTNode *, TypePtr type_hint = nullptr);
+		Constant(const ASTNode *, const TypePtr &type_hint = nullptr);
 
 		ConstantPtr copy() const;
 		/** Applies ptrtoint/inttoptr conversions and returns a new Constant. */

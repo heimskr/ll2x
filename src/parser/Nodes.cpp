@@ -15,11 +15,10 @@ namespace LL2X {
 // MetadataDef
 
 	MetadataDef::MetadataDef(ASTNode *dotident_node, ASTNode *distinct_node, ASTNode *list):
-		BaseNode(llvmParser, LLVM_METADATA, StringSet::intern(dotident_node->concatenate().c_str())) {
+	BaseNode(llvmParser, LLVM_METADATA, StringSet::intern(dotident_node->concatenate().c_str())),
+	distinct(distinct_node != nullptr) {
 		locate(dotident_node);
-		distinct = distinct_node != nullptr;
-		if (distinct_node)
-			delete distinct_node;
+		delete distinct_node;
 		adopt(dotident_node);
 		adopt(list);
 	}
@@ -33,13 +32,13 @@ namespace LL2X {
 	HeaderNode::HeaderNode(bool simple, ASTNode *node): BaseNode(llvmParser, LLVM_BLOCKHEADER, "") {
 		Deleter deleter(node);
 		locate(node);
-		ASTNode *list;
+		ASTNode *list = nullptr;
 
 		if (simple) {
 			label = node->symbol == LLVMTOK_STRING? node->extracted() : node->lexerInfo;
 			list = node->at(1);
 		} else {
-			const auto at0 = node->at(0);
+			auto * at0 = node->at(0);
 			label = at0->symbol == LLVMTOK_STRING? at0->extracted() : at0->lexerInfo;
 			list = node->at(2);
 		}
@@ -54,10 +53,11 @@ namespace LL2X {
 		}
 	}
 
-	HeaderNode::HeaderNode(ASTNode *node): BaseNode(llvmParser, LLVM_BLOCKHEADER, "") {
+	HeaderNode::HeaderNode(ASTNode *node):
+	BaseNode(llvmParser, LLVM_BLOCKHEADER, ""),
+	label(node->symbol == LLVMTOK_STRING? node->extracted() : node->lexerInfo) {
 		Deleter deleter(node);
 		locate(node);
-		label = node->symbol == LLVMTOK_STRING? node->extracted() : node->lexerInfo;
 	}
 
 	std::string HeaderNode::debugExtra() const {
@@ -71,9 +71,9 @@ namespace LL2X {
 
 // AttributesNode
 
-	AttributesNode::AttributesNode(ASTNode *node): BaseNode(llvmParser, LLVMTOK_ATTRIBUTES, "") {
+	AttributesNode::AttributesNode(ASTNode *node):
+	BaseNode(llvmParser, LLVMTOK_ATTRIBUTES, ""), index(node->at(0)->atoi()) {
 		Deleter deleter(node);
-		index = node->at(0)->atoi();
 		for (ASTNode *child: *node->at(1)) {
 			switch (child->symbol) {
 				case LLVMTOK_FNATTR_BASIC:
@@ -158,7 +158,7 @@ namespace LL2X {
 		std::vector<ValuePtr> values = allValues();
 		std::vector<std::shared_ptr<LocalValue>> out;
 		out.reserve(values.size());
-		for (ValuePtr value: values) {
+		for (const ValuePtr &value: values) {
 			if (value && value->isLocal())
 				out.push_back(std::dynamic_pointer_cast<LocalValue>(value));
 		}
@@ -166,10 +166,9 @@ namespace LL2X {
 	}
 
 	void Reader::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
-		for (std::shared_ptr<LocalValue> value: allLocals()) {
+		for (const auto &value: allLocals())
 			if (value->variable->id == to_replace->id)
 				value->variable = new_var;
-		}
 	}
 
 	std::vector<std::reference_wrapper<OperandPtr>> Reader::allReadOperands() {
@@ -219,23 +218,23 @@ namespace LL2X {
 // AllocaNode
 
 	AllocaNode::AllocaNode(ASTNode *result_, ASTNode *inalloca_, ASTNode *type_, ASTNode *numelements_, ASTNode *align_,
-	                       ASTNode *addrspace_, ASTNode *unibangs) {
+	                       ASTNode *addrspace_, ASTNode *unibangs):
+	inalloca(inalloca_  != nullptr) {
 		Deleter deleter(unibangs, result_, inalloca_, type_, numelements_, align_, addrspace_);
 		handleUnibangs(unibangs);
 		result = result_->extracted();
-		inalloca = bool(inalloca_);
 		type = getType(type_);
 
 		// numelements_ is expected to be a LLVMTOK_COMMA node with a type_any child and a LLVMTOK_DECIMAL child.
-		if (numelements_) {
+		if (numelements_ != nullptr) {
 			numelementsType = getType(numelements_->at(0));
 			numelementsValue = getValue(numelements_->at(1));
 		}
 
-		if (align_)
+		if (align_ != nullptr)
 			align = align_->atoi();
 
-		if (addrspace_)
+		if (addrspace_ != nullptr)
 			addrspace = addrspace_->atoi();
 	}
 
@@ -254,37 +253,32 @@ namespace LL2X {
 
 // StoreNode
 
-	StoreNode::StoreNode(ASTNode *volatile__, ASTNode *source_, ASTNode *destination_, ASTNode *align_,
-	                     ASTNode *bangs) {
-		Deleter deleter(source_, destination_, volatile__, align_, bangs);
-		atomic = false;
+	StoreNode::StoreNode(ASTNode *_volatile_, ASTNode *source_, ASTNode *destination_, ASTNode *align_,
+	                     ASTNode *bangs):
+	volatile_(_volatile_ != nullptr) {
+		Deleter deleter(source_, destination_, _volatile_, align_, bangs);
 		source = std::make_shared<Constant>(source_);
 		destination = std::make_shared<Constant>(destination_);
 
-		volatile_ = bool(volatile__);
-
-		if (align_)
+		if (align_ != nullptr)
 			align = align_->atoi();
 
 		handleBangs(bangs);
 	}
 
-	StoreNode::StoreNode(ASTNode *volatile__, ASTNode *source_, ASTNode *destination_, ASTNode *syncscope_,
-	                     ASTNode *ordering_, ASTNode *align_, ASTNode *bangs) {
-		Deleter deleter(source_, destination_, ordering_, align_, volatile__, syncscope_);
-		atomic = true;
+	StoreNode::StoreNode(ASTNode *_volatile_, ASTNode *source_, ASTNode *destination_, ASTNode *syncscope_,
+	                     ASTNode *ordering_, ASTNode *align_, ASTNode *bangs):
+	volatile_(_volatile_ != nullptr), atomic(true), align(align_->atoi()) {
+		Deleter deleter(source_, destination_, ordering_, align_, _volatile_, syncscope_);
 		source = std::make_shared<Constant>(source_);
 		destination = std::make_shared<Constant>(destination_);
-		align = align_->atoi();
 		for (const std::pair<const Ordering, std::string> &pair: ordering_map)
 			if (*ordering_->lexerInfo == pair.second) {
 				ordering = pair.first;
 				break;
 			}
 
-		volatile_ = bool(volatile__);
-
-		if (syncscope_)
+		if (syncscope_ != nullptr)
 			syncscope = StringSet::intern(syncscope_->extractName());
 
 		handleBangs(bangs);
@@ -311,7 +305,7 @@ namespace LL2X {
 		if (volatile_)
 			out << " \e[38;5;202mvolatile\e[0m";
 		out << "\e[0m " << *source << "\e[2m,\e[0m " << *destination;
-		if (syncscope)
+		if (syncscope != nullptr)
 			out << " \e[34msyncscope\e[0;2m(\e[0m\"" << *syncscope << "\"\e[2m)\e[0m";
 		if (align != -1)
 			out << "\e[2m,\e[0;34m align \e[0m" << align;
@@ -332,30 +326,29 @@ namespace LL2X {
 
 // LoadNode
 
-	LoadNode::LoadNode(ASTNode *result_, ASTNode *volatile__, ASTNode *type_, ASTNode *constant_, ASTNode *align_,
-	                   ASTNode *bangs) {
-		Deleter deleter(result_, type_, constant_, volatile__, align_, bangs);
-		atomic = false;
+	LoadNode::LoadNode(ASTNode *result_, ASTNode *_volatile_, ASTNode *type_, ASTNode *constant_, ASTNode *align_,
+	                   ASTNode *bangs):
+	volatile_(_volatile_ != nullptr) {
+		Deleter deleter(result_, type_, constant_, _volatile_, align_, bangs);
 		result = result_->extracted();
 		type = getType(type_);
 		constant = std::make_shared<Constant>(constant_);
-		volatile_ = bool(volatile__);
 
-		if (align_)
+		if (align_ != nullptr)
 			align = align_->atoi();
 
 		handleBangs(bangs);
 	}
 
-	LoadNode::LoadNode(ASTNode *result_, ASTNode *volatile__, ASTNode *type_, ASTNode *constant_, ASTNode *syncscope_,
-	                   ASTNode *ordering_, ASTNode *align_, ASTNode *bangs) {
-		Deleter deleter(result_, type_, constant_, align_, ordering_, syncscope_, volatile__);
-		atomic = true;
+	LoadNode::LoadNode(ASTNode *result_, ASTNode *_volatile_, ASTNode *type_, ASTNode *constant_, ASTNode *syncscope_,
+	                   ASTNode *ordering_, ASTNode *align_, ASTNode *bangs):
+	atomic(true) {
+		Deleter deleter(result_, type_, constant_, align_, ordering_, syncscope_, _volatile_);
 		result = result_->extracted();
 		type = getType(type_);
 		constant = std::make_shared<Constant>(constant_);
 
-		if (align_)
+		if (align_ != nullptr)
 			align = align_->atoi();
 
 		for (const std::pair<const Ordering, std::string> &pair: ordering_map)
@@ -364,10 +357,10 @@ namespace LL2X {
 				break;
 			}
 
-		if (syncscope_)
+		if (syncscope_ != nullptr)
 			syncscope = syncscope_->extracted();
 
-		volatile_ = bool(volatile__);
+		volatile_ = bool(_volatile_);
 
 		handleBangs(bangs);
 	}
@@ -403,7 +396,7 @@ namespace LL2X {
 		if (volatile_)
 			out << " \e[38;5;202mvolatile\e[0m";
 		out << "\e[0m " << *type << "\e[2m,\e[0m " << *constant;
-		if (syncscope)
+		if (syncscope != nullptr)
 			out << " \e[34msyncscope\e[0;2m(\e[0m\"" << *syncscope << "\"\e[2m)\e[0m";
 		if (ordering != Ordering::None)
 			out << " \e[38;5;202m" << ordering_map.at(ordering) << "\e[0m";
@@ -418,19 +411,19 @@ namespace LL2X {
 
 // IcmpNode
 
-	IcmpNode::IcmpNode(ASTNode *result_, ASTNode *cond_, ASTNode *left_, ASTNode *right_, ASTNode *unibangs) {
+	IcmpNode::IcmpNode(ASTNode *result_, ASTNode *cond_, ASTNode *left_, ASTNode *right_, ASTNode *unibangs):
+	cond(cond_inv_map.at(*cond_->lexerInfo)) {
 		Deleter deleter(unibangs, result_, cond_, left_, right_);
 		handleUnibangs(unibangs);
 		result = result_->extracted();
-		cond   = cond_inv_map.at(*cond_->lexerInfo);
 		left   = Constant::make(left_)->convert();
 		right  = Constant::make(right_, left->type)->convert();
 	}
 
-	IcmpNode::IcmpNode(const std::string *result_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_):
+	IcmpNode::IcmpNode(const std::string *result_, IcmpCond cond_, const ConstantPtr &left_, const ConstantPtr &right_):
 		cond(cond_), left(left_->convert()), right(right_->convert()) { result = result_; }
 
-	IcmpNode::IcmpNode(const OperandPtr &operand_, IcmpCond cond_, ConstantPtr left_, ConstantPtr right_):
+	IcmpNode::IcmpNode(const OperandPtr &operand_, IcmpCond cond_, const ConstantPtr &left_, const ConstantPtr &right_):
 		cond(cond_), left(left_->convert()), right(right_->convert()) { operand = operand_; }
 
 	std::string IcmpNode::debugExtra() const {
@@ -492,13 +485,13 @@ namespace LL2X {
 			attribute_list);
 		handleUnibangs(unibangs);
 
-		if (_result)
+		if (_result != nullptr)
 			result = StringSet::intern(_result->extractName());
 
-		if (_cconv)
+		if (_cconv != nullptr)
 			cconv = _cconv->lexerInfo;
 
-		if (_retattrs) {
+		if (_retattrs != nullptr) {
 			for (ASTNode *child: *_retattrs) {
 				const std::string &raname = *child->lexerInfo;
 				if (raname == "dereferenceable")
@@ -512,13 +505,13 @@ namespace LL2X {
 			}
 		}
 
-		if (_addrspace)
+		if (_addrspace != nullptr)
 			addrspace = _addrspace->at(0)->atoi();
 
-		if (return_type)
+		if (return_type != nullptr)
 			returnType = getType(return_type);
 
-		if (_args) {
+		if (_args != nullptr) {
 			argumentsExplicit = true;
 			ASTNode *typelist = nullptr;
 			if (_args->size() == 2) { // Both a typelist and an ellipsis are specified.
@@ -530,22 +523,22 @@ namespace LL2X {
 				else
 					typelist = _args->at(0);
 			}
-			if (typelist)
+			if (typelist != nullptr)
 				for (ASTNode *typenode: *typelist)
 					argumentTypes.push_back(getType(typenode));
 		}
 
-		if (function_name) {
+		if (function_name != nullptr) {
 			name = getValue(function_name);
 			if (!std::dynamic_pointer_cast<VariableValue>(name))
 				throw std::runtime_error("Function name isn't a global or local variable");
 		}
 
-		if (_constants)
+		if (_constants != nullptr)
 			for (ASTNode *child: *_constants)
 				constants.push_back(std::make_shared<Constant>(child));
 
-		if (attribute_list)
+		if (attribute_list != nullptr)
 			for (ASTNode *child: *attribute_list)
 				attributeIndices.push_back(child->atoi());
 	}
@@ -567,7 +560,7 @@ namespace LL2X {
 	std::vector<ValuePtr> CallInvokeNode::allValues() {
 		std::vector<ValuePtr> out;
 		out.reserve(constants.size() + 1);
-		for (ConstantPtr constant: constants)
+		for (const ConstantPtr &constant: constants)
 			out.push_back(constant->value);
 		if (std::shared_ptr<LocalValue> local = std::dynamic_pointer_cast<LocalValue>(name))
 			out.push_back(local);
@@ -599,7 +592,7 @@ namespace LL2X {
 	                   CallInvokeNode(_result, _cconv, _retattrs, _addrspace, return_type, _args, constant,
 	                                  _constants, attribute_list, unibangs) {
 		Deleter deleter(_tail);
-		if (_tail)
+		if (_tail != nullptr)
 			tail = _tail->lexerInfo;
 		getFastmath(fastmath, fastmath_flags);
 	}
@@ -614,7 +607,7 @@ namespace LL2X {
 
 	std::string CallNode::debugExtra() const {
 		std::stringstream out;
-		if (result)
+		if (result != nullptr)
 			out << getResult() << "\e[2m = ";
 		print(out, "\e[0;34m", tail, " ");
 		out << "\e[0;91mcall\e[0m" << fastmath;
@@ -654,16 +647,22 @@ namespace LL2X {
 	AsmNode::AsmNode(ASTNode *_result, ASTNode *_retattrs, ASTNode *return_type, ASTNode *_args, ASTNode *_sideeffect,
 	                 ASTNode *_alignstack, ASTNode *_inteldialect, ASTNode *asm_string, ASTNode *asm_constraints,
 	                 ASTNode *_constants, ASTNode *attribute_list, ASTNode *_srcloc, ASTNode *unibangs):
-	                 CallInvokeNode(_result, nullptr, _retattrs, nullptr, return_type, _args, nullptr, _constants,
-	                                attribute_list, unibangs) {
-		Deleter deleter(asm_string, _sideeffect, _alignstack, _inteldialect, _srcloc, asm_constraints);
-		contents = asm_string->lexerInfo;
-		sideeffect = bool(_sideeffect);
-		alignstack = bool(_alignstack);
-		constraints = asm_constraints->lexerInfo;
+	CallInvokeNode(_result, nullptr, _retattrs, nullptr, return_type, _args, nullptr, _constants, attribute_list,
+	               unibangs),
+	contents(asm_string->lexerInfo),
+	constraints(asm_constraints->lexerInfo),
+	sideeffect(bool(_sideeffect)),
+	alignstack(bool(_alignstack)) {
+		delete asm_string;
+		delete _sideeffect;
+		delete _alignstack;
+		delete _inteldialect;
+		delete asm_constraints;
 
-		if (_srcloc)
+		if (_srcloc != nullptr)
 			srcloc = _srcloc->atoi();
+
+		delete _srcloc;
 	}
 
 	std::string AsmNode::debugExtra() const {
@@ -684,7 +683,7 @@ namespace LL2X {
 
 	std::string InvokeNode::debugExtra() const {
 		std::stringstream out;
-		if (result)
+		if (result != nullptr)
 			out << getResult() << "\e[2m = ";
 		out << "\e[0;91minvoke\e[0m";
 		print(out, " \e[34m", cconv, "\e[0;2m .\e[0m");
@@ -722,17 +721,17 @@ namespace LL2X {
 // GetelementptrNode
 
 	GetelementptrNode::GetelementptrNode(ASTNode *pvar, ASTNode *_inbounds, ASTNode *type_, ASTNode *constant_,
-	                                     ASTNode *indices_, ASTNode *unibangs) {
+	                                     ASTNode *indices_, ASTNode *unibangs):
+	inbounds(_inbounds != nullptr) {
 		Deleter deleter(unibangs, _inbounds, pvar, type_, constant_, indices_);
 		handleUnibangs(unibangs);
 		result = StringSet::intern(pvar->extractName());
-		inbounds = bool(_inbounds);
 		type = getType(type_);
 		constant = Constant::make(constant_)->convert();
 		pointerType = constant->type;
 
 		for (const ASTNode *comma: *indices_) {
-			const long width = comma->at(0)->atoi(1);
+			const int64_t width = comma->at(0)->atoi(1);
 			const ASTNode &index = *comma->at(1);
 			const bool has_minrange = comma->size() == 3;
 			if (index.symbol == LLVMTOK_PVAR)
@@ -755,8 +754,8 @@ namespace LL2X {
 			out << "\e[33mi" << width << "\e[0m ";
 			if (pvar)
 				out << "\e[32m%";
-			if (std::holds_alternative<long>(value))
-				out << std::get<long>(value) << "\e[0m";
+			if (std::holds_alternative<int64_t>(value))
+				out << std::get<int64_t>(value) << "\e[0m";
 			else
 				out << *std::get<Variable::ID>(value) << "\e[0m";
 		}
@@ -796,8 +795,8 @@ namespace LL2X {
 
 // LandingpadNode
 
-	LandingpadNode::Clause::Clause(ASTNode *node) {
-		clauseType = node->symbol == LLVMTOK_CATCH? ClauseType::Catch : ClauseType::Filter;
+	LandingpadNode::Clause::Clause(ASTNode *node):
+	clauseType(node->symbol == LLVMTOK_CATCH? ClauseType::Catch : ClauseType::Filter) {
 		if (node->at(0)->symbol == LLVM_ARRAY_VALUE) {
 			type = getType(node->at(0)->at(0));
 			value = getValue(node->at(0)->at(1));
@@ -813,14 +812,14 @@ namespace LL2X {
 	}
 
 	LandingpadNode::LandingpadNode(ASTNode *result_, ASTNode *type_, ASTNode *clauses_, ASTNode *unibangs,
-	                               bool cleanup_) {
+	                               bool cleanup_):
+	cleanup(cleanup_) {
 		Deleter deleter(unibangs, result_, type_, clauses_);
 		handleUnibangs(unibangs);
 		result = result_->extracted();
 		type = getType(type_);
 		for (ASTNode *clause: *clauses_)
 			clauses.push_back(std::make_shared<Clause>(clause));
-		cleanup = cleanup_;
 	}
 
 	std::string LandingpadNode::debugExtra() const {
@@ -828,7 +827,7 @@ namespace LL2X {
 		out << getResult() << "\e[2m = \e[0;91mlandingpad\e[0m " << *type;
 		if (cleanup)
 			out << " cleanup";
-		for (std::shared_ptr<Clause> clause: clauses)
+		for (const std::shared_ptr<Clause> &clause: clauses)
 			out << " " << std::string(*clause);
 		return out.str();
 	}
@@ -836,7 +835,7 @@ namespace LL2X {
 	std::vector<ValuePtr> LandingpadNode::allValues() {
 		std::vector<ValuePtr> out;
 		out.reserve(clauses.size());
-		for (std::shared_ptr<Clause> clause: clauses)
+		for (const std::shared_ptr<Clause> &clause: clauses)
 			out.push_back(clause->value);
 		return out;
 	}
@@ -876,14 +875,11 @@ namespace LL2X {
 // BasicMathNode
 
 	BasicMathNode::BasicMathNode(ASTNode *result_, ASTNode *oper_, bool nuw_, bool nsw_, ASTNode *type_,
-	                             ASTNode *left_, ASTNode *right_, ASTNode *unibangs) {
+	                             ASTNode *left_, ASTNode *right_, ASTNode *unibangs):
+	oper(oper_->lexerInfo), operSymbol(oper_->symbol), nuw(nuw_), nsw(nsw_) {
 		Deleter deleter(unibangs, result_, oper_, type_, left_, right_);
 		handleUnibangs(unibangs);
-		oper = oper_->lexerInfo;
-		operSymbol = oper_->symbol;
 		result = result_->extracted();
-		nuw = nuw_;
-		nsw = nsw_;
 		type = getType(type_);
 		left = getValue(left_);
 		right = getValue(right_);
@@ -906,7 +902,7 @@ namespace LL2X {
 		getFastmath(fastmath, fastmath_);
 		for (ASTNode *node: *pairs_) {
 			ValuePtr value = getValue(node->at(0));
-			pairs.push_back({value, node->at(1)->extracted()});
+			pairs.emplace_back(value, node->at(1)->extracted());
 			if (!value->isLocal())
 				pure = false;
 		}
@@ -956,39 +952,44 @@ namespace LL2X {
 // DivNode
 
 	DivNode::DivNode(ASTNode *result_, ASTNode *div, ASTNode *exact_,  ASTNode *type_, ASTNode *left_, ASTNode *right_,
-	                 ASTNode *unibangs): SimpleNode(result_, type_, left_, right_, unibangs) {
-		Deleter deleter(exact_, div);
-		exact = bool(exact_);
-		divType = *div->lexerInfo == "sdiv"? DivType::Sdiv : DivType::Udiv;
+	                 ASTNode *unibangs):
+	SimpleNode(result_, type_, left_, right_, unibangs),
+	divType(*div->lexerInfo == "sdiv"? DivType::Sdiv : DivType::Udiv),
+	exact(exact_ != nullptr) {
+		delete exact_;
+		delete div;
 	}
 
 // RemNode
 
 	RemNode::RemNode(ASTNode *result_, ASTNode *rem, ASTNode *exact_, ASTNode *type_, ASTNode *left_, ASTNode *right_,
-	                 ASTNode *unibangs): SimpleNode(result_, type_, left_, right_, unibangs) {
-		Deleter deleter(exact_, rem);
-		exact = bool(exact_);
-		remType = *rem->lexerInfo == "srem"? RemType::Srem : RemType::Urem;
+	                 ASTNode *unibangs):
+	SimpleNode(result_, type_, left_, right_, unibangs),
+	remType(*rem->lexerInfo == "srem"? RemType::Srem : RemType::Urem),
+	exact(exact_ != nullptr) {
+		delete exact_;
+		delete rem;
 	}
 
 // LogicNode
 
-	LogicNode::LogicNode(ASTNode *result_, ASTNode *logic_type, ASTNode *left_, ASTNode *right_, ASTNode *unibangs) {
+	LogicNode::LogicNode(ASTNode *result_, ASTNode *logic_type, ASTNode *left_, ASTNode *right_, ASTNode *unibangs):
+	logicType(logic_inv_map.at(*logic_type->lexerInfo)), type(left->type) {
 		Deleter deleter(unibangs, result_, logic_type, left_, right_);
 		handleUnibangs(unibangs);
-		result    = result_->extracted();
-		logicType = logic_inv_map.at(*logic_type->lexerInfo);
-		left      = Constant::make(left_)->convert();
-		right     = Constant::make(right_, left->type)->convert();
-		type      = left->type;
+		result = result_->extracted();
+		left   = Constant::make(left_)->convert();
+		right  = Constant::make(right_, left->type)->convert();
 	}
 
-	LogicNode::LogicNode(const std::string *result_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
+	LogicNode::LogicNode(const std::string *result_, LogicType logic_type, const ConstantPtr &left_,
+	                     const ConstantPtr &right_):
 	logicType(logic_type), left(left_->convert()), right(right_->convert()), type(left->type) {
 		result = result_;
 	}
 
-	LogicNode::LogicNode(const OperandPtr &operand_, LogicType logic_type, ConstantPtr left_, ConstantPtr right_):
+	LogicNode::LogicNode(const OperandPtr &operand_, LogicType logic_type, const ConstantPtr &left_,
+	                     const ConstantPtr &right_):
 	logicType(logic_type), left(left_->convert()), right(right_->convert()), type(left->type) {
 		operand = operand_;
 	}
@@ -1018,10 +1019,12 @@ namespace LL2X {
 // ShrNode
 
 	ShrNode::ShrNode(ASTNode *result_, ASTNode *shr, ASTNode *exact_, ASTNode *type_, ASTNode *left_, ASTNode *right_,
-	                 ASTNode *unibangs): SimpleNode(result_, type_, left_, right_, unibangs) {
-		Deleter deleter(exact_, shr);
-		exact = bool(exact_);
-		shrType = *shr->lexerInfo == "lshr"? ShrType::Lshr : ShrType::Ashr;
+	                 ASTNode *unibangs):
+	SimpleNode(result_, type_, left_, right_, unibangs),
+	shrType(*shr->lexerInfo == "lshr"? ShrType::Lshr : ShrType::Ashr),
+	exact(exact_ != nullptr) {
+		delete exact_;
+		delete shr;
 	}
 
 // FMathNode
@@ -1059,15 +1062,15 @@ namespace LL2X {
 
 // SwitchNode
 
-	SwitchNode::SwitchNode(ASTNode *type_, ASTNode *value_, ASTNode *label_, ASTNode *table_, ASTNode *unibangs) {
+	SwitchNode::SwitchNode(ASTNode *type_, ASTNode *value_, ASTNode *label_, ASTNode *table_, ASTNode *unibangs):
+	label(label_->extracted()) {
 		Deleter deleter(unibangs, type_, value_, label_, table_);
 		handleUnibangs(unibangs);
 		type = getType(type_);
 		value = getValue(value_);
-		label = label_->extracted();
 		table.reserve(table_->size());
 		for (ASTNode *comma: *table_)
-			table.push_back({getType(comma->at(0)), getValue(comma->at(1)), comma->at(2)->extracted()});
+			table.emplace_back(getType(comma->at(0)), getValue(comma->at(1)), comma->at(2)->extracted());
 	}
 
 	std::string SwitchNode::debugExtra() const {
@@ -1106,7 +1109,7 @@ namespace LL2X {
 		std::stringstream out;
 		out << "\e[34m%" << *result << " \e[39;2m= \e[22;91mextractvalue\e[39m " << *aggregateType << " "
 		    << *aggregateValue;
-		for (int decimal: decimals)
+		for (const auto decimal: decimals)
 			out << "\e[2m,\e[0m " << decimal;
 		return out.str();
 	}
@@ -1130,7 +1133,7 @@ namespace LL2X {
 		std::stringstream out;
 		out << "\e[91minsertvalue\e[0m " << *aggregateType << " " << *aggregateValue << "\e[2m,\e[0m " << *type << " "
 		    << *value;
-		for (int decimal: decimals)
+		for (const auto decimal: decimals)
 			out << "\e[2m,\e[0m " << decimal;
 		return out.str();
 	}
@@ -1177,23 +1180,23 @@ namespace LL2X {
 		{"umin", Op::Umin}, {"fadd", Op::Fadd}, {"fsub", Op::Fsub}, {"fmax", Op::Fmax}, {"fmin", Op::Fmin},
 	};
 
-	AtomicrmwNode::AtomicrmwNode(ASTNode *result_, ASTNode *volatile__, ASTNode *op_, ASTNode *pointer_type,
+	AtomicrmwNode::AtomicrmwNode(ASTNode *result_, ASTNode *_volatile_, ASTNode *op_, ASTNode *pointer_type,
 	                             ASTNode *pointer_, ASTNode *type_, ASTNode *value_, ASTNode *syncscope_,
-	                             ASTNode *ordering_, ASTNode *align_, ASTNode *unibangs) {
-		Deleter
-		deleter(unibangs, volatile__, op_, pointer_type, pointer_, type_, value_, syncscope_, ordering_, align_);
+	                             ASTNode *ordering_, ASTNode *align_, ASTNode *unibangs):
+	opString(op_->lexerInfo) {
+		Deleter deleter(unibangs, _volatile_, op_, pointer_type, pointer_, type_, value_, syncscope_, ordering_,
+		                align_);
 		handleUnibangs(unibangs);
 		result = result_->extracted();
-		opString = op_->lexerInfo;
 		op = opMap.at(*opString);
 		pointerType = getType(pointer_type);
 		pointer = getValue(pointer_);
 		type = getType(type_);
 		value = getValue(value_);
-		if (syncscope_)
+		if (syncscope_ != nullptr)
 			syncscope = syncscope_->extracted();
-		volatile_ = bool(volatile__);
-		if (align_)
+		volatile_ = bool(_volatile_);
+		if (align_ != nullptr)
 			align = align_->atoi();
 		for (const std::pair<const Ordering, std::string> &pair: ordering_map)
 			if (*ordering_->lexerInfo == pair.second) {
@@ -1209,7 +1212,7 @@ namespace LL2X {
 			out << " \e[38;5;202mvolatile\e[39m";
 		out << " \e[91m" << *opString << "\e[39m " << *pointerType << ' ' << *pointer << "\e[2m,\e[22m " << *type << ' '
 		    << *value;
-		if (syncscope)
+		if (syncscope != nullptr)
 			out << " \e[34msyncscope\e[39;2m(\e[22m\"" << *syncscope << "\"\e[2m)\e[22m";
 		if (ordering != Ordering::None)
 			out << " \e[38;5;202m" << ordering_map.at(ordering) << "\e[39m";

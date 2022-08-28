@@ -3,14 +3,12 @@
 
 namespace LL2X {
 	void getFastmath(std::unordered_set<Fastmath> &flags, ASTNode *node, bool destroy) {
-		for (ASTNode *child: *node) {
-			for (const std::pair<const Fastmath, std::string> &pair: fastmath_map) {
+		for (ASTNode *child: *node)
+			for (const std::pair<const Fastmath, std::string> &pair: fastmath_map)
 				if (*child->lexerInfo == pair.second) {
 					flags.insert(pair.first);
 					break;
 				}
-			}
-		}
 
 		if (destroy)
 			delete node;
@@ -30,11 +28,11 @@ namespace LL2X {
 	}
 
 	void print(std::ostream &os, const char *left, const std::string *middle, const char *right) {
-		if (middle)
+		if (middle != nullptr)
 			os << left << *middle << right;
 	}
 
-	void print(std::ostream &os, const char *left, int n, const char *right) {
+	void print(std::ostream &os, const char *left, int64_t n, const char *right) {
 		if (n != -1)
 			os << left << n << right;
 	}

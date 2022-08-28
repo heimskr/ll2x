@@ -34,7 +34,7 @@ namespace LL2X {
 			const std::string *lexerInfo;
 			ASTNode *parent = nullptr;
 			std::list<ASTNode *> children;
-			int debugIndex = -1;
+			int64_t debugIndex = -1;
 
 			ASTNode(Parser &, int sym, const ASTLocation &loc, const char *info);
 			ASTNode(Parser &, int sym, const ASTLocation &loc, const std::string *info);
@@ -66,8 +66,8 @@ namespace LL2X {
 			ASTNode * setDebug(ASTNode *);
 			/** Concatenates the lexerInfo fields of every element of the children vector. */
 			std::string concatenate() const;
-			long atoi() const;
-			long atoi(int offset) const;
+			int64_t atoi() const;
+			int64_t atoi(int offset) const;
 			std::string unquote() const;
 			bool isType() const;
 			bool isValue() const;

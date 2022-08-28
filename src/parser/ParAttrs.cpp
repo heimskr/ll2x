@@ -1,15 +1,15 @@
 #include <sstream>
 
 #include "parser/ASTNode.h"
+#include "parser/Lexer.h"
 #include "parser/ParAttrs.h"
 #include "parser/Types.h"
-#include "parser/Lexer.h"
 
 namespace LL2X {
-	ParAttrs::ParAttrs() {}
+	ParAttrs::ParAttrs() = default;
 
-	ParAttrs::ParAttrs(const ParAttrs &source) {
-		attributes = source.attributes;
+	ParAttrs::ParAttrs(const ParAttrs &source):
+	attributes(source.attributes) {
 		if (source.byvalType)
 			byvalType = source.byvalType->copy();
 		align = source.align;
@@ -22,10 +22,10 @@ namespace LL2X {
 	ParAttrs::ParAttrs(const ASTNode &node) {
 		for (const ASTNode *child: node) {
 			if (child->symbol == LLVMTOK_DEREF) {
-				dereferenceable = atoi(child->at(0)->lexerInfo->c_str());
+				dereferenceable = child->at(0)->atoi();
 				orNull = *child->lexerInfo == "dereferenceable_or_null";
 			} else if (child->symbol == LLVMTOK_ALIGN) {
-				align = atoi(child->at(0)->lexerInfo->c_str());
+				align = child->at(0)->atoi();
 			} else
 				for (const std::pair<const ParAttr, std::string> &pair: parattr_map)
 					if (*child->lexerInfo == pair.second) {

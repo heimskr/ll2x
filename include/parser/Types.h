@@ -63,9 +63,9 @@ namespace LL2X {
 	};
 
 	struct AggregateType: Type {
-		virtual TypePtr extractType(std::list<int> indices) const = 0;
-		TypePtr extractType(const std::vector<int> &indices) const {
-			return extractType(std::list<int>(indices.begin(), indices.end()));
+		virtual TypePtr extractType(std::list<int64_t> indices) const = 0;
+		TypePtr extractType(const std::vector<int64_t> &indices) const {
+			return extractType(std::list<int64_t>(indices.begin(), indices.end()));
 		}
 	};
 
@@ -84,7 +84,7 @@ namespace LL2X {
 		TypePtr copy() const override { return std::make_shared<ArrayType>(count, subtype->copy()); }
 		int width() const override { return count * subtype->width(); }
 		int alignment() const override { return subtype->alignment(); }
-		TypePtr extractType(std::list<int>) const override { return subtype->copy(); }
+		TypePtr extractType(std::list<int64_t>) const override { return subtype->copy(); }
 		bool operator==(const Type &) const override;
 	};
 
@@ -153,21 +153,23 @@ namespace LL2X {
 		std::map<int64_t, int64_t> paddingMap;
 		std::shared_ptr<StructType> paddedChild;
 		static std::unordered_map<std::string, std::shared_ptr<StructType>> knownStructs;
-		TypeType typeType() const override { return TypeType::Struct; }
 		const std::string *name;
 		StructForm form = StructForm::Struct;
 		StructShape shape = StructShape::Default;
 		std::shared_ptr<StructNode> node;
+
 		StructType(const std::string *name_, StructForm form_ = StructForm::Struct,
 		           StructShape shape_ = StructShape::Default);
-		StructType(std::shared_ptr<StructNode>);
+		StructType(const std::shared_ptr<StructNode> &);
 		StructType(const StructNode *);
+
+		TypeType typeType() const override { return TypeType::Struct; }
 		operator std::string() override;
 		std::string toString() override;
 		TypePtr copy() const override;
 		int width() const override;
 		int alignment() const override;
-		TypePtr extractType(std::list<int> indices) const override;
+		TypePtr extractType(std::list<int64_t> indices) const override;
 		std::string barename() const;
 		bool operator==(const Type &) const override;
 		/** Assumes that each member in a struct has a width that's a multiple of 8 bits. */

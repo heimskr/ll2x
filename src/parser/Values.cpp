@@ -8,12 +8,11 @@
 #include "compiler/Variable.h"
 #include "parser/ASTNode.h"
 #include "parser/Constant.h"
+#include "parser/Lexer.h"
 #include "parser/Parser.h"
+#include "parser/StringSet.h"
 #include "parser/Types.h"
 #include "parser/Values.h"
-#include "parser/Lexer.h"
-#include "parser/StringSet.h"
-#include "parser/Constant.h"
 #include "util/Deleter.h"
 #include "util/Util.h"
 
@@ -48,8 +47,8 @@ namespace LL2X {
 		return valueType() == ValueType::Getelementptr;
 	}
 
-	int Value::intValue(bool can_warn) {
-		long val = longValue();
+	int Value::intValue(bool can_warn) const {
+		const int64_t val = longValue();
 		if (can_warn && (INT_MAX < val || val < INT_MIN)) {
 #ifdef THROW_ON_OVERFLOW
 			throw std::runtime_error("Value " + std::to_string(val) + " is outside the integer range");
@@ -61,7 +60,7 @@ namespace LL2X {
 	}
 
 	bool Value::overflows() const {
-		const long long_value = longValue();
+		const int64_t long_value = longValue();
 		return INT_MAX < long_value || long_value < INT_MIN;
 	}
 
@@ -71,13 +70,13 @@ namespace LL2X {
 
 	VectorValue::VectorValue(const ASTNode *node) {
 		for (auto iter = node->cbegin(); iter != node->cend(); ++iter)
-			values.push_back({getType((*iter)->at(0)), getValue((*iter)->at(1))});
+			values.emplace_back(getType((*iter)->at(0)), getValue((*iter)->at(1)));
 	}
 
 	ValuePtr VectorValue::copy() const {
-		std::vector<std::pair<TypePtr, ValuePtr>> newvec {};
+		std::vector<std::pair<TypePtr, ValuePtr>> newvec;
 		for (const std::pair<TypePtr, ValuePtr> &pair: values)
-			newvec.push_back({pair.first->copy(), pair.second->copy()});
+			newvec.emplace_back(pair.first->copy(), pair.second->copy());
 		return std::make_shared<VectorValue>(newvec);
 	}
 
@@ -162,7 +161,11 @@ namespace LL2X {
 
 	GetelementptrValue::GetelementptrValue(bool inbounds_, TypePtr type_, TypePtr ptr_type, ValuePtr variable_,
 	                                       const decltype(decimals) &decimals_):
-		inbounds(inbounds_), type(type_), ptrType(ptr_type), variable(variable_), decimals(decimals_) {}
+		inbounds(inbounds_),
+		type(std::move(type_)),
+		ptrType(std::move(ptr_type)),
+		variable(std::move(variable_)),
+		decimals(decimals_) {}
 
 	GetelementptrValue::GetelementptrValue(ASTNode *inbounds_, ASTNode *type_, ASTNode *ptr_type, ASTNode *variable_,
 	                                       ASTNode *decimal_list) {
@@ -173,7 +176,7 @@ namespace LL2X {
 			const ASTNode *comma = *iter;
 			const ASTNode *inttype = comma->at(0);
 			const ASTNode *decimal = comma->at(1);
-			decimals.push_back({atoi(inttype->lexerInfo->substr(1).c_str()), atol(decimal->lexerInfo->c_str())});
+			decimals.emplace_back(inttype->atoi(1), decimal->atoi());
 		}
 
 		delete type_;
@@ -181,14 +184,13 @@ namespace LL2X {
 		delete variable_;
 		delete decimal_list;
 
-		if (inbounds_) {
+		if (inbounds_ != nullptr) {
 			inbounds = true;
 			delete inbounds_;
 		}
 	}
 
-	GetelementptrValue::GetelementptrValue(const ASTNode *node) {
-		inbounds = node->size() == 5;
+	GetelementptrValue::GetelementptrValue(const ASTNode *node): inbounds(node->size() == 5) {
 		type = getType(node->at(0));
 		ptrType = getType(node->at(1));
 		variable = getValue(node->at(2));
@@ -197,7 +199,7 @@ namespace LL2X {
 			const ASTNode *comma = *iter;
 			const ASTNode *inttype = comma->at(0);
 			const ASTNode *decimal = comma->at(1);
-			decimals.push_back({atoi(inttype->lexerInfo->substr(1).c_str()), atol(decimal->lexerInfo->c_str())});
+			decimals.emplace_back(inttype->atoi(1), decimal->atoi());
 		}
 	}
 
@@ -212,7 +214,7 @@ namespace LL2X {
 			if (std::holds_alternative<Variable::ID>(decimal.second))
 				out << *std::get<Variable::ID>(decimal.second);
 			else
-				out << std::get<long>(decimal.second);
+				out << std::get<int64_t>(decimal.second);
 			out << "\e[39m";
 		}
 		out << "\e[2m)\e[22m";
@@ -230,7 +232,7 @@ namespace LL2X {
 			if (std::holds_alternative<Variable::ID>(decimal.second))
 				out << *std::get<Variable::ID>(decimal.second);
 			else
-				out << std::get<long>(decimal.second);
+				out << std::get<int64_t>(decimal.second);
 		}
 		out << ')';
 		return out.str();
@@ -257,7 +259,7 @@ namespace LL2X {
 		return "icmp " + cond_map.at(cond) + " (" + left->toString() + ", " + right->toString() + ")";
 	}
 
-	std::shared_ptr<IcmpNode> IcmpValue::makeNode(VariablePtr variable) const {
+	std::shared_ptr<IcmpNode> IcmpValue::makeNode(const VariablePtr &variable) const {
 		return IcmpNode::make(Operand::make(variable), cond, left, right);
 	}
 
@@ -282,21 +284,20 @@ namespace LL2X {
 		return logic_map.at(type) + " (" + left->toString() + ", " + right->toString() + ')';
 	}
 
-	std::shared_ptr<LogicNode> LogicValue::makeNode(VariablePtr variable) const {
+	std::shared_ptr<LogicNode> LogicValue::makeNode(const VariablePtr &variable) const {
 		return LogicNode::make(Operand::make(variable), type, left, right);
 	}
 
 // StructValue
 
-	StructValue::StructValue(const ASTNode *node) {
-		packed = *node->lexerInfo == "<";
+	StructValue::StructValue(const ASTNode *node): packed(*node->lexerInfo == "<") {
 		for (const ASTNode *sub: *node->at(0))
 			constants.push_back(std::make_shared<Constant>(sub));
 	}
 
 	ValuePtr StructValue::copy() const {
 		std::vector<std::shared_ptr<Constant>> constants_copy;
-		for (ConstantPtr constant: constants)
+		for (const ConstantPtr &constant: constants)
 			constants_copy.push_back(constant->copy());
 		return std::make_shared<StructValue>(std::move(constants_copy), packed);
 	}
@@ -343,7 +344,7 @@ namespace LL2X {
 	ValuePtr ArrayValue::copy() const {
 		std::vector<ConstantPtr> constants_copy;
 		constants_copy.reserve(constants.size());
-		for (ConstantPtr constant: constants)
+		for (const ConstantPtr &constant: constants)
 			constants_copy.push_back(constant->copy());
 		return std::make_shared<ArrayValue>(constants_copy);
 	}
@@ -379,7 +380,8 @@ namespace LL2X {
 		for (size_t i = 0, max = value->size(); i < max; ++i) {
 			const char ch0 = (*value)[i];
 			if (i < max - 2) {
-				const char ch1 = (*value)[i + 1], ch2 = (*value)[i + 2];
+				const char ch1 = (*value)[i + 1];
+				const char ch2 = (*value)[i + 2];
 				if (ch0 == '\\' && Util::isHex(ch1) && Util::isHex(ch2)) {
 					out += std::string("\\x") + ch1 + ch2;
 					i += 2;
@@ -394,7 +396,7 @@ namespace LL2X {
 	ValuePtr getValue(ASTNode *node) {
 		switch (node->symbol) {
 			case LLVMTOK_FLOATING:        return std::make_shared<DoubleValue>(node);
-			case LLVMTOK_DECIMAL:         return std::make_shared<IntValue>(node);
+			case LLVMTOK_DECIMAL:
 			case LLVMTOK_HEXADECIMAL:     return std::make_shared<IntValue>(node);
 			case LLVMTOK_BOOL:            return std::make_shared<BoolValue>(node);
 			case LLVM_VECTOR:             return std::make_shared<VectorValue>(node);

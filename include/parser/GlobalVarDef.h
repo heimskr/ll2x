@@ -14,7 +14,7 @@ namespace LL2X {
 		DllStorageClass dllStorageClass = DllStorageClass::None;
 		ThreadLocal threadLocal = ThreadLocal::None;
 		UnnamedAddr unnamedAddr = UnnamedAddr::Default;
-		int addrspace = -1;
+		int64_t addrspace = -1;
 		bool externallyInitialized = false;
 		bool isConstant = false; // Global if false, constant if true
 

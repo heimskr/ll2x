@@ -15,13 +15,11 @@ namespace LL2X {
 	                               N _retattrs, N type, N function_name, N function_args, N unnamed_addr, N _fnattrs,
 	                               N _section, N _comdat, N _align, N _personality, N debug):
 	ASTNode(llvmParser, LLVM_FUNCTION_HEADER, function_name->lexerInfo),
-	arguments(dynamic_cast<FunctionArgs *>(function_args)) {
+	name(function_name->extracted()), arguments(dynamic_cast<FunctionArgs *>(function_args)) {
 		Deleter deleter(_linkage, _preemption, _visibility, _dll_storage_class, _cconv, _retattrs, debug, type,
 		                unnamed_addr, _fnattrs, _section, _comdat, _align, _personality, function_name);
 
-		name = function_name->extracted();
-
-		if (_linkage) {
+		if (_linkage != nullptr) {
 			const std::string &link = *_linkage->lexerInfo;
 			for (const std::pair<const Linkage, std::string> &pair: linkage_map)
 				if (link == pair.second) {
@@ -30,7 +28,7 @@ namespace LL2X {
 				}
 		}
 
-		if (_preemption) {
+		if (_preemption != nullptr) {
 			if (*_preemption->lexerInfo == "dso_preemptable")
 				preemption = Preemption::DsoPreemptable;
 			else if (*_preemption->lexerInfo == "dso_local")
@@ -38,17 +36,17 @@ namespace LL2X {
 			else throw std::runtime_error("Invalid preemption: " + *_preemption->lexerInfo);
 		}
 
-		if (_visibility) {
+		if (_visibility != nullptr) {
 			visibility = *_visibility->lexerInfo == "hidden"? Visibility::Hidden :
 				(*_visibility->lexerInfo == "protected"? Visibility::Protected : Visibility::Default);
 		}
 
-		if (_dll_storage_class) {
+		if (_dll_storage_class != nullptr) {
 			dllStorageClass = *_dll_storage_class->lexerInfo == "dllimport"?
 				DllStorageClass::Import : DllStorageClass::Export;
 		}
 
-		if (_cconv) {
+		if (_cconv != nullptr) {
 			const std::string &cc = *_cconv->lexerInfo;
 			for (const std::pair<const CConv, std::string> &pair: cconv_map)
 				if (cc == pair.second) {
@@ -57,7 +55,7 @@ namespace LL2X {
 				}
 		}
 
-		if (_retattrs) {
+		if (_retattrs != nullptr) {
 			for (ASTNode *retattr: *_retattrs) {
 				const std::string *str = retattr->lexerInfo;
 				if (retattr->symbol == LLVMTOK_RETATTR) {
@@ -68,11 +66,14 @@ namespace LL2X {
 					else if (*str == "nonnull") retattrs.insert(RetAttr::Nonnull);
 					else throw std::runtime_error("Unrecognized retattr: " + *str);
 				} else if (retattr->symbol == LLVMTOK_DEREF) {
-					Deref new_deref;
-					if (*str == "dereferenceable") new_deref = Deref::Dereferenceable;
-					else if (*str == "dereferenceable_or_null") new_deref = Deref::DereferenceableOrNull;
-					else throw std::runtime_error("Unrecognized deref: " + *str);
-					int bytes = retattr->at(0)->atoi();
+					Deref new_deref = Deref::Default;
+					if (*str == "dereferenceable")
+						new_deref = Deref::Dereferenceable;
+					else if (*str == "dereferenceable_or_null")
+						new_deref = Deref::DereferenceableOrNull;
+					else
+						throw std::runtime_error("Unrecognized deref: " + *str);
+					int64_t bytes = retattr->at(0)->atoi();
 					if (deref == Deref::DereferenceableOrNull && new_deref == Deref::Dereferenceable) {
 						// If dereferenceable_or_null(x) -> dereferenceable(y), set bytes to max(x, y).
 						if (dereferenceableBytes < bytes)
@@ -86,12 +87,12 @@ namespace LL2X {
 			}
 		}
 
-		if (debug)
+		if (debug != nullptr)
 			debugIndex = debug->front()->atoi();
 
 		returnType = getType(type);
 
-		if (unnamed_addr) {
+		if (unnamed_addr != nullptr) {
 			const std::string &uatype = *unnamed_addr->lexerInfo;
 			if (uatype == "local_unnamed_addr")
 				unnamedAddr = UnnamedAddr::LocalUnnamed;
@@ -114,20 +115,20 @@ namespace LL2X {
 		else
 			throw std::runtime_error("Bad symbol for fnattrs node: " + std::string(parser->getName(_fnattrs->symbol)));
 
-		if (_section)
+		if (_section != nullptr)
 			section = _section->at(0)->extracted();
 
-		if (_comdat) {
+		if (_comdat != nullptr) {
 			if (_comdat->empty())
 				comdat = name;
 			else
 				comdat = _comdat->at(0)->lexerInfo;
 		}
 
-		if (_align)
+		if (_align != nullptr)
 			align = _align->at(0)->atoi();
 
-		if (_personality)
+		if (_personality != nullptr)
 			personality = std::make_shared<Constant>(_personality->at(0));
 	}
 
@@ -154,7 +155,7 @@ namespace LL2X {
 			out << std::string(*arg.type);
 			for (ParAttr parattr: arg.parattrs)
 				out << " " << parattr_map.at(parattr);
-			if (arg.originalName)
+			if (arg.originalName != nullptr)
 				out << " " << *arg.originalName;
 		}
 		if (arguments->ellipsis)

@@ -1,15 +1,15 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-#include "compiler/x86_64.h"
 #include "compiler/PaddedStructs.h"
+#include "compiler/x86_64.h"
 #include "parser/ASTNode.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
-#include "parser/Types.h"
 #include "parser/StructNode.h"
+#include "parser/Types.h"
 
 namespace LL2X {
 	bool Type::isInt() const {
@@ -44,10 +44,13 @@ namespace LL2X {
 	bool ArrayType::operator==(const Type &other) const {
 		if (this == &other)
 			return true;
+
 		if (other.typeType() != TypeType::Array)
 			return false;
-		if (const ArrayType *otherArray = dynamic_cast<const ArrayType *>(&other))
+
+		if (const auto *otherArray = dynamic_cast<const ArrayType *>(&other))
 			return count == otherArray->count && *otherArray->subtype == *subtype;
+
 		return false;
 	}
 
@@ -62,10 +65,13 @@ namespace LL2X {
 	bool VectorType::operator==(const Type &other) const {
 		if (this == &other)
 			return true;
+
 		if (other.typeType() != TypeType::Vector)
 			return false;
-		if (const VectorType *otherVector = dynamic_cast<const VectorType *>(&other))
+
+		if (const auto *otherVector = dynamic_cast<const VectorType *>(&other))
 			return count == otherVector->count && *otherVector->subtype == *subtype;
+
 		return false;
 	}
 
@@ -86,12 +92,24 @@ namespace LL2X {
 	}
 
 	FloatType::Type FloatType::getType(const std::string &str) {
-		if (str == "half") return FloatType::Type::Half;
-		else if (str == "float") return FloatType::Type::Float;
-		else if (str == "double") return FloatType::Type::Double;
-		else if (str == "fp128") return FloatType::Type::FP128;
-		else if (str == "x86_fp80") return FloatType::Type::x86_FP80;
-		else if (str == "ppc_fp128") return FloatType::Type::PPC_FP128;
+		if (str == "half")
+			return FloatType::Type::Half;
+
+		if (str == "float")
+			return FloatType::Type::Float;
+
+		if (str == "double")
+			return FloatType::Type::Double;
+
+		if (str == "fp128")
+			return FloatType::Type::FP128;
+
+		if (str == "x86_fp80")
+			return FloatType::Type::x86_FP80;
+
+		if (str == "ppc_fp128")
+			return FloatType::Type::PPC_FP128;
+
 		throw std::invalid_argument("Unknown float type: " + str);
 	}
 
@@ -142,7 +160,7 @@ namespace LL2X {
 
 		if (!argumentTypes.empty()) {
 			for (size_t i = 0, l = argumentTypes.size(); i < l; ++i) {
-				if (i)
+				if (i != 0)
 					out << ", ";
 				out << std::string(*argumentTypes.at(i));
 			}
@@ -166,7 +184,7 @@ namespace LL2X {
 
 		if (!argumentTypes.empty()) {
 			for (size_t i = 0, l = argumentTypes.size(); i < l; ++i) {
-				if (i)
+				if (i != 0)
 					out << ", ";
 				out << argumentTypes.at(i)->toString();
 			}
@@ -183,7 +201,7 @@ namespace LL2X {
 
 	TypePtr FunctionType::copy() const {
 		std::vector<TypePtr> argument_types {};
-		for (TypePtr argument_type: argumentTypes)
+		for (const TypePtr &argument_type: argumentTypes)
 			argument_types.push_back(argument_type->copy());
 		return std::make_shared<FunctionType>(returnType->copy(), argument_types);
 	}
@@ -198,7 +216,7 @@ namespace LL2X {
 			return true;
 		if (other.typeType() != TypeType::Function)
 			return false;
-		const FunctionType &otherFunction = dynamic_cast<const FunctionType &>(other);
+		const auto &otherFunction = dynamic_cast<const FunctionType &>(other);
 		if (ellipsis != otherFunction.ellipsis || argumentTypes.size() != otherFunction.argumentTypes.size())
 			return false;
 		if (*returnType != *otherFunction.returnType)
@@ -213,7 +231,7 @@ namespace LL2X {
 	bool FunctionType::operator!=(const Type &other) const {
 		if (other.typeType() != TypeType::Function)
 			return true;
-		const FunctionType &otherFunction = dynamic_cast<const FunctionType &>(other);
+		const auto &otherFunction = dynamic_cast<const FunctionType &>(other);
 		if (ellipsis != otherFunction.ellipsis || argumentTypes.size() != otherFunction.argumentTypes.size())
 			return true;
 		if (*returnType != *otherFunction.returnType)
@@ -225,12 +243,12 @@ namespace LL2X {
 		return false;
 	}
 
-	std::unordered_map<std::string, std::shared_ptr<StructType>> StructType::knownStructs = {};
+	std::unordered_map<std::string, std::shared_ptr<StructType>> StructType::knownStructs;
 
 	StructType::StructType(const std::string *name_, StructForm form_, StructShape shape_):
 		name(name_), form(form_), shape(shape_) {}
 
-	StructType::StructType(std::shared_ptr<StructNode> node_):
+	StructType::StructType(const std::shared_ptr<StructNode> &node_):
 		name(node_->name), form(node_->form), shape(node_->shape), node(node_) {}
 
 	StructType::StructType(const StructNode *node_): StructType(std::shared_ptr<StructNode>(node_->copy())) {}
@@ -252,7 +270,11 @@ namespace LL2X {
 	}
 
 	TypePtr StructType::copy() const {
-		auto out = node? std::make_shared<StructType>(node) : std::make_shared<StructType>(name, form, shape);
+		std::shared_ptr<StructType> out;
+		if (node != nullptr)
+			out = std::make_shared<StructType>(node);
+		else
+			out = std::make_shared<StructType>(name, form, shape);
 		out->padded = padded;
 		out->paddingMap = paddingMap;
 		out->paddedChild = paddedChild;
@@ -296,7 +318,7 @@ namespace LL2X {
 		return largest;
 	}
 
-	TypePtr StructType::extractType(std::list<int> indices) const {
+	TypePtr StructType::extractType(std::list<int64_t> indices) const {
 		TypePtr type = node->types.at(indices.front())->copy();
 		if (indices.size() == 1)
 			return type;
@@ -320,14 +342,19 @@ namespace LL2X {
 	bool StructType::operator==(const Type &other) const {
 		if (this == &other)
 			return true;
+
 		// TODO: is this correct?
 		if (other.typeType() != TypeType::Struct)
 			return false;
-		const StructType &otherstruct = dynamic_cast<const StructType &>(other);
+
+		const auto &otherstruct = dynamic_cast<const StructType &>(other);
+
 		if (form != otherstruct.form || shape != otherstruct.shape)
 			return false;
-		if ((name && name != otherstruct.name) || (!name && otherstruct.name))
+
+		if ((name != nullptr && name != otherstruct.name) || (name == nullptr && otherstruct.name != nullptr))
 			return false;
+
 		if (node) {
 			if (!otherstruct.node || node->types.size() != otherstruct.node->types.size())
 				return false;
@@ -335,6 +362,7 @@ namespace LL2X {
 				if (*node->types[i] != *otherstruct.node->types[i])
 					return false;
 		}
+
 		return true;
 	}
 
@@ -350,23 +378,25 @@ namespace LL2X {
 
 		out->node = std::make_shared<StructNode>(StructShape::Packed);
 
-		int largest = 1, current_width = 0, padding_items_added = 0;
+		int64_t largest = 1;
+		int64_t current_width = 0;
+		int64_t padding_items_added = 0;
 		for (TypePtr &subtype: node->types)
-			largest = std::max(largest, subtype->width());
+			largest = std::max(largest, static_cast<int64_t>(subtype->width()));
 
 		for (size_t i = 0; i < node->types.size(); ++i) {
 			const bool is_last = i == node->types.size() - 1;
 			TypePtr &subtype = node->types[i];
-			const int type_width = subtype->width();
+			const int64_t type_width = subtype->width();
 			current_width += type_width;
-			const int next_width = is_last? largest : node->types[i + 1]->width();
+			const int64_t next_width = is_last? largest : node->types[i + 1]->width();
 			if (subtype->typeType() == TypeType::Struct)
 				out->node->types.push_back(dynamic_cast<StructType *>(subtype.get())->pad());
 			else
 				out->node->types.push_back(subtype->copy());
 			out->paddingMap.emplace(i, i + padding_items_added);
-			if (next_width) {
-				int remaining = (next_width - current_width % next_width) % next_width;
+			if (next_width != 0) {
+				int64_t remaining = (next_width - current_width % next_width) % next_width;
 				while (0 < remaining) {
 					out->node->types.push_back(std::make_shared<IntType>(8));
 					++padding_items_added;
@@ -391,12 +421,12 @@ namespace LL2X {
 	}
 
 	TypePtr getType(const ASTNode *node) {
-		if (!node)
+		if (node == nullptr)
 			throw std::runtime_error("node is null in getType");
 
 		switch (node->symbol) {
 			case LLVM_FUNCTIONTYPE: return std::make_shared<FunctionType>(node);
-			case LLVMTOK_INTTYPE:   return std::make_shared<IntType>(atoi(node->lexerInfo->substr(1).c_str()));
+			case LLVMTOK_INTTYPE:   return std::make_shared<IntType>(node->atoi(1));
 			case LLVMTOK_FLOATTYPE: return std::make_shared<FloatType>(FloatType::getType(*node->lexerInfo));
 			case LLVM_POINTERTYPE:  return std::make_shared<PointerType>(getType(node->at(0)));
 			case LLVMTOK_VOID:      return std::make_shared<VoidType>();
@@ -406,9 +436,9 @@ namespace LL2X {
 			case LLVM_STRUCTDEF:    return std::make_shared<StructType>(dynamic_cast<const StructNode *>(node));
 			case LLVMTOK_GVAR:      return std::make_shared<GlobalTemporaryType>(node);
 			case LLVM_ARRAYTYPE:
-				return std::make_shared<ArrayType>(atoi(node->at(0)->lexerInfo->c_str()),getType(node->at(1)));
+				return std::make_shared<ArrayType>(node->at(0)->atoi(), getType(node->at(1)));
 			case LLVM_VECTORTYPE:
-				return std::make_shared<VectorType>(atoi(node->at(0)->lexerInfo->c_str()),getType(node->at(1)));
+				return std::make_shared<VectorType>(node->at(0)->atoi(), getType(node->at(1)));
 			default:
 				throw std::invalid_argument("Couldn't create Type from a node with symbol " +
 				                            std::string(llvmParser.getName(node->symbol)) + " (" +

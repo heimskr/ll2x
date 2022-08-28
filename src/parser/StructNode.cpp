@@ -2,9 +2,9 @@
 #include <sstream>
 
 #include "parser/Lexer.h"
-#include "parser/StructNode.h"
-#include "parser/StringSet.h"
 #include "parser/Parser.h"
+#include "parser/StringSet.h"
+#include "parser/StructNode.h"
 
 namespace LL2X {
 	StructNode::StructNode(std::initializer_list<TypePtr>  types_, StructShape shape_):
@@ -14,7 +14,7 @@ namespace LL2X {
 		ASTNode(llvmParser, LLVM_STRUCTDEF, ""), name(StringSet::intern("[anon]")), shape(shape_), types(types_) {}
 
 	StructNode::StructNode(StructShape shape_):
-		ASTNode(llvmParser, LLVM_STRUCTDEF, ""), name(StringSet::intern("[anon]")), shape(shape_), types{} {}
+		ASTNode(llvmParser, LLVM_STRUCTDEF, ""), name(StringSet::intern("[anon]")), shape(shape_) {}
 
 	StructNode::StructNode(StructShape shape_, ASTNode *left, ASTNode *types_):
 	ASTNode(llvmParser, LLVM_STRUCTDEF, left->lexerInfo), name(StringSet::intern(left->extractName())), shape(shape_) {
@@ -32,7 +32,7 @@ namespace LL2X {
 	}
 
 	void StructNode::addTypes(ASTNode *types_) {
-		if (types_) {
+		if (types_ != nullptr) {
 			types.reserve(types_->size());
 			for (const ASTNode *typenode: *types_)
 				types.push_back(getType(typenode));
@@ -43,7 +43,8 @@ namespace LL2X {
 	std::string StructNode::typeString() const {
 		std::stringstream out;
 		out << "\e[2m{\e[0m";
-		auto begin = types.begin(), end = types.end();
+		auto begin = types.begin();
+		auto end = types.end();
 		for (auto iter = begin; iter != end; ++iter) {
 			if (iter != begin)
 				out << "\e[2m, \e[0m";
@@ -55,14 +56,15 @@ namespace LL2X {
 
 	std::string StructNode::typeStringPlain() const {
 		std::stringstream out;
-		out << "{";
-		auto begin = types.begin(), end = types.end();
+		out << '{';
+		auto begin = types.begin();
+		auto end   = types.end();
 		for (auto iter = begin; iter != end; ++iter) {
 			if (iter != begin)
 				out << ", ";
 			out << (*iter)->toString();
 		}
-		out << "}";
+		out << '}';
 		return out.str();
 	}
 
@@ -82,7 +84,7 @@ namespace LL2X {
 	std::shared_ptr<StructNode> StructNode::copy() const {
 		std::vector<TypePtr> type_copies;
 		type_copies.reserve(types.size());
-		for (TypePtr type: types)
+		for (const TypePtr &type: types)
 			type_copies.push_back(type->copy());
 		std::shared_ptr<StructNode> copied = std::make_shared<StructNode>(type_copies, shape);
 		copied->form = form;

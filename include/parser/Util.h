@@ -16,7 +16,7 @@ namespace LL2X {
 	/** Prints three strings if the middle isn't null. */
 	void print(std::ostream &, const char *, const std::string *, const char * = "");
 	/** Prints two strings and an int if the int isn't -1. */
-	void print(std::ostream &, const char *, int, const char * = "");
+	void print(std::ostream &, const char *, int64_t, const char * = "");
 
 	template <typename Cont>
 	bool equalTypes(const Cont &one, const Cont &two) {

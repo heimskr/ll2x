@@ -2,18 +2,17 @@
 
 #include "parser/AliasDef.h"
 #include "parser/Constant.h"
-#include "parser/Parser.h"
 #include "parser/Lexer.h"
+#include "parser/Parser.h"
 
 namespace LL2X {
 	AliasDef::AliasDef(ASTNode *gvar, ASTNode *linkage_, ASTNode *preemption_, ASTNode *visibility_,
 	                   ASTNode *dll_storage_class, ASTNode *thread_local_, ASTNode *unnamed_addr, ASTNode *type_,
 	                   ASTNode *value_node_):
-	ASTNode(llvmParser, LLVM_ALIAS_DEF, gvar->lexerInfo) {
-		name = gvar->lexerInfo;
+	ASTNode(llvmParser, LLVM_ALIAS_DEF, gvar->lexerInfo), name(gvar->lexerInfo) {
 		delete gvar;
 
-		if (linkage_) {
+		if (linkage_ != nullptr) {
 			const std::string &link = *linkage_->lexerInfo;
 			for (const std::pair<const Linkage, std::string> &pair: linkage_map) {
 				if (link == pair.second) {
@@ -24,7 +23,7 @@ namespace LL2X {
 			delete linkage_;
 		}
 
-		if (preemption_) {
+		if (preemption_ != nullptr) {
 			if (*preemption_->lexerInfo == "dso_preemptable")
 				preemption = Preemption::DsoPreemptable;
 			else if (*preemption_->lexerInfo == "dso_local")
@@ -34,19 +33,19 @@ namespace LL2X {
 			delete preemption_;
 		}
 
-		if (visibility_) {
+		if (visibility_ != nullptr) {
 			visibility = *visibility_->lexerInfo == "hidden"? Visibility::Hidden :
 				(*visibility_->lexerInfo == "protected"? Visibility::Protected : Visibility::Default);
 			delete visibility_;
 		}
 
-		if (dll_storage_class) {
+		if (dll_storage_class != nullptr) {
 			dllStorageClass = *dll_storage_class->lexerInfo == "dllimport"?
 				DllStorageClass::Import : DllStorageClass::Export;
 			delete dll_storage_class;
 		}
 
-		if (thread_local_) {
+		if (thread_local_ != nullptr) {
 			const std::string &tl = *thread_local_->at(0)->lexerInfo;
 			if (tl == "localdynamic")
 				threadLocal = ThreadLocal::LocalDynamic;
@@ -57,7 +56,7 @@ namespace LL2X {
 			delete thread_local_;
 		}
 
-		if (unnamed_addr) {
+		if (unnamed_addr != nullptr) {
 			if (*unnamed_addr->lexerInfo == "unnamed_addr")
 				unnamedAddr = UnnamedAddr::Unnamed;
 			else if (*unnamed_addr->lexerInfo == "local_unnamed_addr")
