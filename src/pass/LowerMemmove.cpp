@@ -24,13 +24,13 @@ namespace LL2X::Passes {
 				++iter;
 				continue;
 			}
-			CallNode *call = dynamic_cast<CallNode *>(llvm->node);
+			auto *call = dynamic_cast<CallNode *>(llvm->node);
 			if (!call->name->isGlobal()) {
 				++iter;
 				continue;
 			}
 			BasicBlockPtr block = instruction->parent.lock();
-			GlobalValue *global = dynamic_cast<GlobalValue *>(call->name.get());
+			auto *global = dynamic_cast<GlobalValue *>(call->name.get());
 			const std::string &name = *global->name;
 			if (name.substr(0, sizeof("llvm.memmove.") - 1) != "llvm.memmove.") {
 				++iter;

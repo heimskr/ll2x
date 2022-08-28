@@ -184,13 +184,13 @@ namespace LL2X::Passes {
 		}
 	}
 
-	int lowerMath(Function &function) {
+	size_t lowerMath(Function &function) {
 		Timer timer("LowerMath");
 		std::list<InstructionPtr> to_remove;
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm)
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr)
 				continue;
 
 			const NodeType type = llvm->node->nodeType();
@@ -199,19 +199,19 @@ namespace LL2X::Passes {
 			} else if (type == NodeType::Logic) {
 				lowerLogic(function, instruction, dynamic_cast<LogicNode *>(llvm->node));
 			} else if (type == NodeType::Div) {
-				DivNode *div = dynamic_cast<DivNode *>(llvm->node);
+				auto *div = dynamic_cast<DivNode *>(llvm->node);
 				if (div->divType == DivNode::DivType::Udiv)
 					lowerDiv(function, instruction, div, false, false);
 				else if (div->divType == DivNode::DivType::Sdiv)
 					lowerDiv(function, instruction, div, false, true);
 			} else if (type == NodeType::Rem) {
-				RemNode *rem = dynamic_cast<RemNode *>(llvm->node);
+				auto *rem = dynamic_cast<RemNode *>(llvm->node);
 				if (rem->remType == RemNode::RemType::Srem)
 					lowerDiv(function, instruction, rem, true, false);
 				else
 					lowerDiv(function, instruction, rem, true, true);
 			} else if (type == NodeType::Shr) {
-				ShrNode *shr = dynamic_cast<ShrNode *>(llvm->node);
+				auto *shr = dynamic_cast<ShrNode *>(llvm->node);
 				if (shr->shrType == ShrNode::ShrType::Ashr)
 					lowerNoncommutative<Sar>(function, instruction, shr);
 				else
@@ -222,7 +222,7 @@ namespace LL2X::Passes {
 			to_remove.push_back(instruction);
 		}
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return to_remove.size();

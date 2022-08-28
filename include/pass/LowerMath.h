@@ -11,7 +11,7 @@ namespace LL2X {
 
 namespace LL2X::Passes {
 	/** Lowers mathematical and logic instructions. */
-	int lowerMath(Function &);
+	size_t lowerMath(Function &);
 
 	void lowerMath(Function &, const std::shared_ptr<Instruction> &, BasicMathNode *);
 	void lowerMult(Function &, const std::shared_ptr<Instruction> &, BasicMathNode *);

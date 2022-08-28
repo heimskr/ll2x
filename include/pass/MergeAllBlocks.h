@@ -6,5 +6,5 @@ namespace LL2X {
 
 namespace LL2X::Passes {
 	/** Merges each terminal-free basic block with the basic block following it. */
-	void mergeAllBlocks(Function &);
+	size_t mergeAllBlocks(Function &);
 }

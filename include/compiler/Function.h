@@ -155,16 +155,13 @@ namespace LL2X {
 			std::optional<DJGraph> djGraph;
 
 			/** The number of random walks that have been performed on the control flow graph. */
-			int walkCount = 0;
+			size_t walkCount = 0;
 
 			/** The number of bytes reserved on the stack for variables and spills. */
-			int stackSize = 0;
+			int64_t stackSize = 0;
 
 			/** The number of bytes reserved on the stack for spills. */
-			int spillSize = 0;
-
-			/** The number of bytes pushed to the stack when InsertPrologue saves registers, including $fp and $sp. */
-			int initialPushedBytes = -1;
+			int64_t spillSize = 0;
 
 			/** Whether all blocks have been minimized to contain exactly one instruction each. */
 			bool blocksAreMinimized = false;
@@ -309,7 +306,8 @@ namespace LL2X {
 
 			/** Assigns or looks up a stack location for a given variable. The width and align parameters are in
 			 *  bytes. */
-			StackLocation & addToStack(const VariablePtr &, StackLocation::Purpose, int width = -1, int align = 1);
+			StackLocation & addToStack(const VariablePtr &, StackLocation::Purpose, int64_t width = -1,
+			                           int64_t align = 1);
 
 			/** Removes an instruction from the function. */
 			void remove(const InstructionPtr &);
@@ -411,10 +409,10 @@ namespace LL2X {
 			size_t replaceSimilarOperand(const std::shared_ptr<Operand> &, const std::shared_ptr<Operand> &);
 
 			void multiply(const InstructionPtr &anchor, const OperandPtr &, int64_t, bool reindex = true,
-			              int debug = -1);
+			              int64_t debug = -1);
 
 			void multiply(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
-			              int debug = -1);
+			              int64_t debug = -1);
 
 			VariablePtr pcRax;
 			VariablePtr pcRdx;

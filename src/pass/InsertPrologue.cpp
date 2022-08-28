@@ -24,14 +24,13 @@ namespace LL2X::Passes {
 		const VariablePtr &rbp = function.pcRbp;
 		const VariablePtr &rsp = function.pcRsp;
 		function.insertBefore<Push, false>(first, Op8(rbp));
-		function.initialPushedBytes = 8;
 
 		// Move %rsp into %rbp.
 		function.insertBefore<Mov, false>(first, Op8(rsp), Op8(rbp));
 
 		// Next, we need to save to the stack any registers that are written to. Start by finding the registers.
 		std::set<int> written;
-		for (InstructionPtr &instruction: function.linearInstructions)
+		for (const InstructionPtr &instruction: function.linearInstructions)
 			for (const VariablePtr &variable: instruction->written)
 				for (const int reg: variable->registers)
 					if (!x86_64::isSpecialPurpose(reg) && x86_64::calleeSaved.contains(reg)) {
@@ -40,15 +39,12 @@ namespace LL2X::Passes {
 						function.calleeSaved.emplace(reg, &location);
 					}
 
-		function.initialPushedBytes += 8 * written.size();
-
 		// Move %rsp down to make room for stack allocations if necessary.
 		if (0 < function.stackSize) {
 			function.comment(first, "upalign(" + std::to_string(function.stackSize) + " + " +
 				std::to_string(function.maxPushedForCalls) + ", 16)");
 			function.insertBefore<Sub, false>(first, Op4(Util::upalign(function.stackSize + function.maxPushedForCalls,
 				16)), Op8(rsp));
-			// function.categories["StackSkip"].insert(sub);
 		}
 
 		function.savedRegisters.clear();

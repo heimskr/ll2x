@@ -6,5 +6,5 @@ namespace LL2X {
 
 namespace LL2X::Passes {
 	/** Removes certain intrinsics, including @llvm.lifetime.*. */
-	int ignoreIntrinsics(Function &);
+	size_t ignoreIntrinsics(Function &);
 }

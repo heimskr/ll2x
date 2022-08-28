@@ -24,14 +24,13 @@ namespace LL2X::Passes {
 			OperandPtr test_operand  = select->conditionValue->makeOperand();
 
 			function.insertBefore<Cmp, false>(instruction, test_operand, Op4(0));
-			// TODO: consider making this conditional
 			function.insertBefore<Mov, false>(instruction, left_operand, select->operand);
 			function.insertBefore<Mov>(instruction, right_operand, select->operand, x86_64::Condition::IfEqual);
 
 			to_remove.push_back(instruction);
 		}
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return to_remove.size();

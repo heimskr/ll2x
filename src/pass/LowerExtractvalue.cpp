@@ -15,10 +15,10 @@ namespace LL2X::Passes {
 		std::list<InstructionPtr> to_remove;
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm || llvm->node->nodeType() != NodeType::ExtractValue)
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr || llvm->node->nodeType() != NodeType::ExtractValue)
 				continue;
-			ExtractValueNode *ev = dynamic_cast<ExtractValueNode *>(llvm->node);
+			auto *ev = dynamic_cast<ExtractValueNode *>(llvm->node);
 
 			ValueType aggregate_type = ev->aggregateValue->valueType();
 			const std::string prefix = "LowerExtractvalue(" + std::string(ev->location) + ")";
@@ -70,6 +70,4 @@ namespace LL2X::Passes {
 
 		return changed;
 	}
-
-	
 }

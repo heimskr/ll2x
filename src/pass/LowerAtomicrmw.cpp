@@ -23,10 +23,10 @@ namespace LL2X::Passes {
 		size_t replaced_count = 0;
 
 		// Loop over all instructions, ignoring everything except atomicrmws.
-		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+		for (const InstructionPtr &instruction: function.linearInstructions) {
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
 
-			if (!llvm || llvm->node->nodeType() != NodeType::Atomicrmw)
+			if (llvm == nullptr || llvm->node->nodeType() != NodeType::Atomicrmw)
 				continue;
 
 			auto *atomicrmw = dynamic_cast<AtomicrmwNode *>(llvm->node);

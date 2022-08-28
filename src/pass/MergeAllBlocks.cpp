@@ -4,9 +4,10 @@
 #include "util/CompilerUtil.h"
 
 namespace LL2X::Passes {
-	void mergeAllBlocks(Function &function) {
-		bool any_changed;
-		bool changed;
+	size_t mergeAllBlocks(Function &function) {
+		size_t changed_count = 0;
+		bool changed = false;
+
 		do {
 			changed = false;
 			auto pre_end = function.blocks.end();
@@ -19,18 +20,23 @@ namespace LL2X::Passes {
 					// an earlier point than intended, which would cause incorrect behavior.
 					if ((*++iter)->preds.size() == 1) {
 						function.mergeBlocks(block, *iter);
-						any_changed = changed = true;
+						changed = true;
+						++changed_count;
 						break;
-					} else --iter;
+					}
+
+					--iter;
 				}
 			}
 		} while (changed);
 
 		function.blocksAreMinimized = false;
 
-		if (any_changed) {
+		if (0 < changed_count) {
 			makeCFG(function);
 			function.reindexBlocks();
 		}
+
+		return changed_count;
 	}
 }

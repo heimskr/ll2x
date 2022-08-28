@@ -1,7 +1,7 @@
 #include "compiler/Function.h"
 #include "compiler/Getelementptr.h"
-#include "compiler/Program.h"
 #include "compiler/LLVMInstruction.h"
+#include "compiler/Program.h"
 #include "instruction/Add.h"
 #include "instruction/And.h"
 #include "instruction/Call.h"
@@ -30,35 +30,41 @@ namespace LL2X::Passes {
 			// First, we check the call node itself—it sometimes contains the signature of the function.
 			if (call->argumentsExplicit) {
 				if ((ellipsis = call->argumentEllipsis)) {
-					if (argument_types) {
+					if (argument_types != nullptr) {
 						argument_types->reserve(call->constants.size());
 						for (const auto &constant: call->constants)
 							argument_types->push_back(constant->convert()->type);
 					}
-				} else if (argument_types)
+				} else if (argument_types != nullptr)
 					*argument_types = call->argumentTypes;
 				return;
-			} else if (function.parent.functions.contains("@" + *global)) {
+			}
+
+			if (function.parent.functions.contains("@" + *global)) {
 				// When the arguments aren't explicit, we check the parent program's map of functions.
 				Function &func = *function.parent.functions.at("@" + *global);
 				ellipsis = func.isVariadic();
-				if (argument_types) {
+				if (argument_types != nullptr) {
 					argument_types->reserve(func.arguments->size());
 					for (FunctionArgument &argument: *func.arguments)
 						argument_types->push_back(argument.type);
 				}
 				return;
-			} else if (function.parent.declarations.contains(*global)) {
+			}
+
+			if (function.parent.declarations.contains(*global)) {
 				// We can also check the map of declarations.
 				FunctionHeader *header = function.parent.declarations.at(*global);
 				ellipsis = header->arguments->ellipsis;
-				if (argument_types) {
+				if (argument_types != nullptr) {
 					argument_types->reserve(header->arguments->arguments.size());
 					for (FunctionArgument &argument: header->arguments->arguments)
 						argument_types->push_back(argument.type);
 				}
 				return;
-			} else if (function.parent.aliases.contains(StringSet::intern("@" + *global))) {
+			}
+
+			if (function.parent.aliases.contains(StringSet::intern("@" + *global))) {
 				// In rare cases, there may be an alias.
 				AliasDef *alias = function.parent.aliases.at(StringSet::intern("@" + *global));
 				global = alias->aliasTo->front() == '@'? StringSet::intern(alias->aliasTo->substr(1)) : alias->aliasTo;
@@ -70,35 +76,35 @@ namespace LL2X::Passes {
 	void setupCalls(Function &function) {
 		auto lock = function.parent.getLock();
 		Timer timer("SetupCalls");
-		int i;
+		size_t i = 0;
 		std::list<InstructionPtr> to_remove;
 
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			// Look for a call instruction.
-			std::shared_ptr<LLVMInstruction> llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
+			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
 			if (!llvm || llvm->node->nodeType() != NodeType::Call)
 				continue;
-			CallNode *call = dynamic_cast<CallNode *>(llvm->node);
+			auto *call = dynamic_cast<CallNode *>(llvm->node);
 			BasicBlockPtr block = instruction->parent.lock();
 
-			GlobalValue *global_name = dynamic_cast<GlobalValue *>(call->name.get());
+			auto *global_name = dynamic_cast<GlobalValue *>(call->name.get());
 			std::unique_ptr<GlobalValue> global_uptr;
 
 			const std::string prefix = "SetupCalls(" + std::string(call->location) + "): ";
 
-			if (global_name) {
+			if (global_name != nullptr) {
 				global_uptr = std::make_unique<GlobalValue>(*global_name);
 				const auto &name = *global_name->name;
-				if (function.parent.uselessFunctions.count(name) != 0) {
+				if (function.parent.uselessFunctions.contains(name)) {
 					to_remove.push_back(instruction);
 					continue;
 				}
-				if (function.parent.simpleFunctions.count(name) != 0) {
-					bool ellipsis;
-					const long simple_index = function.parent.simpleFunctions.at(name);
+				if (function.parent.simpleFunctions.contains(name)) {
+					bool ellipsis = false;
+					const int64_t simple_index = function.parent.simpleFunctions.at(name);
 					extractInfo(global_uptr->name, function, call, ellipsis, nullptr);
 					// TODO: Instructions inserted here won't be touched by SplitResultMoves. This might be an issue.
-					if (!call->result) {
+					if (call->result == nullptr) {
 						warn() << "Call to simple function " << name << " has no result.\n";
 					} else {
 						auto out = setupCallValue(function, call->operand, instruction, call->constants[simple_index]);
@@ -115,24 +121,22 @@ namespace LL2X::Passes {
 
 			// Now we need to find out about the function's arguments because we need to know how to call it.
 			std::vector<TypePtr> argument_types;
-			bool ellipsis;
+			bool ellipsis = false;
 
-			if (global_uptr) {
+			if (global_uptr)
 				extractInfo(global_uptr->name, function, call, ellipsis, &argument_types);
-			} else {
+			else
 				for (ConstantPtr &ptr: call->constants)
 					argument_types.push_back(ptr->type);
-				ellipsis = false;
-			}
 
 			const auto return_size = call->returnType->width();
 			const bool huge_return = 128 < return_size;
 			const int  arg_offset  = huge_return? 1 : 0;
 
 			constexpr int reg_max = 6;
-			const int arg_count = argument_types.size();
+			const size_t arg_count = argument_types.size();
 
-			constexpr static int arg_regs[] {
+			constexpr static std::array<int, 9> arg_regs {
 				x86_64::rdi,
 				x86_64::rsi,
 				x86_64::rdx,
@@ -148,7 +152,7 @@ namespace LL2X::Passes {
 
 			// Clobber caller-saved registers as necessary.
 			const int clobber_start = 0;
-			std::unordered_map<int, std::shared_ptr<Clobber>> clobbers;
+			std::unordered_map<size_t, std::shared_ptr<Clobber>> clobbers;
 			for (i = 0; i < arg_reg_count; ++i)
 				clobbers.emplace(i, function.clobber(instruction, arg_regs[i]));
 
@@ -157,7 +161,7 @@ namespace LL2X::Passes {
 			// If the callee returns a large struct (more than can fit in two registers), we need to allocate space on
 			// the stack for the struct and pass a pointer to it in %rdi.
 			VariablePtr big_result;
-			if (call->result && huge_return) {
+			if (call->result != nullptr && huge_return) {
 				big_result = function.newVariable(call->returnType, block);
 				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
 				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
@@ -219,7 +223,7 @@ namespace LL2X::Passes {
 
 			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)
 			// and unclobber %rax. Or something.
-			if (call->result) {
+			if (call->result != nullptr) {
 				if (return_size == 128) {
 					auto result = OpV(function.getVariable(*call->result));
 					VariablePtr pack = function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock());
@@ -338,7 +342,7 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Passing structs on the stack is not yet supported");
 			}
 
-			VariablePtr var = signext? function.newVariable(IntType::make(64)) : local->variable;
+			VariablePtr var = signext != 0? function.newVariable(IntType::make(64)) : local->variable;
 			insert_exts(local->variable, var);
 			function.insertBefore<Mov, false>(instruction, Op8(var), Op8(pushed, function.pcRsp));
 			return size;
@@ -389,19 +393,19 @@ namespace LL2X::Passes {
 				warn() << "Not sure what to do when the argument of getelementptr isn't a global.\n";
 				function.insertBefore<InvalidInstruction>(instruction);
 				return 0;
-			} else {
-				const std::list<long> indices = Getelementptr::getLongIndices(*gep);
-				const long offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
-				if (Util::outOfRange(offset))
-					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
-				VariablePtr new_var = function.newVariable(constant->type);
-				function.insertBefore<Mov, false>(instruction, Op8(*gep_global->name), OpV(new_var));
-				if (offset != 0)
-					function.insertBefore<Add, false>(instruction, Op4(offset), OpV(new_var));
-				insert_exts(new_var, new_var);
-				function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
-				return size;
 			}
+
+			const std::list<int64_t> indices = Getelementptr::getLongIndices(*gep);
+			const int64_t offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
+			if (Util::outOfRange(offset))
+				warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
+			VariablePtr new_var = function.newVariable(constant->type);
+			function.insertBefore<Mov, false>(instruction, Op8(*gep_global->name), OpV(new_var));
+			if (offset != 0)
+				function.insertBefore<Add, false>(instruction, Op4(offset), OpV(new_var));
+			insert_exts(new_var, new_var);
+			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
+			return size;
 		}
 
 		if (constant->conversionSource)
@@ -528,8 +532,8 @@ namespace LL2X::Passes {
 					return function.insertBefore<InvalidInstruction>(instruction);
 				}
 
-				const std::list<long> indices = Getelementptr::getLongIndices(*gep);
-				const long offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
+				const std::list<int64_t> indices = Getelementptr::getLongIndices(*gep);
+				const int64_t offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
 
 				if (Util::outOfRange(offset))
 					warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
@@ -547,8 +551,8 @@ namespace LL2X::Passes {
 				return out;
 			}
 
-			const std::list<long> indices = Getelementptr::getLongIndices(*gep);
-			const long offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
+			const std::list<int64_t> indices = Getelementptr::getLongIndices(*gep);
+			const int64_t offset = Util::updiv(Getelementptr::compute(gep->ptrType, indices), 8l);
 
 			if (Util::outOfRange(offset))
 				warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';

@@ -11,7 +11,7 @@ namespace LL2X {
 
 namespace LL2X::Passes {
 	/** Replaces LLVM branches with x86_64 instructions. Returns the number of instructions replaced. */
-	int lowerBranches(Function &);
+	size_t lowerBranches(Function &);
 
 	void lowerBranch(Function &, std::shared_ptr<Instruction> &, BrCondNode *);
 	void lowerBranch(Function &, std::shared_ptr<Instruction> &, BrUncondNode *);

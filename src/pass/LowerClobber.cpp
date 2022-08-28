@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 
@@ -15,14 +16,12 @@ namespace LL2X::Passes {
 		if (!block)
 			throw std::runtime_error("Couldn't lock instruction block in LowerClobber");
 
-		for (const VariablePtr &var: block->liveOut)
-			if (var->registers.contains(reg))
-				return true;
-
-		return false;
+		return std::ranges::any_of(block->liveOut, [reg](const VariablePtr &var) {
+			return var->registers.contains(reg);
+		});
 	}
 
-	int lowerClobber(Function &function) {
+	size_t lowerClobber(Function &function) {
 		Timer timer("LowerClobber");
 		std::list<InstructionPtr> to_remove;
 
@@ -57,7 +56,7 @@ namespace LL2X::Passes {
 
 		function.reindexInstructions();
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return to_remove.size();

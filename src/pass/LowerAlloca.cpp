@@ -49,7 +49,7 @@ namespace LL2X::Passes {
 				// stack for it instead of doing runtime stack pointer math.
 
 				if (!alloca->numelementsValue || alloca->numelementsValue->isIntLike()) {
-					long size = Util::upalign(alloca->type->width(), 8) / 8;
+					int64_t size = Util::upalign(alloca->type->width(), 8) / 8;
 					if (alloca->numelementsValue)
 						size *= alloca->numelementsValue->longValue();
 
@@ -73,10 +73,10 @@ namespace LL2X::Passes {
 			if (alloca->align == 16 || alloca->align == 8 || alloca->align == 4 || alloca->align == 2) {
 				function.insertBefore<And, false>(instruction, Op4(-alloca->align), Op8(rsp));
 			} else if (0 < alloca->align) {
-				const int   align = Util::upalign(alloca->align, 8);
-				VariablePtr temp  = function.newVariable(IntType::make(64), block);
-				OperandPtr  rax   = Op8(function.makePrecoloredVariable(x86_64::rax, block));
-				OperandPtr  rdx   = Op8(function.makePrecoloredVariable(x86_64::rdx, block));
+				const int64_t align = Util::upalign(alloca->align, 8);
+				VariablePtr   temp  = function.newVariable(IntType::make(64), block);
+				OperandPtr    rax   = Op8(function.makePrecoloredVariable(x86_64::rax, block));
+				OperandPtr    rdx   = Op8(function.makePrecoloredVariable(x86_64::rdx, block));
 
 				// I hope this part is never run.
 
@@ -107,7 +107,7 @@ namespace LL2X::Passes {
 			// The number of elements requested is usually an integer constant, but it can also be a local variable.
 			// We need to copy the stack pointer to the result variable and then move the stack pointer down past
 			// the allocated memory.
-			int num_elements = -1;
+			int64_t num_elements = -1;
 			if (alloca->numelementsValue) {
 				Value *value = alloca->numelementsValue.get();
 				if (value->isInt()) {
@@ -115,7 +115,7 @@ namespace LL2X::Passes {
 					num_elements = value->longValue();
 				} else if (value->isLocal()) {
 					// If it's a local variable instead, we can't do the multiplication at compile time.
-					LocalValue *local = dynamic_cast<LocalValue *>(value);
+					auto *local = dynamic_cast<LocalValue *>(value);
 					function.comment(instruction, prefix + "mov %rsp, %var");
 					function.insertBefore<Mov, false>(instruction, OpV(alloca_reg), alloca->operand);
 
@@ -150,7 +150,7 @@ namespace LL2X::Passes {
 			if (num_elements != -1) {
 				// mov %rsp, %var
 				auto mov = function.insertBefore<Mov>(instruction, Op8(alloca_reg), alloca->operand);
-				const int to_sub = Util::upalign(num_elements * width, 8);
+				const int64_t to_sub = Util::upalign(num_elements * width, 8);
 
 				if (0 < to_sub) {
 					function.comment(mov, prefix + "%rsp -= to_sub");

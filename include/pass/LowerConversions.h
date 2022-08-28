@@ -10,7 +10,7 @@ namespace LL2X {
 
 namespace LL2X::Passes {
 	/** Lowers conversion instructions. */
-	int lowerConversions(Function &);
+	size_t lowerConversions(Function &);
 
 	void lowerBasicConversion(Function &, std::shared_ptr<Instruction> &, ConversionNode *);
 	void lowerTrunc(Function &, std::shared_ptr<Instruction> &, ConversionNode *);

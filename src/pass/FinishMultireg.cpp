@@ -13,7 +13,7 @@ namespace LL2X::Passes {
 		Timer timer("FinishMultireg");
 		std::list<InstructionPtr> to_remove;
 
-		for (InstructionPtr &instruction: function.linearInstructions) {
+		for (const InstructionPtr &instruction: function.linearInstructions) {
 			if (auto defsource = std::dynamic_pointer_cast<DeferredSourceMove>(instruction)) {
 				if (!defsource->source->isRegister()) {
 					error() << defsource->debugExtra() << '\n';

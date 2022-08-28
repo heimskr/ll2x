@@ -1133,8 +1133,8 @@ namespace LL2X {
 		return new_var;
 	}
 
-	StackLocation & Function::addToStack(const VariablePtr &variable, StackLocation::Purpose purpose, int width,
-	                                     int align) {
+	StackLocation & Function::addToStack(const VariablePtr &variable, StackLocation::Purpose purpose, int64_t width,
+	                                     int64_t align) {
 		for (auto &[offset, location]: stack)
 			if (*location.variable == *variable && location.purpose == purpose)
 				return location;
@@ -2027,12 +2027,12 @@ namespace LL2X {
 	}
 
 	void Function::multiply(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool reindex,
-	                        int debug) {
+	                        int64_t debug) {
 		multiply_impl<Imul>(anchor, operand, value, reindex, debug);
 	}
 
 	void Function::multiply(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
-	                        int debug) {
+	                        int64_t debug) {
 		multiply_impl<Mul>(anchor, operand, value, reindex, debug);
 	}
 }

@@ -11,19 +11,19 @@
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	int lowerIcmp(Function &function) {
+	size_t lowerIcmp(Function &function) {
 		Timer timer("LowerIcmp");
 		std::list<InstructionPtr> to_remove;
 
-		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm || llvm->node->nodeType() != NodeType::Icmp)
+		for (const InstructionPtr &instruction: function.linearInstructions) {
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr || llvm->node->nodeType() != NodeType::Icmp)
 				continue;
 			lowerIcmp(function, instruction, dynamic_cast<IcmpNode *>(llvm->node));
 			to_remove.push_back(instruction);
 		}
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return to_remove.size();
@@ -36,7 +36,8 @@ namespace LL2X::Passes {
 		IcmpCond cond = node->cond;
 
 		auto values = node->allValuePointers();
-		ValuePtr &value1 = *values[0], &value2 = *values[1];
+		ValuePtr &value1 = *values[0];
+		ValuePtr &value2 = *values[1];
 
 		if (value1->valueType() != ValueType::Local) {
 			if (value2->valueType() == ValueType::Local) {
@@ -91,12 +92,10 @@ namespace LL2X::Passes {
 
 		} else {
 
-			int64_t imm;
+			int64_t imm = 0;
 			if (type2 == ValueType::Int)
 				imm = dynamic_cast<IntValue *>(value2.get())->value;
-			else if (type2 == ValueType::Null || type2 == ValueType::Zeroinitializer || type2 == ValueType::Undef)
-				imm = 0;
-			else
+			else if (type2 != ValueType::Null && type2 != ValueType::Zeroinitializer && type2 != ValueType::Undef)
 				throw std::runtime_error("Unsupported value type in icmp instruction: " + value_map.at(type2));
 
 			const int size = node->getType()->width();

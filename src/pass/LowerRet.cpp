@@ -17,16 +17,16 @@ namespace LL2X::Passes {
 		Timer timer("LowerRet");
 		std::list<InstructionPtr> to_remove;
 		
-		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm)
+		for (const InstructionPtr &instruction: function.linearInstructions) {
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr)
 				continue;
 			if (llvm->node->nodeType() == NodeType::Unreachable)
 				to_remove.push_back(instruction);
 			if (llvm->node->nodeType() != NodeType::Ret)
 				continue;
 
-			RetNode *ret = dynamic_cast<RetNode *>(llvm->node);
+			auto *ret = dynamic_cast<RetNode *>(llvm->node);
 
 			BasicBlockPtr block = instruction->parent.lock();
 			if (!block)

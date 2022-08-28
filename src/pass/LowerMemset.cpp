@@ -21,25 +21,26 @@ namespace LL2X::Passes {
 				++iter;
 				continue;
 			}
-			CallNode *call = dynamic_cast<CallNode *>(llvm->node);
+			auto *call = dynamic_cast<CallNode *>(llvm->node);
 			if (!call->name->isGlobal()) {
 				++iter;
 				continue;
 			}
 			BasicBlockPtr block = instruction->parent.lock();
-			GlobalValue *global = dynamic_cast<GlobalValue *>(call->name.get());
+			auto *global = dynamic_cast<GlobalValue *>(call->name.get());
 			const std::string &name = *global->name;
-			if (name.substr(0, sizeof("llvm.memset.") - 1) != "llvm.memset.") {
+			if (std::string_view(name).substr(0, sizeof("llvm.memset.") - 1) != "llvm.memset.") {
 				++iter;
 				continue;
 			}
 
 			if (name == "llvm.memset.p0i8.i64") {
 				// TODO: mysterious volatile 4th parameter
+
 				auto *new_call = (new CallNode(nullptr, PointerType::make(VoidType::make()),
 					StringSet::intern("memset"), {
 						call->constants[0]->convert(),
-						Constant::make(IntType::make(32), call->constants[1]->convert()->value),
+						std::make_shared<Constant>(IntType::make(32), call->constants[1]->convert()->value),
 						call->constants[2]->convert(),
 					}))->setUsePLT();
 
@@ -55,7 +56,7 @@ namespace LL2X::Passes {
 		}
 
 		if (!to_remove.empty()) {
-			for (InstructionPtr &instruction: to_remove)
+			for (const InstructionPtr &instruction: to_remove)
 				function.remove(instruction);
 			function.reindexInstructions();
 		}

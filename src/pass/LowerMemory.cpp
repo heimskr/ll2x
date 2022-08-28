@@ -18,32 +18,35 @@ namespace LL2X::Passes {
 		std::list<InstructionPtr> to_remove;
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm || (llvm->node->nodeType() != NodeType::Load && llvm->node->nodeType() != NodeType::Store))
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr || (llvm->node->nodeType() != NodeType::Load &&
+				llvm->node->nodeType() != NodeType::Store))
 				continue;
 			
 			if (llvm->node->nodeType() == NodeType::Load)
 				lowerLoad(function, instruction, *llvm);
-			else if (llvm->node->nodeType() == NodeType::Store) {
+			else if (llvm->node->nodeType() == NodeType::Store)
 				lowerStore(function, instruction, *llvm);
-			} else continue;
+			else
+				continue;
 
 			to_remove.push_back(instruction);
 			++replaced_count;
 		}
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return replaced_count;
 	}
 
 	void lowerLoad(Function &function, InstructionPtr &instruction, LLVMInstruction &llvm) {
-		LoadNode *node = dynamic_cast<LoadNode *>(llvm.node);
+		auto *node = dynamic_cast<LoadNode *>(llvm.node);
 		ConstantPtr converted = node->constant->convert();
 		if (!converted->value)
 			throw std::runtime_error("Constant lacks value in lowerLoad: " + std::string(*converted));
-		int size;
+
+		int size = 0;
 		try {
 			size = getLoadStoreSize(converted, instruction);
 		} catch (const std::exception &) {
@@ -142,7 +145,7 @@ namespace LL2X::Passes {
 			}
 		}
 
-		int size;
+		int size = 0;
 		try {
 			size = getLoadStoreSize(converted, instruction);
 		} catch (std::exception &) {
@@ -235,10 +238,6 @@ namespace LL2X::Passes {
 				function.insertBefore<Mov>(instruction, soperand, Op8(0, lvar), width);
 
 			} else if (global) {
-
-				// %src -> [global]
-				int symsize = function.parent.symbolSize("@" + *global->name);
-				symsize = symsize / 8 + (symsize % 8? 1 : 0);
 
 				VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
 				// movq var@GOTPCREL(%rip), %temp

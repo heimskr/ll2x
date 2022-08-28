@@ -7,13 +7,13 @@
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	int lowerBranches(Function &function) {
+	size_t lowerBranches(Function &function) {
 		Timer timer("LowerBranches");
 		std::list<InstructionPtr> to_remove;
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			const LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm)
+			const auto *llvm = dynamic_cast<const LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr)
 				continue;
 			const NodeType node_type = llvm->node->nodeType();
 			if (node_type == NodeType::BrCond)

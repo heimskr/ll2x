@@ -15,16 +15,16 @@
 #include "util/Util.h"
 
 namespace LL2X::Passes {
-	int lowerConversions(Function &function) {
+	size_t lowerConversions(Function &function) {
 		Timer timer("LowerConversions");
 		std::list<InstructionPtr> to_remove;
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm || llvm->node->nodeType() != NodeType::Conversion)
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr || llvm->node->nodeType() != NodeType::Conversion)
 				continue;
 			
-			ConversionNode *conversion = dynamic_cast<ConversionNode *>(llvm->node);
+			auto *conversion = dynamic_cast<ConversionNode *>(llvm->node);
 			const Conversion type = conversion->conversionType;
 
 			switch (type) {
@@ -75,7 +75,8 @@ namespace LL2X::Passes {
 		assert(source != nullptr);
 		assert(destination != nullptr);
 
-		const int from = conversion->from->width(), to = conversion->to->width();
+		const int from = conversion->from->width();
+		const int to = conversion->to->width();
 		const std::string prefix = "LowerTrunc(" + std::string(conversion->location) + "): " + std::to_string(from) +
 			" to " + std::to_string(to) + ", ";
 
@@ -89,7 +90,7 @@ namespace LL2X::Passes {
 			function.comment(instruction, prefix + "right shift");
 			function.insertBefore<Shr>(instruction, Op4(64 - to), destination);
 		} else {
-			const long mask = (1l << conversion->to->width()) - 1;
+			const int64_t mask = (1l << conversion->to->width()) - 1;
 			function.comment(instruction, prefix + "move");
 			function.insertBefore<Mov, false>(instruction, source, destination);
 			function.comment(instruction, prefix + "apply mask");

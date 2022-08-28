@@ -13,7 +13,7 @@ namespace LL2X::Passes {
 		// number of physical registers. The terminator of the original block is moved to the end of the added block and
 		// replaced with a branch to the added block.
 		Timer timer("SplitBlocks");
-		bool any_changed;
+		bool any_changed = false;
 		int split_count = 0;
 
 		for (;;) {

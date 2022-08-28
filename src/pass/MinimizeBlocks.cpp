@@ -7,22 +7,20 @@ namespace LL2X::Passes {
 	void minimizeBlocks(Function &function) {
 		Timer timer("MinimizeBlocks");
 
-		std::map<int, BasicBlockPtr> added_blocks;
-
-		std::unordered_map<int, std::vector<int>> predecessors;
-
+		std::map<int64_t, BasicBlockPtr> added_blocks;
+		std::unordered_map<int64_t, std::vector<int64_t>> predecessors;
 		std::unordered_map<const std::string *, const std::string *> label_replacements;
 
 		function.reindexInstructions();
 
-		if (INT_MAX < function.linearInstructions.size())
-			warn() << "Function \e[31m" << *function.name << "\e[39m's instruction count can't fit in an integer. "
+		if (INT64_MAX < function.linearInstructions.size())
+			warn() << "Function \e[31m" << *function.name << "\e[39m's instruction count can't fit in an int64_t. "
 			          "You're going to have a bad time.\n";
 		
-		const int instruction_count = static_cast<int>(function.linearInstructions.size());
+		const int64_t instruction_count = static_cast<int64_t>(function.linearInstructions.size());
 
 		for (const InstructionPtr &instruction: function.linearInstructions) {
-			const int index = instruction->index;
+			const int64_t index = instruction->index;
 			if (index < 0) {
 				error() << instruction->debugExtra() << '\n';
 				throw std::runtime_error("Instruction has an invalid index even after reindexing");
@@ -72,6 +70,8 @@ namespace LL2X::Passes {
 				// There's definitely a faster way to do this.
 				// The use of syntactically invalid block names earlier prevents the sort of weirdness that occurs in,
 				// say, "abc".replace(a => b).replace(b => c) being different from "abc".replace(b => c / a => b).
+				// Except we're not doing that anymore, so we just have to hope the aforementioned weirdness doesn't
+				// ever happen.
 				for (const auto &[old_label, new_label]: label_replacements) {
 					instruction->replaceLabel(old_label, new_label);
 					instruction->replaceLabel(StringSet::intern("%" + *old_label), StringSet::intern("%" + *new_label));

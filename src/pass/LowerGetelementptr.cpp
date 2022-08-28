@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <deque>
 
@@ -16,22 +17,19 @@
 
 namespace LL2X::Passes {
 	static bool anyPvarInIndices(const std::vector<GetelementptrNode::Index> &indices) {
-		for (const auto &index: indices)
-			if (index.isPvar)
-				return true;
-		return false;
+		return std::ranges::any_of(indices, [](const auto &index) { return index.isPvar; });
 	}
 
-	int lowerGetelementptr(Function &function) {
+	size_t lowerGetelementptr(Function &function) {
 		Timer timer("LowerGetelementptr");
 		std::list<InstructionPtr> to_remove;
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm || llvm->node->nodeType() != NodeType::Getelementptr)
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr || llvm->node->nodeType() != NodeType::Getelementptr)
 				continue;
 
-			GetelementptrNode *node = dynamic_cast<GetelementptrNode *>(llvm->node);
+			auto *node = dynamic_cast<GetelementptrNode *>(llvm->node);
 			// In all the getelementptr instructions I've seen, the source argument has always been a pvar, never a
 			// gvar. The indices have been either two decimals or one pvar, but this could be just a quirk of the
 			// example program I've been using (ll/fat.ll), as most of the types are the same struct type. However, I
@@ -56,7 +54,7 @@ namespace LL2X::Passes {
 			} else if (constant_value->isOperand()) {
 				pointer = std::dynamic_pointer_cast<OperandValue>(constant_value)->operand;
 			} else {
-				GlobalValue *global = dynamic_cast<GlobalValue *>(constant_value.get());
+				auto *global = dynamic_cast<GlobalValue *>(constant_value.get());
 				pointer = OpV(function.newVariable(constant_type));
 				function.insertBefore<Mov>(instruction, Op8(*global->name), pointer);
 			}
@@ -83,7 +81,7 @@ namespace LL2X::Passes {
 					if (index.isPvar) {
 						VariablePtr pvar = std::holds_alternative<Variable::ID>(index.value)?
 							  function.getVariable(std::get<Variable::ID>(index.value))
-							: function.getVariable(std::to_string(std::get<long>(index.value)));
+							: function.getVariable(std::to_string(std::get<int64_t>(index.value)));
 						if (tt == TypeType::Pointer || tt == TypeType::Array) {
 							type = dynamic_cast<HasSubtype *>(type.get())->subtype;
 							function.comment(instruction, prefix + "pointer/array, pvar -> " + operand->toString());
@@ -99,7 +97,7 @@ namespace LL2X::Passes {
 					} else if (tt == TypeType::Pointer || tt == TypeType::Array) {
 						type = dynamic_cast<HasSubtype *>(type.get())->subtype;
 						function.comment(instruction, prefix + "pointer/array, number -> " + operand->toString());
-						function.insertBefore<Add>(instruction, Op4(type->width() * std::get<long>(index.value)),
+						function.insertBefore<Add>(instruction, Op4(type->width() * std::get<int64_t>(index.value)),
 							operand);
 					} else if (tt == TypeType::Struct) {
 						std::shared_ptr<StructType> stype = std::dynamic_pointer_cast<StructType>(type);
@@ -109,12 +107,12 @@ namespace LL2X::Passes {
 							snode = stype->node;
 						}
 
-						std::list<long> index_list;
+						std::list<int64_t> index_list;
 						for (const GetelementptrNode::Index &index: indices)
-							index_list.push_back(std::get<long>(index.value));
+							index_list.push_back(std::get<int64_t>(index.value));
 
 						TypePtr out_type;
-						long offset = Util::updiv(Getelementptr::compute(constant_type, index_list, &out_type), 8l);
+						int64_t offset = Util::updiv(Getelementptr::compute(constant_type, index_list, &out_type), 8l);
 						if (Util::outOfRange(offset))
 							warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 						assert(operand->isRegister());
@@ -122,7 +120,7 @@ namespace LL2X::Passes {
 
 						function.comment(instruction, prefix + "struct, number -> " + operand->toString());
 						function.insertBefore<Add>(instruction, Op4(offset), operand);
-						type = snode->types.at(std::get<long>(index.value));
+						type = snode->types.at(std::get<int64_t>(index.value));
 					} else
 						throw std::runtime_error("Invalid type in GetelementPtr: " + std::string(*type));
 				}
@@ -131,11 +129,11 @@ namespace LL2X::Passes {
 				operand->reg->setType(node->type = std::make_shared<PointerType>(type->copy()));
 			} else if ((tt == TypeType::Array || tt == TypeType::Pointer) && dynamic_index) {
 				// result = (base pointer) + (width * first index value) + (subwidth * second index variable)
-				const int skip = Util::updiv(node->type->width(), 8) * std::get<long>(node->indices[0].value);
+				const int64_t skip = Util::updiv(node->type->width(), 8) * std::get<int64_t>(node->indices[0].value);
 				VariablePtr index = function.getVariable(std::get<Variable::ID>(node->indices[1].value));
 
-				int subwidth;
-				if (HasSubtype *has_subtype = dynamic_cast<HasSubtype *>(node->type.get()))
+				int subwidth = 0;
+				if (auto *has_subtype = dynamic_cast<HasSubtype *>(node->type.get()))
 					subwidth = Util::updiv(has_subtype->subtype->width(), 8);
 				else
 					throw std::runtime_error("Type " + std::string(*node->type) + " has no subtype");
@@ -151,7 +149,7 @@ namespace LL2X::Passes {
 				// result += base pointer (not %rbp)
 				function.insertBefore<Add>(instruction, pointer, node->operand);
 			} else if (tt == TypeType::Struct || ((tt == TypeType::Array || tt == TypeType::Pointer) && !one_pvar)) {
-				std::list<std::variant<long, const std::string *>> indices;
+				std::list<std::variant<int64_t, const std::string *>> indices;
 				std::stringstream indices_str;
 				bool first = true;
 				for (const auto &index: node->indices) {
@@ -160,8 +158,8 @@ namespace LL2X::Passes {
 						first = false;
 					else
 						indices_str << ',';
-					indices_str << (std::holds_alternative<long>(index.value)?
-						std::to_string(std::get<long>(index.value)) :
+					indices_str << (std::holds_alternative<int64_t>(index.value)?
+						std::to_string(std::get<int64_t>(index.value)) :
 						"%" + *std::get<const std::string *>(index.value));
 				}
 
@@ -170,7 +168,7 @@ namespace LL2X::Passes {
 #ifdef DEBUG_GETELEMENTPTR
 				TypePtr old_type = node->variable->type;
 #endif
-				// long offset = Util::updiv(Getelementptr::compute(constant_type, indices, &out_type), 8l);
+				// int64_t offset = Util::updiv(Getelementptr::compute(constant_type, indices, &out_type), 8l);
 				// if (Util::outOfRange(offset))
 				// 	warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 				function.comment(instruction, "LowerGetelementptr(" + std::string(node->location) + "): struct-type: " +
@@ -200,12 +198,13 @@ namespace LL2X::Passes {
 				function.insertBefore<Mov, false>(instruction, OpV(index), node->operand);
 				function.multiply(instruction, node->operand, static_cast<int64_t>(width), false, node->debugIndex);
 				function.insertBefore<Add>(instruction, pointer, node->operand);
-			} else throw std::runtime_error("Unsupported type in getelementptr instruction: " + type_map.at(tt));
+			} else
+				throw std::runtime_error("Unsupported type in getelementptr instruction: " + type_map.at(tt));
 
 			to_remove.push_back(instruction);
 		}
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return to_remove.size();

@@ -6,5 +6,5 @@ namespace LL2X {
 
 namespace LL2X::Passes {
 	/** Lowers getelementptr instructions. */
-	int lowerGetelementptr(Function &);
+	size_t lowerGetelementptr(Function &);
 }

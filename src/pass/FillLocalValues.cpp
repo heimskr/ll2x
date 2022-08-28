@@ -7,17 +7,17 @@ namespace LL2X::Passes {
 	void fillLocalValues(Function &function) {
 		Timer timer("FillLocalValues");
 		for (InstructionPtr &instruction: function.linearInstructions) {
-			LLVMInstruction *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (!llvm)
+			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
+			if (llvm == nullptr)
 				continue;
 
 			InstructionNode *node = llvm->node;
-			if (Reader *reader = dynamic_cast<Reader *>(node))
-				for (std::shared_ptr<LocalValue> value: reader->allLocals())
+			if (auto *reader = dynamic_cast<Reader *>(node))
+				for (const std::shared_ptr<LocalValue> &value: reader->allLocals())
 					value->variable = function.getVariable(*value->name);
 
-			if (Writer *writer = dynamic_cast<Writer *>(node))
-				if (writer->result)
+			if (auto *writer = dynamic_cast<Writer *>(node))
+				if (writer->result != nullptr)
 					writer->operand = OpV(function.getVariable(*writer->result));
 		}
 	}

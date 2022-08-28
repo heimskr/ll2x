@@ -50,7 +50,7 @@ namespace LL2X::Passes {
 		if (!to_remove.empty())
 			function.reindexInstructions();
 
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		return to_remove.size();

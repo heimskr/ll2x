@@ -7,5 +7,5 @@ namespace LL2X {
 namespace LL2X::Passes {
 	/** Erases clobber/unclobber instructions if the targeted register isn't live-out or replaces them with push/pop
 	 *  instructions if it is. */
-	int lowerClobber(Function &);
+	size_t lowerClobber(Function &);
 }
