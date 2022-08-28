@@ -5,7 +5,7 @@
 namespace LL2X {
 	struct Lea: SizedSourceToDest {
 		Lea(OperandPtr source_, OperandPtr destination_, int size_);
-		Lea(OperandPtr source_, OperandPtr destination_);
+		Lea(OperandPtr source_, const OperandPtr &destination_);
 
 		std::string debugExtra() override     { return makeDebug("lea");  }
 		std::string toString() const override { return makeString("lea"); }

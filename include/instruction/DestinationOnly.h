@@ -8,7 +8,7 @@ namespace LL2X {
 		DestinationOnly(OperandPtr destination_):
 			OneDestination(std::move(destination_)) {}
 
-		ExtractionResult extract(bool force = false) override;
+		ExtractionResult extract(bool force) override;
 		bool replaceRead(const VariablePtr &, const VariablePtr &) override;
 		bool canReplaceRead(const VariablePtr &) const override;
 		bool replaceWritten(const VariablePtr &, const VariablePtr &) override;

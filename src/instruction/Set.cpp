@@ -2,7 +2,7 @@
 
 namespace LL2X {
 	Set::Set(OperandPtr destination_, x86_64::Condition condition_):
-		DestinationOnly(destination_), HasCondition(condition_) {}
+		DestinationOnly(std::move(destination_)), HasCondition(condition_) {}
 
 	std::string Set::debugExtra() {
 		return lockPrefixAnsi + "\e[1m" + getMnemonic() + "\e[22m " + destination->ansiString();

@@ -8,7 +8,7 @@ namespace LL2X {
 		Mov(OperandPtr source_, OperandPtr destination_, int size_,
 			x86_64::Condition condition = x86_64::Condition::Unconditional);
 
-		Mov(OperandPtr source_, OperandPtr destination_,
+		Mov(OperandPtr source_, const OperandPtr &destination_,
 			x86_64::Condition condition = x86_64::Condition::Unconditional);
 
 		std::string debugExtra() override     { return makeDebug(getMnemonic());  }

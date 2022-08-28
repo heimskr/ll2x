@@ -8,7 +8,7 @@ namespace LL2X {
 		TwoSourcesOnly(OperandPtr first_source, OperandPtr second_source):
 			TwoSources(std::move(first_source), std::move(second_source)) {}
 
-		ExtractionResult extract(bool force = false) override;
+		ExtractionResult extract(bool force) override;
 		bool replaceRead(const VariablePtr &, const VariablePtr &) override;
 		bool canReplaceRead(const VariablePtr &) const override;
 		bool replaceOperand(const OperandPtr &, const OperandPtr &) override;

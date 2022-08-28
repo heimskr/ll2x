@@ -8,7 +8,7 @@ namespace LL2X {
 		Mul(OperandPtr source_, int width_):
 			SizedSourceOnly(std::move(source_), width_) {}
 
-		Mul(OperandPtr source_):
+		explicit Mul(const OperandPtr &source_):
 			SizedSourceOnly(source_, source_->bitWidth) {}
 
 		std::string debugExtra() override     { return makeDebug("mul");  }

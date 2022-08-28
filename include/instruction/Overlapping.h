@@ -12,7 +12,7 @@ namespace LL2X {
 		Overlapping(OperandPtr source_only, OperandPtr multi_):
 			multi(std::move(multi_)), sourceOnly(std::move(source_only)) {}
 
-		ExtractionResult extract(bool force = false) override;
+		ExtractionResult extract(bool force) override;
 		bool replaceRead(const VariablePtr &, const VariablePtr &) override;
 		bool canReplaceRead(const VariablePtr &) const override;
 		bool replaceWritten(const VariablePtr &, const VariablePtr &) override;

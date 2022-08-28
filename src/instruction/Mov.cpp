@@ -2,10 +2,10 @@
 
 namespace LL2X {
 	Mov::Mov(OperandPtr source_, OperandPtr destination_, int size_, x86_64::Condition condition_):
-		SizedSourceToDest(source_, destination_, size_), HasCondition(condition_) {}
+		SizedSourceToDest(std::move(source_), std::move(destination_), size_), HasCondition(condition_) {}
 
-	Mov::Mov(OperandPtr source_, OperandPtr destination_, x86_64::Condition condition_):
-		SizedSourceToDest(source_, destination_, destination_->bitWidth), HasCondition(condition_) {}
+	Mov::Mov(OperandPtr source_, const OperandPtr &destination_, x86_64::Condition condition_):
+		SizedSourceToDest(std::move(source_), destination_, destination_->bitWidth), HasCondition(condition_) {}
 
 	std::string Mov::getMnemonic() const {
 		if (condition == x86_64::Condition::Unconditional)

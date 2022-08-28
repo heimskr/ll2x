@@ -13,7 +13,7 @@ namespace LL2X {
 		Xadd(OperandPtr reg_only, OperandPtr reg_mem, int size_);
 		Xadd(OperandPtr reg_only, OperandPtr reg_mem);
 
-		ExtractionResult extract(bool force = false) override;
+		ExtractionResult extract(bool force) override;
 		bool replaceRead(const VariablePtr &, const VariablePtr &) override;
 		bool canReplaceRead(const VariablePtr &) const override;
 		bool replaceWritten(const VariablePtr &, const VariablePtr &) override;
