@@ -10,18 +10,18 @@ namespace LL2X {
 
 	struct DFSResult {
 		using ParentMap = std::unordered_map<Node *, Node *>;
-		using TimeMap   = std::unordered_map<Node *, int>;
+		using TimeMap   = std::unordered_map<Node *, size_t>;
 
 		const Graph *graph;
 		ParentMap parents;
 		TimeMap discovered, finished;
 
-		DFSResult(const Graph &graph_, const ParentMap &parents_, const TimeMap &discovered_, const TimeMap &finished_);
+		DFSResult(const Graph &graph_, ParentMap parents_, TimeMap discovered_, TimeMap finished_);
 
 		DFSResult(const Graph &graph_,
 		          const std::vector<Node *> &parents_,
-		          const std::vector<int> &discovered_,
-		          const std::vector<int> &finished_);
+		          const std::vector<size_t> &discovered_,
+		          const std::vector<size_t> &finished_);
 	};
 
 	std::ostream & operator<<(std::ostream &, const DFSResult &);

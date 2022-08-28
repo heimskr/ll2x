@@ -13,7 +13,7 @@
 #include "util/Util.h"
 
 namespace LL2X {
-	Graph::Graph() {}
+	Graph::Graph() = default;
 
 	Graph::Graph(const Graph &other) {
 		for (const auto &[label, node]: other)
@@ -26,16 +26,18 @@ namespace LL2X {
 		}
 	}
 
-	Graph::Graph(Graph &&other) {
-		nodes_ = std::move(other.nodes_);
-		labelMap = std::move(other.labelMap);
-		name = std::move(other.name);
-		colors = std::move(other.colors);
+	Graph::Graph(Graph &&other) noexcept: nodes_(std::move(other.nodes_)),
+	                                      labelMap(std::move(other.labelMap)),
+	                                      name(std::move(other.name)),
+	                                      colors(std::move(other.colors)){
 		for (Node *node: nodes_)
 			node->owner = this;
 	}
 
 	Graph & Graph::operator=(const Graph &other) {
+		if (this == &other)
+			return *this;
+
 		clear();
 		for (const auto &[label, node]: other)
 			addNode(label);
@@ -48,7 +50,7 @@ namespace LL2X {
 		return *this;
 	}
 
-	Graph & Graph::operator=(Graph &&other) {
+	Graph & Graph::operator=(Graph &&other) noexcept {
 		clear();
 		nodes_ = std::move(other.nodes_);
 		labelMap = std::move(other.labelMap);
@@ -104,8 +106,8 @@ namespace LL2X {
 	Node & Graph::operator[](size_t index) const {
 		if (nodes_.size() <= index)
 			throw std::out_of_range("Invalid node index: " + std::to_string(index));
-		Node *node = *std::next(nodes_.begin(), index);
-		if (!node)
+		Node *node = *std::next(nodes_.begin(), static_cast<int64_t>(index));
+		if (node == nullptr)
 			throw std::runtime_error("Node at index " + std::to_string(index) + " is null");
 		return *node;
 	}
@@ -184,7 +186,7 @@ namespace LL2X {
 	}
 
 	Node & Graph::rename(Node *node, const std::string &new_label) {
-		if (!node)
+		if (node == nullptr)
 			throw std::invalid_argument("Can't rename a null node");
 		if (node->label() == new_label)
 			return *node;
@@ -222,12 +224,13 @@ namespace LL2X {
 		}
 
 		for (auto &pair: node_map) {
-			Node *old_node = pair.first, *new_node = pair.second;
+			Node *old_node = pair.first;
+			Node *new_node = pair.second;
 			for (Node *old_link: old_node->out_)
 				new_node->link(node_map.at(old_link), false);
 		}
 
-		if (rename_map)
+		if (rename_map != nullptr)
 			*rename_map = node_map;
 	}
 
@@ -238,10 +241,11 @@ namespace LL2X {
 	}
 
 	void Graph::addEdges(const std::string &pairs) {
-		size_t last = 0, space;
+		size_t last = 0;
+		size_t space = std::string::npos;
 		while (last != std::string::npos) {
 			space = pairs.find(' ', last + 1);
-			const std::string sub = pairs.substr(last? last + 1 : 0, space - (last + (last? 1 : 0)));
+			const std::string sub = pairs.substr(last != 0? last + 1 : 0, space - (last + (last == 0? 0 : 1)));
 			const size_t colon = sub.find(':');
 			const std::string from = sub.substr(0, colon);
 			const std::string to = sub.substr(colon + 1);
@@ -255,7 +259,7 @@ namespace LL2X {
 			*this -= nodes_.front();
 	}
 
-	Node * Graph::find(std::function<bool(Node &)> predicate) {
+	Node * Graph::find(const std::function<bool(Node &)> &predicate) {
 		for (Node *node: nodes_)
 			if (predicate(*node))
 				return node;
@@ -264,13 +268,14 @@ namespace LL2X {
 
 	DFSResult Graph::DFS(Node *start) const {
 		DFSResult::ParentMap parents;
-		DFSResult::TimeMap discovered, finished;
+		DFSResult::TimeMap discovered;
+		DFSResult::TimeMap finished;
 		int time = 0;
 
 		std::function<void(Node *)> visit = [&](Node *node) {
 			discovered[node] = ++time;
 			for (Node *out: node->out_)
-				if (discovered.count(out) == 0) {
+				if (!discovered.contains(out)) {
 					parents[out] = node;
 					visit(out);
 				}
@@ -299,7 +304,7 @@ namespace LL2X {
 			Node *next = queue.front();
 			queue.pop_front();
 			for (Node *out: next->out_)
-				if (visited.count(out) == 0) {
+				if (!visited.contains(out)) {
 					visited.insert(out);
 					order.push_back(out);
 					queue.push_back(out);
@@ -324,7 +329,7 @@ namespace LL2X {
 			queue.pop_front();
 			for (const auto *set: {&next->in_, &next->out_})
 				for (Node *adjacent: *set)
-					if (visited.count(adjacent) == 0) {
+					if (!visited.contains(adjacent)) {
 						visited.insert(adjacent);
 						out.insert(adjacent);
 						queue.push_back(adjacent);
@@ -347,7 +352,7 @@ namespace LL2X {
 			visited.insert(node);
 			out.push_back(node);
 			for (Node *successor: node->out_)
-				if (visited.count(successor) == 0)
+				if (!visited.contains(successor))
 					visit(successor);
 		};
 
@@ -451,18 +456,15 @@ namespace LL2X {
 		std::vector<std::pair<Node *, Node *>> out;
 		for (Node *node: nodes_)
 			for (Node *successor: *node)
-				out.push_back({node, successor});
+				out.emplace_back(node, successor);
 		return out;
 	}
 
 	std::string Graph::toDot(const std::string &direction) {
 		std::list<Node *> reflexives;
-		for (Node *node: nodes_) {
-			// node->rename("\"" + node->label() + "_i" + std::to_string(node->in_.size()) + "_o" +
-			// 	std::to_string(node->out_.size()) + "\"");
+		for (Node *node: nodes_)
 			if (node->reflexive())
 				reflexives.push_back(node);
-		}
 
 		std::ostringstream out;
 		out << "digraph rendered_graph {\n";
@@ -505,7 +507,7 @@ namespace LL2X {
 		std::ofstream out;
 		std::string path = "/tmp/ll2w_graph_";
 		for (const char ch: out_path)
-			if (std::isdigit(ch) || std::isalpha(ch) || ch == '_')
+			if (std::isdigit(ch) != 0 || std::isalpha(ch) != 0 || ch == '_')
 				path += ch;
 		path += ".dot";
 		out.open(path);
@@ -516,11 +518,11 @@ namespace LL2X {
 			out_path = (std::filesystem::current_path() / out_path.substr(2)).string();
 
 		std::string type = "png";
-		const size_t pos = out_path.find_last_of(".");
+		const size_t pos = out_path.find_last_of('.');
 		if (pos != std::string::npos && pos != out_path.size() - 1) {
 			type = out_path.substr(pos + 1);
 			for (const char ch: type)
-				if (!std::isalpha(ch)) {
+				if (std::isalpha(ch) == 0) {
 					type = "png";
 					break;
 				}

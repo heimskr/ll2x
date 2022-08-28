@@ -23,12 +23,12 @@ namespace LL2X {
 			void makeInterferenceGraph();
 
 			/** Selects the variable whose corresponding node in the interference graph has the highest degree. */
-			std::shared_ptr<Variable> selectHighestDegree(int *degree_out = nullptr) const;
+			std::shared_ptr<Variable> selectHighestDegree(size_t *degree_out = nullptr) const;
 
 			/** Selects the variable with the lowest spill cost. */
 			std::shared_ptr<Variable> selectLowestSpillCost() const;
 
-			std::shared_ptr<Variable> selectMostLive(int *liveness_out = nullptr) const;
+			std::shared_ptr<Variable> selectMostLive(size_t *liveness_out = nullptr) const;
 
 			std::shared_ptr<Variable> selectChaitin() const;
 

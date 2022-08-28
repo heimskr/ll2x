@@ -119,7 +119,7 @@ namespace LL2X {
 		for (const std::pair<const std::string, Node *> &pair: interference) {
 			if (!pair.second->data.has_value())
 				continue;
-			VariablePtr ptr = pair.second->get<VariablePtr>();
+			auto ptr = pair.second->get<VariablePtr>();
 #ifdef DEBUG_COLORING
 			std::cerr << "Variable " << ptr->ansiString() << " -> registers = ( ";
 			for (const int color: pair.second->colors)
@@ -140,22 +140,22 @@ namespace LL2X {
 		return Result::Success;
 	}
 
-	VariablePtr ColoringAllocator::selectHighestDegree(int *degree_out) const {
+	VariablePtr ColoringAllocator::selectHighestDegree(size_t *degree_out) const {
 		const Node *highest_node = nullptr;
-		int highest = -1;
+		size_t highest = SIZE_MAX;
 		// std::cerr << "Avoid["; for (const std::string &s: triedLabels) std::cerr << " " << s; std::cerr << " ]\n";
 		for (const Node *node: interference.nodes()) {
-			const int degree = node->degree();
+			const size_t degree = node->degree();
 			// if (highest < degree && triedLabels.count(node->label()) == 0) {
 			// if (highest < degree && function->canSpill(node->get<VariablePtr>())) {
-			if (highest < degree && triedLabels.count(node->label()) == 0
-					&& function->canSpill(node->get<VariablePtr>())) {
+			if (highest == SIZE_MAX || (highest < degree && !triedLabels.contains(node->label())
+					&& function->canSpill(node->get<VariablePtr>()))) {
 				highest_node = node;
 				highest = degree;
 			}
 		}
 
-		if (!highest_node)
+		if (highest_node == nullptr)
 			throw NoChoiceError("Couldn't find node with highest degree out of " +
 				std::to_string(interference.nodes().size()) + " node(s)");
 
@@ -164,7 +164,7 @@ namespace LL2X {
 			if (node->degree() == static_cast<size_t>(highest))
 				all_highest.push_back(node);
 
-		if (degree_out)
+		if (degree_out != nullptr)
 			*degree_out = highest;
 
 		return highest_node->get<VariablePtr>();
@@ -178,7 +178,7 @@ namespace LL2X {
 				continue;
 			var->clearSpillCost();
 			const int cost = var->spillCost();
-			if (cost != -1 && triedIDs.count(var->id) == 0 && (cost < lowest && !var->isSimple())) {
+			if (cost != -1 && !triedIDs.contains(var->id) && cost < lowest && !var->isSimple()) {
 				lowest = cost;
 				ptr = var;
 			}
@@ -192,10 +192,10 @@ namespace LL2X {
 		return ptr;
 	}
 
-	VariablePtr ColoringAllocator::selectMostLive(int *liveness_out) const {
+	VariablePtr ColoringAllocator::selectMostLive(size_t *liveness_out) const {
 		Timer timer("SelectMostLive");
 		VariablePtr ptr;
-		int highest = -1;
+		size_t highest = SIZE_MAX;
 		for (const auto *map: {&function->variableStore, &function->extraVariables})
 			for (const auto &[id, var]: *map) {
 				if (var->allRegistersSpecial()) {
@@ -212,8 +212,8 @@ namespace LL2X {
 					continue;
 				}
 
-				const int sum = function->getLiveIn(var).size() + function->getLiveOut(var).size();
-				if (highest < sum && triedIDs.count(var->originalID) == 0) {
+				const size_t sum = function->getLiveIn(var).size() + function->getLiveOut(var).size();
+				if (highest == SIZE_MAX || (highest < sum && !triedIDs.contains(var->originalID))) {
 					highest = sum;
 					ptr = var;
 				}
@@ -224,7 +224,7 @@ namespace LL2X {
 			throw std::runtime_error("Couldn't select variable with highest liveness in function " + *function->name);
 		}
 
-		if (liveness_out)
+		if (liveness_out != nullptr)
 			*liveness_out = highest;
 
 		if (!function->canSpill(ptr))
@@ -235,17 +235,17 @@ namespace LL2X {
 
 	VariablePtr ColoringAllocator::selectChaitin() const {
 		VariablePtr out;
-		long lowest = LONG_MAX;
+		int64_t lowest = LONG_MAX;
 		for (const Node *node: interference.nodes()) {
-			VariablePtr var = node->get<VariablePtr>();
+			auto var = node->get<VariablePtr>();
 			if (var->allRegistersSpecial() || !function->canSpill(var))
 				continue;
 			var->clearSpillCost();
 			const int cost = var->spillCost();
 			if (cost == INT_MAX)
 				continue;
-			const int degree = node->degree();
-			const long chaitin = cost * 10000L / degree;
+			const size_t degree = node->degree();
+			const int64_t chaitin = static_cast<int64_t>(cost * 10000l / degree);
 			if (chaitin < lowest) {
 				lowest = chaitin;
 				out = var;
@@ -275,25 +275,18 @@ namespace LL2X {
 				std::cerr << " " << alias->ansiString();
 			std::cerr << "\n";
 #endif
-			// if (var->registers.empty()) {
-			if (true) {
-				const std::string *parent_id = var->parentID();
-				if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
-					Node &node = interference.addNode(*parent_id);
-					node.data = var;
-					node.colors = var->registers;
+			const std::string *parent_id = var->parentID();
+			if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
+				Node &node = interference.addNode(*parent_id);
+				node.data = var;
+				node.colors = var->registers;
 #ifdef DEBUG_COLORING
-					info() << *var << ": " << var->registersRequired() << " required.";
-					if (var->type)
-						std::cerr << " " << std::string(*var->type);
-					std::cerr << "\n";
+				info() << *var << ": " << var->registersRequired() << " required.";
+				if (var->type)
+					std::cerr << " " << std::string(*var->type);
+				std::cerr << "\n";
 #endif
-					node.colorsNeeded = var->registersRequired();
-#ifdef DEBUG_COLORING
-				} else {
-					// std::cerr << "Skipping " << *var << " (" << *id << "): parent (" << *parent_id << ") is in graph\n";
-#endif
-				}
+				node.colorsNeeded = var->registersRequired();
 			}
 		}
 

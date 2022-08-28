@@ -5,7 +5,7 @@
 #include "graph/Node.h"
 
 namespace LL2X {
-	Node::Node(Graph *owner_, const std::string &label__): owner(owner_), label_(label__) {}
+	Node::Node(Graph *owner_, const std::string &_label_): owner(owner_), label_(_label_) {}
 
 	Node & Node::setColorsNeeded(int count) {
 		colorsNeeded = count;
@@ -102,7 +102,7 @@ namespace LL2X {
 		if (other.owner != owner)
 			return false;
 
-		if (reachability.count(&other) != 0)
+		if (reachability.contains(&other))
 			return reachability.at(&other);
 
 		std::unordered_set<Node *> visited;
@@ -116,7 +116,7 @@ namespace LL2X {
 					return true;
 				}
 
-				if (visited.count(out_node) == 0) {
+				if (!visited.contains(out_node)) {
 					visited.insert(out_node);
 					queue.push_back(out_node);
 				}
@@ -134,7 +134,7 @@ namespace LL2X {
 	size_t Node::degree() const {
 		size_t deg = out_.size();
 		for (Node *neighbor: in_)
-			if (out_.count(neighbor) == 0)
+			if (!out_.contains(neighbor))
 				++deg;
 		return deg;
 	}

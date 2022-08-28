@@ -16,7 +16,7 @@ namespace LL2X {
 
 		public:
 			Node *startNode = nullptr;
-			std::unordered_map<Node *, int> levels;
+			std::unordered_map<Node *, size_t> levels;
 			std::unordered_map<Node *, Node *> dominators;
 
 			/** Constructs a dominator tree from a graph. The dominator tree is a tree in which each node of the

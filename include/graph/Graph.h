@@ -52,11 +52,11 @@ namespace LL2X {
 
 			Graph(const Graph &);
 
-			Graph(Graph &&);
+			Graph(Graph &&) noexcept;
 
 			Graph & operator=(const Graph &);
 
-			Graph & operator=(Graph &&);
+			Graph & operator=(Graph &&) noexcept;
 
 			/** Constructs a graph with a name and no nodes. */
 			Graph(const std::string &name_);
@@ -139,7 +139,7 @@ namespace LL2X {
 			void reset();
 
 			/** Attempts to find the first node matching a predicate function. */
-			Node * find(std::function<bool(Node &)>);
+			Node * find(const std::function<bool(Node &)> &);
 
 			/** Runs a depth-first search at a given start node. */
 			DFSResult DFS(Node *) const;
@@ -180,11 +180,11 @@ namespace LL2X {
 			std::vector<std::pair<Node *, Node *>> allEdges() const;
 
 			/** Returns a representation of the graph in graphviz dot syntax. */
-			virtual std::string toDot(const std::string &direction = "TB");
+			virtual std::string toDot(const std::string &direction);
 
 			/** Renders a representation (PNG by default; changeable by changing the file extension) of the graph to an
 			 *  output file. */
-			void renderTo(std::string png_path, const std::string &direction = "TB");
+			void renderTo(std::string out_path, const std::string &direction = "TB");
 
 			decltype(labelMap)::iterator begin();
 			decltype(labelMap)::iterator end();
