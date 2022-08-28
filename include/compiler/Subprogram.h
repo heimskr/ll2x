@@ -8,9 +8,16 @@ namespace LL2X {
 	class Subprogram {
 		public:
 			std::string name, linkageName;
-			int scope, file, line, type, scopeLine, unit, declaration, retainedNodes;
+			int64_t scope;
+			int64_t file;
+			int64_t line;
+			int64_t type;
+			int64_t scopeLine;
+			int64_t unit;
+			int64_t declaration;
+			int64_t retainedNodes;
 			/** The index of the subprogram within the debug data section, not within the LLVM IR. */
-			int index = -1;
+			int64_t index = -1;
 
 			Subprogram(const ASTNode &);
 
@@ -19,6 +26,6 @@ namespace LL2X {
 			std::string getName() const;
 
 		private:
-			int parseBang(const ASTNode &);
+			static int64_t parseBang(const ASTNode &);
 	};
 }

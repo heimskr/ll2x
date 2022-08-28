@@ -150,7 +150,7 @@ namespace LL2X {
 		bool padded = false;
 		/** Map indices in the struct before padding to the corresponding indices after padding has been inserted.
 		 *  If padded is false, this is empty. */
-		std::map<int, int> paddingMap;
+		std::map<int64_t, int64_t> paddingMap;
 		std::shared_ptr<StructType> paddedChild;
 		static std::unordered_map<std::string, std::shared_ptr<StructType>> knownStructs;
 		TypeType typeType() const override { return TypeType::Struct; }

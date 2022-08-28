@@ -1,5 +1,7 @@
-#include <iostream>
+#include <algorithm>
 #include <climits>
+#include <functional>
+#include <iostream>
 #include <sstream>
 
 #include "compiler/BasicBlock.h"
@@ -20,11 +22,11 @@ namespace LL2X {
 
 	Variable::Variable(ID id_, TypePtr type_, const WeakSet<BasicBlock> &defining_blocks,
 	const WeakSet<BasicBlock> &using_blocks):
-		originalID(id_), id(id_), type(type_), definingBlocks(defining_blocks), usingBlocks(using_blocks) {}
+		originalID(id_), id(id_), type(std::move(type_)), definingBlocks(defining_blocks), usingBlocks(using_blocks) {}
 
 	int Variable::weight() const {
 		int sum = 0;
-		for (std::weak_ptr<BasicBlock> use: usingBlocks)
+		for (const std::weak_ptr<BasicBlock> &use: usingBlocks)
 			sum += use.lock()->estimatedExecutions;
 		return sum;
 	}
@@ -62,29 +64,34 @@ namespace LL2X {
 	bool Variable::operator==(const Variable &other) const {
 		if (this == &other)
 			return true;
+
 		if (id != other.id)
 			return false;
+
 		if (type == other.type)
 			return true;
+
 		if ((type == nullptr) != (other.type == nullptr))
 			return false;
+
 		return *type == *other.type;
 	}
 
 	bool Variable::equivalent(const Variable &other) const {
 		if (*this == other)
 			return true;
+
 		if (!allRegistersSpecial() || !other.allRegistersSpecial() || registers.size() != other.registers.size())
 			return false;
-		for (const int reg: registers)
-			if (other.registers.count(reg) == 0)
-				return false;
-		return true;
+
+		return std::ranges::all_of(registers, [&other](const auto reg) {
+			return other.registers.contains(reg);
+		});
 	}
 
 	bool Variable::isAliasOf(const Variable &other) const {
-		return *this == other || aliases.count(const_cast<Variable *>(&other)) != 0
-			|| other.aliases.count(const_cast<Variable *>(this)) != 0;
+		return *this == other || aliases.contains(const_cast<Variable *>(&other))
+			|| other.aliases.contains(const_cast<Variable *>(this));
 	}
 
 	std::string Variable::ansiString(x86_64::Width width) const {
@@ -150,21 +157,21 @@ namespace LL2X {
 	std::string Variable::plainString(x86_64::Width width) const {
 		if (registers.empty())
 			return '^' + *id;
-		else if (registers.size() == 1)
+
+		if (registers.size() == 1)
 			return '%' + x86_64::registerName(*registers.begin(), width) + ":" + *id;
-		else {
-			std::string out = "<";
-			bool first = true;
-			for (const int reg: registers) {
-				if (first)
-					first = false;
-				else
-					out += ' ';
-				out += '%' + x86_64::registerName(reg, width);
-			}
-			out += ">:" + *id;
-			return out;
+
+		std::string out = "<";
+		bool first = true;
+		for (const int reg: registers) {
+			if (first)
+				first = false;
+			else
+				out += ' ';
+			out += '%' + x86_64::registerName(reg, width);
 		}
+		out += ">:" + *id;
+		return out;
 	}
 
 	Function * Variable::getFunction() const {
@@ -174,7 +181,7 @@ namespace LL2X {
 
 	std::string Variable::functionName() const {
 		const Function *function = getFunction();
-		return function? function->name->substr(1) : "?";
+		return function != nullptr? function->name->substr(1) : "?";
 	}
 
 	Variable::ID Variable::parentID() const {
@@ -187,8 +194,7 @@ namespace LL2X {
 		std::cerr << *this << "{o" << *originalID << "}.makeAliasOf(" << *new_parent << "{o" << *new_parent->originalID
 		          << "}) \e[36m" << functionName() << "\e[39m " << this << "/" << new_parent.get();
 #endif
-		if (new_parent.get() == this || new_parent->parent.lock().get() == this
-		    || new_parent->aliases.count(this) != 0) {
+		if (new_parent.get() == this || new_parent->parent.lock().get() == this || new_parent->aliases.contains(this)) {
 #ifdef DEBUG_ALIASES
 			std::cerr << " \e[2m...\e[22;31mnope\e[39m\n";
 #endif
@@ -226,7 +232,7 @@ namespace LL2X {
 		registers = new_parent->registers; // ???
 	}
 
-	void Variable::addDefiner(std::shared_ptr<BasicBlock> block) {
+	void Variable::addDefiner(const BasicBlockPtr &block) {
 		if (auto sparent = parent.lock()) {
 			sparent->addDefiner(block);
 		} else {
@@ -236,7 +242,7 @@ namespace LL2X {
 		}
 	}
 
-	void Variable::removeDefiner(std::shared_ptr<BasicBlock> block) {
+	void Variable::removeDefiner(const BasicBlockPtr &block) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->removeDefiner(block);
@@ -249,7 +255,7 @@ namespace LL2X {
 			alias->definingBlocks.erase(block);
 	}
 
-	void Variable::addUsingBlock(std::shared_ptr<BasicBlock> block) {
+	void Variable::addUsingBlock(const BasicBlockPtr &block) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->addUsingBlock(block);
@@ -262,7 +268,7 @@ namespace LL2X {
 			alias->usingBlocks.insert(block);
 	}
 
-	void Variable::removeUsingBlock(std::shared_ptr<BasicBlock> block) {
+	void Variable::removeUsingBlock(const BasicBlockPtr &block) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->removeUsingBlock(block);
@@ -275,7 +281,7 @@ namespace LL2X {
 			alias->usingBlocks.erase(block);
 	}
 
-	void Variable::addDefinition(std::shared_ptr<Instruction> instruction) {
+	void Variable::addDefinition(const InstructionPtr &instruction) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->addDefinition(instruction);
@@ -288,7 +294,7 @@ namespace LL2X {
 			alias->definitions.insert(instruction);
 	}
 
-	void Variable::removeDefinition(std::shared_ptr<Instruction> instruction) {
+	void Variable::removeDefinition(const InstructionPtr &instruction) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->removeDefinition(instruction);
@@ -301,7 +307,7 @@ namespace LL2X {
 			alias->definitions.erase(instruction);
 	}
 
-	void Variable::addUse(std::shared_ptr<Instruction> instruction) {
+	void Variable::addUse(const InstructionPtr &instruction) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->addUse(instruction);
@@ -314,7 +320,7 @@ namespace LL2X {
 			alias->uses.insert(instruction);
 	}
 
-	void Variable::removeUse(std::shared_ptr<Instruction> instruction) {
+	void Variable::removeUse(const InstructionPtr &instruction) {
 		if (auto sparent = parent.lock()) {
 			if (sparent.get() != this) {
 				sparent->removeUse(instruction);
@@ -327,7 +333,7 @@ namespace LL2X {
 			alias->uses.erase(instruction);
 	}
 
-	std::shared_ptr<BasicBlock> Variable::onlyDefiner() const {
+	BasicBlockPtr Variable::onlyDefiner() const {
 		if (definingBlocks.size() != 1) {
 			throw std::runtime_error("Variable has " + std::string(definingBlocks.empty()? "no" : "multiple") +
 				" defining blocks");
@@ -336,10 +342,10 @@ namespace LL2X {
 		return definingBlocks.begin()->lock();
 	}
 
-	std::shared_ptr<Instruction> Variable::onlyDefinition() const {
+	InstructionPtr Variable::onlyDefinition() const {
 		if (definitions.size() != 1) {
 			std::cerr << "[Bad variable: " << *this << "]\n";
-			for (auto weak: definitions)
+			for (const auto &weak: definitions)
 				std::cerr << "\e[31;2m-\e[0m " << weak.lock()->debugExtra() << "\n";
 			throw std::runtime_error("Variable has " + std::string(definitions.empty()? "no" : "multiple") +
 				" definitions");
@@ -348,7 +354,7 @@ namespace LL2X {
 		return definitions.begin()->lock();
 	}
 
-	void Variable::setType(TypePtr new_type) {
+	void Variable::setType(const TypePtr &new_type) {
 		if (auto sparent = parent.lock()) {
 			sparent->setType(new_type);
 		} else {
@@ -370,25 +376,21 @@ namespace LL2X {
 	}
 
 	VARSETTER(ID, ID, new_id, id)
-	VARSETTER(DefiningBlocks, const decltype(Variable::definingBlocks) &, block, definingBlocks)
-	VARSETTER(Definitions, const decltype(Variable::definitions) &, defs, definitions)
-	VARSETTER(Uses, const decltype(Variable::uses) &, new_uses, uses)
-	VARSETTER(UsingBlocks, const decltype(Variable::usingBlocks) &, blocks, usingBlocks)
-	VARSETTER(LastUse, decltype(Variable::lastUse), use, lastUse);
-	VARSETTER(Registers, const decltype(Variable::registers) &, new_registers, registers);
+	VARSETTER(DefiningBlocks, const decltype(Variable::definingBlocks) &, block,         definingBlocks)
+	VARSETTER(Definitions,    const decltype(Variable::definitions) &,    defs,          definitions)
+	VARSETTER(Uses,           const decltype(Variable::uses) &,           new_uses,      uses)
+	VARSETTER(UsingBlocks,    const decltype(Variable::usingBlocks) &,    blocks,        usingBlocks)
+	VARSETTER(LastUse,        const decltype(Variable::lastUse) &,        use,           lastUse);
+	VARSETTER(Registers,      const decltype(Variable::registers) &,      new_registers, registers);
 
 	bool Variable::hasSpecialRegister() const {
-		for (const int reg: registers)
-			if (x86_64::isSpecialPurpose(reg))
-				return true;
-		return false;
+		return std::ranges::any_of(registers, x86_64::isSpecialPurpose);
 	}
 
 	bool Variable::hasNonSpecialRegister() const {
-		for (const int reg: registers)
-			if (!x86_64::isSpecialPurpose(reg))
-				return true;
-		return false;
+		return std::ranges::any_of(registers, [](const int reg) {
+			return !x86_64::isSpecialPurpose(reg);
+		});
 	}
 
 	int Variable::nonSpecialCount() const {
@@ -406,7 +408,8 @@ namespace LL2X {
 	bool Variable::compareRegisters(const Variable &other) const {
 		if (registers.size() != other.registers.size())
 			return false;
-		auto this_iter = registers.begin(), that_iter = other.registers.begin();
+		auto this_iter = registers.begin();
+		auto that_iter = other.registers.begin();
 		for (; this_iter != registers.end(); ++this_iter, ++that_iter)
 			if (*this_iter != *that_iter)
 				return false;
@@ -451,13 +454,13 @@ namespace LL2X {
 		return os << var.ansiString();
 	}
 
-	bool Variable::isLess(long max) const {
+	bool Variable::isLess(int64_t max) const {
 		return isLess(id, max);
 	}
 
-	bool Variable::isLess(Variable::ID id, long max) {
+	bool Variable::isLess(Variable::ID id, int64_t max) {
 		try {
-			long parsed = Util::parseLong(id);
+			int64_t parsed = Util::parseLong(id);
 			return parsed < max;
 		} catch (const std::invalid_argument &) {
 			return false;

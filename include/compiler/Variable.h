@@ -78,25 +78,25 @@ namespace LL2X {
 			std::weak_ptr<Variable> getParent() const { return parent; }
 			const std::set<Variable *, VariableCompare> & getAliases() const { return aliases; }
 
-			void addDefiner(std::shared_ptr<BasicBlock>);
-			void removeDefiner(std::shared_ptr<BasicBlock>);
-			void addUsingBlock(std::shared_ptr<BasicBlock>);
-			void removeUsingBlock(std::shared_ptr<BasicBlock>);
-			void addDefinition(std::shared_ptr<Instruction>);
-			void removeDefinition(std::shared_ptr<Instruction>);
-			void addUse(std::shared_ptr<Instruction>);
-			void removeUse(std::shared_ptr<Instruction>);
+			void addDefiner(const std::shared_ptr<BasicBlock> &);
+			void removeDefiner(const std::shared_ptr<BasicBlock> &);
+			void addUsingBlock(const std::shared_ptr<BasicBlock> &);
+			void removeUsingBlock(const std::shared_ptr<BasicBlock> &);
+			void addDefinition(const std::shared_ptr<Instruction> &);
+			void removeDefinition(const std::shared_ptr<Instruction> &);
+			void addUse(const std::shared_ptr<Instruction> &);
+			void removeUse(const std::shared_ptr<Instruction> &);
 
 			std::shared_ptr<BasicBlock> onlyDefiner() const;
 			std::shared_ptr<Instruction> onlyDefinition() const;
 
 			void setID(ID);
-			void setType(TypePtr);
+			void setType(const TypePtr &);
 			void setDefiningBlocks(const decltype(definingBlocks) &);
 			void setDefinitions(const decltype(definitions) &);
 			void setUses(const decltype(uses) &);
 			void setUsingBlocks(const decltype(usingBlocks) &);
-			void setLastUse(decltype(lastUse));
+			void setLastUse(const decltype(lastUse) &);
 			void setRegisters(const decltype(registers) &);
 
 			/** Returns true if the variable has at least one register that is special purpose. */
@@ -136,10 +136,10 @@ namespace LL2X {
 			void debug();
 
 			/** Returns true if the variable's ID is numeric and less than the given number. */
-			bool isLess(long) const;
+			bool isLess(int64_t) const;
 
 			/** Returns true if the given variable ID is numeric and less than the given number. */
-			static bool isLess(Variable::ID, long);
+			static bool isLess(Variable::ID, int64_t);
 	};
 
 	std::ostream & operator<<(std::ostream &, const LL2X::Variable &);

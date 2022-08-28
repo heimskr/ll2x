@@ -26,9 +26,9 @@ namespace LL2X {
 			std::unordered_set<VariablePtr> read, written;
 
 			/** The order of the instruction within the entire function in its linearized representation. */
-			int index;
+			int64_t index = -1;
 
-			int debugIndex = -1;
+			int64_t debugIndex = -1;
 
 			/** Whether to treat this instruction as not reading any variables. */
 			bool secretReads = false;

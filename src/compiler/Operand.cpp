@@ -17,7 +17,7 @@ namespace LL2X {
 		return (var && var->registers.size() == 1 && *var->registers.begin() == x86_64::rip)? "@GOTPCREL" : "";
 	}
 
-	Operand::Operand(VariablePtr var):
+	Operand::Operand(const VariablePtr &var):
 	mode(Mode::Register), width(x86_64::getWidth(var->type? var->type->width() : 64)),
 	bitWidth(var->type? var->type->width() : 64), reg(var) {
 		if (!var->type)

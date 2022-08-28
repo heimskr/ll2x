@@ -12,45 +12,46 @@
 #include "parser/StructNode.h"
 
 namespace LL2X::PaddedStructs {
-	int getOffset(const StructType &type, int index) {
+	int64_t getOffset(const StructType &type, int64_t index) {
 		if (index == 0)
 			return 0;
-		int offset = 0;
+		int64_t offset = 0;
 		std::shared_ptr<StructNode> node = type.node;
 		if (!node)
 			return getOffset(*StructType::knownStructs.at(type.barename()), index);
 		if (type.shape == StructShape::Packed)
-			for (int i = 0; i < index; ++i)
+			for (int64_t i = 0; i < index; ++i)
 				offset += node->types.at(i)->width();
 		else
-			for (int i = 0; i < index; ++i) {
-				const int width = node->types.at(i)->width();
+			for (int64_t i = 0; i < index; ++i) {
+				const int64_t width = node->types.at(i)->width();
 				offset = Util::upalign(offset, width) + width;
 			}
 		return offset;
 	}
 
-	int getOffset(const std::shared_ptr<StructType> &type, int index) {
+	int64_t getOffset(const std::shared_ptr<StructType> &type, int64_t index) {
 		return getOffset(*type, index);
 	}
 
-	VariablePtr extract(const VariablePtr &source, int index, Function &function, const InstructionPtr &instruction) {
-		std::list<int> source_regs(source->registers.begin(), source->registers.end());
+	VariablePtr extract(const VariablePtr &source, int64_t index, Function &function,
+	                    const InstructionPtr &instruction) {
+		std::list<int64_t> source_regs(source->registers.begin(), source->registers.end());
 
 		TypePtr type = source->type;
 		if (!type)
 			throw std::runtime_error("PaddedStructs::extract: source variable has dno type");
 		
 		auto *initial_struct_type = dynamic_cast<StructType *>(type.get());
-		if (!initial_struct_type)
+		if (initial_struct_type == nullptr)
 			throw std::runtime_error("PaddedStructs::extract: source variable type isn't StructType");
 
 		auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-		if (!llvm)
+		if (llvm == nullptr)
 			throw std::runtime_error("PaddedStructs::extract not called on an LLVM instruction");
 
 		auto *evnode = dynamic_cast<ExtractValueNode *>(llvm->node);
-		if (!evnode)
+		if (evnode == nullptr)
 			throw std::runtime_error("PaddedStructs::extract not called on an extractvalue node");
 
 		const OperandPtr &out_operand = evnode->operand;
@@ -66,11 +67,12 @@ namespace LL2X::PaddedStructs {
 
 		// TODO: support ArrayType
 
-		int width_sum = 0;
-		for (int i = 0; i < index; ++i)
+		int64_t width_sum = 0;
+		for (int64_t i = 0; i < index; ++i)
 			width_sum += struct_type->node->types.at(i)->width();
 
-		int skip, source_reg_index = 0;
+		int64_t skip = 0;
+		int64_t source_reg_index = 0;
 
 		// While 64 <= width sum, subtract 64 and skip a source register.
 		// The result will be the number of bits to skip in the first used source register.
@@ -78,12 +80,12 @@ namespace LL2X::PaddedStructs {
 			++source_reg_index;
 
 		auto extracted_type = struct_type->node->types.at(index);
-		int width_remaining = extracted_type->width();
-		int target_remaining = 64;
-		int target_reg_index = 0;
+		int64_t width_remaining = extracted_type->width();
+		int64_t target_remaining = 64;
+		int64_t target_reg_index = 0;
 
 		while (0 < width_remaining) {
-			const int to_take = std::min({64 - skip, target_remaining, width_remaining});
+			const int64_t to_take = std::min({64 - skip, target_remaining, width_remaining});
 			VariablePtr from_pack = function.newVariable(OpaqueType::make(), instruction->parent.lock());
 
 			function.comment(instruction, "PaddedStructs(" + source->type->toString() + " -> " +

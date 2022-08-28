@@ -13,12 +13,12 @@ namespace LL2X {
 
 	namespace PaddedStructs {
 		/** Returns the offset in bits of a member of a struct. */
-		int getOffset(const StructType &, int index);
+		int64_t getOffset(const StructType &, int64_t index);
 
-		int getOffset(const std::shared_ptr<StructType> &, int index);
+		int64_t getOffset(const std::shared_ptr<StructType> &, int64_t index);
 
 		/** Inserts instructions to extract a value from a struct packed inside registers. */
-		std::shared_ptr<Variable> extract(const std::shared_ptr<Variable> &, int index, Function &,
+		std::shared_ptr<Variable> extract(const std::shared_ptr<Variable> &, int64_t index, Function &,
 		                                  const std::shared_ptr<Instruction> &);
 	}
 }

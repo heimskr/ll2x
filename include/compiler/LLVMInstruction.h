@@ -15,7 +15,7 @@ namespace LL2X {
 			virtual ~LLVMInstruction();
 
 			bool isTerminal() const override;
-			ExtractionResult extract(bool force = false) override;
+			ExtractionResult extract(bool force) override;
 			std::string debugExtra() override;
 			std::string toString() const override;
 

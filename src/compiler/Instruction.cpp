@@ -5,7 +5,7 @@
 #include "parser/ASTNode.h"
 
 namespace LL2X {
-	Instruction::~Instruction() {}
+	Instruction::~Instruction() = default;
 
 	bool Instruction::operator<(const Instruction &other) const {
 		return index < other.index;

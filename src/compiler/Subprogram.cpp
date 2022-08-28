@@ -45,7 +45,7 @@ namespace LL2X {
 		return nonempty.substr(1, nonempty.size() - 2);
 	}
 
-	int Subprogram::parseBang(const ASTNode &node) {
+	int64_t Subprogram::parseBang(const ASTNode &node) {
 		return node.symbol == LLVMTOK_INTBANG? node.atoi() : -1;
 	}
 }

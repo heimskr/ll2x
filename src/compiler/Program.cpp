@@ -11,13 +11,13 @@
 #include "compiler/Getelementptr.h"
 #include "compiler/PaddedStructs.h"
 #include "compiler/Program.h"
+#include "main.h"
+#include "options.h"
 #include "parser/ASTNode.h"
 #include "parser/Parser.h"
 #include "parser/StructNode.h"
 #include "parser/Values.h"
 #include "util/Util.h"
-#include "main.h"
-#include "options.h"
 
 namespace LL2X {
 	struct GlobalData {
@@ -33,8 +33,8 @@ namespace LL2X {
 		StructType::knownStructs.clear();
 		for (const ASTNode *node: root) {
 			if (node->symbol == LLVM_STRUCTDEF) {
-				const StructNode *struct_node = dynamic_cast<const StructNode *>(node);
-				if (!struct_node)
+				const auto *struct_node = dynamic_cast<const StructNode *>(node);
+				if (struct_node == nullptr)
 					throw std::runtime_error("struct_node is null in Program::Program");
 				StructType::knownStructs.emplace(*struct_node->name, std::make_shared<StructType>(struct_node));
 			}
@@ -43,7 +43,7 @@ namespace LL2X {
 		declareBuiltins();
 
 		for (ASTNode *node: root) {
-			if (!node)
+			if (node == nullptr)
 				continue;
 			switch (node->symbol) {
 				case LLVM_FUNCTION_DEF:
@@ -58,12 +58,12 @@ namespace LL2X {
 					sourceFilename = node->extractName();
 					break;
 				case LLVM_GLOBAL_DEF:
-					if (GlobalVarDef *global = dynamic_cast<GlobalVarDef *>(node)) {
+					if (auto *global = dynamic_cast<GlobalVarDef *>(node)) {
 						globals.emplace(*node->lexerInfo, global);
 					} else throw std::runtime_error("Node with token GLOBAL_DEF isn't an instance of GlobalVarDef");
 					break;
 				case LLVMTOK_ATTRIBUTES: {
-					AttributesNode *attrnode = dynamic_cast<AttributesNode *>(node);
+					const auto *attrnode = dynamic_cast<const AttributesNode *>(node);
 					fnattrs.emplace(attrnode->index, attrnode->functionAttributes);
 					parattrs.emplace(attrnode->index, attrnode->parameterAttributes);
 					break;
@@ -72,26 +72,26 @@ namespace LL2X {
 					aliases.emplace(node->lexerInfo, dynamic_cast<AliasDef *>(node));
 					break;
 				case LLVMTOK_DIFILE: {
-					const int index = node->front()->atoi();
+					const int64_t index = node->front()->atoi();
 					files.try_emplace(index, node->at(1)->unquote(), node->at(2)->unquote());
 					highestIndex = std::max(index, highestIndex);
 					break;
 				}
 				case LLVMTOK_DILOCATION: {
-					const int index = node->front()->atoi();
+					const int64_t index = node->front()->atoi();
 					locations.try_emplace(index, *node->at(1));
 					highestIndex = std::max(index, highestIndex);
 					break;
 				}
 				case LLVMTOK_DISUBPROGRAM: {
-					const int index = node->front()->atoi();
+					const int64_t index = node->front()->atoi();
 					subprograms.try_emplace(index, *node->at(1));
 					highestIndex = std::max(index, highestIndex);
 					break;
 				}
 				case LLVMTOK_DILB:
 				case LLVMTOK_DILBF: {
-					const int index = node->front()->atoi();
+					const int64_t index = node->front()->atoi();
 					lexicalBlocks.try_emplace(index, node->at(2)->atoi(), node->at(1)->atoi());
 					highestIndex = std::max(index, highestIndex);
 					break;
@@ -100,13 +100,13 @@ namespace LL2X {
 		}
 
 		for (auto &[index, location]: locations)
-			if (subprograms.count(location.scope) != 0)
+			if (subprograms.contains(location.scope))
 				location.file = subprograms.at(location.scope).file;
-			else if (lexicalBlocks.count(location.scope) != 0) {
+			else if (lexicalBlocks.contains(location.scope)) {
 				location.file = lexicalBlocks.at(location.scope).file;
 				do {
 					location.scope = lexicalBlocks.at(location.scope).scope;
-				} while (lexicalBlocks.count(location.scope) != 0);
+				} while (lexicalBlocks.contains(location.scope));
 			} else
 				warn() << "Couldn't find scope " << location.scope << " from location " << index << ".\n";
 	}
@@ -119,7 +119,7 @@ namespace LL2X {
 	void Program::analyze() {
 		for (auto &[name, function]: functions) {
 			ValuePtr value;
-			long simple_index = -1;
+			int64_t simple_index = -1;
 			switch (function->analyze(&value, &simple_index)) {
 				case Function::Type::Simple:
 					simpleFunctions.emplace(name.substr(1), simple_index);
@@ -172,7 +172,7 @@ namespace LL2X {
 			if (*pair.second->name == SINGLE_FUNCTION)
 #endif
 			out << pair.second->toString() << "\n";
-			if (pair.second->section && *pair.second->section == ".text.startup")
+			if (pair.second->section != nullptr && *pair.second->section == ".text.startup")
 				startup.push_back(pair.second);
 		}
 
@@ -212,9 +212,9 @@ namespace LL2X {
 			global_data.try_emplace(name, constant, constant->value, global->location);
 		}
 
-		if (global_data.count("llvm.global_ctors") != 0) {
+		if (global_data.contains("llvm.global_ctors")) {
 			const GlobalData &def = global_data.at("llvm.global_ctors");
-			if (auto *array = dynamic_cast<const ArrayType *>(def.constant->type.get())) {
+			if (const auto *array = dynamic_cast<const ArrayType *>(def.constant->type.get())) {
 				out << ".section .data.rel\n";
 				out << ".align 8\n\n";
 				out << "__ctors_start:\n";
@@ -229,7 +229,7 @@ namespace LL2X {
 					def.constant->type->toString());
 		}
 
-		bool changed;
+		bool changed = false;
 
 		do {
 			changed = false;
@@ -242,7 +242,7 @@ namespace LL2X {
 						changed = true;
 					} else if (data.value->valueType() == ValueType::Global) {
 						const std::string &target = *dynamic_cast<GlobalValue *>(data.value.get())->name;
-						if (global_strings.count(target) != 0) {
+						if (global_strings.contains(target)) {
 							global_strings.emplace(name, global_strings.at(target));
 							changed = true;
 						}
@@ -301,17 +301,18 @@ namespace LL2X {
 		} else {
 			auto snode = std::make_shared<StructNode>(types, packed? StructShape::Packed : StructShape::Default);
 			auto stype = std::make_shared<StructType>(snode);
-			int sum = 0, i = 0;
+			int64_t sum = 0;
+			int64_t i = 0;
 			for (const ConstantPtr &constant: constants) {
 				if (first)
 					first = false;
 				else
 					out += '\n';
-				const int offset = PaddedStructs::getOffset(stype, i++) / 8;
-				const int difference = offset - sum;
-				if (difference < 0) {
+				const int64_t offset = PaddedStructs::getOffset(stype, i++) / 8;
+				const int64_t difference = offset - sum;
+				if (difference < 0)
 					throw std::runtime_error("Difference between struct offset and total width is negative");
-				} else if (0 < difference) {
+				if (0 < difference) {
 					out += ".fill " + std::to_string(difference) + ", 1, 0\n";
 					sum = offset;
 				}
@@ -373,11 +374,11 @@ namespace LL2X {
 			}
 			case ValueType::Getelementptr: {
 				section = ".data";
-				GetelementptrValue *gep = dynamic_cast<GetelementptrValue *>(value.get());
+				auto *gep = dynamic_cast<GetelementptrValue *>(value.get());
 
 				auto validate = [value](GetelementptrValue *gep) {
 					for (const auto &[width, decimal]: gep->decimals)
-						if (!std::holds_alternative<long>(decimal)) {
+						if (!std::holds_alternative<int64_t>(decimal)) {
 							std::cerr << *value << '\n';
 							throw std::runtime_error("Found an invalid decimal in a getelementptr expression in "
 								"Program::outputValue");
@@ -385,14 +386,14 @@ namespace LL2X {
 				};
 
 				validate(gep);
-				long offset = Getelementptr::compute(gep, nullptr) / 8;
+				int64_t offset = Getelementptr::compute(gep, nullptr) / 8;
 				std::string comment = " // Offsets: " + std::to_string(offset);
 				bool comment_changed = false;
 
 				while (gep->variable->valueType() == ValueType::Getelementptr) {
 					gep = dynamic_cast<GetelementptrValue *>(gep->variable.get());
 					validate(gep);
-					const long new_offset = Getelementptr::compute(gep, nullptr) / 8;
+					const int64_t new_offset = Getelementptr::compute(gep, nullptr) / 8;
 					comment += ", " + std::to_string(new_offset);
 					comment_changed = true;
 					offset += new_offset;
@@ -427,11 +428,6 @@ namespace LL2X {
 		return out;
 	}
 
-	void Program::debugSection(std::ostream *out) {
-		// TODO: implement debug data
-		(void) out;
-	}
-
 	int Program::symbolSize(const std::string &name) const {
 		GlobalVarDef *def = globals.at(name);
 		if (def->type)
@@ -453,7 +449,7 @@ namespace LL2X {
 		}
 	}
 
-	int Program::newDebugIndex() {
+	int64_t Program::newDebugIndex() {
 		return ++highestIndex;
 	}
 

@@ -21,13 +21,14 @@ namespace LL2X {
 
 	class Program {
 		private:
-			int highestIndex = -1;
+			int64_t highestIndex = -1;
 			std::mutex mutex;
 
 			std::string outputStruct(const StructValue &);
-			std::string valuePrefix(size_t bitwidth);
 			std::string outputValue(const TypePtr &type, const ValuePtr &value, const char * &section);
 			std::string outputArray(const ArrayValue &);
+
+			static std::string valuePrefix(size_t bitwidth);
 
 		public:
 			std::unordered_map<std::string, Function *> functions;
@@ -37,18 +38,18 @@ namespace LL2X {
 			/** A set of all globals to which references were emitted while outputting the data section. Doesn't include
 			 *  the '@'. */
 			std::set<std::string> referencedGlobals;
-			std::map<int, std::unordered_set<FnAttr>> fnattrs;
-			std::map<int, std::unordered_set<ParAttr>> parattrs;
+			std::map<int64_t, std::unordered_set<FnAttr>> fnattrs;
+			std::map<int64_t, std::unordered_set<ParAttr>> parattrs;
 			std::unordered_map<const std::string *, AliasDef *> aliases;
-			std::map<int, File> files;
-			std::map<int, Location> locations;
-			std::map<int, Subprogram> subprograms;
-			std::map<int, LexicalBlock> lexicalBlocks;
+			std::map<int64_t, File> files;
+			std::map<int64_t, Location> locations;
+			std::map<int64_t, Subprogram> subprograms;
+			std::map<int64_t, LexicalBlock> lexicalBlocks;
 			/** A set of all LLVM debug indices found in the program. */
-			std::set<int> debugIndices;
+			std::set<int64_t> debugIndices;
 			/** A map of names of functions that do nothing except return an argument to the index of the argument they
 			 *  return. Names don't contain a leading @. */
-			std::map<std::string, long> simpleFunctions;
+			std::map<std::string, int64_t> simpleFunctions;
 			/** A set of names of functions that do nothing but return void. Names don't contain a leading @. */
 			std::set<std::string> uselessFunctions;
 			/** A map of names of functions that do nothing but return a constant to the constant they return.
@@ -67,11 +68,8 @@ namespace LL2X {
 			/** Returns the source code of the program. */
 			std::string toString();
 
-			/** Outputs the data section (excluding the #data header) to a stream. */
+			/** Outputs the data section to a stream. */
 			void dataSection(std::ostream &);
-
-			/** Outputs the debug data section (excluding the #debug header) to a stream. */
-			void debugSection(std::ostream *);
 
 			/** Returns the size (in bits) of the global variable with a given name.
 			 *  The name should include an initial "@". */
@@ -80,7 +78,7 @@ namespace LL2X {
 			/** Prints debug information for all the functions in the program. */
 			void debug();
 
-			int newDebugIndex();
+			int64_t newDebugIndex();
 
 			void declareBuiltins();
 

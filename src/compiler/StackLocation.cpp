@@ -4,7 +4,8 @@
 namespace LL2X {
 	StackLocation::StackLocation(Function *function_, std::shared_ptr<Variable> variable_, Purpose purpose_,
 	int offset_, int width_, int align_):
-		function(function_), purpose(purpose_), offset(offset_), width(width_), align(align_), variable(variable_) {}
+		function(function_), purpose(purpose_), offset(offset_), width(width_), align(align_),
+		variable(std::move(variable_)) {}
 
 	StackLocation::StackLocation(Function *function_, LL2X::Type *type_, Purpose purpose_, int offset_, int width_,
 	int align_):

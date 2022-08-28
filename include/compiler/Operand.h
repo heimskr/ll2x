@@ -45,7 +45,7 @@ namespace LL2X {
 		Operand(const Operand &) = default;
 		Operand(Operand &&) = default;
 
-		Operand(VariablePtr var);
+		Operand(const VariablePtr &var);
 
 		Operand(x86_64::Width width_, const Operand &other): Operand(other) {
 			width = width_;

@@ -6,15 +6,15 @@
 #include "parser/Nodes.h"
 #include "util/Util.h"
 
-#define IFLV(x, t) do { if (std::shared_ptr<LocalValue> local_value = std::dynamic_pointer_cast<LocalValue>((x))) \
+#define IFLV(x, t) do { if (auto local_value = std::dynamic_pointer_cast<LocalValue>((x))) \
 	readname(local_value, (t)); } while (0)
-#define FORV(x...) for (ValuePtr value: {x})
-#define CAST(t) t *cast = dynamic_cast<t *>(node); if (!cast) break
+#define FORV(x...) for (const auto &value: {x})
+#define CAST(t) auto *cast = dynamic_cast<t *>(node); if (!cast) break
 
 namespace LL2X {
 	LLVMInstruction::LLVMInstruction(InstructionNode *node_, int index_, bool owns_node):
 	Instruction(index_), node(node_), ownsNode(owns_node) {
-		if (node_)
+		if (node_ != nullptr)
 			debugIndex = node_->debugIndex;
 	}
 
@@ -36,13 +36,13 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		auto readname = [&](std::shared_ptr<LocalValue> lv, TypePtr type) {
+		auto readname = [&](const std::shared_ptr<LocalValue> &lv, const TypePtr &type) {
 			if (!secretReads)
 				read.insert(parent.lock()->parent->getVariable(lv->name, type));
 		};
 
-		auto write = [&](const std::string *str, TypePtr type) {
-			if (str && !secretWrites)
+		auto write = [&](const std::string *str, const TypePtr &type) {
+			if (str != nullptr && !secretWrites)
 				written.insert(parent.lock()->parent->getVariable(str, type, parent.lock()));
 		};
 
@@ -111,7 +111,7 @@ namespace LL2X {
 				CAST(CallInvokeNode);
 				write(cast->result, cast->returnType);
 				IFLV(cast->name, nullptr);
-				for (ConstantPtr constant: cast->constants)
+				for (const ConstantPtr &constant: cast->constants)
 					IFLV(constant->value, constant->type);
 				break;
 			}
@@ -261,7 +261,7 @@ namespace LL2X {
 
 		if (auto *reader = dynamic_cast<Reader *>(node))
 			for (auto *value: reader->allValuePointers())
-				if (value && *value && (*value)->isOperand()) {
+				if (value != nullptr && *value && (*value)->isOperand()) {
 					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
 					if (*operand == *to_replace) {
 						operand = replace_with;
@@ -283,7 +283,7 @@ namespace LL2X {
 
 		if (auto *reader = dynamic_cast<Reader *>(node))
 			for (auto *value: reader->allValuePointers())
-				if (value && *value && (*value)->isOperand()) {
+				if (value != nullptr && *value && (*value)->isOperand()) {
 					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
 					if (operand->similarTo(*to_replace)) {
 						operand = replace_with;
@@ -394,6 +394,6 @@ namespace LL2X {
 	}
 
 	bool LLVMInstruction::isPhi() const {
-		return node && node->nodeType() == NodeType::Phi;
+		return node != nullptr && node->nodeType() == NodeType::Phi;
 	}
 }
