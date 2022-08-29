@@ -311,7 +311,7 @@ namespace LL2X {
 					first = false;
 				else
 					out += '\n';
-				const int64_t offset = PaddedStructs::getOffset(stype, i++) / 8;
+				const int64_t offset = PaddedStructs::getOffset(*stype, i++) / 8;
 				const int64_t difference = offset - sum;
 				if (difference < 0)
 					throw std::runtime_error("Difference between struct offset and total width is negative");

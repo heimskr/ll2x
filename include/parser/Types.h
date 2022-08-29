@@ -123,7 +123,7 @@ namespace LL2X {
 		static std::shared_ptr<PointerType> make(TypePtr subtype) { return std::make_shared<PointerType>(subtype); }
 	};
 
-	class FunctionType: public Type {
+	class FunctionType: public Type, public Makeable<FunctionType> {
 		private:
 			TypeType typeType() const override { return TypeType::Function; }
 			std::string cached, cachedPlain;
@@ -133,9 +133,8 @@ namespace LL2X {
 			std::vector<TypePtr> argumentTypes;
 			bool ellipsis;
 			FunctionType(const ASTNode *);
-			FunctionType(TypePtr return_type, std::vector<TypePtr> &argument_types,
-			bool ellipsis_ = false):
-				returnType(return_type), argumentTypes(std::move(argument_types)), ellipsis(ellipsis_) {}
+			FunctionType(TypePtr return_type, std::vector<TypePtr> argument_types, bool ellipsis_ = false):
+				returnType(std::move(return_type)), argumentTypes(std::move(argument_types)), ellipsis(ellipsis_) {}
 			void uncache() { cached.clear(); }
 			operator std::string() override;
 			std::string toString() override;

@@ -36,7 +36,7 @@ namespace LL2X::Getelementptr {
 					stype = StructType::knownStructs.at(stype->barename());
 					snode = stype->node;
 				}
-				return PaddedStructs::getOffset(stype, front)
+				return PaddedStructs::getOffset(*stype, front)
 					+ compute_mutating(snode->types.at(front), indices, out_type);
 			}
 			default: throw TypeError("Getelementptr::compute encountered an invalid type: " + std::string(*type), type);
@@ -89,7 +89,7 @@ namespace LL2X::Getelementptr {
 					snode = stype->node;
 				}
 				const int64_t index = std::get<int64_t>(front);
-				const int64_t offset = Util::updiv(PaddedStructs::getOffset(stype, index), 8l);
+				const int64_t offset = Util::updiv(PaddedStructs::getOffset(*stype, index), 8l);
 				// Too lazy to handle overflows here.
 				if (Util::outOfRange(offset))
 					warn() << "PaddedStructs offset " << offset << " is out of the integer range. Incorrect code will "

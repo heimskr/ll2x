@@ -40,8 +40,8 @@ namespace LL2X::Passes {
 				return;
 			}
 
+			// When the arguments aren't explicit, we check the parent program's map of functions.
 			if (function.parent.functions.contains("@" + *global)) {
-				// When the arguments aren't explicit, we check the parent program's map of functions.
 				Function &func = *function.parent.functions.at("@" + *global);
 				ellipsis = func.isVariadic();
 				if (argument_types != nullptr) {
@@ -52,8 +52,8 @@ namespace LL2X::Passes {
 				return;
 			}
 
+			// We can also check the map of declarations.
 			if (function.parent.declarations.contains(*global)) {
-				// We can also check the map of declarations.
 				FunctionHeader *header = function.parent.declarations.at(*global);
 				ellipsis = header->arguments->ellipsis;
 				if (argument_types != nullptr) {
@@ -64,8 +64,8 @@ namespace LL2X::Passes {
 				return;
 			}
 
+			// In rare cases, there may be an alias.
 			if (function.parent.aliases.contains(StringSet::intern("@" + *global))) {
-				// In rare cases, there may be an alias.
 				AliasDef *alias = function.parent.aliases.at(StringSet::intern("@" + *global));
 				global = alias->aliasTo->front() == '@'? StringSet::intern(alias->aliasTo->substr(1)) : alias->aliasTo;
 			} else
@@ -413,7 +413,7 @@ namespace LL2X::Passes {
 			return pushCallValue(function, instruction, constant->conversionSource, pushed);
 
 		warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
-				<< __LINE__ << '\n';
+		       << __LINE__ << '\n';
 
 		function.insertBefore<InvalidInstruction>(instruction);
 

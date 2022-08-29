@@ -24,14 +24,10 @@ namespace LL2X::PaddedStructs {
 				offset += node->types.at(i)->width();
 		else
 			for (int64_t i = 0; i < index; ++i) {
-				const int64_t width = node->types.at(i)->width();
-				offset = Util::upalign(offset, width) + width;
+				auto &type = node->types.at(i);
+				offset = Util::upalign(offset, type->alignment()) + type->width();
 			}
 		return offset;
-	}
-
-	int64_t getOffset(const std::shared_ptr<StructType> &type, int64_t index) {
-		return getOffset(*type, index);
 	}
 
 	VariablePtr extract(const VariablePtr &source, int64_t index, Function &function,
