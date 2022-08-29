@@ -113,7 +113,7 @@ void paddingtest() {
 		for (const auto &type: stype->node->types) {
 			const int offset = PaddedStructs::getOffset(*stype, i);
 			std::cerr << "  " << i++ << ": " << std::string(*type) << "\n    offset = " << offset / 8 << ", width = "
-			          << type->width() << " B\n";
+			          << (type->width() / 8) << ", alignment = " << type->alignment() << '\n';
 		}
 		std::cerr << "  Size: " << (stype->width() / 8) << "\n\n";
 	};

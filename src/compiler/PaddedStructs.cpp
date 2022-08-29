@@ -23,9 +23,10 @@ namespace LL2X::PaddedStructs {
 			for (int64_t i = 0; i < index; ++i)
 				offset += node->types.at(i)->width();
 		else
-			for (int64_t i = 0; i < index; ++i) {
-				auto &type = node->types.at(i);
-				offset = Util::upalign(offset, type->alignment()) + type->width();
+			for (int64_t i = 1; i <= index; ++i) {
+				const int prev_width = node->types.at(i - 1)->width();
+				const int align = 8 * node->types.at(i)->alignment();
+				offset = Util::upalign(offset + prev_width, align);
 			}
 		return offset;
 	}

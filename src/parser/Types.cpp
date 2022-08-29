@@ -287,7 +287,7 @@ namespace LL2X {
 			return knownStructs.at(barename())->width();
 		}
 
-		return PaddedStructs::getOffset(*this, node->types.size());
+		return PaddedStructs::getOffset(*this, node->types.size() - 1) + node->types.back()->width();
 
 		// int out = 0;
 		// int largest = 0;
