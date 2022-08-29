@@ -76,7 +76,7 @@ namespace LL2X::Passes {
 	void setupCalls(Function &function) {
 		auto lock = function.parent.getLock();
 		Timer timer("SetupCalls");
-		size_t i = 0;
+		ssize_t i = 0;
 		std::list<InstructionPtr> to_remove;
 
 		for (const InstructionPtr &instruction: function.linearInstructions) {
@@ -134,7 +134,7 @@ namespace LL2X::Passes {
 			const int  arg_offset  = huge_return? 1 : 0;
 
 			constexpr int reg_max = 6;
-			const size_t arg_count = argument_types.size();
+			const ssize_t arg_count = static_cast<ssize_t>(argument_types.size());
 
 			constexpr static std::array<int, 9> arg_regs {
 				x86_64::rdi,
@@ -180,8 +180,9 @@ namespace LL2X::Passes {
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
 			for (i = arg_count + arg_offset - 1; reg_max <= i; --i) {
-				function.comment(instruction, prefix + "push " + call->constants[i - arg_offset]->toString());
-				bytes_pushed += pushCallValue(function, instruction, call->constants[i - arg_offset], bytes_pushed);
+				info() << "arg_offset[" << arg_offset << "], i[" << i << "]\n";
+				function.comment(instruction, prefix + "push " + call->constants.at(i - arg_offset)->toString());
+				bytes_pushed += pushCallValue(function, instruction, call->constants.at(i - arg_offset), bytes_pushed);
 			}
 
 			function.maxPushedForCalls = std::max(function.maxPushedForCalls, bytes_pushed);

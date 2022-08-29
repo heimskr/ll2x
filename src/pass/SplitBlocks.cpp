@@ -5,7 +5,7 @@
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	int splitBlocks(Function &function) {
+	size_t splitBlocks(Function &function) {
 		// Liveness analysis appears to work on the level of basic blocks, rather than instructions. This means that
 		// variables can't die until the end of a basic block. If there are more definitions in a basic block than there
 		// are physical registers, register allocation is therefore impossible. A workaround is to ensure that no basic
@@ -14,7 +14,7 @@ namespace LL2X::Passes {
 		// replaced with a branch to the added block.
 		Timer timer("SplitBlocks");
 		bool any_changed = false;
-		int split_count = 0;
+		size_t split_count = 0;
 
 		for (;;) {
 			any_changed = false;

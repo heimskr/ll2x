@@ -17,6 +17,7 @@
 #include "parser/Parser.h"
 #include "parser/StructNode.h"
 #include "parser/Values.h"
+#include "pass/UsePLT.h"
 #include "util/Util.h"
 
 namespace LL2X {
@@ -160,6 +161,8 @@ namespace LL2X {
 #endif
 		}
 #endif
+
+		Passes::usePLT(*this);
 	}
 
 	std::string Program::toString() {

@@ -42,7 +42,7 @@ namespace LL2X::Passes {
 						call->constants[0]->convert(),
 						std::make_shared<Constant>(IntType::make(32), call->constants[1]->convert()->value),
 						call->constants[2]->convert(),
-					}))->setUsePLT();
+					}));
 
 				new_call->locate(call);
 

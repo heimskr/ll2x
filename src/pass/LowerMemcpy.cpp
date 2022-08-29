@@ -41,7 +41,7 @@ namespace LL2X::Passes {
 						call->constants[0]->convert(),
 						call->constants[1]->convert(),
 						call->constants[2]->convert(),
-					}))->setUsePLT();
+					}));
 
 				new_call->locate(call);
 

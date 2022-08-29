@@ -974,12 +974,13 @@ namespace LL2X {
 // LogicNode
 
 	LogicNode::LogicNode(ASTNode *result_, ASTNode *logic_type, ASTNode *left_, ASTNode *right_, ASTNode *unibangs):
-	logicType(logic_inv_map.at(*logic_type->lexerInfo)), type(left->type) {
+	logicType(logic_inv_map.at(*logic_type->lexerInfo)),
+	left(Constant::make(left_)->convert()),
+	right(Constant::make(right_, left->type)->convert()),
+	type(left->type) {
 		Deleter deleter(unibangs, result_, logic_type, left_, right_);
 		handleUnibangs(unibangs);
 		result = result_->extracted();
-		left   = Constant::make(left_)->convert();
-		right  = Constant::make(right_, left->type)->convert();
 	}
 
 	LogicNode::LogicNode(const std::string *result_, LogicType logic_type, const ConstantPtr &left_,
