@@ -1051,8 +1051,8 @@ namespace LL2X {
 		finalDone = true;
 #ifdef FINAL_DEBUG
 		debug();
-		// allocator->interference.renderTo("interference_final_" + *name + ".png");
-		// allocator->interference.renderTo("interference_final_" + *name + ".svg");
+		allocator->interference.renderTo("interference_final_" + *name + ".png");
+		allocator->interference.renderTo("interference_final_" + *name + ".svg");
 #endif
 	}
 

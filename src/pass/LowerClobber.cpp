@@ -42,16 +42,30 @@ namespace LL2X::Passes {
 					}
 
 					const int offset = -location->offset;
+					const std::string reg_name = x86_64::registerName(reg);
 
 					auto mov = std::make_shared<Mov>(Op8(precolored), Op8(offset, function.pcRbp));
-					function.comment(clobber, "Clobber " + x86_64::registerName(reg));
+					function.comment(clobber, "Clobber " + reg_name);
 					function.insertBefore(clobber, mov, false)->setDebug(*instruction, false)->setSecret()->extract();
-					function.comment(clobber->unclobber, "Unclobber " + x86_64::registerName(reg));
+					function.comment(clobber->unclobber, "Unclobber " + reg_name);
 					function.insertBefore<Mov, false>(clobber->unclobber, Op8(offset, function.pcRbp), Op8(precolored));
+					for (const auto &semi: clobber->semis) {
+						function.comment(semi, "Semiunclobber %" + reg_name + " into " + semi->destination->toString());
+						function.insertBefore<Mov, false>(semi, Op8(offset, function.pcRbp), semi->destination);
+					}
+				} else {
+					for (const auto &semi: clobber->semis) {
+						const std::string reg_name = x86_64::registerName(reg);
+						function.comment(semi, "Semiunclobber %" + reg_name + " into " + semi->destination->toString());
+						OperandPtr precolored = OpV(function.makePrecoloredVariable(reg, instruction->parent.lock()));
+						function.insertBefore<Mov, false>(semi, precolored, semi->destination);
+					}
 				}
 
 				to_remove.push_back(clobber);
 				to_remove.push_back(clobber->unclobber);
+				for (const auto &semi: clobber->semis)
+					to_remove.push_back(semi);
 			}
 
 		function.reindexInstructions();

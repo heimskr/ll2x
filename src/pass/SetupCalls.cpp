@@ -107,7 +107,8 @@ namespace LL2X::Passes {
 					if (call->result == nullptr) {
 						warn() << "Call to simple function " << name << " has no result.\n";
 					} else {
-						auto out = setupCallValue(function, call->operand, instruction, call->constants[simple_index]);
+						auto out = setupCallValue(function, call->operand, instruction, call->constants[simple_index],
+							{});
 						if (out)
 							function.comment(out, prefix + "simple function elision for " + name);
 						else
@@ -153,8 +154,12 @@ namespace LL2X::Passes {
 			// Clobber caller-saved registers as necessary.
 			const int clobber_start = 0;
 			std::unordered_map<size_t, std::shared_ptr<Clobber>> clobbers;
-			for (i = 0; i < arg_reg_count; ++i)
-				clobbers.emplace(i, function.clobber(instruction, arg_regs[i]));
+			ClobberMap clobbers_by_reg;
+			for (i = 0; i < arg_reg_count; ++i) {
+				auto clobber = function.clobber(instruction, arg_regs[i]);
+				clobbers.emplace(i, clobber);
+				clobbers_by_reg.emplace(arg_regs[i], clobber);
+			}
 
 			VariablePtr rax = function.makePrecoloredVariable(x86_64::rax, block);
 
@@ -174,7 +179,7 @@ namespace LL2X::Passes {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
 				ConstantPtr constant = call->constants[i - arg_offset];
 				function.comment(instruction, prefix + "move argument " + constant->convert()->value->toString());
-				setupCallValue(function, OpV(precolored), instruction, constant);
+				setupCallValue(function, OpV(precolored), instruction, constant, clobbers_by_reg);
 			}
 
 			// Push variables onto the stack, right to left.
@@ -182,7 +187,8 @@ namespace LL2X::Passes {
 			for (i = arg_count + arg_offset - 1; reg_max <= i; --i) {
 				info() << "arg_offset[" << arg_offset << "], i[" << i << "]\n";
 				function.comment(instruction, prefix + "push " + call->constants.at(i - arg_offset)->toString());
-				bytes_pushed += pushCallValue(function, instruction, call->constants.at(i - arg_offset), bytes_pushed);
+				bytes_pushed += pushCallValue(function, instruction, call->constants.at(i - arg_offset), bytes_pushed,
+				                              clobbers_by_reg);
 			}
 
 			function.maxPushedForCalls = std::max(function.maxPushedForCalls, bytes_pushed);
@@ -258,8 +264,10 @@ namespace LL2X::Passes {
 		function.extractVariables();
 	}
 
-	int pushCallValue(Function &function, const InstructionPtr &instruction, const ConstantPtr &constant, int pushed) {
+	int pushCallValue(Function &function, const InstructionPtr &instruction, const ConstantPtr &constant, int pushed,
+	                  const ClobberMap &clobbers) {
 		// Stack parameters seem to be passed on a 64-bit boundary.
+		// TOOD!: clobbers.
 
 		int size = 8;
 		ValueType value_type = constant->value->valueType();
@@ -410,7 +418,7 @@ namespace LL2X::Passes {
 		}
 
 		if (constant->conversionSource)
-			return pushCallValue(function, instruction, constant->conversionSource, pushed);
+			return pushCallValue(function, instruction, constant->conversionSource, pushed, clobbers);
 
 		warn() << "Not sure what to do with " << *constant << " (" << getName(value_type) << ") at " __FILE__ ":"
 		       << __LINE__ << '\n';
@@ -421,9 +429,9 @@ namespace LL2X::Passes {
 	}
 
 	InstructionPtr setupCallValue(Function &function, const OperandPtr &new_operand, const InstructionPtr &instruction,
-	                              const ConstantPtr &constant) {
+	                              const ConstantPtr &constant, const ClobberMap &clobbers) {
 		if (constant->conversionSource) {
-			setupCallValue(function, new_operand, instruction, constant->conversionSource);
+			setupCallValue(function, new_operand, instruction, constant->conversionSource, clobbers);
 			return nullptr;
 		}
 
@@ -486,8 +494,16 @@ namespace LL2X::Passes {
 		ValueType value_type = constant->value->valueType();
 		if (value_type == ValueType::Local) {
 			// If it's a variable, move it into the argument register.
+			// Moving argument into argument registers can be problematic (e.g., movq %rsi, %rdx, which would take place
+			// after %rsi is overwritten!), so we use the clobbered memory locations for those.
 			auto local = std::dynamic_pointer_cast<LocalValue>(constant->value);
-			auto out = function.insertBefore<Mov>(instruction, OpV(local->variable), new_operand, 64);
+			InstructionPtr out;
+			if (local->variable->registers.size() == 1 && clobbers.contains(*local->variable->registers.begin())) {
+				const int reg = *local->variable->registers.begin();
+				out = function.insertBefore(instruction, clobbers.at(reg)->makeSemi(new_operand));
+				out->setDebug(*instruction, true);
+			} else
+				out = function.insertBefore<Mov>(instruction, OpV(local->variable), new_operand, 64);
 			insert_exts();
 			return out;
 		}
@@ -581,8 +597,20 @@ namespace LL2X::Passes {
 		}
 
 		if (value_type == ValueType::Operand) {
-			auto operand_value = std::dynamic_pointer_cast<OperandValue>(constant->value);
-			auto out = function.insertBefore<Mov>(instruction, operand_value->operand, new_operand);
+			const auto &operand = std::dynamic_pointer_cast<OperandValue>(constant->value)->operand;
+
+			InstructionPtr out;
+			if (operand->isRegister() && operand->reg->registers.size() == 1) {
+				const int reg = *operand->reg->registers.begin();
+				if (clobbers.contains(reg)) {
+					out = function.insertBefore(instruction, clobbers.at(reg)->makeSemi(new_operand));
+					out->setDebug(*instruction, true);
+				}
+			}
+
+			if (!out)
+				auto out = function.insertBefore<Mov>(instruction, operand, new_operand);
+
 			insert_exts();
 			return out;
 		}

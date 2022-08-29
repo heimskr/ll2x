@@ -354,6 +354,8 @@ namespace LL2X {
 	}
 
 	std::shared_ptr<StructType> StructType::pad() {
+		warn() << "StructType::pad() is likely buggy.\n";
+
 		if (padded)
 			return shared_from_this();
 
