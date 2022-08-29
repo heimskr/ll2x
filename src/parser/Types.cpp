@@ -282,27 +282,12 @@ namespace LL2X {
 	}
 
 	int StructType::width() const {
-		if (!node) {
+		if (!node)
 			// This is likely a named struct rather than a literal struct.
 			return knownStructs.at(barename())->width();
-		}
 
-		return PaddedStructs::getOffset(*this, node->types.size() - 1) + node->types.back()->width();
-
-		// int out = 0;
-		// int largest = 0;
-		// for (const TypePtr &type: node->types) {
-		// 	const int width = type->width();
-		// 	if (width == 0)
-		// 		continue;
-		// 	out += width + ((width - (out % width)) % width);
-		// 	if (largest < width)
-		// 		largest = width;
-		// }
-		// if (largest != 0 && out % largest != 0)
-		// 	out += largest - (out % largest);
-
-		// return out;
+		return Util::upalign(PaddedStructs::getOffset(*this, node->types.size() - 1) + node->types.back()->width(),
+			alignment() * 8);
 	}
 
 	int StructType::alignment() const {

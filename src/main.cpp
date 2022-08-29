@@ -21,7 +21,7 @@ void paddingtest();
 void compile(const std::string &filename, bool show_debug);
 
 int main(int argc, char **argv) {
-	paddingtest(); return 0;
+	// paddingtest(); return 0;
 	global_argc = argc;
 	global_argv = argv;
 	auto usage = [] { std::cerr << "Usage: ll2x [-d] <input>\n"; return 1; };
