@@ -15,7 +15,7 @@ namespace LL2X::Passes {
 
 		if (INT64_MAX < function.linearInstructions.size())
 			warn() << "Function \e[31m" << *function.name << "\e[39m's instruction count can't fit in an int64_t. "
-			          "You're going to have a bad time.\n";
+			          "You'll get bad code in a few billion years, most likely.\n";
 		
 		const int64_t instruction_count = static_cast<int64_t>(function.linearInstructions.size());
 

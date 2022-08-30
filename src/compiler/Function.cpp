@@ -290,6 +290,11 @@ namespace LL2X {
 				}
 	}
 
+	void Function::extractInstructions(bool force) {
+		for (const InstructionPtr &instruction: linearInstructions)
+			instruction->extract(force);
+	}
+
 	void Function::relinearize() {
 		Timer timer("Relinearize");
 		linearInstructions.clear();
@@ -1038,6 +1043,11 @@ namespace LL2X {
 		Passes::replaceCmov(*this);
 		Passes::replaceBigMov(*this);
 		Passes::transformLabels(*this);
+		extractInstructions(true); // Hack: some other pass is forgetting to extract after changing operands.
+		for (const BasicBlockPtr &block: blocks)
+			block->extract(true);
+		resetLiveness();
+		computeLiveness();
 		Passes::fixMemoryOperands(*this);
 		hackVariables();
 		// for (InstructionPtr &instruction: linearInstructions) {

@@ -193,6 +193,9 @@ namespace LL2X {
 			/** Copies use/definition information from the BasicBlocks into the Variables. */
 			void extractVariables(bool reset = false);
 
+			/** Extracts read/written information from all instructions. */
+			void extractInstructions(bool force = false);
+
 			/** Recreates linearInstructions from each BasicBlock's vector of instructions and renumbers the
 			 *  instructions. */
 			void relinearize();

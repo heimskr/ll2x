@@ -224,8 +224,8 @@ namespace LL2X::Passes {
 
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {
-				function.comment(llvm, prefix + "readjust stack pointer");
-				function.insertBefore<Add, false>(instruction, Op4(bytes_pushed), Op8(function.pcRsp), 64);
+				// function.comment(llvm, prefix + "readjust stack pointer");
+				// function.insertBefore<Add, false>(instruction, Op4(bytes_pushed), Op8(function.pcRsp), 64);
 			}
 
 			// If the call specified a result variable, move %rax into that variable (unless the result is > 128 bits)

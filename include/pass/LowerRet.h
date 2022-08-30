@@ -5,6 +5,6 @@ namespace LL2X {
 }
 
 namespace LL2X::Passes {
-	/** Replaces ret instructions with epilogues and corresponding Why instructions. */
+	/** Replaces ret instructions with epilogues and corresponding x86_64 instructions. */
 	size_t lowerRet(Function &);
 }

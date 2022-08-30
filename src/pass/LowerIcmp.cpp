@@ -23,8 +23,11 @@ namespace LL2X::Passes {
 			to_remove.push_back(instruction);
 		}
 
-		for (const InstructionPtr &instruction: to_remove)
-			function.remove(instruction);
+		if (!to_remove.empty()) {
+			function.reindexInstructions();
+			for (const InstructionPtr &instruction: to_remove)
+				function.remove(instruction);
+		}
 
 		return to_remove.size();
 	}
@@ -65,6 +68,8 @@ namespace LL2X::Passes {
 		
 		const ValueType type2 = value2->valueType();
 
+		const std::string prefix = "LowerIcmp(" + std::string(node->location) + "): ";
+
 		if (type2 == ValueType::Local || type2 == ValueType::Global) {
 
 			VariablePtr right;
@@ -72,10 +77,12 @@ namespace LL2X::Passes {
 
 			if (type2 == ValueType::Local) {
 				right = dynamic_cast<LocalValue *>(value2.get())->variable;
+				function.comment(instruction, prefix + left->toString() + " vs. local " + right->toString());
 			} else {
 				right = function.newVariable(node->getType(), instruction->parent.lock());
-				function.insertBefore<Mov, false>(instruction, Op8(right),
-					OpX(width, *dynamic_cast<GlobalValue *>(value2.get())->name, function.pcRip));
+				const std::string &name = *dynamic_cast<GlobalValue *>(value2.get())->name;
+				function.comment(instruction, prefix + left->toString() + " vs. global " + name);
+				function.insertBefore<Mov, false>(instruction, Op8(right), OpX(width, name, function.pcRip));
 				function.insertBefore<Mov, false>(instruction, Op8(right), OpX(width, 0, right), width);
 			}
 
@@ -85,9 +92,10 @@ namespace LL2X::Passes {
 		} else if (type2 == ValueType::Operand) {
 
 			const auto width = node->getType()->width();
+			const auto &operand = dynamic_cast<OperandValue *>(value2.get())->operand;
 			// TODO: verify right operand width
-			function.insertBefore<Cmp, false>(instruction, OpX(width, left),
-				dynamic_cast<OperandValue *>(value2.get())->operand, width);
+			function.comment(instruction, prefix + left->toString() + " vs. operand " + operand->toString());
+			function.insertBefore<Cmp, false>(instruction, OpX(width, left), operand, width);
 			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 
 		} else {
@@ -99,8 +107,10 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Unsupported value type in icmp instruction: " + value_map.at(type2));
 
 			const int size = node->getType()->width();
+			function.comment(instruction, prefix + left->toString() + " vs. intlike " + std::to_string(imm));
 			function.insertBefore<Cmp, false>(instruction, OpX(size, left), OpX(size, imm), size);
-			function.insertBefore<Set>(instruction, destination, x86_64::getCondition(cond));
+			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
+
 		}
 	}
 }

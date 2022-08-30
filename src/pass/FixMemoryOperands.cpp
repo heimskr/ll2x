@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "compiler/Function.h"
 #include "instruction/Pop.h"
 #include "instruction/Push.h"
@@ -39,6 +41,12 @@ namespace LL2X::Passes {
 		return *pool.begin();
 	}
 
+	static bool isLive(int reg, const InstructionPtr &instruction) {
+		return std::ranges::any_of(instruction->parent.lock()->liveOut, [reg](const VariablePtr &variable) {
+			return variable->registers.contains(reg);
+		});
+	}
+
 	size_t fixMemoryOperands(Function &function) {
 		Timer timer("FixMemoryOperands");
 
@@ -47,30 +55,38 @@ namespace LL2X::Passes {
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			if (auto source_to_dest = std::dynamic_pointer_cast<SourceToDest>(instruction)) {
 				if (source_to_dest->source->isIndirect() && source_to_dest->destination->isIndirect()) {
+					function.comment(instruction, "Fixing " + instruction->toString());
 					const int reg = chooseRegister(source_to_dest->source, source_to_dest->destination);
+					const bool live = isLive(reg, instruction);
 					VariablePtr temp = function.makePrecoloredVariable(reg, instruction->parent.lock());
-					function.insertBefore<Push, false>(instruction, Op8(temp));
+					if (live)
+						function.insertBefore<Push, false>(instruction, Op8(temp));
 					int size = source_to_dest->destination->bitWidth;
 					if (auto sized = std::dynamic_pointer_cast<Sized>(source_to_dest))
 						size = sized->size;
 					temp->setType(IntType::make(size));
 					auto mov = function.insertAfter<Mov, false>(instruction, OpV(temp), source_to_dest->destination,
 						size);
-					function.insertAfter<Pop, false>(mov, Op8(temp));
+					if (live)
+						function.insertAfter<Pop, false>(mov, Op8(temp));
 					source_to_dest->destination = OpV(temp);
 					++num_changed;
 				}
 			} else if (auto overlapping = std::dynamic_pointer_cast<Overlapping>(instruction)) {
 				if (overlapping->sourceOnly->isIndirect() && overlapping->multi->isIndirect()) {
+					function.comment(instruction, "Fixing " + instruction->toString());
 					const int reg = chooseRegister(overlapping->sourceOnly, overlapping->multi);
+					const bool live = isLive(reg, instruction);
 					VariablePtr temp = function.makePrecoloredVariable(reg, instruction->parent.lock());
-					function.insertBefore<Push, false>(instruction, Op8(temp));
+					if (live)
+						function.insertBefore<Push, false>(instruction, Op8(temp));
 					int size = overlapping->sourceOnly->bitWidth;
 					if (auto sized = std::dynamic_pointer_cast<Sized>(overlapping))
 						size = sized->size;
 					temp->setType(IntType::make(size));
 					auto mov = function.insertBefore<Mov, false>(instruction, overlapping->sourceOnly, OpV(temp), size);
-					function.insertAfter<Pop, false>(instruction, Op8(temp));
+					if (live)
+						function.insertAfter<Pop, false>(instruction, Op8(temp));
 					overlapping->sourceOnly = OpV(temp);
 					++num_changed;
 				}
