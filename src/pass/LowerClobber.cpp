@@ -62,7 +62,7 @@ namespace LL2X::Passes {
 					}
 				}
 
-				function.forceLiveness();
+				// function.forceLiveness();
 
 				to_remove.push_back(clobber);
 				to_remove.push_back(clobber->unclobber);
