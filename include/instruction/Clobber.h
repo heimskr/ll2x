@@ -3,6 +3,8 @@
 #include "compiler/x86_64.h"
 #include "instruction/DestinationOnly.h"
 #include "instruction/Intermediate.h"
+#include "instruction/OneDestination.h"
+#include "instruction/OneSource.h"
 #include "util/Makeable.h"
 
 namespace LL2X {
@@ -49,11 +51,11 @@ namespace LL2X {
 		}
 	};
 
-	struct SemiUnclobber: IntermediateInstruction, OneDestination, Makeable<SemiUnclobber> {
+	struct SemiUnclobber: IntermediateInstruction, OneDestination, OneSource, Makeable<SemiUnclobber> {
 		int reg;
 
 		SemiUnclobber(int reg_, OperandPtr destination_, int index_ = -1):
-			IntermediateInstruction(index_), OneDestination(std::move(destination_)), reg(reg_) {}
+			IntermediateInstruction(index_), OneDestination(std::move(destination_)), OneSource(nullptr), reg(reg_) {}
 
 		std::string debugExtra() override { return toString(); }
 		std::string toString() const override;

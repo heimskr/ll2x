@@ -19,6 +19,7 @@
 // #define DEBUG_STACK
 // #define DEBUG_CANSPILL
 // #define DEBUG_MINILABELS
+// #define DEBUG_BEFORE_SETUPCALLS
 // #define DEBUG_AFTER_SETUPCALLS
 // #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
@@ -985,6 +986,9 @@ namespace LL2X {
 		Passes::lowerMemcpy(*this);
 		Passes::lowerMemmove(*this);
 		Passes::lowerMemset(*this);
+#ifdef DEBUG_BEFORE_SETUPCALLS
+		debug();
+#endif
 		Passes::setupCalls(*this);
 #ifdef DEBUG_AFTER_SETUPCALLS
 		debug();

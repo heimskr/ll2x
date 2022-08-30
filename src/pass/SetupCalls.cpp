@@ -623,8 +623,11 @@ namespace LL2X::Passes {
 			InstructionPtr out;
 			if (operand->isRegister() && operand->reg->registers.size() == 1) {
 				const int reg = *operand->reg->registers.begin();
-				if (clobbers.contains(reg))
-					out = function.insertBefore(instruction, clobbers.at(reg)->makeSemi(new_operand));
+				if (clobbers.contains(reg)) {
+					auto semi = clobbers.at(reg)->makeSemi(new_operand);
+					semi->source = operand;
+					out = function.insertBefore(instruction, semi);
+				}
 			}
 
 			if (!out)

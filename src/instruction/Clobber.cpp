@@ -10,7 +10,9 @@ namespace LL2X {
 	}
 
 	std::string SemiUnclobber::toString() const {
-		return "\e[33munclobber\e[32m %" + x86_64::registerName(reg) + "\e[39m into " + destination->ansiString();
+		if (source)
+			return "\e[33msemiunclobber\e[39m " + source->ansiString() + " into " + destination->ansiString();
+		return "\e[33msemiunclobber\e[32m %" + x86_64::registerName(reg) + "\e[39m into " + destination->ansiString();
 	}
 
 	ExtractionResult SemiUnclobber::extract(bool force) {
@@ -24,6 +26,9 @@ namespace LL2X {
 		if (!secretReads || !secretWrites)
 			if (!(destination->isIndirect()? secretReads : secretWrites))
 				destination->extract(true, read, written);
+
+		if (!secretReads && source)
+			source->extract(false, read, written);
 
 		return {read.size(), written.size()};
 	}

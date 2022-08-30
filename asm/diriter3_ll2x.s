@@ -554,6 +554,8 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %rsi, -40(%rbp)
 	# Clobber %rdx
 	movq %rdx, -48(%rbp)
+	# Clobber %rcx
+	movq %rcx, -56(%rbp)
 	# Clobber %r8
 	movq %r8, -64(%rbp)
 	# Clobber %rax
@@ -562,7 +564,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %rax, %rdi
 	# SetupCalls(1600:3): move argument %rcx
 	# Semiunclobber %rcx into %rsi
-	movq %rcx, %rsi
+	movq -56(%rbp), %rsi
 	# SetupCalls(1600:3): move argument %r8
 	# Semiunclobber %r8 into %rdx
 	movq -64(%rbp), %rdx
@@ -571,6 +573,8 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq -72(%rbp), %rax
 	# Unclobber %r8
 	movq -64(%rbp), %r8
+	# Unclobber %rcx
+	movq -56(%rbp), %rcx
 	# Unclobber %rdx
 	movq -48(%rbp), %rdx
 	# Unclobber %rsi
@@ -736,16 +740,16 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rdi, %r10
 	addq $16, %r10
 	# LowerLoad(1243:3).2: (^20) into ^21
-	movq (%r10), %rdi
+	movq (%r10), %r11
 	cmpq $0, %r9
 	movq $15, %r9
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__RC0
-	movq %rdi, %r9
+	movq %r11, %r9
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__RC0:
 	# LowerIcmp(1245:3): ^14 vs. operand ^22
 	cmpq %r9, %r13
-	seta %dil
-	cmpb $0, %dil
+	seta %r9b
+	cmpb $0, %r9b
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M449
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M63:
 	# LowerGetelementptr(1250:3): pointer-type -> ^25
@@ -841,15 +845,23 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movb %al, (%r12)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M145:
+	# Clobber %rcx
+	movq %rcx, -40(%rbp)
+	# Clobber %r8
+	movq %r8, -48(%rbp)
 	# SetupCalls(1307:3): move argument ^25
 	movq %r12, %rdi
 	# SetupCalls(1307:3): move argument %rcx
 	# Semiunclobber %rcx into %rsi
-	movq %rcx, %rsi
+	movq -40(%rbp), %rsi
 	# SetupCalls(1307:3): move argument %r8
 	# Semiunclobber %r8 into %rdx
-	movq %r8, %rdx
+	movq -48(%rbp), %rdx
 	callq memcpy@PLT
+	# Unclobber %r8
+	movq -48(%rbp), %r8
+	# Unclobber %rcx
+	movq -40(%rbp), %rcx
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M171:
 	# LowerIcmp(1311:3): %r8 vs. operand %rdx
@@ -986,15 +998,23 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movb %al, (%r12)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M285:
+	# Clobber %rcx
+	movq %rcx, -40(%rbp)
+	# Clobber %r8
+	movq %r8, -48(%rbp)
 	# SetupCalls(1384:3): move argument ^25
 	movq %r12, %rdi
 	# SetupCalls(1384:3): move argument %rcx
 	# Semiunclobber %rcx into %rsi
-	movq %rcx, %rsi
+	movq -40(%rbp), %rsi
 	# SetupCalls(1384:3): move argument %r8
 	# Semiunclobber %r8 into %rdx
-	movq %r8, %rdx
+	movq -48(%rbp), %rdx
 	callq memmove@PLT
+	# Unclobber %r8
+	movq -48(%rbp), %r8
+	# Unclobber %rcx
+	movq -40(%rbp), %rcx
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M311:
 	# LowerIcmp(1388:3): ^70 vs. operand %rcx
@@ -1027,6 +1047,8 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movb %bl, (%r12)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M335:
+	# Clobber %r8
+	movq %r8, -48(%rbp)
 	# Clobber %rax
 	movq %rax, -56(%rbp)
 	# SetupCalls(1413:3): move argument ^25
@@ -1035,10 +1057,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rax, %rsi
 	# SetupCalls(1413:3): move argument %r8
 	# Semiunclobber %r8 into %rdx
-	movq %r8, %rdx
+	movq -48(%rbp), %rdx
 	callq memcpy@PLT
 	# Unclobber %rax
 	movq -56(%rbp), %rax
+	# Unclobber %r8
+	movq -48(%rbp), %r8
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M361:
 	movq %rbx, %rax
@@ -1059,18 +1083,22 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movb %al, (%r12)
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M403
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M377:
+	# Clobber %rcx
+	movq %rcx, -40(%rbp)
 	# Clobber %r8
 	movq %r8, -48(%rbp)
 	# SetupCalls(1437:3): move argument ^25
 	movq %r12, %rdi
 	# SetupCalls(1437:3): move argument %rcx
 	# Semiunclobber %rcx into %rsi
-	movq %rcx, %rsi
+	movq -40(%rbp), %rsi
 	# SetupCalls(1437:3): move argument ^93
 	movq %r15, %rdx
 	callq memmove@PLT
 	# Unclobber %r8
 	movq -48(%rbp), %r8
+	# Unclobber %rcx
+	movq -40(%rbp), %rcx
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M403:
 	# LowerGetelementptr(1441:3): pointer-type -> ^98
 	movq %r15, %rax
@@ -1111,22 +1139,42 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq -40(%rbp), %rcx
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M449:
+	# Clobber %rdi
+	movq %rdi, -16(%rbp)
+	# Clobber %rsi
+	movq %rsi, -24(%rbp)
+	# Clobber %rdx
+	movq %rdx, -32(%rbp)
+	# Clobber %rcx
+	movq %rcx, -40(%rbp)
+	# Clobber %r8
+	movq %r8, -48(%rbp)
 	# SetupCalls(1464:3): move argument %rdi
 	# Semiunclobber %rdi into %rdi
-	movq %rdi, %rdi
+	movq -16(%rbp), %rdi
 	# SetupCalls(1464:3): move argument %rsi
 	# Semiunclobber %rsi into %rsi
-	movq %rsi, %rsi
+	movq -24(%rbp), %rsi
 	# SetupCalls(1464:3): move argument %rdx
 	# Semiunclobber %rdx into %rdx
-	movq %rdx, %rdx
+	movq -32(%rbp), %rdx
 	# SetupCalls(1464:3): move argument %rcx
 	# Semiunclobber %rcx into %rcx
-	movq %rcx, %rcx
+	movq -40(%rbp), %rcx
 	# SetupCalls(1464:3): move argument %r8
 	# Semiunclobber %r8 into %r8
-	movq %r8, %r8
+	movq -48(%rbp), %r8
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm
+	# Unclobber %r8
+	movq -48(%rbp), %r8
+	# Unclobber %rcx
+	movq -40(%rbp), %rcx
+	# Unclobber %rdx
+	movq -32(%rbp), %rdx
+	# Unclobber %rsi
+	movq -24(%rbp), %rsi
+	# Unclobber %rdi
+	movq -16(%rbp), %rdi
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm__M479:
 	# LowerStore(1472:3).9: mov ^14, (^6)
 	movq -8(%rbp), %rax
@@ -1155,13 +1203,13 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(732 + 8, 16)
+	# upalign(740 + 8, 16)
 	subq $752, %rsp
-	movq %rbx, -556(%rbp)
-	movq %r12, -564(%rbp)
-	movq %r13, -572(%rbp)
-	movq %r14, -596(%rbp)
-	movq %r15, -668(%rbp)
+	movq %rbx, -564(%rbp)
+	movq %r12, -572(%rbp)
+	movq %r13, -580(%rbp)
+	movq %r14, -604(%rbp)
+	movq %r15, -676(%rbp)
 	# LowerAlloca(852:3): size = 1, type = i8*, var = ^3
 	# Fixing leaq -1(%rbp), -428(%rbp)
 	leaq -1(%rbp), %r15
@@ -1192,13 +1240,17 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	addq $112, %r12
 	# LowerGetelementptr(866:3): struct-type: %"class.std::basic_ios"* -> ^11, indices=0,0
 	movq %r12, %rax
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(867:3): move argument ^11
 	movq %rax, %rdi
 	callq _ZNSt8ios_baseC2Ev@PLT
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	# LowerGetelementptr(868:3): struct-type: %"class.std::basic_ios"* -> ^12, indices=0,0,0
 	movq %r12, %r13
 	movq _ZTVSt9basic_iosIcSt11char_traitsIcEE@GOTPCREL(%rip), %rax
@@ -1228,8 +1280,10 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	addq $112, %rax
 	addq $232, %rax
 	movq %rax, %rcx
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(878:3): move argument ^17
 	movq %rcx, %rdi
 	# SetupCalls(878:3): move argument 0
@@ -1238,7 +1292,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq $32, %rdx
 	callq memset@PLT
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	movq _ZTTNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE@GOTPCREL(%rip), %rcx
 	addq $8, %rcx
 	# LowerLoad(881:3).2: (^133) into ^18
@@ -1258,9 +1314,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# LowerGetelementptr(886:3): struct-type: i32 () *** -> ^22, indices=-3
 	movq %rax, %rcx
 	addq $-24, %rcx
-	movq %rcx, %rdi
+	movq %rcx, %r8
 	# LowerLoad(888:3).2: (^23) into ^24
-	movq (%rdi), %rax
+	movq (%r8), %rax
 	# LowerGetelementptr(889:3): pointer-type -> ^25
 	movq %rax, %rcx
 	addq -476(%rbp), %rcx
@@ -1279,15 +1335,19 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rcx, %rax
 	addq -476(%rbp), %rax
 	movq %rax, %rcx
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(898:3): move argument ^32
 	movq %rcx, %rdi
 	# SetupCalls(898:3): move argument null
 	movq $0, %rsi
 	callq _ZNSt9basic_iosIcSt11char_traitsIcEE4initEPSt15basic_streambufIcS1_E@PLT
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	movq _ZTVNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE@GOTPCREL(%rip), %rcx
 	addq $24, %rcx
 	# LowerStore(899:3).9: mov ^135, (^19)
@@ -1317,8 +1377,10 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	addq $8, -492(%rbp)
 	addq $56, -492(%rbp)
 	movq %rax, %rcx
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(910:3): move argument ^37
 	movq %rcx, %rdi
 	# SetupCalls(910:3): move argument 0
@@ -1327,14 +1389,20 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq $48, %rdx
 	callq memset@PLT
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(911:3): move argument ^36
 	movq -492(%rbp), %rdi
 	callq _ZNSt6localeC1Ev@PLT
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	movq _ZTVNSt7__cxx1115basic_stringbufIcSt11char_traitsIcESaIcEEE@GOTPCREL(%rip), %rax
 	addq $16, %rax
 	# LowerStore(912:3).9: mov ^138, (^34)
@@ -1384,15 +1452,19 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rcx, %rax
 	# LowerGetelementptr(941:3): struct-type: %"class.std::__cxx11::basic_stringbuf"* -> ^50, indices=0,0
 	movq %r13, %rcx
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(942:3): move argument ^49
 	movq %rax, %rdi
 	# SetupCalls(942:3): move argument ^50
 	movq %rcx, %rsi
 	callq _ZNSt9basic_iosIcSt11char_traitsIcEE4initEPSt15basic_streambufIcS1_E@PLT
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	# Fixing movq -460(%rbp), -516(%rbp)
 	movq -460(%rbp), %r15
 	movq %r15, -516(%rbp)
@@ -1403,8 +1475,10 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movb (%r12), %al
 	# LowerStore(949:3).9: mov ^53, (^6)
 	movb %al, (%rbx)
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rsi
-	movq %rsi, -524(%rbp)
+	movq %rsi, -532(%rbp)
 	# SetupCalls(951:3): move argument ^51
 	movq -516(%rbp), %rdi
 	# SetupCalls(951:3): move argument ^6
@@ -1415,7 +1489,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# SetupCalls(951:3): move result from %rax
 	movq %rax, %rax
 	# Unclobber %rsi
-	movq -524(%rbp), %rsi
+	movq -532(%rbp), %rsi
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	# LowerGetelementptr(953:3): struct-type: %"struct.std::__detail::_Quoted_string"* -> ^55, indices=0,0
 	movq %rsi, %rax
 	# LowerLoad(954:3).2: (^55) into ^56
@@ -1450,6 +1526,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# LowerStore(983:3).9: mov ^66, (^5)
 	movq -452(%rbp), %rbx
 	movb %al, (%rbx)
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(985:3): move argument ^51
 	movq -516(%rbp), %rdi
 	# SetupCalls(985:3): move argument ^5
@@ -1459,6 +1537,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(985:3): move result from %rax
 	movq %rax, %rax
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	movq -468(%rbp), %rax
 	# LowerGetelementptr(997:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^69, indices=0,2
 	movq -468(%rbp), %rax
@@ -1518,8 +1598,10 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %r8, %rcx
 	movq %rax, %r9
 	subq %rcx, %r9
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rdx
-	movq %rdx, -532(%rbp)
+	movq %rdx, -540(%rbp)
 	# SetupCalls(1052:3): move argument ^8
 	movq -468(%rbp), %rdi
 	# SetupCalls(1052:3): move argument 0
@@ -1534,14 +1616,20 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# SetupCalls(1052:3): move result from %rax
 	movq %rax, %rax
 	# Unclobber %rdx
-	movq -532(%rbp), %rdx
+	movq -540(%rbp), %rdx
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	jmp .___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M500
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M476:
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1063:3): move argument ^8
 	movq -468(%rbp), %rdi
 	# SetupCalls(1063:3): move argument ^39
 	movq -500(%rbp), %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M500:
 	# LowerGetelementptr(1071:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^91, indices=0,0,0
 	movq -468(%rbp), %r15
@@ -1549,9 +1637,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq (%r15), %rax
 	# LowerLoad(1074:3).2: (^71) into ^93
 	movq (%r14), %rcx
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1075:3): move argument %rdi
 	# Semiunclobber %rdi into %rdi
-	movq %rdi, %rdi
+	movq -524(%rbp), %rdi
 	# SetupCalls(1075:3): move argument ^92
 	movq %rax, %rsi
 	# SetupCalls(1075:3): move argument ^93
@@ -1559,6 +1649,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(1075:3): move result from %rax
 	movq %rax, %rax
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	# LowerLoad(1080:3).2: (^91) into ^95
 	movq (%r15), %rax
 	# LowerIcmp(1081:3): ^95 vs. operand ^72
@@ -1567,13 +1659,17 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	cmpb $0, %bl
 	jne .___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M561
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M539:
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rax
-	movq %rax, -540(%rbp)
+	movq %rax, -548(%rbp)
 	# SetupCalls(1097:3): move argument ^95
 	movq %rax, %rdi
 	callq _ZdlPv@PLT
 	# Unclobber %rax
-	movq -540(%rbp), %rax
+	movq -548(%rbp), %rax
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M561:
 	# LowerLoad(1104:3).4: _ZTTNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE into ^99
 	movq _ZTTNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE@GOTPCREL(%rip), %rbx
@@ -1615,32 +1711,44 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	cmpb $0, %al
 	jne .___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M620
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M598:
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# Clobber %rcx
-	movq %rcx, -548(%rbp)
+	movq %rcx, -556(%rbp)
 	# SetupCalls(1138:3): move argument ^108
 	movq %rcx, %rdi
 	callq _ZdlPv@PLT
 	# Unclobber %rcx
-	movq -548(%rbp), %rcx
+	movq -556(%rbp), %rcx
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M620:
 	movq _ZTVSt15basic_streambufIcSt11char_traitsIcEE@GOTPCREL(%rip), %rax
 	addq $16, %rax
 	# LowerStore(1143:3).9: mov ^141, (^106)
 	movq %rax, (%rbx)
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1144:3): move argument ^36
 	movq -492(%rbp), %rdi
 	callq _ZNSt6localeD1Ev@PLT
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	# LowerGetelementptr(1146:3): struct-type: %"class.std::__cxx11::basic_ostringstream"* -> ^112, indices=0,2,0
 	movq -460(%rbp), %rax
 	addq $112, %rax
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1147:3): move argument ^112
 	movq %rax, %rdi
 	callq _ZNSt8ios_baseD2Ev@PLT
-	movq -668(%rbp), %r15
-	movq -596(%rbp), %r14
-	movq -572(%rbp), %r13
-	movq -564(%rbp), %r12
-	movq -556(%rbp), %rbx
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
+	movq -676(%rbp), %r15
+	movq -604(%rbp), %r14
+	movq -580(%rbp), %r13
+	movq -572(%rbp), %r12
+	movq -564(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -1664,6 +1772,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	jne .___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__RC2
 	movb %al, %r10b
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__RC2:
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1166:3): move argument @.str.dbg2
 	movq .str.dbg2@GOTPCREL(%rip), %rdi
 	# SetupCalls(1166:3): move argument ^115
@@ -1680,6 +1790,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %r10, (%rsp)
 	movq $0, %rax
 	callq printf@PLT
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	cmpb $0, %r10b
 	jne .___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M720
 	jmp .___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M750
@@ -1687,6 +1799,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# LowerStore(1173:3).9: mov ^118, (^4)
 	movq -444(%rbp), %rax
 	movb %r14b, (%rax)
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1175:3): move argument ^51
 	movq -516(%rbp), %rdi
 	# SetupCalls(1175:3): move argument ^4
@@ -1696,10 +1810,14 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(1175:3): move result from %rax
 	movq %rax, %rax
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M750:
 	# LowerStore(1183:3).9: mov ^115, (^3)
 	movq -428(%rbp), %rax
 	movb %bl, (%rax)
+	# Clobber %rdi
+	movq %rdi, -524(%rbp)
 	# SetupCalls(1185:3): move argument ^51
 	movq -516(%rbp), %rdi
 	# SetupCalls(1185:3): move argument ^3
@@ -1709,6 +1827,8 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(1185:3): move result from %rax
 	movq %rax, %rax
+	# Unclobber %rdi
+	movq -524(%rbp), %rdi
 	# LowerGetelementptr(1188:3): struct-type: i8* -> ^125, indices=1
 	movq -420(%rbp), %rax
 	addq $1, %rax
@@ -1883,13 +2003,13 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(128 + 0, 16)
-	subq $128, %rsp
-	movq %rbx, -80(%rbp)
-	movq %r12, -112(%rbp)
-	movq %r13, -88(%rbp)
-	movq %r14, -96(%rbp)
-	movq %r15, -104(%rbp)
+	# upalign(136 + 0, 16)
+	subq $144, %rsp
+	movq %rbx, -88(%rbp)
+	movq %r12, -120(%rbp)
+	movq %r13, -96(%rbp)
+	movq %r14, -104(%rbp)
+	movq %r15, -112(%rbp)
 	# LowerAlloca(645:3): size = 16, type = {%"class.std::__cxx11::basic_string"*, i64}*, var = ^3
 	leaq -16(%rbp), %rbx
 	movq %rbx, -72(%rbp)
@@ -1942,9 +2062,13 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	jne .___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M34
 	jmp .___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M56
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M34:
+	# Clobber %rdi
+	movq %rdi, -80(%rbp)
 	# SetupCalls(705:3): move argument getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
 	movq .str.3@GOTPCREL(%rip), %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
+	# Unclobber %rdi
+	movq -80(%rbp), %rdi
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M56:
 	movq %r14, %r12
 	addq $1, %r12
@@ -1955,13 +2079,21 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	jne .___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M62
 	jmp .___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M82
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M62:
+	# Clobber %rdi
+	movq %rdi, -80(%rbp)
 	callq _ZSt17__throw_bad_allocv@PLT
+	# Unclobber %rdi
+	movq -80(%rbp), %rdi
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M82:
+	# Clobber %rdi
+	movq %rdi, -80(%rbp)
 	# SetupCalls(725:3): move argument ^21
 	movq %r12, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(725:3): move result from %rax
 	movq %rax, %r12
+	# Unclobber %rdi
+	movq -80(%rbp), %rdi
 	# LowerGetelementptr(728:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^26, indices=0,0,0
 	movq -56(%rbp), %rax
 	# LowerStore(729:3).9: mov ^25, (^26)
@@ -1988,6 +2120,8 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	movb %al, (%r15)
 	jmp .___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M155
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M129:
+	# Clobber %rdi
+	movq %rdi, -80(%rbp)
 	# SetupCalls(758:3): move argument ^29
 	movq %r15, %rdi
 	# SetupCalls(758:3): move argument ^9
@@ -1995,6 +2129,8 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	# SetupCalls(758:3): move argument ^11
 	movq %r14, %rdx
 	callq memcpy@PLT
+	# Unclobber %rdi
+	movq -80(%rbp), %rdi
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M155:
 	# LowerGetelementptr(767:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^34, indices=0,1
 	movq -56(%rbp), %rax
@@ -2019,14 +2155,18 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	addq $8, %rax
 	# LowerStore(776:3).3: mov $imm, ^37
 	movq $23586, (%rax)
+	# Clobber %rdi
+	movq %rdi, -80(%rbp)
 	# SetupCalls(777:3): move argument %rdi
 	# Semiunclobber %rdi into %rdi
-	movq %rdi, %rdi
+	movq -80(%rbp), %rdi
 	# SetupCalls(777:3): move argument ^4
 	movq -72(%rbp), %rsi
 	callq _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE
 	# SetupCalls(777:3): move result from %rax
 	movq %rax, %rax
+	# Unclobber %rdi
+	movq -80(%rbp), %rdi
 	# LowerGetelementptr(782:3): struct-type: %"class.std::__cxx11::basic_string"* -> ^39, indices=0,0,0
 	movq -56(%rbp), %rax
 	# LowerLoad(783:3).2: (^39) into ^40
@@ -2043,11 +2183,11 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	callq _ZdlPv@PLT
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M230:
 	movq %rdi, %rax
-	movq -104(%rbp), %r15
-	movq -96(%rbp), %r14
-	movq -88(%rbp), %r13
-	movq -112(%rbp), %r12
-	movq -80(%rbp), %rbx
+	movq -112(%rbp), %r15
+	movq -104(%rbp), %r14
+	movq -96(%rbp), %r13
+	movq -120(%rbp), %r12
+	movq -88(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
