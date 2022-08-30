@@ -21,7 +21,7 @@
 // #define DEBUG_MINILABELS
 // #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
-// #define FINAL_DEBUG
+#define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
@@ -399,9 +399,6 @@ namespace LL2X {
 		if (do_debug)
 			debug();
 
-		// Doing this surprisingly speeds things up significantly. It also probably improves code correctness...
-		extractInstructions(true);
-
 		for (auto iter = linearInstructions.begin(), end = linearInstructions.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
 			if (auto mov = std::dynamic_pointer_cast<Mov>(instruction))
@@ -461,6 +458,9 @@ namespace LL2X {
 #ifdef DEBUG_SPILL
 		std::cerr << "\n";
 #endif
+
+		// Doing this surprisingly speeds things up significantly. It also probably improves code correctness...
+		extractInstructions(true);
 
 		// TODO: can some of this be targeted to just the spilled variable?
 		reindexInstructions();
@@ -1762,18 +1762,27 @@ namespace LL2X {
 				if (var->definingBlocks.size() > 1)
 					stream << " (multiple defs)";
 				stream << "  pid = \e[1m" << *var->parentID() << "\e[22;2m";
-				stream << "  aliases =\e[1m";
-				for (Variable *alias: var->getAliases())
-					stream << " " << *alias->id;
+				const auto aliases = var->getAliases();
+				if (!aliases.empty()) {
+					stream << "  aliases =\e[1m";
+					for (const Variable *alias: aliases)
+						stream << " " << *alias->id;
+					stream << "\e[22;2m";
+				}
+				if (!var->registers.empty()) {
+					stream << " \e[32;1m";
+					for (const int reg: var->registers)
+						stream << " %" << x86_64::registerName(reg);
+				}
 				stream << "\e[0m\n";
 				if (varLiveness) {
-					stream << "    \e[2m;      \e[32min  =\e[1m";
+					stream << "    \e[2m;      \e[32min   =\e[1m";
 					for (const BasicBlockPtr &block: blocks) {
 						if (block->isLiveIn(var))
 							stream << " %" << *block->label;
 					}
 					stream << "\e[0m\n";
-					stream << "    \e[2m;      \e[31mout =\e[1m";
+					stream << "    \e[2m;      \e[31mout  =\e[1m";
 					for (const BasicBlockPtr &block: blocks) {
 						if (block->isLiveOut(var))
 							stream << " %" << *block->label;
