@@ -92,7 +92,7 @@
 #include "pass/Phi.h"
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
-// #include "pass/RemoveUselessBranches.h"
+#include "pass/RemoveUselessBranches.h"
 #include "pass/ReplaceBigMov.h"
 #include "pass/ReplaceCmov.h"
 #include "pass/ReplaceConstants.h"
@@ -1019,7 +1019,7 @@ namespace LL2X {
 		// Passes::lowerStack(*this);
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
-		// Passes::removeUselessBranches(*this);
+		Passes::removeUselessBranches(*this);
 		Passes::mergeAllBlocks(*this);
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);

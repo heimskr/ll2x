@@ -370,7 +370,8 @@ namespace LL2X::Passes {
 		// Integer-like values
 		if (value_type == ValueType::Int) {
 			VariablePtr new_var = function.newVariable(constant->type);
-			function.insertBefore<Mov, false>(instruction, Op4(constant->value->longValue()), OpV(new_var));
+			const int64_t long_value = constant->value->longValue();
+			function.insertBefore<Mov, false>(instruction, Op4(long_value), OpV(new_var));
 			insert_exts(new_var, new_var);
 			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;

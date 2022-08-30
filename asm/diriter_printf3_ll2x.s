@@ -151,7 +151,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	movq %r12, (%rax)
 	# MovePhi: ^19 -> ^23
 	movq %r13, %r14
-	jmp .___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M123
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M123:
 	# LowerSwitch(557:3): begin conditions
 	cmpq $1, %r12
@@ -178,7 +177,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	callq memcpy@PLT
 	# Unclobber rdi
 	movq -8(%rbp), %rdi
-	jmp .___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M161
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M161:
 	# LowerGetelementptr(579:3): struct-type: %"class.std::filesystem::__cxx11::path"* -> ^28, indices=0,0,1
 	movq %rdi, %rax
@@ -383,7 +381,6 @@ main:
 	lock addl %ebx, (%rax)
 	# MovePhi: ^44 -> ^46
 	movl %ebx, %r15d
-	jmp .__main__M163
 	.__main__M163:
 	cmpl $1, %r15d
 	sete %al
@@ -428,7 +425,6 @@ main:
 	lock addl %eax, (%rcx)
 	# MovePhi: ^60 -> ^62
 	movl %eax, %r14d
-	jmp .__main__M218
 	.__main__M218:
 	cmpl $1, %r14d
 	sete %al
@@ -447,7 +443,6 @@ main:
 	movq -144(%rbp), %rdi
 	# SetupCalls(258:3): jump to function operand ^67
 	callq *%rax
-	jmp .__main__M251
 	.__main__M251:
 	# LowerLoad(262:3).2: (^28) into ^69
 	movq -136(%rbp), %rax
@@ -503,7 +498,6 @@ main:
 	lock addl %ecx, (%rax)
 	# MovePhi: ^84 -> ^86
 	movl %ecx, -88(%rbp)
-	jmp .__main__M289
 	.__main__M289:
 	cmpl $1, -88(%rbp)
 	sete %al
@@ -548,7 +542,6 @@ main:
 	lock addl %ecx, (%rax)
 	# MovePhi: ^100 -> ^102
 	movl %ecx, -96(%rbp)
-	jmp .__main__M344
 	.__main__M344:
 	cmpl $1, -96(%rbp)
 	sete %al
@@ -567,7 +560,6 @@ main:
 	movq %rbx, %rdi
 	# SetupCalls(354:3): jump to function operand ^107
 	callq *%rax
-	jmp .__main__M377
 	.__main__M377:
 	# LowerGetelementptr(360:3): struct-type: %"class.std::filesystem::__cxx11::path"* -> ^109, indices=0,1
 	movq -112(%rbp), %rax
@@ -596,7 +588,6 @@ main:
 	movq -160(%rbp), %rcx
 	# Unclobber rdx
 	movq -152(%rbp), %rdx
-	jmp .__main__M412
 	.__main__M412:
 	# LowerStore(392:3).3: mov $imm, ^110
 	movq $0, (%rbx)
@@ -617,7 +608,6 @@ main:
 	# SetupCalls(418:3): move argument ^117
 	movq %rbx, %rdi
 	callq _ZdlPv@PLT
-	jmp .__main__M447
 	.__main__M447:
 	movq $0, %rax
 	movq -256(%rbp), %r15
