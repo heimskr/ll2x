@@ -16,7 +16,7 @@ namespace LL2X::Passes {
 		if (!block)
 			throw std::runtime_error("Couldn't lock instruction block in LowerClobber");
 
-		return std::ranges::any_of(block->liveOut, [reg](const VariablePtr &var) {
+		return std::ranges::any_of(block->allLive, [reg](const VariablePtr &var) {
 			return var->registers.contains(reg);
 		});
 	}

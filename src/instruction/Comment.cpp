@@ -6,7 +6,7 @@ namespace LL2X {
 		TargetInstruction(index_), text(text_) {}
 
 	std::string Comment::debugExtra() {
-		return "\e[35;2m# " + text + "\e[22;39m";
+		return "\e[35m# " + text + "\e[39m";
 	}
 
 	std::string Comment::toString() const {

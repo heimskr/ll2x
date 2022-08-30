@@ -1,6 +1,7 @@
 #pragma once
 
 #include "compiler/x86_64.h"
+#include "instruction/DestinationOnly.h"
 #include "instruction/Intermediate.h"
 #include "util/Makeable.h"
 
@@ -48,15 +49,17 @@ namespace LL2X {
 		}
 	};
 
-	struct SemiUnclobber: IntermediateInstruction, Makeable<SemiUnclobber> {
+	struct SemiUnclobber: IntermediateInstruction, OneDestination, Makeable<SemiUnclobber> {
 		int reg;
-		OperandPtr destination;
 
 		SemiUnclobber(int reg_, OperandPtr destination_, int index_ = -1):
-			IntermediateInstruction(index_), reg(reg_), destination(std::move(destination_)) {}
+			IntermediateInstruction(index_), OneDestination(std::move(destination_)), reg(reg_) {}
 
 		std::string debugExtra() override { return toString(); }
-
 		std::string toString() const override;
+
+		ExtractionResult extract(bool force) override;
+
+		std::pair<int, int> extractPrecolored() override;
 	};
 }

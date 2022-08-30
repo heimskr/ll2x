@@ -42,7 +42,7 @@ namespace LL2X::Passes {
 	}
 
 	static bool isLive(int reg, const InstructionPtr &instruction) {
-		return std::ranges::any_of(instruction->parent.lock()->liveOut, [reg](const VariablePtr &variable) {
+		return std::ranges::any_of(instruction->parent.lock()->allLive, [reg](const VariablePtr &variable) {
 			return variable->registers.contains(reg);
 		});
 	}

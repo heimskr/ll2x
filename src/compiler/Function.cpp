@@ -19,6 +19,7 @@
 // #define DEBUG_STACK
 // #define DEBUG_CANSPILL
 // #define DEBUG_MINILABELS
+// #define DEBUG_AFTER_SETUPCALLS
 // #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
 // #define FINAL_DEBUG
@@ -985,6 +986,9 @@ namespace LL2X {
 		Passes::lowerMemmove(*this);
 		Passes::lowerMemset(*this);
 		Passes::setupCalls(*this);
+#ifdef DEBUG_AFTER_SETUPCALLS
+		debug();
+#endif
 		Passes::lowerMemory(*this);
 		// Passes::lowerInlineAsm(*this);
 		Passes::lowerExtractvalue(*this);
@@ -997,12 +1001,6 @@ namespace LL2X {
 		Passes::lowerSwitch(*this);
 		Passes::fixBigConstants(*this);
 		Passes::minimizeBlocks(*this);
-		try {
-			Passes::makeCFG(*this);
-		} catch (const std::runtime_error &) {
-			debug();
-			throw;
-		}
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		extractVariables(true);
@@ -1031,6 +1029,7 @@ namespace LL2X {
 		// Passes::removeRedundantMoves(*this);
 		Passes::removeUselessSourceBranches(*this);
 		Passes::mergeAllBlocks(*this);
+		forceLiveness();
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
 		Passes::removeUselessTargetBranches(*this);
@@ -1052,6 +1051,7 @@ namespace LL2X {
 		forceLiveness(); // Hack: some other pass is forgetting to extract after changing operands.
 		Passes::fixMemoryOperands(*this);
 		hackVariables();
+		forceLiveness();
 		// for (InstructionPtr &instruction: linearInstructions) {
 		// 	if (instruction->debugIndex != -1) {
 		// 		auto lock = parent.getLock();
@@ -1103,6 +1103,7 @@ namespace LL2X {
 		extractInstructions(true);
 		for (const BasicBlockPtr &block: blocks)
 			block->extract(true);
+		extractVariables(true);
 		resetLiveness();
 		computeLiveness();
 	}
@@ -1374,18 +1375,26 @@ namespace LL2X {
 		for (const auto &[name, var]: variableStore)
 			if (!var->hasSpecialRegister())
 				for (const auto &block: blocks) {
-					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
+					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var)) {
 						block->liveIn.insert(var);
-					if (isLiveOutUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
+						block->allLive.insert(var);
+					}
+					if (isLiveOutUsingMergeSet(mergesets, &(*djGraph)[*block->label], var)) {
 						block->liveOut.insert(var);
+						block->allLive.insert(var);
+					}
 				}
 		for (const auto &[name, var]: extraVariables)
 			if (!var->hasSpecialRegister())
 				for (const auto &block: blocks) {
-					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
+					if (isLiveInUsingMergeSet(mergesets, &(*djGraph)[*block->label], var)) {
 						block->liveIn.insert(var);
-					if (isLiveOutUsingMergeSet(mergesets, &(*djGraph)[*block->label], var))
+						block->allLive.insert(var);
+					}
+					if (isLiveOutUsingMergeSet(mergesets, &(*djGraph)[*block->label], var)) {
 						block->liveOut.insert(var);
+						block->allLive.insert(var);
+					}
 				}
 	}
 
@@ -1439,6 +1448,7 @@ namespace LL2X {
 		for (auto &block: blocks) {
 			block->liveIn  = std::unordered_set<VariablePtr>(in[block->label].cbegin(),  in[block->label].cend());
 			block->liveOut = std::unordered_set<VariablePtr>(out[block->label].cbegin(), out[block->label].cend());
+			block->allLive = Util::merge(block->liveIn, block->liveOut);
 		}
 	}
 
@@ -1467,6 +1477,7 @@ namespace LL2X {
 
 		// LiveIn(B) = LiveIn(B) ∪ {v}
 		block->liveIn.insert(var);
+		block->allLive.insert(var);
 
 		// if v ∈ PhiDefs(B) then return
 		if (block->inPhiDefs(var))
@@ -1514,6 +1525,7 @@ namespace LL2X {
 				for (const BasicBlockPtr &block: blocks) {
 					block->liveIn.erase(var);
 					block->liveOut.erase(var);
+					block->allLive.erase(var);
 				}
 		}
 	}
@@ -1522,6 +1534,7 @@ namespace LL2X {
 		for (const BasicBlockPtr &block: blocks) {
 			block->liveIn.clear();
 			block->liveOut.clear();
+			block->allLive.clear();
 		}
 	}
 
@@ -1758,10 +1771,16 @@ namespace LL2X {
 				stream << " \e[2m; \e[1m%" << *id << "/" << *var->id << "/" << *var->originalID << "\e[0;2m  defs ("
 				       << var->definitions.size() << " inst) =";
 				for (const std::weak_ptr<BasicBlock> &def: var->definingBlocks)
-					stream << " \e[1;2m" << std::setw(2) << *def.lock()->label << "\e[0m";
-				stream << "  \e[0;2muses =";
+					if (auto locked = def.lock())
+						stream << " \e[1;2m" << std::setw(2) << *locked->label << "\e[22m";
+					else
+						stream << " \e[2m??\e[22m";
+				stream << "  \e[2muses =";
 				for (const std::weak_ptr<BasicBlock> &use: var->usingBlocks)
-					stream << " \e[1;2m" << std::setw(2) << *use.lock()->label << "\e[0m";
+					if (auto locked = use.lock())
+						stream << " \e[1;2m" << std::setw(2) << *locked->label << "\e[22m";
+					else
+						stream << " \e[2m??\e[22m";
 				const int spill_cost = var->spillCost();
 				stream << "\e[2m  cost = \e[1m" << (spill_cost == INT_MAX? "∞" : std::to_string(spill_cost))
 				       << "\e[0;2m";

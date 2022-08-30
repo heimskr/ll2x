@@ -174,7 +174,18 @@ namespace LL2X::Passes {
 
 			for (const auto &[value, block_label]: phi_node->pairs) {
 				const LocalValue *local = value->isLocal()? dynamic_cast<LocalValue *>(value.get()) : nullptr;
-				BasicBlockPtr block = function.bbMap.at(block_label);
+				BasicBlockPtr block;
+				try {
+					block = function.bbMap.at(block_label);
+				} catch (const std::out_of_range &) {
+					error() << "Couldn't find " << *block_label << " in " << *function.name << "'s bbMap.\n"
+					           "    bbMap entries (" << function.bbMap.size() << "):\n";
+					for (const auto &[bbname, bb]: function.bbMap)
+						std::cerr << "    - " << *bbname << '\n';
+					std::cerr << "    Phi node: " << phi_node->debugExtra() << '\n';
+					throw;
+				}
+
 				InstructionPtr new_instruction;
 
 				std::string comment;

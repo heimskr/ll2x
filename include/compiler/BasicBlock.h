@@ -30,7 +30,10 @@ namespace LL2X {
 			std::vector<Label> preds;
 			std::list<std::shared_ptr<Instruction>> instructions;
 			std::set<std::shared_ptr<Variable>> read, written, nonPhiWritten, nonPhiRead;
-			std::unordered_set<std::shared_ptr<Variable>> liveIn, liveOut;
+			std::unordered_set<std::shared_ptr<Variable>> liveIn;
+			std::unordered_set<std::shared_ptr<Variable>> liveOut;
+			/** Contains everything in liveIn and liveOut. */
+			std::unordered_set<std::shared_ptr<Variable>> allLive;
 			/** A set of all variables used by ϕ-instructions in this block. */
 			std::unordered_set<std::shared_ptr<Variable>> phiUses;
 			Node *node = nullptr;

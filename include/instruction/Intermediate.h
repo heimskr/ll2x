@@ -1,5 +1,8 @@
 #pragma once
 
+#include <set>
+#include <utility>
+
 #include "compiler/Instruction.h"
 
 namespace LL2X {
@@ -9,8 +12,8 @@ namespace LL2X {
 			using Instruction::Instruction;
 
 		public:
-			std::unordered_set<int> precoloredRead;
-			std::unordered_set<int> precoloredWritten;
+			std::set<int> precoloredRead;
+			std::set<int> precoloredWritten;
 
 			bool isTerminal() const override { return false; }
 			std::pair<int, int> extract(bool) override { return {0, 0}; }

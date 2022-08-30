@@ -522,9 +522,9 @@ namespace LL2X::Passes {
 			if (local->variable->registers.size() == 1 && clobbers.contains(*local->variable->registers.begin())) {
 				const int reg = *local->variable->registers.begin();
 				out = function.insertBefore(instruction, clobbers.at(reg)->makeSemi(new_operand));
-				out->setDebug(*instruction, true);
 			} else
 				out = function.insertBefore<Mov>(instruction, OpV(local->variable), new_operand, 64);
+			out->setDebug(*instruction, true);
 			insert_exts();
 			return out;
 		}
@@ -623,15 +623,14 @@ namespace LL2X::Passes {
 			InstructionPtr out;
 			if (operand->isRegister() && operand->reg->registers.size() == 1) {
 				const int reg = *operand->reg->registers.begin();
-				if (clobbers.contains(reg)) {
+				if (clobbers.contains(reg))
 					out = function.insertBefore(instruction, clobbers.at(reg)->makeSemi(new_operand));
-					out->setDebug(*instruction, true);
-				}
 			}
 
 			if (!out)
-				auto out = function.insertBefore<Mov>(instruction, operand, new_operand);
+				out = function.insertBefore<Mov>(instruction, operand, new_operand);
 
+			out->setDebug(*instruction, true);
 			insert_exts();
 			return out;
 		}

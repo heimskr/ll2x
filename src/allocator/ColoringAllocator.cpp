@@ -438,9 +438,8 @@ namespace LL2X {
 				node.colors = {written.begin(), written.end()};
 				// Assumption: each basic block contains one instruction (i.e., they've all been minimized).
 				// Though does that assumption matter here?
-				// TODO: do we need to care about live-in too?
 				BasicBlockPtr block = intermediate->parent.lock();
-				for (const VariablePtr &var: block->liveOut) {
+				for (const VariablePtr &var: block->allLive) {
 					const auto &pid = *var->parentID();
 					if (interference.hasLabel(pid))
 						interference.link(label, pid, true);

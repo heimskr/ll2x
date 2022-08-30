@@ -1,10 +1,11 @@
 #include "compiler/Function.h"
 #include "compiler/LLVMInstruction.h"
+#include "pass/MakeCFG.h"
 #include "pass/MinimizeBlocks.h"
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	void minimizeBlocks(Function &function) {
+	void minimizeBlocks(Function &function, bool remake_cfg) {
 		Timer timer("MinimizeBlocks");
 
 		std::map<int64_t, BasicBlockPtr> added_blocks;
@@ -77,5 +78,13 @@ namespace LL2X::Passes {
 					instruction->replaceLabel(StringSet::intern("%" + *old_label), StringSet::intern("%" + *new_label));
 				}
 		replacement_timer.stop();
+
+		if (remake_cfg)
+			try {
+				Passes::makeCFG(function);
+			} catch (const std::runtime_error &) {
+				function.debug();
+				throw;
+			}
 	}
 }
