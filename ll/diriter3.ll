@@ -77,6 +77,7 @@ $_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_ = comdat 
 @_ZTVSt15basic_streambufIcSt11char_traitsIcEE = external unnamed_addr constant { [16 x i8*] }, align 8
 @.str.5 = private unnamed_addr constant [25 x i8] c"basic_string::_M_replace\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_diriter.cpp, i8* null }]
+@.str.dbg = private unnamed_addr constant [6 x i8] c"[%p]\n\00", align 1
 
 declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #0
 
@@ -1148,6 +1149,9 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
 
 113:                                              ; preds = %63, %123
   %114 = phi i8* [ %58, %63 ], [ %125, %123 ]
+
+  call i32 (i8*, ...) @printf(i8* @.str.dbg, i8* %114)
+
   call void @llvm.dbg.value(metadata i8* %114, metadata !4256, metadata !DIExpression()), !dbg !4365
   %115 = load i8, i8* %114, align 1, !dbg !4639, !tbaa !3358
   call void @llvm.dbg.value(metadata i8 %115, metadata !4258, metadata !DIExpression()), !dbg !4640
