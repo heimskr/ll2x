@@ -42,7 +42,7 @@ namespace LL2X::Passes {
 					}
 
 					const int offset = -location->offset;
-					const std::string reg_name = x86_64::registerName(reg);
+					const std::string reg_name = '%' + x86_64::registerName(reg);
 
 					auto mov = std::make_shared<Mov>(Op8(precolored), Op8(offset, function.pcRbp));
 					function.comment(clobber, "Clobber " + reg_name);
@@ -50,7 +50,7 @@ namespace LL2X::Passes {
 					function.comment(clobber->unclobber, "Unclobber " + reg_name);
 					function.insertBefore<Mov, false>(clobber->unclobber, Op8(offset, function.pcRbp), Op8(precolored));
 					for (const auto &semi: clobber->semis) {
-						function.comment(semi, "Semiunclobber %" + reg_name + " into " + semi->destination->toString());
+						function.comment(semi, "Semiunclobber " + reg_name + " into " + semi->destination->toString());
 						function.insertBefore<Mov, false>(semi, Op8(offset, function.pcRbp), semi->destination);
 					}
 				} else {
@@ -61,6 +61,8 @@ namespace LL2X::Passes {
 						function.insertBefore<Mov, false>(semi, precolored, semi->destination);
 					}
 				}
+
+				function.forceLiveness();
 
 				to_remove.push_back(clobber);
 				to_remove.push_back(clobber->unclobber);

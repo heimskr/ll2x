@@ -21,7 +21,7 @@
 // #define DEBUG_MINILABELS
 // #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
-#define FINAL_DEBUG
+// #define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
@@ -1035,6 +1035,7 @@ namespace LL2X {
 		Passes::lowerBranches(*this);
 		Passes::removeUselessTargetBranches(*this);
 		Passes::hackOperands(*this);
+		forceLiveness();
 		Passes::lowerClobber(*this);
 		const bool naked = isNaked();
 		if (!naked)
@@ -1048,11 +1049,7 @@ namespace LL2X {
 		Passes::replaceCmov(*this);
 		Passes::replaceBigMov(*this);
 		Passes::transformLabels(*this);
-		extractInstructions(true); // Hack: some other pass is forgetting to extract after changing operands.
-		for (const BasicBlockPtr &block: blocks)
-			block->extract(true);
-		resetLiveness();
-		computeLiveness();
+		forceLiveness(); // Hack: some other pass is forgetting to extract after changing operands.
 		Passes::fixMemoryOperands(*this);
 		hackVariables();
 		// for (InstructionPtr &instruction: linearInstructions) {
@@ -1067,8 +1064,8 @@ namespace LL2X {
 		finalDone = true;
 #ifdef FINAL_DEBUG
 		debug();
-		allocator->interference.renderTo("interference_final_" + *name + ".png");
-		allocator->interference.renderTo("interference_final_" + *name + ".svg");
+		// allocator->interference.renderTo("interference_final_" + *name + ".png");
+		// allocator->interference.renderTo("interference_final_" + *name + ".svg");
 #endif
 	}
 
@@ -1099,6 +1096,15 @@ namespace LL2X {
 		info() << "Total spills: \e[1m" << allocator->getSpillCount() << "\e[0m. Finished \e[1m" << *name
 		       << "\e[0m.\n\n";
 #endif
+	}
+
+	void Function::forceLiveness() {
+		Timer timer("ForceLiveness");
+		extractInstructions(true);
+		for (const BasicBlockPtr &block: blocks)
+			block->extract(true);
+		resetLiveness();
+		computeLiveness();
 	}
 
 	void Function::precolorArguments() {

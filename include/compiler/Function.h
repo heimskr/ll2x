@@ -301,6 +301,9 @@ namespace LL2X {
 			/** Performs a full set of compiler passes on the function. */
 			void compile();
 
+			/** Force-extracts all instructions and blocks, resets liveness and computes liveness. */
+			void forceLiveness();
+
 			/** Assigns special argument registers to variables in a list of intervals as appropriate. */
 			void precolorArguments(std::list<Interval> &);
 
