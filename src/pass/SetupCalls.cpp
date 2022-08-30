@@ -185,7 +185,7 @@ namespace LL2X::Passes {
 			// Push variables onto the stack, right to left.
 			int bytes_pushed = 0;
 			for (i = arg_count + arg_offset - 1; reg_max <= i; --i) {
-				info() << "arg_offset[" << arg_offset << "], i[" << i << "]\n";
+				// info() << "arg_offset[" << arg_offset << "], i[" << i << "]\n";
 				function.comment(instruction, prefix + "push " + call->constants.at(i - arg_offset)->toString());
 				bytes_pushed += pushCallValue(function, instruction, call->constants.at(i - arg_offset), bytes_pushed,
 				                              clobbers_by_reg);
@@ -418,6 +418,24 @@ namespace LL2X::Passes {
 			return size;
 		}
 
+		if (value_type == ValueType::Operand) {
+			if (constant->type->typeType() == TypeType::Struct) {
+				// Some notes based on seeing what clang -S emits:
+				// - A struct containing a single 64-bit member is passed like a scalar.
+				// - A struct containing two 64-bit members is put in the caller's stack frame and a pointer thereto is
+				//   passed to the callee.
+				throw std::runtime_error("Passing structs on the stack is not yet supported");
+			}
+
+			auto operand = std::dynamic_pointer_cast<OperandValue>(constant->value)->operand;
+
+			// TODO!: sign extension
+			// VariablePtr var = signext != 0? function.newVariable(IntType::make(64)) : local->variable;
+			// insert_exts(local->variable, var);
+			function.insertBefore<Mov, false>(instruction, operand, Op8(pushed, function.pcRsp));
+			return size;
+		}
+
 		if (constant->conversionSource)
 			return pushCallValue(function, instruction, constant->conversionSource, pushed, clobbers);
 
@@ -435,6 +453,8 @@ namespace LL2X::Passes {
 			setupCallValue(function, new_operand, instruction, constant->conversionSource, clobbers);
 			return nullptr;
 		}
+
+		new_operand->bitWidth = constant->type->width();
 
 		int signext = constant->parattrs.signext? constant->type->width() : 0;
 		int zeroext = constant->parattrs.zeroext? constant->type->width() : 0;
