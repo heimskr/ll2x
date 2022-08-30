@@ -207,7 +207,7 @@ namespace LL2X {
 			VariablePtr newVariable(const TypePtr & = nullptr, const BasicBlockPtr & = nullptr);
 
 			/** Tries to spill a variable. Returns true if any instructions were inserted. */
-			bool spill(const VariablePtr &, bool doDebug = false);
+			bool spill(const VariablePtr &, bool do_debug = false);
 
 			void markSpilled(const VariablePtr &);
 

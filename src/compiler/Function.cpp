@@ -324,7 +324,9 @@ namespace LL2X {
 		return getVariable(newLabel(), type, definer);
 	}
 
-	bool Function::spill(const VariablePtr &variable, bool doDebug) {
+	bool Function::spill(const VariablePtr &variable, bool do_debug) {
+		// warn() << "Spilling " << *variable << '\n';
+
 		bool out = false;
 		// Right after the definition of the variable to be spilled, store its value onto the stack in the proper
 		// location. For each use of the original variable, replace the original variable with a new variable, and right
@@ -394,8 +396,11 @@ namespace LL2X {
 			std::cerr << "  No stores inserted for " << *variable << ".\n";
 #endif
 
-		if (doDebug)
+		if (do_debug)
 			debug();
+
+		// Doing this surprisingly speeds things up significantly. It also probably improves code correctness...
+		extractInstructions(true);
 
 		for (auto iter = linearInstructions.begin(), end = linearInstructions.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
