@@ -1559,9 +1559,11 @@ namespace LL2X {
 			const int dbg = instruction->debugIndex;
 			if (dbg != -1 && instruction->showDebug()) {
 				auto lock = parent.getLock();
-				if (parent.locations.contains(dbg))
-					out << " !" << parent.locations.at(dbg).index;
-				else
+				if (parent.locations.contains(dbg)) {
+					const long index = parent.locations.at(dbg).index;
+					if (index != -1)
+						out << " !" << index;
+				} else
 					warn() << "Couldn't find location for !" << dbg << '\n';
 			}
 			out << '\n';

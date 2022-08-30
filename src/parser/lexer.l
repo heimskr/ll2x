@@ -171,6 +171,7 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 "!DILexicalBlockFile"		{ LLVMRTOKEN(DILBF) }
 "!DILabel"					{ LLVMRTOKEN(DILABEL) }
 "!DIEnumerator"				{ LLVMRTOKEN(DIENUMERATOR) }
+"!DIArgList"				{ LLVMRTOKEN(DIARGLIST) }
 "!heapallocsite"			{ LLVMRTOKEN(HEAPALLOCSITE) }
 "!range"					{ LLVMRTOKEN(RANGE) }
 "!noalias"					{ LLVMRTOKEN(NOALIAS) }
@@ -305,6 +306,8 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 "None"						{ LLVMRTOKEN(NONE) }
 "filename"					{ LLVMRTOKEN(FILENAME) }
 "directory"					{ LLVMRTOKEN(DIRECTORY) }
+"checksumkind"				{ LLVMRTOKEN(CHECKSUMKIND) }
+"checksum"					{ LLVMRTOKEN(CHECKSUM) }
 "tag"						{ LLVMRTOKEN(TAG) }
 "baseType"					{ LLVMRTOKEN(BASETYPE) }
 "size"						{ LLVMRTOKEN(SIZE) }
