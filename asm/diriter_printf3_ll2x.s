@@ -96,7 +96,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	seta %al
 	cmpb $0, %al
 	jne .___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M38
-	jmp .___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M34
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M34:
 	movq %rcx, %rax
 	# MovePhi: ^10 -> ^23
@@ -274,7 +273,6 @@ main:
 	sete %cl
 	cmpb $0, %cl
 	jne .__main__M262
-	jmp .__main__M75
 	.__main__M75:
 	# LowerGetelementptr(87:3): struct-type: %"class.std::_Sp_counted_base"* -> ^13, indices=0,1
 	movq %rbx, %rdx
@@ -285,7 +283,6 @@ main:
 	sete %cl
 	cmpb $0, %cl
 	jne .__main__M103
-	jmp .__main__M83
 	.__main__M83:
 	# LowerLoad(97:3).2: (^13) into ^17
 	movl (%rdx), %ecx
@@ -336,7 +333,6 @@ main:
 	movq %rax, -136(%rbp)
 	# MovePhi: ^23 -> ^29
 	movq %rdx, -144(%rbp)
-	jmp .__main__M127
 	.__main__M127:
 	# LowerGetelementptr(160:3): struct-type: %"class.std::_Sp_counted_base"* -> ^30, indices=0,1
 	movq -144(%rbp), %rax
@@ -347,7 +343,6 @@ main:
 	sete %bl
 	cmpb $0, %bl
 	jne .__main__M142
-	jmp .__main__M135
 	.__main__M135:
 	# LowerLoad(170:3).2: (^30) into ^34
 	movl (%rax), %ebx
@@ -365,7 +360,6 @@ main:
 	sete %bl
 	cmpb $0, %bl
 	jne .__main__M158
-	jmp .__main__M149
 	.__main__M149:
 	# LowerLoad(204:3).2: (^30) into ^41
 	movl (%rax), %ebx
@@ -409,7 +403,6 @@ main:
 	sete %al
 	cmpb $0, %al
 	jne .__main__M213
-	jmp .__main__M204
 	.__main__M204:
 	# LowerLoad(237:3).2: (^53) into ^57
 	movl (%rcx), %eax
@@ -451,14 +444,12 @@ main:
 	sete %al
 	cmpb $0, %al
 	jne .__main__M262
-	jmp .__main__M256
 	.__main__M256:
 	# MovePhi: ^28 -> ^72 (in new block 134 whose parent is 68)
 	pushq %r15
 	movq -136(%rbp), %r15
 	movq %r15, -80(%rbp)
 	popq %r15
-	jmp .__main__M259
 	.__main__M259:
 	# MovePhi: intlike -> ^124
 	movl $0, -104(%rbp)
@@ -471,7 +462,6 @@ main:
 	sete %al
 	cmpb $0, %al
 	jne .__main__M377
-	jmp .__main__M267
 	.__main__M267:
 	# LowerGetelementptr(290:3): struct-type: %"class.std::_Sp_counted_base"* -> ^77, indices=0,1
 	movq %rbx, %rax
@@ -482,7 +472,6 @@ main:
 	sete %cl
 	cmpb $0, %cl
 	jne .__main__M284
-	jmp .__main__M275
 	.__main__M275:
 	# LowerLoad(300:3).2: (^77) into ^81
 	movl (%rax), %ecx
@@ -526,7 +515,6 @@ main:
 	sete %cl
 	cmpb $0, %cl
 	jne .__main__M339
-	jmp .__main__M330
 	.__main__M330:
 	# LowerLoad(333:3).2: (^93) into ^97
 	movl (%rax), %ecx
@@ -572,7 +560,6 @@ main:
 	sete %dl
 	cmpb $0, %dl
 	jne .__main__M412
-	jmp .__main__M387
 	.__main__M387:
 	movq %rax, %rdx
 	# Clobber rdx
@@ -603,7 +590,6 @@ main:
 	sete %al
 	cmpb $0, %al
 	jne .__main__M447
-	jmp .__main__M425
 	.__main__M425:
 	# SetupCalls(418:3): move argument ^117
 	movq %rbx, %rdi
@@ -651,7 +637,6 @@ main:
 	sete %al
 	cmpb $0, %al
 	jne .__main__M262
-	jmp .__main__M533
 	.__main__M533:
 	# MovePhi: ^126 -> ^124 (in new block 136 whose parent is 123)
 	movl %r12d, -104(%rbp)

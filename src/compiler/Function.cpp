@@ -1019,10 +1019,11 @@ namespace LL2X {
 		// Passes::lowerStack(*this);
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
-		Passes::removeUselessBranches(*this);
+		Passes::removeUselessSourceBranches(*this);
 		Passes::mergeAllBlocks(*this);
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
+		Passes::removeUselessTargetBranches(*this);
 		Passes::hackOperands(*this);
 		Passes::lowerClobber(*this);
 		const bool naked = isNaked();
