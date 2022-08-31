@@ -1,2 +1,2 @@
 [2022/08/26 03:58:47] alloca alignment
-[2022/08/29 19:12:24] pushing/popping %r15 in FixMemoryOperands within pushCallValue messes up the stack.
+[2022/08/30 01:01:51] getelementptr instructions based on fixed allocas are optimized by clang. Can we do that too?

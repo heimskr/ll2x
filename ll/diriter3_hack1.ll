@@ -1196,6 +1196,16 @@ define internal void @_GLOBAL__sub_I_diriter.cpp() #6 section ".text.startup" !d
   ret void
 }
 
+define i64* @hack1(%"class.std::__cxx11::basic_ostringstream"* %0) {
+  %2 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %0, i64 0, i32 1, i32 2, i32 1
+  ret i64* %2
+}
+
+define %union.anon* @hack2(%"class.std::__cxx11::basic_ostringstream"* %0) {
+  %2 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %0, i64 0, i32 1, i32 2, i32 2
+  ret %union.anon* %2
+}
+
 ; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
 declare void @llvm.dbg.value(metadata, metadata, metadata) #14
 
