@@ -177,8 +177,9 @@ namespace LL2X::Passes {
 			// Move variables into the argument registers.
 			for (i = arg_offset; i < reg_max && i < arg_count + arg_offset; ++i) {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
-				ConstantPtr constant = call->constants[i - arg_offset];
-				function.comment(instruction, prefix + "move argument " + constant->convert()->value->toString());
+				ConstantPtr constant = call->constants[i - arg_offset]->convert();
+				function.comment(instruction, prefix + "move argument " + constant->type->toString() + " " +
+					constant->value->toString());
 				setupCallValue(function, OpV(precolored), instruction, constant, clobbers_by_reg);
 			}
 
@@ -531,7 +532,7 @@ namespace LL2X::Passes {
 
 		if (value_type == ValueType::Int) {
 			// If it's an integer constant, set the argument register to it.
-			auto out = function.insertBefore<Mov>(instruction, Op4(constant->value->longValue()), new_operand);
+			auto out = function.insertBefore<Mov>(instruction, Op4(constant->value->longValue()), new_operand, 64);
 			insert_exts();
 			return out;
 		}

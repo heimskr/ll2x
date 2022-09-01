@@ -119,7 +119,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_:
 	movq %rdi, -32(%rbp)
 	# Clobber %rsi
 	movq %rsi, -40(%rbp)
-	# SetupCalls(1113:3): move argument getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
+	# SetupCalls(1113:3): move argument i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
 	movq .str.3@GOTPCREL(%rip), %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
 	# Unclobber %rsi
@@ -170,7 +170,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_:
 	movq %rdi, -32(%rbp)
 	# Clobber %rsi
 	movq %rsi, -40(%rbp)
-	# SetupCalls(1131:3): move argument ^25
+	# SetupCalls(1131:3): move argument i64 ^25
 	movq %r12, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(1131:3): move result from %rax
@@ -194,7 +194,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_:
 	movq %rsi, -40(%rbp)
 	# Clobber %rcx
 	movq %rcx, -48(%rbp)
-	# SetupCalls(1137:3): move argument ^30
+	# SetupCalls(1137:3): move argument i8* ^30
 	movq %rcx, %rdi
 	callq _ZdlPv@PLT
 	# Unclobber %rcx
@@ -251,11 +251,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_:
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4___M186:
 	# Clobber %rdi
 	movq %rdi, -32(%rbp)
-	# SetupCalls(1167:3): move argument ^39
+	# SetupCalls(1167:3): move argument i8* ^39
 	movq %r15, %rdi
-	# SetupCalls(1167:3): move argument ^41
+	# SetupCalls(1167:3): move argument i8* ^41
 	movq %rbx, %rsi
-	# SetupCalls(1167:3): move argument ^6
+	# SetupCalls(1167:3): move argument i64 ^6
 	movq -16(%rbp), %rdx
 	callq memcpy@PLT
 	# Unclobber %rdi
@@ -297,14 +297,14 @@ _GLOBAL__sub_I_diriter.cpp:
 	.___GLOBAL__sub_I_diriter.cpp__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# SetupCalls(1194:3): move argument @_ZStL8__ioinit
+	# SetupCalls(1194:3): move argument %"class.std::ios_base::Init"* @_ZStL8__ioinit
 	movq _ZStL8__ioinit@GOTPCREL(%rip), %rdi
 	callq _ZNSt8ios_base4InitC1Ev@PLT
-	# SetupCalls(1195:3): move argument @_ZNSt8ios_base4InitD1Ev
+	# SetupCalls(1195:3): move argument void (i8*) ** @_ZNSt8ios_base4InitD1Ev
 	movq _ZNSt8ios_base4InitD1Ev@GOTPCREL(%rip), %rdi
-	# SetupCalls(1195:3): move argument getelementptr inbounds (%"class.std::ios_base::Init", %"class.std::ios_base::Init"* @_ZStL8__ioinit, i64 0, i32 0)
+	# SetupCalls(1195:3): move argument i8* getelementptr inbounds (%"class.std::ios_base::Init", %"class.std::ios_base::Init"* @_ZStL8__ioinit, i64 0, i32 0)
 	movq _ZStL8__ioinit@GOTPCREL(%rip), %rsi
-	# SetupCalls(1195:3): move argument @__dso_handle
+	# SetupCalls(1195:3): move argument i8* @__dso_handle
 	movq __dso_handle@GOTPCREL(%rip), %rdx
 	callq __cxa_atexit@PLT
 	# SetupCalls(1195:3): move result from %rax
@@ -377,7 +377,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %rcx, -48(%rbp)
 	# Clobber %r8
 	movq %r8, -56(%rbp)
-	# SetupCalls(979:3): move argument getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
+	# SetupCalls(979:3): move argument i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
 	movq .str.3@GOTPCREL(%rip), %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
 	# Unclobber %r8
@@ -459,7 +459,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %rcx, -48(%rbp)
 	# Clobber %r8
 	movq %r8, -56(%rbp)
-	# SetupCalls(1007:3): move argument ^32
+	# SetupCalls(1007:3): move argument i64 ^32
 	movq %r14, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(1007:3): move result from %rax
@@ -504,11 +504,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %r8, -56(%rbp)
 	# Clobber %r9
 	movq %r9, -64(%rbp)
-	# SetupCalls(1022:3): move argument ^36
+	# SetupCalls(1022:3): move argument i8* ^36
 	movq %r14, %rdi
-	# SetupCalls(1022:3): move argument ^39
+	# SetupCalls(1022:3): move argument i8* ^39
 	movq %r9, %rsi
-	# SetupCalls(1022:3): move argument %rsi
+	# SetupCalls(1022:3): move argument i64 %rsi
 	# Semiunclobber %rsi into %rdx
 	movq -32(%rbp), %rdx
 	callq memcpy@PLT
@@ -561,12 +561,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %r8, -56(%rbp)
 	# Clobber %rax
 	movq %rax, -72(%rbp)
-	# SetupCalls(1042:3): move argument ^49
+	# SetupCalls(1042:3): move argument i8* ^49
 	movq %rax, %rdi
-	# SetupCalls(1042:3): move argument %rcx
+	# SetupCalls(1042:3): move argument i8* %rcx
 	# Semiunclobber %rcx into %rsi
 	movq -48(%rbp), %rsi
-	# SetupCalls(1042:3): move argument %r8
+	# SetupCalls(1042:3): move argument i64 %r8
 	# Semiunclobber %r8 into %rdx
 	movq -56(%rbp), %rdx
 	callq memcpy@PLT
@@ -629,11 +629,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	movq %r9, -64(%rbp)
 	# Clobber %rax
 	movq %rax, -72(%rbp)
-	# SetupCalls(1068:3): move argument ^60
+	# SetupCalls(1068:3): move argument i8* ^60
 	movq %r9, %rdi
-	# SetupCalls(1068:3): move argument ^63
+	# SetupCalls(1068:3): move argument i8* ^63
 	movq %rax, %rsi
-	# SetupCalls(1068:3): move argument ^9
+	# SetupCalls(1068:3): move argument i64 ^9
 	movq %r13, %rdx
 	callq memcpy@PLT
 	# Unclobber %rax
@@ -649,7 +649,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm:
 	cmpb $0, %al
 	jne .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M311
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M289:
-	# SetupCalls(1077:3): move argument ^69
+	# SetupCalls(1077:3): move argument i8* ^69
 	movq -16(%rbp), %rdi
 	callq _ZdlPv@PLT
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm__M311:
@@ -711,7 +711,7 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -40(%rbp)
 	# Clobber %r8
 	movq %r8, -48(%rbp)
-	# SetupCalls(763:3): move argument getelementptr inbounds ([25 x i8], [25 x i8]* @.str.5, i64 0, i64 0)
+	# SetupCalls(763:3): move argument i8* getelementptr inbounds ([25 x i8], [25 x i8]* @.str.5, i64 0, i64 0)
 	movq .str.5@GOTPCREL(%rip), %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
 	# Unclobber %r8
@@ -817,11 +817,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %r8, -48(%rbp)
 	# Clobber %rax
 	movq %rax, -56(%rbp)
-	# SetupCalls(808:3): move argument ^37
+	# SetupCalls(808:3): move argument i8* ^37
 	movq %rax, %rdi
-	# SetupCalls(808:3): move argument ^38
+	# SetupCalls(808:3): move argument i8* ^38
 	movq %rbx, %rsi
-	# SetupCalls(808:3): move argument ^27
+	# SetupCalls(808:3): move argument i64 ^27
 	movq %r15, %rdx
 	callq memmove@PLT
 	# Unclobber %rax
@@ -849,12 +849,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -40(%rbp)
 	# Clobber %r8
 	movq %r8, -48(%rbp)
-	# SetupCalls(823:3): move argument ^25
+	# SetupCalls(823:3): move argument i8* ^25
 	movq %r12, %rdi
-	# SetupCalls(823:3): move argument %rcx
+	# SetupCalls(823:3): move argument i8* %rcx
 	# Semiunclobber %rcx into %rsi
 	movq -40(%rbp), %rsi
-	# SetupCalls(823:3): move argument %r8
+	# SetupCalls(823:3): move argument i64 %r8
 	# Semiunclobber %r8 into %rdx
 	movq -48(%rbp), %rdx
 	callq memcpy@PLT
@@ -897,12 +897,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %r8, -48(%rbp)
 	# Clobber %rax
 	movq %rax, -56(%rbp)
-	# SetupCalls(842:3): move argument ^25
+	# SetupCalls(842:3): move argument i8* ^25
 	movq %r12, %rdi
-	# SetupCalls(842:3): move argument %rcx
+	# SetupCalls(842:3): move argument i8* %rcx
 	# Semiunclobber %rcx into %rsi
 	movq -40(%rbp), %rsi
-	# SetupCalls(842:3): move argument %r8
+	# SetupCalls(842:3): move argument i64 %r8
 	# Semiunclobber %r8 into %rdx
 	movq -48(%rbp), %rdx
 	callq memmove@PLT
@@ -955,11 +955,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %r8, -48(%rbp)
 	# Clobber %rax
 	movq %rax, -56(%rbp)
-	# SetupCalls(863:3): move argument ^61
+	# SetupCalls(863:3): move argument i8* ^61
 	movq %rsi, %rdi
-	# SetupCalls(863:3): move argument ^62
+	# SetupCalls(863:3): move argument i8* ^62
 	movq %rbx, %rsi
-	# SetupCalls(863:3): move argument ^27
+	# SetupCalls(863:3): move argument i64 ^27
 	movq %r15, %rdx
 	callq memmove@PLT
 	# Unclobber %rax
@@ -1006,12 +1006,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -40(%rbp)
 	# Clobber %r8
 	movq %r8, -48(%rbp)
-	# SetupCalls(885:3): move argument ^25
+	# SetupCalls(885:3): move argument i8* ^25
 	movq %r12, %rdi
-	# SetupCalls(885:3): move argument %rcx
+	# SetupCalls(885:3): move argument i8* %rcx
 	# Semiunclobber %rcx into %rsi
 	movq -40(%rbp), %rsi
-	# SetupCalls(885:3): move argument %r8
+	# SetupCalls(885:3): move argument i64 %r8
 	# Semiunclobber %r8 into %rdx
 	movq -48(%rbp), %rdx
 	callq memmove@PLT
@@ -1055,11 +1055,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %r8, -48(%rbp)
 	# Clobber %rax
 	movq %rax, -56(%rbp)
-	# SetupCalls(908:3): move argument ^25
+	# SetupCalls(908:3): move argument i8* ^25
 	movq %r12, %rdi
-	# SetupCalls(908:3): move argument ^85
+	# SetupCalls(908:3): move argument i8* ^85
 	movq %rax, %rsi
-	# SetupCalls(908:3): move argument %r8
+	# SetupCalls(908:3): move argument i64 %r8
 	# Semiunclobber %r8 into %rdx
 	movq -48(%rbp), %rdx
 	callq memcpy@PLT
@@ -1091,12 +1091,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -40(%rbp)
 	# Clobber %r8
 	movq %r8, -48(%rbp)
-	# SetupCalls(926:3): move argument ^25
+	# SetupCalls(926:3): move argument i8* ^25
 	movq %r12, %rdi
-	# SetupCalls(926:3): move argument %rcx
+	# SetupCalls(926:3): move argument i8* %rcx
 	# Semiunclobber %rcx into %rsi
 	movq -40(%rbp), %rsi
-	# SetupCalls(926:3): move argument ^93
+	# SetupCalls(926:3): move argument i64 ^93
 	movq %r15, %rdx
 	callq memmove@PLT
 	# Unclobber %r8
@@ -1130,11 +1130,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -40(%rbp)
 	# Clobber %rax
 	movq %rax, -56(%rbp)
-	# SetupCalls(944:3): move argument ^98
+	# SetupCalls(944:3): move argument i8* ^98
 	movq %rbx, %rdi
-	# SetupCalls(944:3): move argument ^99
+	# SetupCalls(944:3): move argument i8* ^99
 	movq %rcx, %rsi
-	# SetupCalls(944:3): move argument ^100
+	# SetupCalls(944:3): move argument i64 ^100
 	movq %rax, %rdx
 	callq memcpy@PLT
 	# Unclobber %rax
@@ -1153,19 +1153,19 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm:
 	movq %rcx, -40(%rbp)
 	# Clobber %r8
 	movq %r8, -48(%rbp)
-	# SetupCalls(948:3): move argument %rdi
+	# SetupCalls(948:3): move argument %"class.std::__cxx11::basic_string"* %rdi
 	# Semiunclobber %rdi into %rdi
 	movq -16(%rbp), %rdi
-	# SetupCalls(948:3): move argument %rsi
+	# SetupCalls(948:3): move argument i64 %rsi
 	# Semiunclobber %rsi into %rsi
 	movq -24(%rbp), %rsi
-	# SetupCalls(948:3): move argument %rdx
+	# SetupCalls(948:3): move argument i64 %rdx
 	# Semiunclobber %rdx into %rdx
 	movq -32(%rbp), %rdx
-	# SetupCalls(948:3): move argument %rcx
+	# SetupCalls(948:3): move argument i8* %rcx
 	# Semiunclobber %rcx into %rcx
 	movq -40(%rbp), %rcx
-	# SetupCalls(948:3): move argument %r8
+	# SetupCalls(948:3): move argument i64 %r8
 	# Semiunclobber %r8 into %r8
 	movq -48(%rbp), %r8
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm
@@ -1248,7 +1248,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(547:3): move argument ^11
+	# SetupCalls(547:3): move argument %"class.std::ios_base"* ^11
 	movq %rax, %rdi
 	callq _ZNSt8ios_baseC2Ev@PLT
 	# Unclobber %rsi
@@ -1288,11 +1288,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(558:3): move argument ^17
+	# SetupCalls(558:3): move argument i8* ^17
 	movq %rcx, %rdi
-	# SetupCalls(558:3): move argument 0
-	movl $0, %esi
-	# SetupCalls(558:3): move argument 32
+	# SetupCalls(558:3): move argument i32 0
+	movq $0, %rsi
+	# SetupCalls(558:3): move argument i64 32
 	movq $32, %rdx
 	callq memset@PLT
 	# Unclobber %rsi
@@ -1343,9 +1343,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(576:3): move argument ^32
+	# SetupCalls(576:3): move argument %"class.std::basic_ios"* ^32
 	movq %rcx, %rdi
-	# SetupCalls(576:3): move argument null
+	# SetupCalls(576:3): move argument %"class.std::basic_streambuf"* null
 	movq $0, %rsi
 	callq _ZNSt9basic_iosIcSt11char_traitsIcEE4initEPSt15basic_streambufIcS1_E@PLT
 	# Unclobber %rsi
@@ -1385,11 +1385,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(585:3): move argument ^37
+	# SetupCalls(585:3): move argument i8* ^37
 	movq %rcx, %rdi
-	# SetupCalls(585:3): move argument 0
-	movl $0, %esi
-	# SetupCalls(585:3): move argument 48
+	# SetupCalls(585:3): move argument i32 0
+	movq $0, %rsi
+	# SetupCalls(585:3): move argument i64 48
 	movq $48, %rdx
 	callq memset@PLT
 	# Unclobber %rsi
@@ -1400,7 +1400,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(586:3): move argument ^36
+	# SetupCalls(586:3): move argument %"class.std::locale"* ^36
 	movq -492(%rbp), %rdi
 	callq _ZNSt6localeC1Ev@PLT
 	# Unclobber %rsi
@@ -1460,9 +1460,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(605:3): move argument ^49
+	# SetupCalls(605:3): move argument %"class.std::basic_ios"* ^49
 	movq %rcx, %rdi
-	# SetupCalls(605:3): move argument ^50
+	# SetupCalls(605:3): move argument %"class.std::basic_streambuf"* ^50
 	movq %rax, %rsi
 	callq _ZNSt9basic_iosIcSt11char_traitsIcEE4initEPSt15basic_streambufIcS1_E@PLT
 	# Unclobber %rsi
@@ -1483,11 +1483,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rsi
 	movq %rsi, -532(%rbp)
-	# SetupCalls(611:3): move argument ^51
+	# SetupCalls(611:3): move argument %"class.std::basic_ostream"* ^51
 	movq -516(%rbp), %rdi
-	# SetupCalls(611:3): move argument ^6
+	# SetupCalls(611:3): move argument i8* ^6
 	movq %rbx, %rsi
-	# SetupCalls(611:3): move argument 1
+	# SetupCalls(611:3): move argument i64 1
 	movq $1, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(611:3): move result from %rax
@@ -1532,11 +1532,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movb %al, (%rbx)
 	# Clobber %rdi
 	movq %rdi, -524(%rbp)
-	# SetupCalls(631:3): move argument ^51
+	# SetupCalls(631:3): move argument %"class.std::basic_ostream"* ^51
 	movq -516(%rbp), %rdi
-	# SetupCalls(631:3): move argument ^5
+	# SetupCalls(631:3): move argument i8* ^5
 	movq -452(%rbp), %rsi
-	# SetupCalls(631:3): move argument 1
+	# SetupCalls(631:3): move argument i64 1
 	movq $1, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(631:3): move result from %rax
@@ -1606,15 +1606,15 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rdx
 	movq %rdx, -540(%rbp)
-	# SetupCalls(661:3): move argument ^8
+	# SetupCalls(661:3): move argument %"class.std::__cxx11::basic_string"* ^8
 	movq -468(%rbp), %rdi
-	# SetupCalls(661:3): move argument 0
+	# SetupCalls(661:3): move argument i64 0
 	movq $0, %rsi
-	# SetupCalls(661:3): move argument 0
+	# SetupCalls(661:3): move argument i64 0
 	movq $0, %rdx
-	# SetupCalls(661:3): move argument ^84
+	# SetupCalls(661:3): move argument i8* ^84
 	movq %r8, %rcx
-	# SetupCalls(661:3): move argument ^87
+	# SetupCalls(661:3): move argument i64 ^87
 	movq %r9, %r8
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm
 	# SetupCalls(661:3): move result from %rax
@@ -1627,9 +1627,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M476:
 	# Clobber %rdi
 	movq %rdi, -524(%rbp)
-	# SetupCalls(665:3): move argument ^8
+	# SetupCalls(665:3): move argument %"class.std::__cxx11::basic_string"* ^8
 	movq -468(%rbp), %rdi
-	# SetupCalls(665:3): move argument ^39
+	# SetupCalls(665:3): move argument %"class.std::__cxx11::basic_string"* ^39
 	movq -500(%rbp), %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_
 	# Unclobber %rdi
@@ -1643,12 +1643,12 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq (%rbx), %rcx
 	# Clobber %rdi
 	movq %rdi, -524(%rbp)
-	# SetupCalls(672:3): move argument %rdi
+	# SetupCalls(672:3): move argument %"class.std::basic_ostream"* %rdi
 	# Semiunclobber %rdi into %rdi
 	movq -524(%rbp), %rdi
-	# SetupCalls(672:3): move argument ^92
+	# SetupCalls(672:3): move argument i8* ^92
 	movq %rax, %rsi
-	# SetupCalls(672:3): move argument ^93
+	# SetupCalls(672:3): move argument i64 ^93
 	movq %rcx, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(672:3): move result from %rax
@@ -1667,7 +1667,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rax
 	movq %rax, -548(%rbp)
-	# SetupCalls(678:3): move argument ^95
+	# SetupCalls(678:3): move argument i8* ^95
 	movq %rax, %rdi
 	callq _ZdlPv@PLT
 	# Unclobber %rax
@@ -1720,7 +1720,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rcx
 	movq %rcx, -556(%rbp)
-	# SetupCalls(700:3): move argument ^108
+	# SetupCalls(700:3): move argument i8* ^108
 	movq %rcx, %rdi
 	callq _ZdlPv@PLT
 	# Unclobber %rcx
@@ -1734,7 +1734,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rax, (%rbx)
 	# Clobber %rdi
 	movq %rdi, -524(%rbp)
-	# SetupCalls(705:3): move argument ^36
+	# SetupCalls(705:3): move argument %"class.std::locale"* ^36
 	movq -492(%rbp), %rdi
 	callq _ZNSt6localeD1Ev@PLT
 	# Unclobber %rdi
@@ -1744,7 +1744,7 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	addq $112, %rax
 	# Clobber %rdi
 	movq %rdi, -524(%rbp)
-	# SetupCalls(707:3): move argument ^112
+	# SetupCalls(707:3): move argument %"class.std::ios_base"* ^112
 	movq %rax, %rdi
 	callq _ZNSt8ios_baseD2Ev@PLT
 	# Unclobber %rdi
@@ -1788,11 +1788,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %rdi, -524(%rbp)
 	# Clobber %rdx
 	movq %rdx, -540(%rbp)
-	# SetupCalls(731:3): move argument ^51
+	# SetupCalls(731:3): move argument %"class.std::basic_ostream"* ^51
 	movq -516(%rbp), %rdi
-	# SetupCalls(731:3): move argument ^4
+	# SetupCalls(731:3): move argument i8* ^4
 	movq -444(%rbp), %rsi
-	# SetupCalls(731:3): move argument 1
+	# SetupCalls(731:3): move argument i64 1
 	movq $1, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(731:3): move result from %rax
@@ -1807,11 +1807,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movb %bl, (%rax)
 	# Clobber %rdi
 	movq %rdi, -524(%rbp)
-	# SetupCalls(738:3): move argument ^51
+	# SetupCalls(738:3): move argument %"class.std::basic_ostream"* ^51
 	movq -516(%rbp), %rdi
-	# SetupCalls(738:3): move argument ^3
+	# SetupCalls(738:3): move argument i8* ^3
 	movq -428(%rbp), %rsi
-	# SetupCalls(738:3): move argument 1
+	# SetupCalls(738:3): move argument i64 1
 	movq $1, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(738:3): move result from %rax
@@ -1848,7 +1848,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	movq %rsi, %rbx
 	# Clobber %rdi
 	movq %rdi, -8(%rbp)
-	# SetupCalls(334:3): move argument ^4
+	# SetupCalls(334:3): move argument i8* ^4
 	movq %rbx, %rdi
 	callq strlen@PLT
 	# SetupCalls(334:3): move result from %rax
@@ -1881,7 +1881,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M43:
 	# Clobber %rdi
 	movq %rdi, -8(%rbp)
-	# SetupCalls(352:3): move argument getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
+	# SetupCalls(352:3): move argument i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
 	movq .str.3@GOTPCREL(%rip), %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
 	# Unclobber %rdi
@@ -1904,7 +1904,7 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M91:
 	# Clobber %rdi
 	movq %rdi, -8(%rbp)
-	# SetupCalls(365:3): move argument ^15
+	# SetupCalls(365:3): move argument i64 ^15
 	movq %r13, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(365:3): move result from %rax
@@ -1939,11 +1939,11 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M138:
 	# Clobber %rdi
 	movq %rdi, -8(%rbp)
-	# SetupCalls(385:3): move argument ^23
+	# SetupCalls(385:3): move argument i8* ^23
 	movq %r14, %rdi
-	# SetupCalls(385:3): move argument ^4
+	# SetupCalls(385:3): move argument i8* ^4
 	movq %rbx, %rsi
-	# SetupCalls(385:3): move argument ^5
+	# SetupCalls(385:3): move argument i64 ^5
 	movq %r12, %rdx
 	callq memcpy@PLT
 	# Unclobber %rdi
@@ -1964,14 +1964,14 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	addq $32, %rax
 	# Clobber %rdi
 	movq %rdi, -8(%rbp)
-	# SetupCalls(394:3): move argument ^30
+	# SetupCalls(394:3): move argument %"struct.std::filesystem::__cxx11::path::_List"* ^30
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5_ListC1Ev@PLT
 	# Unclobber %rdi
 	movq -8(%rbp), %rdi
 	# Clobber %rdi
 	movq %rdi, -8(%rbp)
-	# SetupCalls(395:3): move argument %rdi
+	# SetupCalls(395:3): move argument %"class.std::filesystem::__cxx11::path"* %rdi
 	# Semiunclobber %rdi into %rdi
 	movq -8(%rbp), %rdi
 	callq _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv@PLT
@@ -2053,7 +2053,7 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M34:
 	# Clobber %rdi
 	movq %rdi, -80(%rbp)
-	# SetupCalls(433:3): move argument getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
+	# SetupCalls(433:3): move argument i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i64 0, i64 0)
 	movq .str.3@GOTPCREL(%rip), %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
 	# Unclobber %rdi
@@ -2076,7 +2076,7 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M82:
 	# Clobber %rdi
 	movq %rdi, -80(%rbp)
-	# SetupCalls(446:3): move argument ^21
+	# SetupCalls(446:3): move argument i64 ^21
 	movq %r12, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(446:3): move result from %rax
@@ -2111,11 +2111,11 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M129:
 	# Clobber %rdi
 	movq %rdi, -80(%rbp)
-	# SetupCalls(466:3): move argument ^29
+	# SetupCalls(466:3): move argument i8* ^29
 	movq %r15, %rdi
-	# SetupCalls(466:3): move argument ^9
+	# SetupCalls(466:3): move argument i8* ^9
 	movq %r13, %rsi
-	# SetupCalls(466:3): move argument ^11
+	# SetupCalls(466:3): move argument i64 ^11
 	movq %r14, %rdx
 	callq memcpy@PLT
 	# Unclobber %rdi
@@ -2146,10 +2146,10 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	movq $23586, (%rax)
 	# Clobber %rdi
 	movq %rdi, -80(%rbp)
-	# SetupCalls(478:3): move argument %rdi
+	# SetupCalls(478:3): move argument %"class.std::basic_ostream"* %rdi
 	# Semiunclobber %rdi into %rdi
 	movq -80(%rbp), %rdi
-	# SetupCalls(478:3): move argument ^4
+	# SetupCalls(478:3): move argument %"struct.std::__detail::_Quoted_string"* ^4
 	movq -72(%rbp), %rsi
 	callq _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE
 	# SetupCalls(478:3): move result from %rax
@@ -2169,7 +2169,7 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M208:
 	# Clobber %rax
 	movq %rax, -88(%rbp)
-	# SetupCalls(486:3): move argument ^40
+	# SetupCalls(486:3): move argument i8* ^40
 	movq %rax, %rdi
 	callq _ZdlPv@PLT
 	# Unclobber %rax
@@ -2220,23 +2220,23 @@ main:
 	movq %r15, -129(%rbp)
 	popq %r15
 	movq -121(%rbp), %rax
-	# SetupCalls(100:3): move argument ^2
+	# SetupCalls(100:3): move argument %"class.std::filesystem::__cxx11::path"* ^2
 	movq -121(%rbp), %rdi
-	# SetupCalls(100:3): move argument @.str
+	# SetupCalls(100:3): move argument [2 x i8]* @.str
 	movq .str@GOTPCREL(%rip), %rsi
-	# SetupCalls(100:3): move argument 2
-	movb $2, %dl
+	# SetupCalls(100:3): move argument i8 2
+	movq $2, %rdx
 	andq $255, %rdx
 	callq _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE
 	movq %rbx, %rax
-	# SetupCalls(103:3): move argument ^3
+	# SetupCalls(103:3): move argument %"class.std::filesystem::__cxx11::directory_iterator"* ^3
 	movq %rbx, %rdi
-	# SetupCalls(103:3): move argument ^2
+	# SetupCalls(103:3): move argument %"class.std::filesystem::__cxx11::path"* ^2
 	movq -121(%rbp), %rsi
-	# SetupCalls(103:3): move argument 0
-	movb $0, %dl
+	# SetupCalls(103:3): move argument i8 0
+	movq $0, %rdx
 	andq $255, %rdx
-	# SetupCalls(103:3): move argument null
+	# SetupCalls(103:3): move argument %"class.std::error_code"* null
 	movq $0, %rcx
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathENS_17directory_optionsEPSt10error_code@PLT
 	movq -129(%rbp), %rax
@@ -2380,7 +2380,7 @@ main:
 	addq $16, %rcx
 	# LowerLoad(179:3).2: (^52) into ^53
 	movq (%rcx), %rax
-	# SetupCalls(180:3): move argument ^30
+	# SetupCalls(180:3): move argument %"class.std::_Sp_counted_base"* ^30
 	movq %r14, %rdi
 	# SetupCalls(180:3): jump to function operand ^53
 	callq *%rax
@@ -2425,7 +2425,7 @@ main:
 	addq $24, %rbx
 	# LowerLoad(204:3).2: (^67) into ^68
 	movq (%rbx), %rax
-	# SetupCalls(205:3): move argument ^30
+	# SetupCalls(205:3): move argument %"class.std::_Sp_counted_base"* ^30
 	movq %r14, %rdi
 	# SetupCalls(205:3): jump to function operand ^68
 	callq *%rax
@@ -2496,7 +2496,7 @@ main:
 	addq $16, %rcx
 	# LowerLoad(248:3).2: (^92) into ^93
 	movq (%rcx), %rax
-	# SetupCalls(249:3): move argument ^75
+	# SetupCalls(249:3): move argument %"class.std::_Sp_counted_base"* ^75
 	movq %rbx, %rdi
 	# SetupCalls(249:3): jump to function operand ^93
 	callq *%rax
@@ -2541,7 +2541,7 @@ main:
 	addq $24, %rcx
 	# LowerLoad(273:3).2: (^107) into ^108
 	movq (%rcx), %rax
-	# SetupCalls(274:3): move argument ^75
+	# SetupCalls(274:3): move argument %"class.std::_Sp_counted_base"* ^75
 	movq %rbx, %rdi
 	# SetupCalls(274:3): jump to function operand ^108
 	callq *%rax
@@ -2564,9 +2564,9 @@ main:
 	movq %rcx, -145(%rbp)
 	# Clobber %rax
 	movq %rax, -153(%rbp)
-	# SetupCalls(287:3): move argument ^115
+	# SetupCalls(287:3): move argument %"struct.std::filesystem::__cxx11::path::_List::_Impl_deleter"* ^115
 	movq %rdx, %rdi
-	# SetupCalls(287:3): move argument ^112
+	# SetupCalls(287:3): move argument %"struct.std::filesystem::__cxx11::path::_List::_Impl"* ^112
 	movq %rcx, %rsi
 	callq _ZNKSt10filesystem7__cxx114path5_List13_Impl_deleterclEPNS2_5_ImplE@PLT
 	# Unclobber %rax
@@ -2590,7 +2590,7 @@ main:
 	cmpb $0, %al
 	jne .__main__M471
 	.__main__M449:
-	# SetupCalls(300:3): move argument ^118
+	# SetupCalls(300:3): move argument i8* ^118
 	movq %rbx, %rdi
 	callq _ZdlPv@PLT
 	.__main__M471:
@@ -2604,34 +2604,34 @@ main:
 	popq %rbp
 	retq
 	.__main__M472:
-	# SetupCalls(309:3): move argument ^4
+	# SetupCalls(309:3): move argument %"class.std::filesystem::__cxx11::directory_iterator"* ^4
 	movq -129(%rbp), %rdi
 	callq _ZNKSt10filesystem7__cxx1118directory_iteratordeEv@PLT
 	# SetupCalls(309:3): move result from %rax
 	movq %rax, %r12
 	movl -105(%rbp), %ebx
 	addl $1, %ebx
-	# SetupCalls(311:3): move argument @_ZSt4cout
+	# SetupCalls(311:3): move argument %"class.std::basic_ostream"* @_ZSt4cout
 	movq _ZSt4cout@GOTPCREL(%rip), %rdi
-	# SetupCalls(311:3): move argument ^125
+	# SetupCalls(311:3): move argument i32 ^125
 	movl -105(%rbp), %esi
 	callq _ZNSolsEi@PLT
 	# SetupCalls(311:3): move result from %rax
 	movq %rax, %r13
-	# SetupCalls(312:3): move argument ^128
+	# SetupCalls(312:3): move argument %"class.std::basic_ostream"* ^128
 	movq %r13, %rdi
-	# SetupCalls(312:3): move argument getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i64 0, i64 0)
+	# SetupCalls(312:3): move argument i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i64 0, i64 0)
 	movq .str.1@GOTPCREL(%rip), %rsi
-	# SetupCalls(312:3): move argument 2
+	# SetupCalls(312:3): move argument i64 2
 	movq $2, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(312:3): move result from %rax
 	movq %rax, %rax
 	# LowerGetelementptr(313:3): struct-type: %"class.std::filesystem::__cxx11::directory_entry"* -> ^130, indices=0,0
 	movq %r12, %rax
-	# SetupCalls(314:3): move argument ^128
+	# SetupCalls(314:3): move argument %"class.std::basic_ostream"* ^128
 	movq %r13, %rdi
-	# SetupCalls(314:3): move argument ^130
+	# SetupCalls(314:3): move argument %"class.std::filesystem::__cxx11::path"* ^130
 	movq %rax, %rsi
 	callq _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE
 	# SetupCalls(314:3): move result from %rax
@@ -2639,16 +2639,16 @@ main:
 	# LowerStore(316:3).3: mov $imm, ^1
 	movq -113(%rbp), %rax
 	movb $10, (%rax)
-	# SetupCalls(317:3): move argument ^131
+	# SetupCalls(317:3): move argument %"class.std::basic_ostream"* ^131
 	movq %r12, %rdi
-	# SetupCalls(317:3): move argument ^1
+	# SetupCalls(317:3): move argument i8* ^1
 	movq -113(%rbp), %rsi
-	# SetupCalls(317:3): move argument 1
+	# SetupCalls(317:3): move argument i64 1
 	movq $1, %rdx
 	callq _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
 	# SetupCalls(317:3): move result from %rax
 	movq %rax, %rax
-	# SetupCalls(319:3): move argument ^4
+	# SetupCalls(319:3): move argument %"class.std::filesystem::__cxx11::directory_iterator"* ^4
 	movq -129(%rbp), %rdi
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorppEv@PLT
 	# SetupCalls(319:3): move result from %rax
