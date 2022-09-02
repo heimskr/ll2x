@@ -77,6 +77,8 @@ $_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_ = comdat 
 @_ZTVSt15basic_streambufIcSt11char_traitsIcEE = external unnamed_addr constant { [16 x i8*] }, align 8
 @.str.5 = private unnamed_addr constant [25 x i8] c"basic_string::_M_replace\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_diriter.cpp, i8* null }]
+@.str.5 = private unnamed_addr constant [25 x i8] c"basic_string::_M_replace\00", align 1
+@.str.dbgp = private unnamed_addr constant [6 x i8] c"[%p]\n\00", align 1
 
 declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #0
 
@@ -349,6 +351,9 @@ define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERK
 
 18:                                               ; preds = %14
   %19 = tail call noalias noundef nonnull i8* @_Znwm(i64 noundef %15) #18, !dbg !4030
+  ;;
+  %_err = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* noundef %_err, i8* @.str.dbgp, i32 noundef %19)
   %20 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", %"class.std::filesystem::__cxx11::path"* %0, i64 0, i32 0, i32 0, i32 0, !dbg !4037
   store i8* %19, i8** %20, align 8, !dbg !4038, !tbaa !3771
   %21 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", %"class.std::filesystem::__cxx11::path"* %0, i64 0, i32 0, i32 2, i32 0, !dbg !4045
@@ -426,6 +431,9 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
 
 24:                                               ; preds = %20
   %25 = call noalias noundef nonnull i8* @_Znwm(i64 noundef %21) #18, !dbg !4179
+  ;;
+  %_err = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* noundef %_err, i8* @.str.dbgp, i32 noundef %25)
   %26 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %5, i64 0, i32 0, i32 0, !dbg !4182
   store i8* %25, i8** %26, align 8, !dbg !4183, !tbaa !3771, !alias.scope !4115
   %27 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %5, i64 0, i32 2, i32 0, !dbg !4186
@@ -965,6 +973,9 @@ define linkonce_odr dso_local void @_ZNSt7__cxx1112basic_stringIcSt11char_traits
 
 35:                                               ; preds = %30
   %36 = tail call noalias noundef nonnull i8* @_Znwm(i64 noundef %32) #18, !dbg !4965
+  ;;
+  %_err = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* noundef %_err, i8* @.str.dbgp, i32 noundef %36)
   %37 = icmp eq i64 %1, 0, !dbg !4966
   br i1 %37, label %44, label %38, !dbg !4968
 
@@ -1089,6 +1100,9 @@ define linkonce_odr dso_local void @_ZNSt7__cxx1112basic_stringIcSt11char_traits
 
 28:                                               ; preds = %19
   %29 = tail call noalias noundef nonnull i8* @_Znwm(i64 noundef %25) #18, !dbg !5102
+  ;;
+  %_err = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* noundef %_err, i8* @.str.dbgp, i32 noundef %29)
   %30 = load i8*, i8** %7, align 8, !dbg !5109, !tbaa !3771
   %31 = icmp eq i8* %30, %10, !dbg !5112
   br i1 %31, label %33, label %32, !dbg !5113

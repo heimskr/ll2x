@@ -168,8 +168,8 @@ namespace LL2X::Passes {
 			VariablePtr big_result;
 			if (call->result != nullptr && huge_return) {
 				big_result = function.newVariable(call->returnType, block);
-				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct,
-					-1, big_result->type->alignment());
+				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct, -1,
+					big_result->type->alignment());
 				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
 				OperandPtr rdi = Op8(function.makePrecoloredVariable(x86_64::rdi, block));
 				function.insertBefore<Lea, false>(instruction, pointer, rdi);
@@ -179,8 +179,7 @@ namespace LL2X::Passes {
 			for (i = arg_offset; i < reg_max && i < arg_count + arg_offset; ++i) {
 				VariablePtr precolored = function.makePrecoloredVariable(arg_regs[i], instruction->parent.lock());
 				ConstantPtr constant = call->constants[i - arg_offset]->convert();
-				function.comment(instruction, prefix + "move argument " + constant->type->toString() + " " +
-					constant->value->toString());
+				function.comment(instruction, prefix + "move argument " + constant->toString());
 				setupCallValue(function, OpV(precolored), instruction, constant, clobbers_by_reg);
 			}
 
