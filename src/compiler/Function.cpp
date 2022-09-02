@@ -1177,6 +1177,9 @@ namespace LL2X {
 				variable->type->width() / 8, 8);
 		}
 
+		if (align == 0)
+			align = 1;
+
 		stackSize = Util::upalign(stackSize + width, align);
 		auto &added = stack.try_emplace(stackSize, this, variable, purpose, stackSize, width).first->second;
 		if (purpose == StackLocation::Purpose::Spill)
@@ -1886,6 +1889,8 @@ namespace LL2X {
 		if (create) {
 			if (created != nullptr)
 				*created = true;
+			if (variable->type)
+				return addToStack(variable, StackLocation::Purpose::Spill, -1, variable->type->alignment());
 			return addToStack(variable, StackLocation::Purpose::Spill);
 		}
 		throw std::out_of_range("Couldn't find a spill location for " + variable->plainString(x86_64::Width::Eight));

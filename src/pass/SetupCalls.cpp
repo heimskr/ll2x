@@ -168,7 +168,8 @@ namespace LL2X::Passes {
 			VariablePtr big_result;
 			if (call->result != nullptr && huge_return) {
 				big_result = function.newVariable(call->returnType, block);
-				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct);
+				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct,
+					-1, big_result->type->alignment());
 				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
 				OperandPtr rdi = Op8(function.makePrecoloredVariable(x86_64::rdi, block));
 				function.insertBefore<Lea, false>(instruction, pointer, rdi);

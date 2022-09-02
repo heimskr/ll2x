@@ -93,15 +93,10 @@ define dso_local noundef i32 @main() local_unnamed_addr #3 !dbg !3268 {
   %3 = alloca %"class.std::filesystem::__cxx11::directory_iterator", align 8
   %4 = alloca %"class.std::filesystem::__cxx11::directory_iterator", align 8
   %5 = bitcast %"class.std::filesystem::__cxx11::path"* %2 to i8*, !dbg !3278
-  call void @llvm.lifetime.start.p0i8(i64 40, i8* nonnull %5) #16, !dbg !3278
-  call void @llvm.dbg.declare(metadata %"class.std::filesystem::__cxx11::path"* %2, metadata !3270, metadata !DIExpression()), !dbg !3279
   call void @_ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE(%"class.std::filesystem::__cxx11::path"* noundef nonnull align 8 dereferenceable(40) %2, [2 x i8]* noundef nonnull align 1 dereferenceable(2) @.str, i8 noundef zeroext 2), !dbg !3279
   %6 = bitcast %"class.std::filesystem::__cxx11::directory_iterator"* %3 to i8*, !dbg !3281
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #16, !dbg !3281
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathENS_17directory_optionsEPSt10error_code(%"class.std::filesystem::__cxx11::directory_iterator"* noundef nonnull align 8 dereferenceable(16) %3, %"class.std::filesystem::__cxx11::path"* noundef nonnull align 8 dereferenceable(40) %2, i8 noundef zeroext 0, %"class.std::error_code"* noundef null) #16, !dbg !3289
   %7 = bitcast %"class.std::filesystem::__cxx11::directory_iterator"* %4 to i8*, !dbg !3291
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %7) #16, !dbg !3291
-  call void @llvm.dbg.declare(metadata %"class.std::filesystem::__cxx11::directory_iterator"* %4, metadata !3274, metadata !DIExpression()), !dbg !3290
   %8 = getelementptr inbounds %"class.std::filesystem::__cxx11::directory_iterator", %"class.std::filesystem::__cxx11::directory_iterator"* %3, i64 0, i32 0, i32 0, !dbg !3305
   %9 = load %"struct.std::filesystem::__cxx11::_Dir"*, %"struct.std::filesystem::__cxx11::_Dir"** %8, align 8, !dbg !3305, !tbaa !3306
   %10 = getelementptr inbounds %"class.std::filesystem::__cxx11::directory_iterator", %"class.std::filesystem::__cxx11::directory_iterator"* %3, i64 0, i32 0, i32 1, i32 0, !dbg !3326
@@ -213,7 +208,6 @@ define dso_local noundef i32 @main() local_unnamed_addr #3 !dbg !3268 {
   br label %124, !dbg !3576
 
 74:                                               ; preds = %124, %0, %69
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %7) #16, !dbg !3291
   %75 = load %"class.std::_Sp_counted_base"*, %"class.std::_Sp_counted_base"** %10, align 8, !dbg !3583, !tbaa !3327
   %76 = icmp eq %"class.std::_Sp_counted_base"* %75, null, !dbg !3584
   br i1 %76, label %109, label %77, !dbg !3585
@@ -273,7 +267,6 @@ define dso_local noundef i32 @main() local_unnamed_addr #3 !dbg !3268 {
   br label %109, !dbg !3626
 
 109:                                              ; preds = %74, %86, %102, %105
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #16, !dbg !3291
   %110 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", %"class.std::filesystem::__cxx11::path"* %2, i64 0, i32 1, !dbg !3633
   %111 = getelementptr inbounds %"struct.std::filesystem::__cxx11::path::_List", %"struct.std::filesystem::__cxx11::path::_List"* %110, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, !dbg !3694
   %112 = load %"struct.std::filesystem::__cxx11::path::_List::_Impl"*, %"struct.std::filesystem::__cxx11::path::_List::_Impl"** %111, align 8, !dbg !3696, !tbaa !3698
@@ -299,7 +292,6 @@ define dso_local noundef i32 @main() local_unnamed_addr #3 !dbg !3268 {
   br label %123, !dbg !3816
 
 123:                                              ; preds = %116, %122
-  call void @llvm.lifetime.end.p0i8(i64 40, i8* nonnull %5) #16, !dbg !3817
   ret i32 0, !dbg !3817
 
 124:                                              ; preds = %72, %124
@@ -310,10 +302,8 @@ define dso_local noundef i32 @main() local_unnamed_addr #3 !dbg !3268 {
   %129 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %128, i8* noundef nonnull getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i64 0, i64 0), i64 noundef 2) #16, !dbg !3832
   %130 = getelementptr inbounds %"class.std::filesystem::__cxx11::directory_entry", %"class.std::filesystem::__cxx11::directory_entry"* %126, i64 0, i32 0, !dbg !3843
   %131 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %128, %"class.std::filesystem::__cxx11::path"* noundef nonnull align 8 dereferenceable(40) %130), !dbg !3844
-  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %1), !dbg !3845
   store i8 10, i8* %1, align 1, !tbaa !3358
   %132 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %131, i8* noundef nonnull %1, i64 noundef 1) #16, !dbg !3853
-  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %1), !dbg !3854
   %133 = call noundef nonnull align 8 dereferenceable(16) %"class.std::filesystem::__cxx11::directory_iterator"* @_ZNSt10filesystem7__cxx1118directory_iteratorppEv(%"class.std::filesystem::__cxx11::directory_iterator"* noundef nonnull align 8 dereferenceable(16) %4) #16, !dbg !3291
   %134 = load %"class.std::_Sp_counted_base"*, %"class.std::_Sp_counted_base"** %73, align 8, !dbg !3541, !tbaa !3327
   %135 = icmp eq %"class.std::_Sp_counted_base"* %134, null, !dbg !3575
@@ -333,8 +323,6 @@ define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERK
   %6 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", %"class.std::filesystem::__cxx11::path"* %0, i64 0, i32 0, i32 2, !dbg !3931
   %7 = bitcast %"class.std::filesystem::__cxx11::path"* %0 to %union.anon**, !dbg !3940
   store %union.anon* %6, %union.anon** %7, align 8, !dbg !3940, !tbaa !3941
-  call void @llvm.dbg.declare(metadata %"struct.std::__false_type"* undef, metadata !3965, metadata !DIExpression()) #16, !dbg !3968
-  call void @llvm.dbg.declare(metadata %"struct.std::forward_iterator_tag"* undef, metadata !3984, metadata !DIExpression()) #16, !dbg !3988
   %8 = icmp ugt i64 %5, 15, !dbg !3989
   br i1 %8, label %11, label %9, !dbg !3991
 
@@ -403,9 +391,7 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   %4 = bitcast { %"class.std::__cxx11::basic_string"*, i64 }* %3 to %"struct.std::__detail::_Quoted_string"*
   %5 = alloca %"class.std::__cxx11::basic_string", align 8
   %6 = bitcast { %"class.std::__cxx11::basic_string"*, i64 }* %3 to i8*, !dbg !4113
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #16, !dbg !4113
   %7 = bitcast %"class.std::__cxx11::basic_string"* %5 to i8*, !dbg !4114
-  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %7) #16, !dbg !4114
   tail call void @llvm.experimental.noalias.scope.decl(metadata !4115), !dbg !4118
   %8 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", %"class.std::filesystem::__cxx11::path"* %1, i64 0, i32 0, i32 0, i32 0, !dbg !4139
   %9 = load i8*, i8** %8, align 8, !dbg !4139, !tbaa !3771, !noalias !4115
@@ -414,8 +400,6 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   %12 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %5, i64 0, i32 2, !dbg !4150
   %13 = bitcast %"class.std::__cxx11::basic_string"* %5 to %union.anon**, !dbg !4153
   store %union.anon* %12, %union.anon** %13, align 8, !dbg !4153, !tbaa !3941, !alias.scope !4115
-  call void @llvm.dbg.declare(metadata %"struct.std::__false_type"* undef, metadata !3965, metadata !DIExpression()) #16, !dbg !4158
-  call void @llvm.dbg.declare(metadata %"struct.std::forward_iterator_tag"* undef, metadata !3984, metadata !DIExpression()) #16, !dbg !4161
   %14 = icmp ugt i64 %11, 15, !dbg !4162
   br i1 %14, label %17, label %15, !dbg !4163
 
@@ -485,8 +469,6 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   br label %44, !dbg !4238
 
 44:                                               ; preds = %33, %43
-  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %7) #16, !dbg !4239
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #16, !dbg !4239
   ret %"class.std::basic_ostream"* %0, !dbg !4240
 }
 
@@ -538,8 +520,6 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   %7 = alloca %"class.std::__cxx11::basic_ostringstream", align 8
   %8 = alloca %"class.std::__cxx11::basic_string", align 8
   %9 = bitcast %"class.std::__cxx11::basic_ostringstream"* %7 to i8*, !dbg !4262
-  call void @llvm.lifetime.start.p0i8(i64 376, i8* nonnull %9) #16, !dbg !4262
-  call void @llvm.dbg.declare(metadata %"class.std::__cxx11::basic_ostringstream"* %7, metadata !4253, metadata !DIExpression()), !dbg !4263
   %10 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %7, i64 0, i32 2, !dbg !4270
   %11 = getelementptr inbounds %"class.std::basic_ios", %"class.std::basic_ios"* %10, i64 0, i32 0, !dbg !4277
   call void @_ZNSt8ios_baseC2Ev(%"class.std::ios_base"* noundef nonnull align 8 dereferenceable(216) %11) #16, !dbg !4278
@@ -604,10 +584,8 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   %51 = bitcast %"class.std::__cxx11::basic_ostringstream"* %7 to %"class.std::basic_ostream"*, !dbg !4355
   %52 = getelementptr inbounds %"struct.std::__detail::_Quoted_string", %"struct.std::__detail::_Quoted_string"* %1, i64 0, i32 1, !dbg !4356
   %53 = load i8, i8* %52, align 8, !dbg !4356, !tbaa !4357
-  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %6), !dbg !4359
   store i8 %53, i8* %6, align 1, !tbaa !3358
   %54 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %51, i8* noundef nonnull %6, i64 noundef 1) #16, !dbg !4361
-  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %6), !dbg !4362
   %55 = getelementptr inbounds %"struct.std::__detail::_Quoted_string", %"struct.std::__detail::_Quoted_string"* %1, i64 0, i32 0, !dbg !4363
   %56 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %55, align 8, !dbg !4363, !tbaa !4364
   %57 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %56, i64 0, i32 0, i32 0, !dbg !4373
@@ -624,12 +602,9 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
 
 65:                                               ; preds = %123, %2
   %66 = load i8, i8* %52, align 8, !dbg !4402, !tbaa !4357
-  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %5), !dbg !4403
   store i8 %66, i8* %5, align 1, !tbaa !3358
   %67 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %51, i8* noundef nonnull %5, i64 noundef 1) #16, !dbg !4405
-  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %5), !dbg !4406
   %68 = bitcast %"class.std::__cxx11::basic_string"* %8 to i8*, !dbg !4407
-  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %68) #16, !dbg !4407
   call void @llvm.experimental.noalias.scope.decl(metadata !4408), !dbg !4411
   call void @llvm.experimental.noalias.scope.decl(metadata !4418) #16, !dbg !4421
   %69 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %8, i64 0, i32 2, !dbg !4439
@@ -677,7 +652,6 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   br label %98, !dbg !4577
 
 98:                                               ; preds = %90, %97
-  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %68) #16, !dbg !4578
   %99 = load i32 (...)**, i32 (...)*** bitcast ([4 x i8*]* @_ZTTNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE to i32 (...)***), align 8, !dbg !4590
   store i32 (...)** %99, i32 (...)*** %19, align 8, !dbg !4590, !tbaa !3517
   %100 = load i32 (...)**, i32 (...)*** bitcast (i8** getelementptr inbounds ([4 x i8*], [4 x i8*]* @_ZTTNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE, i64 0, i64 3) to i32 (...)***), align 8, !dbg !4590
@@ -703,7 +677,6 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   call void @_ZNSt6localeD1Ev(%"class.std::locale"* noundef nonnull align 8 dereferenceable(8) %36) #16, !dbg !4629
   %112 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %7, i64 0, i32 2, i32 0, !dbg !4636
   call void @_ZNSt8ios_baseD2Ev(%"class.std::ios_base"* noundef nonnull align 8 dereferenceable(216) %112) #16, !dbg !4636
-  call void @llvm.lifetime.end.p0i8(i64 376, i8* nonnull %9) #16, !dbg !4638
   ret %"class.std::basic_ostream"* %94, !dbg !4638
 
 113:                                              ; preds = %63, %123
@@ -717,17 +690,13 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   br i1 %120, label %121, label %123, !dbg !4645
 
 121:                                              ; preds = %113
-  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %4), !dbg !4646
   store i8 %118, i8* %4, align 1, !tbaa !3358
   %122 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %51, i8* noundef nonnull %4, i64 noundef 1) #16, !dbg !4648
-  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %4), !dbg !4649
   br label %123, !dbg !4650
 
 123:                                              ; preds = %113, %121
-  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %3), !dbg !4651
   store i8 %115, i8* %3, align 1, !tbaa !3358
   %124 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %51, i8* noundef nonnull %3, i64 noundef 1) #16, !dbg !4653
-  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %3), !dbg !4654
   %125 = getelementptr inbounds i8, i8* %114, i64 1, !dbg !4661
   %126 = icmp eq i8* %125, %61, !dbg !4400
   br i1 %126, label %65, label %113, !dbg !4401, !llvm.loop !4662

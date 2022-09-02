@@ -37,7 +37,7 @@ namespace LL2X::Passes {
 					if (function.clobbers.contains(reg)) {
 						location = function.clobbers.at(reg);
 					} else {
-						location = &function.addToStack(precolored, StackLocation::Purpose::Clobber);
+						location = &function.addToStack(precolored, StackLocation::Purpose::Clobber, 8, 8);
 						function.clobbers.emplace(reg, location);
 					}
 

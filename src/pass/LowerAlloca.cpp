@@ -57,7 +57,8 @@ namespace LL2X::Passes {
 						warn() << "Alloca size at " << alloca->location << " is too large: " << size << '\n';
 
 					VariablePtr destination = function.getVariable(*alloca->result);
-					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size);
+					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size,
+						alloca->align);
 
 					// function.replaceSimilarOperand(OpV(destination), Op8(-location.offset, rbp));
 
