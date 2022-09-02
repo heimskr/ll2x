@@ -66,7 +66,7 @@ $_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_ = comdat 
 @_ZStL8__ioinit = internal global %"class.std::ios_base::Init" zeroinitializer, align 1, !dbg !0
 @__dso_handle = external hidden global i8
 @.str = private unnamed_addr constant [2 x i8] c"/\00", align 1
-@_ZSt4cerr = external global %"class.std::basic_ostream", align 8
+@_ZSt4cout = external global %"class.std::basic_ostream", align 8
 @.str.1 = private unnamed_addr constant [3 x i8] c": \00", align 1
 @__libc_single_threaded = external local_unnamed_addr global i8, align 1
 @.str.3 = private unnamed_addr constant [24 x i8] c"basic_string::_M_create\00", align 1
@@ -77,6 +77,9 @@ $_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_assignERKS4_ = comdat 
 @_ZTVSt15basic_streambufIcSt11char_traitsIcEE = external unnamed_addr constant { [16 x i8*] }, align 8
 @.str.5 = private unnamed_addr constant [25 x i8] c"basic_string::_M_replace\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_diriter.cpp, i8* null }]
+@.str.dbg = private unnamed_addr constant [17 x i8] c"'%c' (%d) [%p]\n\00", align 1
+@.str.dbg2 = private unnamed_addr constant [73 x i8] c"%%115 = %x, %%116 = %x, %%117 = %x, %%118 = %x, %%119 = %x, %%120 = %x\n\00", align 1
+@.str.dbgp = private unnamed_addr constant [7 x i8] c"[%p]\n\00", align 1
 
 declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* noundef nonnull align 1 dereferenceable(1)) unnamed_addr #0
 
@@ -306,7 +309,7 @@ define dso_local noundef i32 @main() local_unnamed_addr #3 !dbg !3268 {
   %125 = phi i32 [ %127, %124 ], [ 0, %72 ]
   %126 = call noundef nonnull align 8 dereferenceable(41) %"class.std::filesystem::__cxx11::directory_entry"* @_ZNKSt10filesystem7__cxx1118directory_iteratordeEv(%"class.std::filesystem::__cxx11::directory_iterator"* noundef nonnull align 8 dereferenceable(16) %4) #16, !dbg !3818
   %127 = add nuw nsw i32 %125, 1, !dbg !3820
-  %128 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, i32 noundef %125) #16, !dbg !3822
+  %128 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i32 noundef %125) #16, !dbg !3822
   %129 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %128, i8* noundef nonnull getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i64 0, i64 0), i64 noundef 2) #16, !dbg !3832
   %130 = getelementptr inbounds %"class.std::filesystem::__cxx11::directory_entry", %"class.std::filesystem::__cxx11::directory_entry"* %126, i64 0, i32 0, !dbg !3843
   %131 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %128, %"class.std::filesystem::__cxx11::path"* noundef nonnull align 8 dereferenceable(40) %130), !dbg !3844
@@ -695,6 +698,7 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   br i1 %109, label %111, label %110, !dbg !4610
 
 110:                                              ; preds = %98
+  call i32 (i8*, ...) @printf(i8* @.str.dbgp, i8* %108)
   call void @_ZdlPv(i8* noundef %108) #16, !dbg !4621
   br label %111, !dbg !4622
 
@@ -708,12 +712,19 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
 
 113:                                              ; preds = %63, %123
   %114 = phi i8* [ %58, %63 ], [ %125, %123 ]
+
   %115 = load i8, i8* %114, align 1, !dbg !4639, !tbaa !3358
+
+  ; call i32 (i8*, ...) @printf(i8* @.str.dbg, i8 %115, i8 %115, i8* %114)
+
   %116 = load i8, i8* %52, align 8, !dbg !4641, !tbaa !4357
   %117 = icmp eq i8 %115, %116, !dbg !4644
   %118 = load i8, i8* %64, align 1
+
   %119 = icmp eq i8 %115, %118
   %120 = select i1 %117, i1 true, i1 %119, !dbg !4645
+  ; %temp1 = bitcast i1 %117 to i8
+  ; call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([73 x i8], [73 x i8]* @.str.dbg2, i64 0, i64 0), i8 %115, i8 %116, i1 %117, i8 %118, i1 %119, i1 %120)
   br i1 %120, label %121, label %123, !dbg !4645
 
 121:                                              ; preds = %113
@@ -1226,7 +1237,7 @@ attributes #18 = { nounwind allocsize(0) }
 !5 = !DIFile(filename: "/usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/ios_base.h", directory: "")
 !6 = !DICompositeType(tag: DW_TAG_class_type, name: "ios_base", scope: !2, file: !5, line: 228, size: 1728, flags: DIFlagFwdDecl | DIFlagNonTrivial, identifier: "_ZTSSt8ios_base")
 !7 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus_14, file: !8, producer: "Ubuntu clang version 14.0.0-1ubuntu1", isOptimized: true, runtimeVersion: 0, emissionKind: FullDebug, enums: !9, retainedTypes: !1181, globals: !2307, imports: !2308, splitDebugInlining: false, nameTableKind: None)
-!8 = !DIFile(filename: "cpp/diriter.cpp", directory: "/home/kai/src/ll2x", checksumkind: CSK_MD5, checksum: "7f328fa04e74e18b2360e3b4d6b886c7")
+!8 = !DIFile(filename: "cpp/diriter.cpp", directory: "/home/kai/src/ll2x", checksumkind: CSK_MD5, checksum: "ce2783818a8069fb247b8ac3cf10a46a")
 !9 = !{!10, !18, !26, !1053, !1152, !1155, !1164, !1175}
 !10 = !DICompositeType(tag: DW_TAG_enumeration_type, name: "_Lock_policy", scope: !12, file: !11, line: 49, baseType: !13, size: 32, elements: !14, identifier: "_ZTSN9__gnu_cxx12_Lock_policyE")
 !11 = !DIFile(filename: "/usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ext/concurrence.h", directory: "")

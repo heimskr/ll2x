@@ -1005,11 +1005,15 @@ namespace LL2X {
 		Passes::lowerSwitch(*this);
 		Passes::fixBigConstants(*this);
 		Passes::minimizeBlocks(*this);
-		for (BasicBlockPtr &block: blocks)
-			block->extract(true);
-		extractVariables(true);
-		resetLiveness();
-		computeLiveness();
+
+		// for (BasicBlockPtr &block: blocks)
+		// 	block->extract(true);
+		// extractVariables(true);
+		// resetLiveness();
+		// computeLiveness();
+
+		forceLiveness();
+
 		updateInstructionNodes();
 		reindexBlocks();
 		initialDone = true;
@@ -1029,6 +1033,7 @@ namespace LL2X {
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
 		// Passes::replaceStoresAndLoads(*this);
 		// Passes::lowerStack(*this);
+		// forceLiveness();
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		Passes::removeUselessSourceBranches(*this);
@@ -1049,6 +1054,7 @@ namespace LL2X {
 		// Passes::lowerVarargsSecond(*this);
 		// Passes::removeUnreachable(*this);
 		// Passes::breakUpBigSets(*this);
+		// forceLiveness();
 		Passes::replaceCmov(*this);
 		Passes::replaceBigMov(*this);
 		Passes::transformLabels(*this);

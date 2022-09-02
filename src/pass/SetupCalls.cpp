@@ -540,14 +540,14 @@ namespace LL2X::Passes {
 		if (value_type == ValueType::Bool) {
 			// If it's a boolean constant, convert it to an integer and do the same.
 			const bool bval = std::dynamic_pointer_cast<BoolValue>(constant->value)->value;
-			auto out = function.insertBefore<Mov>(instruction, Op4(bval? 1 : 0), new_operand);
+			auto out = function.insertBefore<Mov>(instruction, Op4(bval? 1 : 0), new_operand, 64);
 			insert_exts();
 			return out;
 		}
 
 		if (value_type == ValueType::Null || value_type == ValueType::Undef) {
 			// If it's a null or undef constant, just use zero. No need to sign extend.
-			return function.insertBefore<Mov>(instruction, Op4(0), new_operand);
+			return function.insertBefore<Mov>(instruction, Op4(0), new_operand, 64);
 		}
 
 		if (value_type == ValueType::Getelementptr) {

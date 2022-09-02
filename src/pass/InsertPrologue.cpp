@@ -35,7 +35,7 @@ namespace LL2X::Passes {
 				for (const int reg: variable->registers)
 					if (!x86_64::isSpecialPurpose(reg) && x86_64::calleeSaved.contains(reg)) {
 						written.insert(reg);
-						const auto &location = function.addToStack(variable, StackLocation::Purpose::CalleeSave);
+						const auto &location = function.addToStack(variable, StackLocation::Purpose::CalleeSave, 8, 8);
 						function.calleeSaved.emplace(reg, &location);
 					}
 
