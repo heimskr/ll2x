@@ -61,7 +61,7 @@ namespace LL2X::Passes {
 							// On even rarer occasions, the operands can be global variables.
 							BasicBlockPtr block = function.bbMap.at(pair.second);
 							InstructionPtr new_instr;
-							
+
 							if (pair.first->isIntLike())
 								new_instr = std::make_shared<Mov>(OpX(phi_size, pair.first->longValue()),
 									OpX(phi_size, target), phi_size);
@@ -259,7 +259,7 @@ namespace LL2X::Passes {
 						middle_made = block_made = true;
 						const std::string *new_label = function.newLabel();
 						comment += " (in new block " + *new_label + " whose parent is " + *block->label + ")";
-						middle_block = std::make_shared<BasicBlock>(new_label, std::vector {block->label},
+						middle_block = std::make_shared<BasicBlock>(new_label, std::vector{block->label},
 							std::list<InstructionPtr>());
 						middle_block->parent = &function;
 						auto block_iter = std::find(function.blocks.begin(), function.blocks.end(), block);

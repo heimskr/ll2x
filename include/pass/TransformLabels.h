@@ -5,6 +5,6 @@ namespace LL2X {
 }
 
 namespace LL2X::Passes {
-	/** Transforms the labels of any operand with labelNeedsTransformation == true.. */
+	/** Transforms the labels of any operand with labelNeedsTransformation == true. */
 	size_t transformLabels(Function &);
 }

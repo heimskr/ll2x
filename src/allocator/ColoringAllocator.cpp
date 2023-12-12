@@ -235,7 +235,7 @@ namespace LL2X {
 
 	VariablePtr ColoringAllocator::selectChaitin() const {
 		VariablePtr out;
-		int64_t lowest = LONG_MAX;
+		int64_t lowest = INT64_MAX;
 		for (const Node *node: interference.nodes()) {
 			auto var = node->get<VariablePtr>();
 			if (var->allRegistersSpecial() || !function->canSpill(var))
@@ -267,13 +267,12 @@ namespace LL2X {
 		interference.clear();
 		size_t links = 0;
 
-
 		for (const auto &[id, var]: function->variableStore) {
 #ifdef DEBUG_COLORING
-			std::cerr << "%% " << *id << " " << var->ansiString() << "; aliases:";
+			std::cerr << "%% " << *id << ' ' << var->ansiString() << "; aliases:";
 			for (Variable *alias: var->getAliases())
-				std::cerr << " " << alias->ansiString();
-			std::cerr << "\n";
+				std::cerr << ' ' << alias->ansiString();
+			std::cerr << '\n';
 #endif
 			const std::string *parent_id = var->parentID();
 			if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
@@ -407,7 +406,6 @@ namespace LL2X {
 #ifdef DEBUG_COLORING
 		info() << "Label count: " << labels.size() << "\n";
 #endif
-
 		for (const auto &[block_id, vec]: vecs) {
 			const size_t size = vec.size();
 			if (size < 2)
@@ -425,14 +423,14 @@ namespace LL2X {
 		// to assign certain registers to certain variables. As of this writing, only unclobber instructions cause
 		// precolored nodes to be made.
 		int precolored_added = 0;
-		for (const InstructionPtr &instruction: function->linearInstructions)
+		for (const InstructionPtr &instruction: function->linearInstructions) {
 			if (auto intermediate = std::dynamic_pointer_cast<IntermediateInstruction>(instruction)) {
 				// TODO: maybe we'll have to care about precoloredReads someday. Probably not.
 				intermediate->extractPrecolored();
 				const auto &written = intermediate->precoloredWritten;
 				if (written.empty())
 					continue;
-				
+
 				const std::string label = "__ll2x_pc" + std::to_string(precolored_added++);
 				Node &node = interference.addNode(label);
 				node.colors = {written.begin(), written.end()};
@@ -445,6 +443,7 @@ namespace LL2X {
 						interference.link(label, pid, true);
 				}
 			}
+		}
 
 #ifdef DEBUG_COLORING
 		info() << "Made " << links << " link" << (links == 1? "" : "s") << ".\n";

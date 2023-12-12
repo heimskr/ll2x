@@ -809,7 +809,7 @@ dbg_type: "@llvm.dbg.value" | "@llvm.dbg.declare";
 anybang: LLVMTOK_INTBANG
        | "!" any_ident { $$ = $1->adopt($2); }
        | diexpression
-       | diargslist;
+       | diarglist;
 
 // Example: call void @llvm.assume(i1 true) [ "align"(i8* %10, i64 %9) ]
 i_assume: "call" "void" "@llvm.assume" "(" LLVMTOK_INTTYPE LLVMTOK_BOOL ")" "[" assume_list "]" _cdebug
@@ -823,7 +823,7 @@ diexpression_list: diexpression_list "," diexpression_item { $$ = $1->adopt($3);
                  | diexpression_item { $$ = (new AN(llvmParser, LLVM_DIEXPRESSION_LIST))->adopt($1); };
 diexpression_item: any_ident | LLVMTOK_DECIMAL;
 
-diargslist: "!DIArgList" "(" constant "," constant ")" { $$ = $1->adopt({$3, $5}); D($2, $4, $6); };
+diarglist: "!DIArgList" "(" constant "," constant ")" { $$ = $1->adopt({$3, $5}); D($2, $4, $6); };
 
 i_getelementptr: result "getelementptr" _inbounds type_any "," constant gep_indices unibangs
                { auto loc = $1->location; $$ = (new GetelementptrNode($1, $3, $4, $6, $7, $8))->locate(loc); D($2, $5); };
@@ -905,7 +905,7 @@ i_freeze: result "freeze" type_any value unibangs { $$ = new FreezeNode($1, $3, 
 i_atomicrmw: result "atomicrmw" _volatile atomic_op type_ptr value "," type_any value _syncscope LLVMTOK_ORDERING _align
              unibangs
              { $$ = new AtomicrmwNode($1, $3, $4, $5, $6, $8, $9, $10, $11, $12, $13); D($2, $7); };
-atomic_op: LLVMTOK_ATOMICOP | LLVMTOK_FMATH | LLVMTOK_LOGIC | "add" | "sub"
+atomic_op: LLVMTOK_ATOMICOP | LLVMTOK_FMATH | LLVMTOK_LOGIC | "add" | "sub";
 
 // Constants
 

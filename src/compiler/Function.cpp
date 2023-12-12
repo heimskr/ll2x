@@ -1502,6 +1502,7 @@ namespace LL2X {
 				BasicBlockPtr p = node->get<std::weak_ptr<BasicBlock>>().lock();
 				// LiveOut(P) = LiveOut(P) ∪ {v}
 				p->liveOut.insert(var);
+				p->allLive.insert(var);
 				upAndMark(p, var);
 			}
 		} catch (const std::out_of_range &) {
@@ -1699,13 +1700,14 @@ namespace LL2X {
 				(void) blockLiveness;
 				stream << "\e[34m" << *block->label << ":\e[39m\n";
 #else
-				stream << "    \e[2m; \e[4m<label>:\e[1m" << *block->label << "\e[22;2;4m @ " << block->index
+				stream << "    \e[2m; \e[4;1m" << *block->label << "\e[22;2;4m @ " << block->index
 				       << ": preds =";
 				for (auto begin = block->preds.begin(), iter = begin, end = block->preds.end(); iter != end; ++iter) {
 					if (iter != begin)
 						stream << ',';
 					stream << " %" << **iter;
 				}
+				stream << '.';
 				if (blockLiveness) {
 					std::set<std::string> uses;
 					for (const InstructionPtr &instruction: block->instructions)
