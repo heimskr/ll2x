@@ -23,7 +23,7 @@ namespace LL2X::Passes {
 			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
 			if (llvm == nullptr || llvm->node->nodeType() != NodeType::Conversion)
 				continue;
-			
+
 			auto *conversion = dynamic_cast<ConversionNode *>(llvm->node);
 			const Conversion type = conversion->conversionType;
 
@@ -61,6 +61,8 @@ namespace LL2X::Passes {
 		OperandPtr source = std::dynamic_pointer_cast<OperandValue>(node->value)->operand;
 		if (node->operand->isRegister())
 			node->operand->reg->setType(node->to);
+		function.comment(instruction, "LowerBasicConversion(" + std::string(node->location) + "): " + source->toString()
+			+ " -> " + node->operand->toString());
 		function.insertBefore<Mov>(instruction, source, node->operand);
 	}
 

@@ -22,7 +22,7 @@ namespace LL2X::Passes {
 			if (llvm == nullptr || (llvm->node->nodeType() != NodeType::Load &&
 				llvm->node->nodeType() != NodeType::Store))
 				continue;
-			
+
 			if (llvm->node->nodeType() == NodeType::Load)
 				lowerLoad(function, instruction, *llvm);
 			else if (llvm->node->nodeType() == NodeType::Store)
@@ -72,7 +72,8 @@ namespace LL2X::Passes {
 			if (operand->isRegister()) {
 				function.comment(instruction, prefix + ".2: (" + operand->toString() + ") into " +
 					node->operand->toString());
-				function.insertBefore<Mov>(instruction, Op8(0, operand->reg), node->operand, width);
+				// function.insertBefore<Mov>(instruction, Op8(0, operand->reg), node->operand, width);
+				function.insertBefore<Mov>(instruction, Op8(0, operand->getVariable()), node->operand, width);
 			} else {
 				function.comment(instruction, prefix + ".3: " + operand->toString() + " into " +
 					node->operand->toString());
@@ -286,8 +287,33 @@ namespace LL2X::Passes {
 	int getLoadStoreSize(ConstantPtr &constant, const InstructionPtr &instruction) {
 		auto constant_ptr = std::dynamic_pointer_cast<PointerType>(constant->type);
 
-		if (!constant_ptr)
-			throw std::runtime_error("Expected a PointerType in the constant of a load/store instruction");
+		if (!constant_ptr) {
+			if (constant->type->typeType() != TypeType::OpaquePointer)
+				throw std::runtime_error("Expected a PointerType or OpaquePointerType in the constant of a load/store instruction");
+
+			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
+
+			if (!llvm) {
+				error() << instruction->toString() << '\n';
+				throw std::runtime_error("Expected instruction with an opaque pointer operand to be an LLVM instruction");
+			}
+
+			switch (llvm->node->nodeType()) {
+				case NodeType::Store: {
+					auto &store = dynamic_cast<StoreNode &>(*llvm->node);
+					return store.source->type->width() / 8;
+				}
+
+				case NodeType::Load: {
+					auto &load = dynamic_cast<LoadNode &>(*llvm->node);
+					return load.type->width() / 8;
+				}
+
+				default:
+					error() << instruction->toString() << '\n';
+					throw std::runtime_error("Unhandled LLVM node in getLoadStoreSize: " + llvm->node->debugExtra());
+			}
+		}
 
 		TypePtr subtype = constant_ptr->subtype;
 

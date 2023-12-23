@@ -1,3 +1,4 @@
+#include <cassert>
 #include <climits>
 #include <ctime>
 #include <iomanip>
@@ -23,7 +24,7 @@
 // #define DEBUG_AFTER_SETUPCALLS
 // #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
-// #define FINAL_DEBUG
+#define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
@@ -42,6 +43,7 @@
 #include "instruction/Add.h"
 #include "instruction/Clobber.h"
 #include "instruction/Comment.h"
+#include "instruction/DummyDefiner.h"
 #include "instruction/Imul.h"
 #include "instruction/Label.h"
 #include "instruction/Mov.h"
@@ -92,6 +94,7 @@
 #include "pass/MergeAllBlocks.h"
 #include "pass/MinimizeBlocks.h"
 #include "pass/Phi.h"
+#include "pass/RemoveDummies.h"
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
 #include "pass/RemoveUselessBranches.h"
@@ -373,6 +376,8 @@ namespace LL2X {
 			}
 
 			if (should_insert) {
+				assert(variable);
+				insertBefore<DummyDefiner>(definition, OpV(variable));
 				definition->replaceSimilarOperand(OpV(variable), Op8(-location.offset, pcRbp));
 				definition->extract(true);
 
@@ -1060,6 +1065,7 @@ namespace LL2X {
 		Passes::transformLabels(*this);
 		forceLiveness(); // Hack: some other pass is forgetting to extract after changing operands.
 		Passes::fixMemoryOperands(*this);
+		Passes::removeDummies(*this);
 		hackVariables();
 		forceLiveness();
 		// for (InstructionPtr &instruction: linearInstructions) {
@@ -1073,9 +1079,12 @@ namespace LL2X {
 		// }
 		finalDone = true;
 #ifdef FINAL_DEBUG
-		debug();
+		if (*name == "@_ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE")
+			debug();
 		// allocator->interference.renderTo("interference_final_" + *name + ".png");
 		// allocator->interference.renderTo("interference_final_" + *name + ".svg");
+		if (*name == "@_ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE")
+			allocator->interference.renderTo("interference_final_" + *name + ".svg");
 #endif
 	}
 

@@ -114,6 +114,9 @@ namespace LL2X {
 					parameterAttributes.insert(ParAttr::Readonly);
 					functionAttributes.insert(FnAttr::readonly);
 					break;
+				case LLVMTOK_MEMORY:
+					// TODO: implement memory attributes
+					break;
 				default:
 					node->at(1)->debug();
 					throw std::runtime_error("Invalid child of ATTRIBUTE_LIST: " + std::string(child->getName()));

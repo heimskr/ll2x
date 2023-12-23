@@ -65,7 +65,7 @@ namespace LL2X::Passes {
 		VariablePtr left = dynamic_cast<LocalValue *>(value1.get())->variable;
 		OperandPtr destination = node->operand;
 		destination->width = x86_64::Width::Low;
-		
+
 		const ValueType type2 = value2->valueType();
 
 		const std::string prefix = "LowerIcmp(" + std::string(node->location) + "): ";
@@ -77,11 +77,11 @@ namespace LL2X::Passes {
 
 			if (type2 == ValueType::Local) {
 				right = dynamic_cast<LocalValue *>(value2.get())->variable;
-				function.comment(instruction, prefix + left->toString() + " vs. local " + right->toString());
+				function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. local " + right->toString());
 			} else {
 				right = function.newVariable(node->getType(), instruction->parent.lock());
 				const std::string &name = *dynamic_cast<GlobalValue *>(value2.get())->name;
-				function.comment(instruction, prefix + left->toString() + " vs. global " + name);
+				function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. global " + name);
 				function.insertBefore<Mov, false>(instruction, Op8(right), OpX(width, name, function.pcRip));
 				function.insertBefore<Mov, false>(instruction, Op8(right), OpX(width, 0, right), width);
 			}
@@ -94,7 +94,7 @@ namespace LL2X::Passes {
 			const auto width = node->getType()->width();
 			const auto &operand = dynamic_cast<OperandValue *>(value2.get())->operand;
 			// TODO: verify right operand width
-			function.comment(instruction, prefix + left->toString() + " vs. operand " + operand->toString());
+			function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. operand " + operand->type->toString() + ' ' + operand->toString());
 			function.insertBefore<Cmp, false>(instruction, OpX(width, left), operand, width);
 			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 
@@ -107,7 +107,7 @@ namespace LL2X::Passes {
 				throw std::runtime_error("Unsupported value type in icmp instruction: " + value_map.at(type2));
 
 			const int size = node->getType()->width();
-			function.comment(instruction, prefix + left->toString() + " vs. intlike " + std::to_string(imm));
+			function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. intlike " + std::to_string(imm));
 			function.insertBefore<Cmp, false>(instruction, OpX(size, left), OpX(size, imm), size);
 			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 

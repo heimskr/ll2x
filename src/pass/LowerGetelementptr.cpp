@@ -148,7 +148,7 @@ namespace LL2X::Passes {
 				function.insertBefore<Add>(instruction, Op4(skip), node->operand);
 				// result += base pointer (not %rbp)
 				function.insertBefore<Add>(instruction, pointer, node->operand);
-			} else if (tt == TypeType::Struct || ((tt == TypeType::Array || tt == TypeType::Pointer) && !one_pvar)) {
+			} else if (tt == TypeType::Struct || ((tt == TypeType::Array || tt == TypeType::Pointer || tt == TypeType::OpaquePointer) && !one_pvar)) {
 				std::list<std::variant<int64_t, const std::string *>> indices;
 				std::stringstream indices_str;
 				bool first = true;
@@ -163,17 +163,11 @@ namespace LL2X::Passes {
 						"%" + *std::get<const std::string *>(index.value));
 				}
 
-
 				TypePtr out_type;
-#ifdef DEBUG_GETELEMENTPTR
-				TypePtr old_type = node->variable->type;
-#endif
+
 				// int64_t offset = Util::updiv(Getelementptr::compute(constant_type, indices, &out_type), 8l);
 				// if (Util::outOfRange(offset))
 				// 	warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
-				function.comment(instruction, "LowerGetelementptr(" + std::string(node->location) + "): struct-type: " +
-					constant_type->toString() + " -> " + node->operand->toString() + ", indices=" +
-					indices_str.str());
 
 				VariablePtr source;
 				if (node->constant->value->isLocal())
@@ -181,15 +175,18 @@ namespace LL2X::Passes {
 				else
 					source = function.makeVariable(node->constant->value, instruction, node->constant->type);
 
+				function.comment(instruction, "LowerGetelementptr(" + std::string(node->location) + "): struct-type: " +
+					constant_type->toString() + ' ' + source->toString() + " -> " + node->operand->toString() +
+					", indices=" + indices_str.str());
+
 				function.insertBefore<Mov>(instruction, OpV(source), node->operand);
 
 				Getelementptr::insert(function, node->pointerType, indices, instruction, node->operand, &out_type);
+				function.comment(instruction, "LowerGetelementptr(" + std::string(node->location) + "): type of " + node->operand->toString() + " is "
+					+ out_type->toString());
 				node->operand->reg->setType(out_type);
 				node->type = out_type;
-#ifdef DEBUG_GETELEMENTPTR
-				function.comment(add, "Type: " + std::string(*old_type) + " -> " + std::string(*out_type));
-#endif
-			} else if ((tt == TypeType::Array || tt == TypeType::Pointer) && one_pvar) {
+			} else if ((tt == TypeType::Array || tt == TypeType::Pointer || tt == TypeType::OpaquePointer) && one_pvar) {
 				// result = (base pointer) + (width * index value)
 				VariablePtr index = function.getVariable(std::get<Variable::ID>(node->indices.at(0).value));
 				const int width = Util::updiv(node->type->width(), 8);

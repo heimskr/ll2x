@@ -59,7 +59,7 @@ using AN = LL2X::ASTNode;
 %token LLVMTOK_FNATTR_BASIC LLVMTOK_CCONV LLVMTOK_VISIBILITY LLVMTOK_FASTMATH LLVMTOK_STRUCTVAR LLVMTOK_CLASSVAR
 %token LLVMTOK_UNIONVAR LLVMTOK_INTBANG LLVMTOK_ORDERING LLVMTOK_ICMP_COND LLVMTOK_LABEL_COMMENT LLVMTOK_PREDS_COMMENT
 %token LLVMTOK_TAIL LLVMTOK_CONV_OP LLVMTOK_DIV LLVMTOK_REM LLVMTOK_LOGIC LLVMTOK_SHR LLVMTOK_FMATH LLVMTOK_SIMPLE_LABEL
-%token LLVMTOK_NO_PREDS LLVMTOK_HEXADECIMAL LLVMTOK_COMDATTYPE LLVMTOK_ATOMICOP
+%token LLVMTOK_NO_PREDS LLVMTOK_HEXADECIMAL LLVMTOK_COMDATTYPE LLVMTOK_ATOMICOP LLVMTOK_MEMORY_KIND
 %token LLVMTOK_SOURCE_FILENAME "source_filename"
 %token LLVMTOK_BANG "!"
 %token LLVMTOK_EQUALS "="
@@ -202,6 +202,7 @@ using AN = LL2X::ASTNode;
 %token LLVMTOK_SPLITDEBUGINLINING "splitDebugInlining"
 %token LLVMTOK_NAMETABLEKIND "nameTableKind"
 %token LLVMTOK_NONE "None"
+%token LLVMTOK_NONE_LOWER "none"
 %token LLVMTOK_DIFILE "!DIFile"
 %token LLVMTOK_FILENAME "filename"
 %token LLVMTOK_DIRECTORY "directory"
@@ -268,6 +269,11 @@ using AN = LL2X::ASTNode;
 %token LLVMTOK_DIARGLIST "!DIArgList"
 %token LLVMTOK_CHECKSUMKIND "checksumkind"
 %token LLVMTOK_CHECKSUM "checksum"
+%token LLVMTOK_PTR "ptr"
+%token LLVMTOK_MODULE "module"
+%token LLVMTOK_MEMORY "memory"
+%token LLVMTOK_ARGMEM "argmem"
+%token LLVMTOK_INACCESSIBLEMEM "inaccessiblemem"
 
 %token LLVM_CONSTANT LLVM_CONVERSION_EXPR LLVM_INITIAL_VALUE_LIST LLVM_ARRAYTYPE LLVM_VECTORTYPE LLVM_POINTERTYPE
 %token LLVM_TYPE_LIST LLVM_FUNCTIONTYPE LLVM_GDEF_EXTRAS LLVM_STRUCTDEF LLVM_ATTRIBUTE_LIST LLVM_RETATTR_LIST
@@ -277,7 +283,8 @@ using AN = LL2X::ASTNode;
 %token LLVM_STRUCT_VALUE LLVM_VALUE_LIST LLVM_ARRAY_VALUE LLVM_CLAUSES LLVM_GLOBAL_DEF LLVM_PHI_PAIR LLVM_SWITCH_LIST
 %token LLVM_BLOCKHEADER LLVM_DECIMAL_PAIR_LIST LLVM_BANGS LLVM_ALIAS_DEF LLVM_METADATA LLVM_DIEXPRESSION_LIST
 %token LLVM_DIDT_LIST LLVM_PIPE_LIST LLVM_DICT_LIST LLVM_DICU_LIST LLVM_DISUBPROGRAM_LIST LLVM_DILV_LIST
-%token LLVM_DILOCATION_LIST LLVM_DIGV_LIST LLVM_DITVP_LIST LLVM_DIE_LIST LLVM_DITTP_LIST LLVM_DIST_LIST
+%token LLVM_DILOCATION_LIST LLVM_DIGV_LIST LLVM_DITVP_LIST LLVM_DIE_LIST LLVM_DITTP_LIST LLVM_DIST_LIST LLVM_OPAQUEPTR
+%token LLVM_MEMORYLIST
 
 %start start
 
@@ -295,6 +302,7 @@ program: program source_filename { $1->adopt($2); }
        | program function_def    { $1->adopt($2); }
        | program comdat_def      { $1->adopt($2); }
        | program alias_def       { $1->adopt($2); }
+       | program module_asm      { $1->adopt($2); }
        | { $$ = LL2X::llvmParser.root; };
 
 declaration: "declare" _debug function_header { $1->adopt($3); D($2); }
@@ -307,6 +315,7 @@ declaration: "declare" _debug function_header { $1->adopt($3); D($2); }
            | "declare" "void" "@llvm.assume" "(" function_args ")" _fnattrs
              { $$ = nullptr; D($1, $2, $3, $4, $5, $6, $7); };
 
+module_asm: "module" "asm" LLVMTOK_STRING { $1->adopt($2->adopt($3)); };
 
 
 // Struct definitions
@@ -339,9 +348,10 @@ convertible_fnattr: "writeonly" | "readonly" | "readnone" | LLVMTOK_PATCHABLE_PR
 attribute_basic_fnattr: LLVMTOK_FNATTR_BASIC | attribute_convertible_fnattr { $1->symbol = LLVMTOK_FNATTR_BASIC; };
 attribute_convertible_fnattr: LLVMTOK_PATCHABLE_PROLOGUE;
 attribute_fnattr: attribute_basic_fnattr
-      | "alignstack" "(" LLVMTOK_DECIMAL ")"                     { $$ = $1->adopt($3);       D($2, $4);     }
-      | "allocsize"  "(" LLVMTOK_DECIMAL "," LLVMTOK_DECIMAL ")" { $$ = $1->adopt({$3, $5}); D($2, $4, $6); }
-      | "allocsize"  "(" LLVMTOK_DECIMAL ")"                     { $$ = $1->adopt($3);       D($2, $4);     };
+                | "alignstack" "(" LLVMTOK_DECIMAL ")"                     { $1->adopt($3);       D($2, $4);     }
+                | "allocsize"  "(" LLVMTOK_DECIMAL "," LLVMTOK_DECIMAL ")" { $1->adopt({$3, $5}); D($2, $4, $6); }
+                | "allocsize"  "(" LLVMTOK_DECIMAL ")"                     { $1->adopt($3);       D($2, $4);     }
+                | attribute_memory;
 
 attribute_parattr: LLVMTOK_PARATTR
                  | attribute_parattr_simple                 { $1->symbol = LLVMTOK_PARATTR;  }
@@ -349,6 +359,14 @@ attribute_parattr: LLVMTOK_PARATTR
                  | "inalloca" "(" type_any ")" { $$ = $1->adopt($3); D($2, $4); }
                  | retattr;
 attribute_parattr_simple: LLVMTOK_INALLOCA;
+
+attribute_memory: "memory" "(" memory_list ")" { $1->adopt($3); D($2, $4); };
+
+memory_list: memory_list "," memory_item { $1->adopt($3); D($2); }
+           | memory_item { $$ = (new AN(llvmParser, LLVM_MEMORYLIST))->adopt($1); };
+memory_item: LLVMTOK_MEMORY_KIND
+           | memory_prefix ":" LLVMTOK_MEMORY_KIND { $$ = $1->adopt($3); D($2); };
+memory_prefix: "argmem" | "inaccessiblemem";
 
 
 
@@ -370,7 +388,7 @@ metadata_def: metabang "=" metadata_distinct "!{" metadata_list "}"
               { $$ = nullptr; D($1, $2, $3, $4, $5, $6, $7); }
             | metabang "=" metadata_distinct "!DIFile" "(" "filename" ":" LLVMTOK_STRING "," "directory" ":" LLVMTOK_STRING ")"
               { $$ = $4->adopt({$1, $8, $12}); D($2, $3, $5, $6, $7, $9, $10, $11, $13); }
-            | metabang "=" metadata_distinct "!DIFile" "(" "filename" ":" LLVMTOK_STRING "," "directory" ":" LLVMTOK_STRING 
+            | metabang "=" metadata_distinct "!DIFile" "(" "filename" ":" LLVMTOK_STRING "," "directory" ":" LLVMTOK_STRING
               "," "checksumkind" ":" any_ident "," "checksum" ":" LLVMTOK_STRING ")"
               { $$ = $4->adopt({$1, $8, $12}); D($2, $3, $5, $6, $7, $9, $10, $11, $13, $14, $15, $16, $17, $18, $19, $20, $21); }
             | metabang "=" metadata_distinct "!DIDerivedType" "(" didt_list ")"
@@ -602,13 +620,14 @@ _cdebug: cdebug | { $$ = nullptr; };
 
 // Types
 
-type_any: type_nonvoid | LLVMTOK_VOID;
+type_any: type_nonvoid | LLVMTOK_VOID | type_opaque_ptr;
 type_nonvoid: LLVMTOK_INTTYPE | LLVMTOK_FLOATTYPE | type_array | type_vector | type_ptr | type_function | type_struct | LLVMTOK_STRUCTVAR | LLVMTOK_CLASSVAR | LLVMTOK_UNIONVAR;
-type_nonfn: LLVMTOK_INTTYPE | LLVMTOK_FLOATTYPE | type_array | type_vector | type_ptr | type_struct | LLVMTOK_STRUCTVAR | LLVMTOK_CLASSVAR | LLVMTOK_UNIONVAR | LLVMTOK_VOID;
+type_nonfn: LLVMTOK_INTTYPE | LLVMTOK_FLOATTYPE | type_array | type_vector | type_ptr | type_struct | LLVMTOK_STRUCTVAR | LLVMTOK_CLASSVAR | LLVMTOK_UNIONVAR | LLVMTOK_VOID | type_opaque_ptr;
 type_array:  "[" LLVMTOK_DECIMAL "x" type_any    "]" { $$ = (new AN(llvmParser, LLVM_ARRAYTYPE,  ""))->adopt({$2, $4}); D($1, $3, $5); };
 type_vector: "<" LLVMTOK_DECIMAL "x" vector_type ">" { $$ = (new AN(llvmParser, LLVM_VECTORTYPE))->adopt({$2, $4}); D($1, $3, $5); };
 vector_type: LLVMTOK_INTTYPE | type_ptr | LLVMTOK_FLOATTYPE;
 type_ptr: type_any "*" { $$ = (new AN(llvmParser, LLVM_POINTERTYPE, "*"))->adopt($1); D($2); };
+type_opaque_ptr: "ptr" { $$ = (new AN(llvmParser, LLVM_OPAQUEPTR, "ptr"))->locate($1); D($1); };
 type_function: type_any "(" types extra_ellipsis ")" { $$ = (new AN(llvmParser, LLVM_FUNCTIONTYPE))->adopt({$1, $3, $4}); D($2, $5); }
              | type_any "("            _ellipsis ")" { $$ = (new AN(llvmParser, LLVM_FUNCTIONTYPE))->adopt({$1, $3});     D($2, $4); };
 type_struct: "{" types "}"         { $$ = new StructNode(StructShape::Default, $2); D($1, $3);         }
@@ -922,9 +941,9 @@ parattr: LLVMTOK_PARATTR
        | retattr | "writeonly";
 parattr_simple: "inalloca" | "readonly" | LLVMTOK_READNONE;
 retattr: LLVMTOK_RETATTR
-       | LLVMTOK_DEREF "(" LLVMTOK_DECIMAL ")" { $$ = $1->adopt($3); D($2, $4); }
-       | "align" "(" LLVMTOK_DECIMAL ")"       { $$ = $1->adopt($3); D($2, $4); }
-       | "align" LLVMTOK_DECIMAL               { $$ = $1->adopt($2); }
+       | LLVMTOK_DEREF "(" LLVMTOK_DECIMAL ")"     { $$ = $1->adopt($3); D($2, $4); }
+       | "align" "(" LLVMTOK_DECIMAL ")"           { $$ = $1->adopt($3); D($2, $4); }
+       | "align" LLVMTOK_DECIMAL                   { $$ = $1->adopt($2); }
        | "noundef";
 operand: LLVMTOK_PVAR | LLVMTOK_DECIMAL | LLVMTOK_HEXADECIMAL | LLVMTOK_GVAR | LLVMTOK_BOOL | LLVMTOK_FLOATING | struct
        | bare_array   | LLVMTOK_CSTRING | getelementptr_expr  | "null" | "zeroinitializer"  | "undef";

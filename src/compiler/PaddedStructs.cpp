@@ -11,23 +11,31 @@
 #include "parser/Nodes.h"
 #include "parser/StructNode.h"
 
+#include <cassert>
+
 namespace LL2X::PaddedStructs {
 	int64_t getOffset(const StructType &type, int64_t index) {
+		assert(0 <= index);
+
 		if (index == 0)
 			return 0;
+
 		int64_t offset = 0;
 		std::shared_ptr<StructNode> node = type.node;
+
 		if (!node)
 			return getOffset(*StructType::knownStructs.at(type.barename()), index);
-		if (type.shape == StructShape::Packed)
+
+		if (type.shape == StructShape::Packed) {
 			for (int64_t i = 0; i < index; ++i)
 				offset += node->types.at(i)->width();
-		else
+		} else {
 			for (int64_t i = 1; i <= index; ++i) {
 				const int prev_width = node->types.at(i - 1)->width();
 				const int align = 8 * node->types.at(i)->alignment();
 				offset = Util::upalign(offset + prev_width, align);
 			}
+		}
 		return offset;
 	}
 
@@ -38,7 +46,7 @@ namespace LL2X::PaddedStructs {
 		TypePtr type = source->type;
 		if (!type)
 			throw std::runtime_error("PaddedStructs::extract: source variable has dno type");
-		
+
 		auto *initial_struct_type = dynamic_cast<StructType *>(type.get());
 		if (initial_struct_type == nullptr)
 			throw std::runtime_error("PaddedStructs::extract: source variable type isn't StructType");

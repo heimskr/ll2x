@@ -48,6 +48,9 @@ namespace LL2X {
 
 			virtual bool isTerminal() const = 0;
 
+			/** Whether the instruction needs to be removed during final compilation. */
+			virtual bool isDummy() const { return false; }
+
 			/** Examines the instruction node to determine which virtual registers are read/written. Returns a pair of
 			 *  the number of registers read and the number of registers written. */
 			virtual ExtractionResult extract(bool force = false) = 0;

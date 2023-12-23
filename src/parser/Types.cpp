@@ -139,6 +139,18 @@ namespace LL2X {
 			(other.typeType() == TypeType::Pointer && *dynamic_cast<const PointerType &>(other).subtype == *subtype);
 	}
 
+	OpaquePointerType::operator std::string() {
+		return "\e[1mptr\e[22m";
+	}
+
+	std::string OpaquePointerType::toString() {
+		return "ptr";
+	}
+
+	bool OpaquePointerType::operator==(const Type &other) const {
+		return this == &other || other.typeType() == TypeType::OpaquePointer;
+	}
+
 	FunctionType::FunctionType(const ASTNode *node) {
 		returnType = getType(node->at(0));
 		if (node->children.size() == 3 || (1 < node->size() && node->at(1)->symbol == LLVM_TYPE_LIST)) {
@@ -428,6 +440,8 @@ namespace LL2X {
 				return std::make_shared<ArrayType>(node->at(0)->atoi(), getType(node->at(1)));
 			case LLVM_VECTORTYPE:
 				return std::make_shared<VectorType>(node->at(0)->atoi(), getType(node->at(1)));
+			case LLVM_OPAQUEPTR:
+				return std::make_shared<OpaquePointerType>();
 			default:
 				throw std::invalid_argument("Couldn't create Type from a node with symbol " +
 				                            std::string(llvmParser.getName(node->symbol)) + " (" +

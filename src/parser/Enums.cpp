@@ -7,7 +7,9 @@ namespace LL2X {
 		{TypeType::None,    "None"},    {TypeType::Void,     "Void"},     {TypeType::Int,    "Int"},
 		{TypeType::Array,   "Array"},   {TypeType::Vector,   "Vector"},   {TypeType::Float,  "Float"},
 		{TypeType::Pointer, "Pointer"}, {TypeType::Function, "Function"}, {TypeType::Struct, "Struct"},
-		{TypeType::GlobalTemporary, "GlobalTemporary"}};
+		{TypeType::GlobalTemporary, "GlobalTemporary"}, {TypeType::Opaque, "Opaque"},
+		{TypeType::OpaquePointer, "OpaquePointer"}
+	};
 
 	std::unordered_map<ValueType, std::string> value_map {
 		{ValueType::Double, "Double"}, {ValueType::Int,             "Int"            }, {ValueType::Null,    "Null"   },
@@ -15,17 +17,20 @@ namespace LL2X {
 		{ValueType::Global, "Global"}, {ValueType::Getelementptr,   "Getelementptr"  }, {ValueType::Void,    "Void"   },
 		{ValueType::Struct, "Struct"}, {ValueType::Array,           "Array"          }, {ValueType::CString, "CString"},
 		{ValueType::Undef,  "Undef" }, {ValueType::Zeroinitializer, "Zeroinitializer"}, {ValueType::Icmp,    "Icmp"   },
-		{ValueType::Logic,  "Logic" }, {ValueType::Operand,         "Operand"}};
+		{ValueType::Logic,  "Logic" }, {ValueType::Operand,         "Operand"}
+	};
 
 	std::unordered_map<Linkage, std::string> linkage_map {
 		{Linkage::Private,     "private"},      {Linkage::Appending,  "appending"},   {Linkage::Weak,    "weak"},
 		{Linkage::Linkonce,    "linkonce"},     {Linkage::ExternWeak, "extern_weak"}, {Linkage::WeakOdr, "weak_odr"},
 		{Linkage::LinkonceOdr, "linkonce_odr"}, {Linkage::External,   "external"},    {Linkage::Common,  "common"},
-		{Linkage::Internal,    "internal"},     {Linkage::AvailableExternally, "available_externally"}};
+		{Linkage::Internal,    "internal"},     {Linkage::AvailableExternally, "available_externally"}
+	};
 
 	std::unordered_map<Preemption, std::string> preemption_map {
 		{Preemption::Default,  "default"}, {Preemption::DsoPreemptable, "dso_preemptable"},
-		{Preemption::DsoLocal, "dso_local"}};
+		{Preemption::DsoLocal, "dso_local"}
+	};
 
 	std::unordered_map<CConv, std::string> cconv_map {
 		{CConv::Default, "default"}, {CConv::ccc, "ccc"}, {CConv::cxx_fast_tlscc, "cxx_fast_tlscc"},
@@ -42,11 +47,13 @@ namespace LL2X {
 		{CConv::cc80, "cc80"}, {CConv::arm_aapcs_vfpcc, "arm_aapcs_vfpcc"}, {CConv::intel_ocl_bicc, "intel_ocl_bicc"},
 		{CConv::x86_64_sysvcc, "x86_64_sysvcc"}, {CConv::x86_fastcallcc, "x86_fastcallcc"},
 		{CConv::x86_thiscallcc, "x86_thiscallcc"}, {CConv::arm_aapcscc, "arm_aapcscc"},
-		{CConv::spir_kernel, "spir_kernel"}};
-	
+		{CConv::spir_kernel, "spir_kernel"}
+	};
+
 	std::unordered_map<RetAttr, std::string> retattr_map {
 		{RetAttr::Zeroext, "zeroext"}, {RetAttr::Signext, "signext"}, {RetAttr::Inreg, "inreg"},
-		{RetAttr::Noalias, "noalias"}, {RetAttr::Nonnull, "nonnull"}};
+		{RetAttr::Noalias, "noalias"}, {RetAttr::Nonnull, "nonnull"}
+	};
 
 	std::unordered_map<ParAttr, std::string> parattr_map {
 		{ParAttr::Byval,      "byval"},      {ParAttr::Inalloca,  "inalloca"},  {ParAttr::Sret,      "sret"},
@@ -54,7 +61,8 @@ namespace LL2X {
 		{ParAttr::Swifterror, "swifterror"}, {ParAttr::Immarg,    "immarg"},    {ParAttr::Nonnull,   "nonnull"},
 		{ParAttr::Returned,   "returned"},   {ParAttr::Nest,      "nest"},      {ParAttr::Nofree,    "nofree"},
 		{ParAttr::Zeroext,    "zeroext"},    {ParAttr::Signext,   "signext"},   {ParAttr::Inreg,     "inreg"},
-		{ParAttr::Noalias,    "noalias"},    {ParAttr::Writeonly, "writeonly"}, {ParAttr::Readnone, "readnone"}};
+		{ParAttr::Noalias,    "noalias"},    {ParAttr::Writeonly, "writeonly"}, {ParAttr::Readnone, "readnone"}
+	};
 
 	std::unordered_map<FnAttr, std::string> fnattr_map {
 		{FnAttr::alwaysinline,       "alwaysinline"},       {FnAttr::noredzone,           "noredzone"},
@@ -76,53 +84,65 @@ namespace LL2X {
 		{FnAttr::ssp,                "ssp"},                {FnAttr::speculatable,        "speculatable"},
 		{FnAttr::sanitize_hwaddress, "sanitize_hwaddress"}, {FnAttr::readonly,            "readonly"},
 		{FnAttr::willreturn,         "willreturn"},         {FnAttr::nosync,              "nosync"},
-		{FnAttr::inaccessiblemem_or_argmemonly, "inaccessiblemem_or_argmemonly"}};
+		{FnAttr::inaccessiblemem_or_argmemonly, "inaccessiblemem_or_argmemonly"}
+	};
 
 	std::unordered_map<Fastmath, std::string> fastmath_map {
 		{Fastmath::Nnan,    "nnan"},    {Fastmath::Ninf,     "ninf"},     {Fastmath::Nsz, "nsz"},
 		{Fastmath::Reassoc, "reassoc"}, {Fastmath::Contract, "contract"}, {Fastmath::Afn, "afn"},
-		{Fastmath::Arcp,    "arcp"},    {Fastmath::Fast,     "fast"}};
+		{Fastmath::Arcp,    "arcp"},    {Fastmath::Fast,     "fast"}
+	};
 
 	std::unordered_map<Ordering, std::string> ordering_map {
 		{Ordering::None,    "none"},    {Ordering::Unordered, "unordered"}, {Ordering::Monotonic, "monotonic"},
 		{Ordering::Acquire, "acquire"}, {Ordering::Release,   "release"},   {Ordering::AcqRel,    "acqrel"},
-		{Ordering::SeqCst, "seqcst"}};
+		{Ordering::SeqCst, "seqcst"}
+	};
 
 	std::unordered_map<IcmpCond, std::string> cond_map {
 		{IcmpCond::Eq,  "eq"},  {IcmpCond::Ne,  "ne"},  {IcmpCond::Ugt, "ugt"}, {IcmpCond::Uge, "uge"},
 		{IcmpCond::Ult, "ult"}, {IcmpCond::Ule, "ule"}, {IcmpCond::Sgt, "sgt"}, {IcmpCond::Sge, "sge"},
-		{IcmpCond::Slt, "slt"}, {IcmpCond::Sle, "sle"}};
+		{IcmpCond::Slt, "slt"}, {IcmpCond::Sle, "sle"}
+	};
 
 	std::unordered_map<IcmpCond, std::string> cond_op_map {
 		{IcmpCond::Eq,  "=="}, {IcmpCond::Ne,  "!="},
 		{IcmpCond::Ugt, ">"},  {IcmpCond::Uge, ">="}, {IcmpCond::Ult, "<"}, {IcmpCond::Ule, "<="},
-		{IcmpCond::Sgt, ">"},  {IcmpCond::Sge, ">="}, {IcmpCond::Slt, "<"}, {IcmpCond::Sle, "<="}};
+		{IcmpCond::Sgt, ">"},  {IcmpCond::Sge, ">="}, {IcmpCond::Slt, "<"}, {IcmpCond::Sle, "<="}
+	};
 
 	std::unordered_map<std::string, IcmpCond> cond_inv_map {
 		{ "eq", IcmpCond::Eq},  { "ne", IcmpCond::Ne},  {"ugt", IcmpCond::Ugt}, {"uge", IcmpCond::Uge},
 		{"ult", IcmpCond::Ult}, {"ule", IcmpCond::Ule}, {"sgt", IcmpCond::Sgt}, {"sge", IcmpCond::Sge},
-		{"slt", IcmpCond::Slt}, {"sle", IcmpCond::Sle}};
+		{"slt", IcmpCond::Slt}, {"sle", IcmpCond::Sle}
+	};
 
 	std::unordered_map<IcmpCond, IcmpCond> cond_rev_map {
 		{IcmpCond::Eq, IcmpCond::Eq}, {IcmpCond::Ne, IcmpCond::Ne}, {IcmpCond::Ugt, IcmpCond::Ult},
 		{IcmpCond::Uge, IcmpCond::Ule}, {IcmpCond::Ult, IcmpCond::Ugt}, {IcmpCond::Ule, IcmpCond::Uge},
 		{IcmpCond::Sgt, IcmpCond::Slt}, {IcmpCond::Sge, IcmpCond::Sle}, {IcmpCond::Slt, IcmpCond::Sgt},
-		{IcmpCond::Sle, IcmpCond::Sge}};
+		{IcmpCond::Sle, IcmpCond::Sge}
+	};
 
 	std::unordered_map<Conversion, std::string> conversion_map {
 		{Conversion::None,    "none"},    {Conversion::Trunc,    "trunc"},    {Conversion::Zext,     "zext"},
 		{Conversion::Sext,    "sext"},    {Conversion::Fptrunc,  "fptrunc"},  {Conversion::Fpext,    "fpext"},
 		{Conversion::Fptoui,  "fptoui"},  {Conversion::Fptosi,   "fptosi"},   {Conversion::Uitofp,   "uitofp"},
 		{Conversion::Sitofp,  "sitofp"},  {Conversion::Ptrtoint, "ptrtoint"}, {Conversion::Inttoptr, "inttoptr"},
-		{Conversion::Bitcast, "bitcast"}, {Conversion::Addrspacecast, "addrspacecast"}};
+		{Conversion::Bitcast, "bitcast"}, {Conversion::Addrspacecast, "addrspacecast"}
+	};
 
-	std::unordered_map<QueryType, std::string> query_map {{QueryType::Memory, "mem"}};
+	std::unordered_map<QueryType, std::string> query_map {
+		{QueryType::Memory, "mem"}
+	};
 
 	std::unordered_map<LogicType, std::string> logic_map {
-		{LogicType::And, "and"}, {LogicType::Or, "or"}, {LogicType::Xor, "xor"}};
+		{LogicType::And, "and"}, {LogicType::Or, "or"}, {LogicType::Xor, "xor"}
+	};
 
 	std::unordered_map<std::string, LogicType> logic_inv_map {
-		{"and", LogicType::And}, {"or", LogicType::Or}, {"xor", LogicType::Xor}};
+		{"and", LogicType::And}, {"or", LogicType::Or}, {"xor", LogicType::Xor}
+	};
 
 	bool isSigned(IcmpCond cond) {
 		switch (cond) {

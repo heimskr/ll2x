@@ -95,7 +95,7 @@ namespace LL2X {
 #endif
 					for (BasicBlockPtr &block: function->blocks)
 						block->extract();
-					Passes::makeCFG(*function); 
+					Passes::makeCFG(*function);
 					function->extractVariables(true);
 					function->resetLiveness();
 					function->computeLiveness();
@@ -266,6 +266,7 @@ namespace LL2X {
 		Timer timer("MakeInterferenceGraph");
 		interference.clear();
 		size_t links = 0;
+		(void) links;
 
 		for (const auto &[id, var]: function->variableStore) {
 #ifdef DEBUG_COLORING

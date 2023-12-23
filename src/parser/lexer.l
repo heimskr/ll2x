@@ -46,7 +46,7 @@ LLVM_FLOATING			("-"?[0-9]+"."[0-9]+("e"[+\-][0-9]+)?)
 LLVM_FLOATTYPE			("half"|"float"|"double"|"fp128"|"x86_fp80"|"ppc_fp128")
 LLVM_DLLPORT			("dllimport"|"dllexport")
 LLVM_THREAD_LOCAL_TYPE	("localdynamic"|"initialexec"|"localexec")
-LLVM_PARATTR			("nocapture"|"swiftself"|"swifterror"|"immarg"|"returned"|"nest"|"nofree")
+LLVM_PARATTR			("nocapture"|"swiftself"|"swifterror"|"immarg"|"returned"|"nest"|"nofree"|"nocallback")
 LLVM_RETATTR			("zeroext"|"signext"|"inreg"|"noalias"|"nonnull")
 LLVM_DEREF				("dereferenceable"|"dereferenceable_or_null")
 LLVM_STRUCTVAR			(("%struct."{LLVM_IDENT})|("%\"struct."([^\\"\n]|\\[\\'"0nt])+\"))
@@ -71,6 +71,7 @@ LLVM_FMATH				("fadd"|"fsub"|"fmul"|"fdiv"|"frem")
 LLVM_COMDATTYPE			("any"|"exactmatch"|"largest"|"noduplicates"|"samesize")
 LLVM_TYPED_PARATTR		("byval"|"byref"|"preallocated"|"sret"|"elementtype")
 LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
+LLVM_MEMORY_KIND		("none"|"read"|"write"|"readwrite")
 
 %%
 
@@ -135,6 +136,7 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 {LLVM_COMDATTYPE}			{ LLVMRTOKEN(COMDATTYPE) }
 {LLVM_TYPED_PARATTR}		{ LLVMRTOKEN(TYPED_PARATTR) }
 {LLVM_ATOMICOP}				{ LLVMRTOKEN(ATOMICOP) }
+{LLVM_MEMORY_KIND}			{ LLVMRTOKEN(MEMORY_KIND) }
 
 
 "!invariant.group"			{ LLVMRTOKEN(INVARIANT_GROUP) }
@@ -218,6 +220,10 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 "#"							{ LLVMRTOKEN(HASH) }
 ":"							{ LLVMRTOKEN(COLON) }
 "undef"						{ LLVMRTOKEN(UNDEF) }
+"ptr"						{ LLVMRTOKEN(PTR) }
+"memory"					{ LLVMRTOKEN(MEMORY) }
+"argmem"					{ LLVMRTOKEN(ARGMEM) }
+"inaccessiblemem"			{ LLVMRTOKEN(INACCESSIBLEMEM) }
 "|"							{ LLVMRTOKEN(PIPE) }
 
 "select"					{ LLVMRTOKEN(SELECT) }
@@ -275,6 +281,7 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 "phi"						{ LLVMRTOKEN(PHI) }
 "switch"					{ LLVMRTOKEN(SWITCH) }
 "unreachable"				{ LLVMRTOKEN(UNREACHABLE) }
+"module"					{ LLVMRTOKEN(MODULE) }
 "asm"						{ LLVMRTOKEN(ASM) }
 "sideeffect"				{ LLVMRTOKEN(SIDEEFFECT) }
 "inteldialect"				{ LLVMRTOKEN(INTELDIALECT) }
@@ -304,6 +311,7 @@ LLVM_ATOMICOP			("xchg"|"nand"|"max"|"min"|"umax"|"umin"|"fmax"|"fmin")
 "sysroot"					{ LLVMRTOKEN(SYSROOT) }
 "sdk"						{ LLVMRTOKEN(SDK) }
 "None"						{ LLVMRTOKEN(NONE) }
+"none"						{ LLVMRTOKEN(NONE_LOWER) }
 "filename"					{ LLVMRTOKEN(FILENAME) }
 "directory"					{ LLVMRTOKEN(DIRECTORY) }
 "checksumkind"				{ LLVMRTOKEN(CHECKSUMKIND) }

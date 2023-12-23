@@ -23,6 +23,11 @@ namespace LL2X::Passes {
 
 			const int width = sized->size;
 
+			if (width == 0) {
+				// TODO!: support width == 0
+				continue;
+			}
+
 			if (auto one_source = std::dynamic_pointer_cast<OneSource>(target))
 				if (one_source->source->isHackable())
 					one_source->source->setWidth(width);

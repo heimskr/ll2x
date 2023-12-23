@@ -62,8 +62,13 @@ namespace LL2X::Getelementptr {
 		indices.pop_front();
 		switch (type->typeType()) {
 			case TypeType::Pointer:
+			case TypeType::OpaquePointer:
 			case TypeType::Array: {
-				TypePtr subtype = dynamic_cast<HasSubtype *>(type.get())->subtype;
+				TypePtr subtype;
+				if (type->typeType() == TypeType::OpaquePointer)
+					subtype = std::make_shared<OpaquePointerType>();
+				else
+					subtype = dynamic_cast<HasSubtype *>(type.get())->subtype;
 				const int64_t subbytes = Util::updiv(subtype->width(), 8);
 				if (std::holds_alternative<int64_t>(front)) {
 					const int64_t offset = std::get<int64_t>(front) * subbytes;

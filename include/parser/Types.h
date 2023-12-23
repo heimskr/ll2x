@@ -123,6 +123,17 @@ namespace LL2X {
 		static std::shared_ptr<PointerType> make(TypePtr subtype) { return std::make_shared<PointerType>(subtype); }
 	};
 
+	struct OpaquePointerType: Type {
+		TypeType typeType() const override { return TypeType::OpaquePointer; }
+		OpaquePointerType() = default;
+		operator std::string() override;
+		std::string toString() override;
+		TypePtr copy() const override { return std::make_shared<OpaquePointerType>(); }
+		int width() const override { return x86_64::pointerWidth * 8; }
+		int alignment() const override { return x86_64::pointerWidth; }
+		bool operator==(const Type &) const override;
+	};
+
 	class FunctionType: public Type, public Makeable<FunctionType> {
 		private:
 			TypeType typeType() const override { return TypeType::Function; }

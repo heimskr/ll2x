@@ -691,6 +691,7 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class
   store i32 (...)** %100, i32 (...)*** %105, align 8, !dbg !4590, !tbaa !3517
   %106 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %7, i64 0, i32 1, i32 0, i32 0, !dbg !4598
   store i32 (...)** bitcast (i8** getelementptr inbounds ({ [16 x i8*] }, { [16 x i8*] }* @_ZTVNSt7__cxx1115basic_stringbufIcSt11char_traitsIcESaIcEEE, i64 0, inrange i32 0, i64 2) to i32 (...)**), i32 (...)*** %106, align 8, !dbg !4598, !tbaa !3517
+  ; %107 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %7, i64 0, i32 1, i32 2, i32 0, i32 0, !dbg !4608
   %107 = getelementptr inbounds %"class.std::__cxx11::basic_ostringstream", %"class.std::__cxx11::basic_ostringstream"* %7, i64 0, i32 1, i32 2, i32 0, i32 0, !dbg !4608
   %108 = load i8*, i8** %107, align 8, !dbg !4608, !tbaa !3771
   %109 = icmp eq i8* %108, %43, !dbg !4609
