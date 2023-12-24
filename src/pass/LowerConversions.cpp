@@ -88,9 +88,9 @@ namespace LL2X::Passes {
 			function.comment(instruction, prefix + "move");
 			function.insertBefore<Mov, false>(instruction, source, destination);
 			function.comment(instruction, prefix + "left shift");
-			function.insertBefore<Shl, false>(instruction, Op4(64 - to), destination);
+			function.insertShiftBefore<Shl, false>(instruction, Op4(64 - to), destination);
 			function.comment(instruction, prefix + "right shift");
-			function.insertBefore<Shr>(instruction, Op4(64 - to), destination);
+			function.insertShiftBefore<Shr>(instruction, Op4(64 - to), destination);
 		} else {
 			const int64_t mask = (1l << conversion->to->width()) - 1;
 			function.comment(instruction, prefix + "move");
@@ -121,7 +121,7 @@ namespace LL2X::Passes {
 				// mov $1, %temp
 				function.insertBefore<Mov, false>(instruction, Op4(1), OpV(temp_var));
 				// shl $(from - 1), %temp
-				function.insertBefore<Shl, false>(instruction, Op4(from - 1), OpV(temp_var));
+				function.insertShiftBefore<Shl, false>(instruction, Op4(from - 1), OpV(temp_var));
 				// Now %temp contains "m".
 				// mov %src, %dest
 				function.insertBefore<Mov, false>(instruction, source, destination);

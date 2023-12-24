@@ -39,6 +39,7 @@ namespace LL2X {
 		Number originalConstant = 0;
 		bool useRip = false;
 		bool labelNeedsTransformation = false;
+		bool sizeForced = false;
 
 		Operand() = delete;
 

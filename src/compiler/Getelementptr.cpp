@@ -121,7 +121,6 @@ namespace LL2X::Getelementptr {
 
 	int64_t compute(const GetelementptrValue *value, TypePtr *out_type) {
 		std::list<int64_t> indices = getLongIndices(*value);
-		warn() << std::string(const_cast<GetelementptrValue &>(*value)) << '\n';
 		return compute_mutating(value->ptrType, indices, out_type);
 	}
 

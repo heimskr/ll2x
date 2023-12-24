@@ -34,7 +34,7 @@ namespace LL2X::Passes {
 				continue;
 			}
 
-			if (name == "llvm.memset.p0i8.i64") {
+			if (name == "llvm.memset.p0i8.i64" || name == "llvm.memset.p0.i64") {
 				// TODO: mysterious volatile 4th parameter
 
 				auto *new_call = (new CallNode(nullptr, PointerType::make(VoidType::make()),
@@ -64,5 +64,5 @@ namespace LL2X::Passes {
 		return to_remove.size();
 	}
 
-	
+
 }

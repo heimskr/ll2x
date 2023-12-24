@@ -35,7 +35,7 @@ namespace LL2X::Passes {
 				continue;
 			}
 
-			if (name == "llvm.memcpy.p0i8.p0i8.i64") {
+			if (name == "llvm.memcpy.p0i8.p0i8.i64" || name == "llvm.memcpy.p0.p0.i64") {
 				auto *new_call = (new CallNode(nullptr, PointerType::make(VoidType::make()),
 					StringSet::intern("memcpy"), {
 						call->constants[0]->convert(),
@@ -60,5 +60,5 @@ namespace LL2X::Passes {
 		}
 
 		return to_remove.size();
-	}	
+	}
 }

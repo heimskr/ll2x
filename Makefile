@@ -1,7 +1,7 @@
 CHECK			?= none
 COMPILER		?= clang++
 DEBUGGER		?= lldb
-OPTIMIZATION	?= -O0 -g
+OPTIMIZATION	?= -Ofast -march=native -g
 STANDARD		?= c++20
 WARNINGS		?= -Wall -Wextra
 CFLAGS			:= -std=$(STANDARD) $(OPTIMIZATION) $(WARNINGS) -Iinclude
@@ -15,7 +15,7 @@ LLVMPARSEHDR	:= include/yyparse.h
 LLVMFLEXSRC		:= src/parser/lexer.l
 LLVMBISONSRC	:= src/parser/parser.y
 
-CLOC_OPTIONS	:= --exclude-dir=.vscode,asm,ll --not-match-f='^(yy)(lex|parse)|\.svg$$'
+CLOC_OPTIONS	:= --exclude-dir=.vscode,asm,ll,cpp --not-match-f='^(yy)(lex|parse)|\.s(vg)?$$'
 BISON_OPTIONS	:= --color=always
 SOURCES			:= $(shell find src/**/*.cpp src/*.cpp)
 OBJECTS			:= $(SOURCES:.cpp=.o) $(LLVMLEXCPP:.cpp=.o) $(LLVMPARSECPP:.cpp=.o)
@@ -49,8 +49,9 @@ $(LLVMPARSECPP:.cpp=.o): $(LLVMPARSECPP) $(LLVMPARSEHDR)
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
 test: $(OUTPUT)
-	# ./$(OUTPUT) ll/diriter3.ll > diriter3.s && clang diriter3.s -lstdc++ && ./a.out
-	./$(OUTPUT) ll/virtual.ll > virtual.s && clang virtual.s -lstdc++ && ./a.out
+	# ./$(OUTPUT) ll/diriter3.ll > diriter3.s && clang -g diriter3.s -lstdc++ && ./a.out
+	# ./$(OUTPUT) ll/virtual.ll > virtual.s && clang -g virtual.s -lstdc++ && ./a.out
+	./$(OUTPUT) ll/csmith1.ll > csmith1.s && clang -g csmith1.s -lstdc++ && ./a.out
 
 clean:
 	rm -f $(OUTPUT) src/*.o src/**/*.o graph_*.png \

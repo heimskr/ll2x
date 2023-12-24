@@ -152,7 +152,7 @@ namespace LL2X {
 	}
 
 	bool Operand::isHackable() const {
-		return !isNumeric() && !isIndirect();
+		return !isNumeric() && !isIndirect() && !sizeForced;
 	}
 
 	bool Operand::isIndirect() const {

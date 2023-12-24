@@ -41,9 +41,9 @@ namespace LL2X::Passes {
 				auto new_right = Op4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
 				function.insertBefore<Mov>(instruction, left, destination);
 				if (is_signed)
-					function.insertBefore<Sar>(instruction, new_right, destination);
+					function.insertShiftBefore<Sar>(instruction, new_right, destination);
 				else
-					function.insertBefore<Shr>(instruction, new_right, destination);
+					function.insertShiftBefore<Shr>(instruction, new_right, destination);
 				return;
 			}
 		}
@@ -113,6 +113,34 @@ namespace LL2X::Passes {
 		function.insertBefore<Ins>(instruction, right, destination, width);
 	}
 
+	template <typename Ins, typename N>
+	static void lowerShift(Function &function, const InstructionPtr &instruction, N *node) {
+		OperandPtr left  = node->left->makeOperand();
+		OperandPtr right = node->right->makeOperand();
+		OperandPtr destination = node->operand;
+		const auto width = node->type->width();
+
+		info() << "Right: " << *right << '\n';
+
+		if (right->isRegister()) {
+			info() << "It's a register.\n";
+			VariablePtr cl = function.makePrecoloredVariable(x86_64::rcx, instruction->parent.lock());
+			cl->setType(IntType::make(8));
+			OperandPtr cl_operand = Op1(cl);
+			cl_operand->sizeForced = true;
+			function.comment(instruction, "LowerShift(" + std::string(node->location) + "): operand " +
+				right->toString() + " changed to " + cl_operand->toString());
+			function.insertBefore<Mov, false>(instruction, right, cl_operand, 8);
+			right = cl_operand;
+			info() << "New operand: " << *right << '\n';
+		} else {
+			info() << "It's not a register.\n";
+		}
+
+		function.insertBefore<Mov, false>(instruction, left, destination, width);
+		function.insertBefore<Ins>(instruction, right, destination, width);
+	}
+
 	void lowerMath(Function &function, const InstructionPtr &instruction, BasicMathNode *node) {
 		if (*node->oper == "add")
 			lowerCommutative<Add>(function, instruction, node);
@@ -121,7 +149,7 @@ namespace LL2X::Passes {
 		else if (*node->oper == "mul")
 			lowerMult(function, instruction, node);
 		else if (*node->oper == "shl")
-			lowerNoncommutative<Shl>(function, instruction, node);
+			lowerShift<Shl>(function, instruction, node);
 		else
 			throw std::runtime_error("Unknown math operation: " + *node->oper);
 	}
@@ -146,7 +174,7 @@ namespace LL2X::Passes {
 			if (0 < constant && Util::isPowerOfTwo(constant)) {
 				auto new_right = Op4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
 				function.insertBefore<Mov>(instruction, left, destination);
-				function.insertBefore<Shl>(instruction, new_right, destination);
+				function.insertShiftBefore<Shl>(instruction, new_right, destination);
 				return;
 			}
 		}
@@ -213,9 +241,9 @@ namespace LL2X::Passes {
 			} else if (type == NodeType::Shr) {
 				auto *shr = dynamic_cast<ShrNode *>(llvm->node);
 				if (shr->shrType == ShrNode::ShrType::Ashr)
-					lowerNoncommutative<Sar>(function, instruction, shr);
+					lowerShift<Sar>(function, instruction, shr);
 				else
-					lowerNoncommutative<Shr>(function, instruction, shr);
+					lowerShift<Shr>(function, instruction, shr);
 			} else
 				continue;
 

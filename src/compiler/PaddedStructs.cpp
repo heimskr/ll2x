@@ -102,23 +102,23 @@ namespace LL2X::PaddedStructs {
 				// Normally I'd use a mask and an `and` instruction, but our mask would often be larger than the 32 bits
 				// allowed in an instruction's immediate value. What we're doing here is removing the bits we skipped in
 				// the source register.
-				function.insertBefore<Shl, false>(instruction, Op4(skip), OpV(from_pack));
-				function.insertBefore<Shr, false>(instruction, Op4(skip), OpV(from_pack));
+				function.insertShiftBefore<Shl, false>(instruction, Op4(skip), OpV(from_pack), 32);
+				function.insertShiftBefore<Shr, false>(instruction, Op4(skip), OpV(from_pack), 32);
 			}
 
 			if (skip + to_take < 64) {
 				// Same applies here; instead of masking, we have to use two shifts. This time, we're removing the extra
 				// bits to the right of the data we want.
-				function.insertBefore<Shr, false>(instruction, Op4(64 - skip - to_take), OpV(from_pack));
+				function.insertShiftBefore<Shr, false>(instruction, Op4(64 - skip - to_take), OpV(from_pack), 32);
 
 				// If the output is, say, an i16 type, then we want the data to be right-aligned without the left
 				// alignment we use for structs. We can accomplish that by simply not shifting it back to the left here.
 				if (out_var->type->typeType() == TypeType::Struct)
-					function.insertBefore<Shl, false>(instruction, Op4(64 - skip - to_take), OpV(from_pack));
+					function.insertShiftBefore<Shl, false>(instruction, Op4(64 - skip - to_take), OpV(from_pack), 32);
 			}
 
 			if (skip != 0)
-				function.insertBefore<Shl, false>(instruction, Op4(skip), OpV(from_pack));
+				function.insertShiftBefore<Shl, false>(instruction, Op4(skip), OpV(from_pack), 32);
 
 			function.insertBefore<DeferredDestinationMove, false>(instruction, OpV(from_pack), OpV(out_var),
 				target_reg_index);

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "instruction/SizedOverlapping.h"
+#include "instruction/Shift.h"
 
 namespace LL2X {
-	struct Shr: SizedOverlapping {
-		using SizedOverlapping::SizedOverlapping;
+	struct Shr: Shift {
+		using Shift::Shift;
 		std::string debugExtra() override     { return makeDebug("shr");  }
 		std::string toString() const override { return makeString("shr"); }
 	};

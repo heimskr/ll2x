@@ -621,8 +621,8 @@ _cdebug: cdebug | { $$ = nullptr; };
 
 // Types
 
-type_any: type_nonvoid | LLVMTOK_VOID | type_opaque_ptr;
-type_nonvoid: LLVMTOK_INTTYPE | LLVMTOK_FLOATTYPE | type_array | type_vector | type_ptr | type_function | type_struct | LLVMTOK_STRUCTVAR | LLVMTOK_CLASSVAR | LLVMTOK_UNIONVAR;
+type_any: type_nonvoid | LLVMTOK_VOID;
+type_nonvoid: LLVMTOK_INTTYPE | LLVMTOK_FLOATTYPE | type_array | type_vector | type_ptr | type_function | type_struct | LLVMTOK_STRUCTVAR | LLVMTOK_CLASSVAR | LLVMTOK_UNIONVAR | type_opaque_ptr;
 type_nonfn: LLVMTOK_INTTYPE | LLVMTOK_FLOATTYPE | type_array | type_vector | type_ptr | type_struct | LLVMTOK_STRUCTVAR | LLVMTOK_CLASSVAR | LLVMTOK_UNIONVAR | LLVMTOK_VOID | type_opaque_ptr;
 type_array:  "[" LLVMTOK_DECIMAL "x" type_any    "]" { $$ = (new AN(llvmParser, LLVM_ARRAYTYPE,  ""))->adopt({$2, $4}); D($1, $3, $5); };
 type_vector: "<" LLVMTOK_DECIMAL "x" vector_type ">" { $$ = (new AN(llvmParser, LLVM_VECTORTYPE))->adopt({$2, $4}); D($1, $3, $5); };
@@ -923,7 +923,7 @@ i_unreachable: "unreachable" _cdebug
 
 i_freeze: result "freeze" type_any value unibangs { $$ = new FreezeNode($1, $3, $4, $5); D($2); };
 
-i_atomicrmw: result "atomicrmw" _volatile atomic_op type_ptr value "," type_any value _syncscope LLVMTOK_ORDERING _align
+i_atomicrmw: result "atomicrmw" _volatile atomic_op type_any_ptr value "," type_any value _syncscope LLVMTOK_ORDERING _align
              unibangs
              { $$ = new AtomicrmwNode($1, $3, $4, $5, $6, $8, $9, $10, $11, $12, $13); D($2, $7); };
 atomic_op: LLVMTOK_ATOMICOP | LLVMTOK_FMATH | LLVMTOK_LOGIC | "add" | "sub";

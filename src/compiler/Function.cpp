@@ -101,6 +101,7 @@
 #include "pass/ReplaceBigMov.h"
 #include "pass/ReplaceCmov.h"
 #include "pass/ReplaceConstants.h"
+#include "pass/ReplaceGlobalTemporaries.h"
 // #include "pass/ReplaceStoresAndLoads.h"
 #include "pass/SetupCalls.h"
 #include "pass/SplitBlocks.h"
@@ -1010,6 +1011,7 @@ namespace LL2X {
 		Passes::lowerSwitch(*this);
 		Passes::fixBigConstants(*this);
 		Passes::minimizeBlocks(*this);
+		Passes::replaceGlobalTemporaries(*this);
 
 		// for (BasicBlockPtr &block: blocks)
 		// 	block->extract(true);

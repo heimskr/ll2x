@@ -440,6 +440,34 @@ namespace LL2X {
 				return out;
 			}
 
+			template <typename Sh, bool Reindex = true>
+			std::shared_ptr<Sh> insertShiftBefore(const InstructionPtr &anchor, OperandPtr shift_by,
+			                                         const OperandPtr &source, const OperandPtr &destination,
+			                                         int width = -1) {
+				if (width == -1)
+					width = destination->bitWidth;
+
+				if (shift_by->isRegister()) {
+					VariablePtr cl = makePrecoloredVariable(x86_64::rcx, anchor->parent.lock());
+					cl->setType(IntType::make(8));
+					OperandPtr cl_operand = Op1(cl);
+					cl_operand->sizeForced = true;
+					insertBefore<Mov, false>(anchor, shift_by, cl_operand, 8);
+					shift_by = cl_operand;
+				}
+
+				if (*source != *destination)
+					insertBefore<Mov, false>(anchor, source, destination, width);
+
+				return insertBefore<Sh, Reindex>(anchor, shift_by, destination, width);
+			}
+
+			template <typename Sh, bool Reindex = true>
+			std::shared_ptr<Sh> insertShiftBefore(const InstructionPtr &anchor, const OperandPtr &shift_by,
+			                                         const OperandPtr &destination, int width = -1) {
+				return insertShiftBefore<Sh>(anchor, shift_by, destination, destination, width);
+			}
+
 		private:
 
 			size_t precoloredCount = 0;

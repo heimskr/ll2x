@@ -57,9 +57,11 @@ namespace LL2X::Passes {
 		}
 
 		auto int_type = std::dynamic_pointer_cast<IntType>(node->getType());
-		if (!int_type && node->getType()->typeType() != TypeType::Pointer) {
-			node->debug();
-			throw std::invalid_argument("icmp instructions must have an integer or pointer type");
+		if (!int_type) {
+			if (TypeType tt = node->getType()->typeType(); tt != TypeType::Pointer && tt != TypeType::OpaquePointer) {
+				node->debug();
+				throw std::invalid_argument("icmp instructions must have an integer or pointer type");
+			}
 		}
 
 		VariablePtr left = dynamic_cast<LocalValue *>(value1.get())->variable;
