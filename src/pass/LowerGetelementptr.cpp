@@ -7,6 +7,7 @@
 #include "compiler/Instruction.h"
 #include "compiler/LLVMInstruction.h"
 #include "instruction/Add.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "parser/StructNode.h"
 #include "pass/LowerGetelementptr.h"
@@ -56,14 +57,17 @@ namespace LL2X::Passes {
 			} else {
 				auto *global = dynamic_cast<GlobalValue *>(constant_value.get());
 				pointer = OpV(function.newVariable(constant_type));
-				function.insertBefore<Mov>(instruction, Op8(*global->name), pointer);
+				function.insertBefore<Lea>(instruction, Op8(*global->name, true, false), pointer);
 			}
 
-			const TypeType tt = constant_type->typeType();
+			// const TypeType tt = constant_type->typeType();
+			const TypeType tt = node->type->typeType();
 			const bool one_pvar = node->indices.size() == 1 && node->indices.at(0).isPvar;
 			const bool any_pvar = anyPvarInIndices(node->indices);
 			const bool dynamic_index = node->indices.size() == 2 && !node->indices[0].isPvar && node->indices[1].isPvar;
 			const std::string prefix = "LowerGetelementptr(" + std::string(node->location) + "): ";
+
+			function.comment(instruction, "tt = " + std::string(type_map.at(tt)) + ", type = " + node->type->toString());
 
 			if (tt == TypeType::Struct && any_pvar) {
 				// If there are any pvars in the index list, we can't combine all the indices into a single constant and
