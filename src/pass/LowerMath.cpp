@@ -120,10 +120,7 @@ namespace LL2X::Passes {
 		OperandPtr destination = node->operand;
 		const auto width = node->type->width();
 
-		info() << "Right: " << *right << '\n';
-
 		if (right->isRegister()) {
-			info() << "It's a register.\n";
 			VariablePtr cl = function.makePrecoloredVariable(x86_64::rcx, instruction->parent.lock());
 			cl->setType(IntType::make(8));
 			OperandPtr cl_operand = Op1(cl);
@@ -132,9 +129,6 @@ namespace LL2X::Passes {
 				right->toString() + " changed to " + cl_operand->toString());
 			function.insertBefore<Mov, false>(instruction, right, cl_operand, 8);
 			right = cl_operand;
-			info() << "New operand: " << *right << '\n';
-		} else {
-			info() << "It's not a register.\n";
 		}
 
 		function.insertBefore<Mov, false>(instruction, left, destination, width);
@@ -235,9 +229,9 @@ namespace LL2X::Passes {
 			} else if (type == NodeType::Rem) {
 				auto *rem = dynamic_cast<RemNode *>(llvm->node);
 				if (rem->remType == RemNode::RemType::Srem)
-					lowerDiv(function, instruction, rem, true, false);
-				else
 					lowerDiv(function, instruction, rem, true, true);
+				else
+					lowerDiv(function, instruction, rem, true, false);
 			} else if (type == NodeType::Shr) {
 				auto *shr = dynamic_cast<ShrNode *>(llvm->node);
 				if (shr->shrType == ShrNode::ShrType::Ashr)

@@ -12,3 +12,5 @@ a.out
 /include/yyparse.h
 /src/parser/yyparse*
 /src/parser/yylex*
+
+/csmith1
