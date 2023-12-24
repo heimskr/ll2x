@@ -49,7 +49,8 @@ $(LLVMPARSECPP:.cpp=.o): $(LLVMPARSECPP) $(LLVMPARSEHDR)
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
 test: $(OUTPUT)
-	./$(OUTPUT) ll/diriter3.ll > diriter3.s && clang diriter3.s -lstdc++ && ./a.out
+	# ./$(OUTPUT) ll/diriter3.ll > diriter3.s && clang diriter3.s -lstdc++ && ./a.out
+	./$(OUTPUT) ll/virtual.ll > virtual.s && clang virtual.s -lstdc++ && ./a.out
 
 clean:
 	rm -f $(OUTPUT) src/*.o src/**/*.o graph_*.png \

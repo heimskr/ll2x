@@ -25,8 +25,13 @@ namespace LL2X::Getelementptr {
 		indices.pop_front();
 		switch (type->typeType()) {
 			case TypeType::Pointer:
+			case TypeType::OpaquePointer:
 			case TypeType::Array: {
-				TypePtr subtype = dynamic_cast<HasSubtype *>(type.get())->subtype;
+				TypePtr subtype;
+				if (type->typeType() == TypeType::OpaquePointer)
+					subtype = std::make_shared<OpaquePointerType>();
+				else
+					subtype = dynamic_cast<HasSubtype *>(type.get())->subtype;
 				return front * subtype->width() + compute_mutating(subtype, indices, out_type);
 			}
 			case TypeType::Struct: {
@@ -116,6 +121,7 @@ namespace LL2X::Getelementptr {
 
 	int64_t compute(const GetelementptrValue *value, TypePtr *out_type) {
 		std::list<int64_t> indices = getLongIndices(*value);
+		warn() << std::string(const_cast<GetelementptrValue &>(*value)) << '\n';
 		return compute_mutating(value->ptrType, indices, out_type);
 	}
 

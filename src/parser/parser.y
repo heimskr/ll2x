@@ -523,16 +523,17 @@ dilocation_item: "line"      ":" LLVMTOK_DECIMAL { $$ = $1->adopt($3); D($2); }
 dilocation_list: dilocation_list "," dilocation_item { $$ = $1->adopt($3); D($2); }
          | dilocation_item { $$ = (new AN(llvmParser, LLVM_DILOCATION_LIST))->adopt($1); };
 
-digv_item: "name"         ":" LLVMTOK_STRING  { $$ = $1->adopt($3); D($2); }
-         | "scope"        ":" LLVMTOK_INTBANG { $$ = $1->adopt($3); D($2); }
-         | "file"         ":" LLVMTOK_INTBANG { $$ = $1->adopt($3); D($2); }
-         | "line"         ":" LLVMTOK_DECIMAL { $$ = $1->adopt($3); D($2); }
-         | "type"         ":" LLVMTOK_INTBANG { $$ = $1->adopt($3); D($2); }
-         | "isLocal"      ":" LLVMTOK_BOOL    { $$ = $1->adopt($3); D($2); }
-         | "isDefinition" ":" LLVMTOK_BOOL    { $$ = $1->adopt($3); D($2); }
-         | "align"        ":" LLVMTOK_DECIMAL { $$ = $1->adopt($3); D($2); }
-         | "linkageName"  ":" LLVMTOK_STRING  { $$ = $1->adopt($3); D($2); }
-         | "declaration"  ":" intnullbang     { $$ = $1->adopt($3); D($2); };
+digv_item: "name"         ":" LLVMTOK_STRING  { $1->adopt($3); D($2); }
+         | "scope"        ":" LLVMTOK_INTBANG { $1->adopt($3); D($2); }
+         | "scope"        ":" "null"          { $1->adopt($3); D($2); }
+         | "file"         ":" LLVMTOK_INTBANG { $1->adopt($3); D($2); }
+         | "line"         ":" LLVMTOK_DECIMAL { $1->adopt($3); D($2); }
+         | "type"         ":" LLVMTOK_INTBANG { $1->adopt($3); D($2); }
+         | "isLocal"      ":" LLVMTOK_BOOL    { $1->adopt($3); D($2); }
+         | "isDefinition" ":" LLVMTOK_BOOL    { $1->adopt($3); D($2); }
+         | "align"        ":" LLVMTOK_DECIMAL { $1->adopt($3); D($2); }
+         | "linkageName"  ":" LLVMTOK_STRING  { $1->adopt($3); D($2); }
+         | "declaration"  ":" intnullbang     { $1->adopt($3); D($2); };
 digv_list: digv_list "," digv_item { $$ = $1->adopt($3); D($2); }
          | digv_item { $$ = (new AN(llvmParser, LLVM_DIGV_LIST))->adopt($1); };
 
@@ -628,6 +629,7 @@ type_vector: "<" LLVMTOK_DECIMAL "x" vector_type ">" { $$ = (new AN(llvmParser, 
 vector_type: LLVMTOK_INTTYPE | type_ptr | LLVMTOK_FLOATTYPE;
 type_ptr: type_any "*" { $$ = (new AN(llvmParser, LLVM_POINTERTYPE, "*"))->adopt($1); D($2); };
 type_opaque_ptr: "ptr" { $$ = (new AN(llvmParser, LLVM_OPAQUEPTR, "ptr"))->locate($1); D($1); };
+type_any_ptr: type_ptr | type_opaque_ptr;
 type_function: type_any "(" types extra_ellipsis ")" { $$ = (new AN(llvmParser, LLVM_FUNCTIONTYPE))->adopt({$1, $3, $4}); D($2, $5); }
              | type_any "("            _ellipsis ")" { $$ = (new AN(llvmParser, LLVM_FUNCTIONTYPE))->adopt({$1, $3});     D($2, $4); };
 type_struct: "{" types "}"         { $$ = new StructNode(StructShape::Default, $2); D($1, $3);         }
@@ -952,7 +954,7 @@ conversion_expr: LLVMTOK_CONV_OP constant "to" type_any         { $$ = (new AN(l
 icmp_expr: "icmp" LLVMTOK_ICMP_COND "(" constant "," constant ")" { $$ = $1->adopt({$2, $4, $6}); D($3, $5, $7); };
 logic_expr: LLVMTOK_LOGIC "(" constant "," constant ")" { $$ = $1->adopt({$3, $5}); D($2, $4, $6); };
 
-getelementptr_expr: "getelementptr" _inbounds "(" type_any "," type_ptr gepexpr_operand decimal_pairs ")"
+getelementptr_expr: "getelementptr" _inbounds "(" type_any "," type_any_ptr gepexpr_operand decimal_pairs ")"
                     { $1->adopt({$4, $6, $7, $8, $2}); D($3, $5, $9); };
 _inbounds: LLVMTOK_INBOUNDS | { $$ = nullptr; };
 decimal_pairs: decimal_pairs "," _inrange LLVMTOK_INTTYPE LLVMTOK_DECIMAL { $1->adopt($2->adopt({$4, $5, $3})); }
