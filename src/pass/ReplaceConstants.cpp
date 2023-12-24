@@ -43,7 +43,7 @@ namespace LL2X::Passes {
 							warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 						TypePtr ptr_type = std::make_shared<PointerType>(out_type);
 						VariablePtr new_var = function.newVariable(ptr_type, instruction->parent.lock());
-						auto mov_addr = std::make_shared<Mov>(Op8(*gep_global->name), OpV(new_var));
+						auto mov_addr = std::make_shared<Mov>(Op8(*gep_global->name, true, false), OpV(new_var));
 						function.insertBefore(instruction, mov_addr)->setDebug(*llvm)->extract();
 
 						if (offset != 0)

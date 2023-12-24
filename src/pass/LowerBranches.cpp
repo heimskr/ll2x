@@ -37,7 +37,7 @@ namespace LL2X::Passes {
 		if (condition_type == ValueType::Bool) {
 			const BoolValue *boolval = dynamic_cast<BoolValue *>(br->condition->value.get());
 			const std::string transformed = function.transformLabel(boolval->value? *br->ifTrue : *br->ifFalse);
-			function.insertBefore<Jmp>(instruction, Op8(transformed, false));
+			function.insertBefore<Jmp>(instruction, Op8(transformed, false, false));
 		} else if (condition_type == ValueType::Local || condition_type == ValueType::Operand) {
 			TypePtr type = br->condition->type;
 			OperandPtr condition;
@@ -48,9 +48,9 @@ namespace LL2X::Passes {
 				condition = dynamic_cast<OperandValue *>(br->condition->value.get())->operand;
 
 			function.insertBefore<Cmp, false>(instruction, condition, Op4(0), type->width());
-			function.insertBefore<Jmp, false>(instruction, Op8(function.transformLabel(*br->ifTrue), false),
+			function.insertBefore<Jmp, false>(instruction, Op8(function.transformLabel(*br->ifTrue), false, false),
 				x86_64::Condition::IfNotEqual);
-			function.insertBefore<Jmp, false>(instruction, Op8(function.transformLabel(*br->ifFalse), false));
+			function.insertBefore<Jmp, false>(instruction, Op8(function.transformLabel(*br->ifFalse), false, false));
 		} else {
 			br->debug();
 			throw std::runtime_error("Expected a bool, pvar or operand for the condition of a conditional jump, got " +
@@ -59,6 +59,6 @@ namespace LL2X::Passes {
 	}
 
 	void lowerBranch(Function &function, InstructionPtr &instruction, BrUncondNode *br) {
-		function.insertBefore<Jmp>(instruction, Op8(function.transformLabel(*br->destination), false));
+		function.insertBefore<Jmp>(instruction, Op8(function.transformLabel(*br->destination), false, false));
 	}
 }

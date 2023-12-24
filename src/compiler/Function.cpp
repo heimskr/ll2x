@@ -1931,7 +1931,8 @@ namespace LL2X {
 				VariablePtr new_var = newVariable(out_type);
 				OperandPtr operand = OpV(new_var);
 
-				insertBefore<Mov>(instruction, Op4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name), operand);
+				insertBefore<Mov>(instruction, Op4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name, true,
+					false), operand);
 
 				if (offset != 0)
 					insertBefore<Add>(instruction, Op4(offset), operand, 64);
@@ -1974,7 +1975,7 @@ namespace LL2X {
 			case ValueType::Global: {
 				auto *global = dynamic_cast<GlobalValue *>(value.get());
 				new_var = newVariable(hint? hint : GlobalTemporaryType::make(global->name));
-				mov = std::make_shared<Mov>(Op4(*global->name), OpV(new_var));
+				mov = std::make_shared<Mov>(Op4(*global->name, true, false), OpV(new_var));
 				break;
 			}
 			case ValueType::Int:

@@ -38,6 +38,7 @@ namespace LL2X {
 
 		Number originalConstant = 0;
 		bool useRip = false;
+		bool useGotpcrel = false;
 		bool labelNeedsTransformation = false;
 		bool sizeForced = false;
 
@@ -64,9 +65,9 @@ namespace LL2X {
 		Operand(x86_64::Width width_, Number number, bool):
 			mode(Mode::Direct), width(width_), bitWidth(x86_64::getWidth(width_)), displacement(number) {}
 
-		Operand(x86_64::Width width_, std::string label_, bool use_rip = true):
+		Operand(x86_64::Width width_, std::string label_, bool use_rip, bool use_gotpcrel):
 			mode(Mode::Label), width(width_), bitWidth(x86_64::getWidth(width_)), label(std::move(label_)),
-			useRip(use_rip) {}
+			useRip(use_rip), useGotpcrel(use_gotpcrel) {}
 
 		Operand(x86_64::Width width_, VariablePtr reg_):
 			mode(Mode::Register), width(width_), bitWidth(x86_64::getWidth(width_)), reg(reg_) {}
@@ -185,7 +186,7 @@ namespace LL2X {
 	}
 
 	inline OperandPtr OpL(const std::string &label) {
-		auto out = Op8(label, false);
+		auto out = Op8(label, false, false);
 		out->labelNeedsTransformation = true;
 		return out;
 	}

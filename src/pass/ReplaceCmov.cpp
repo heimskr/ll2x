@@ -21,7 +21,7 @@ namespace LL2X::Passes {
 				continue;
 
 			const std::string label = base + std::to_string(to_remove.size());
-			function.insertBefore<Jmp, false>(instruction, Op8(label, false), x86_64::invert(cmov->condition));
+			function.insertBefore<Jmp, false>(instruction, Op8(label, false, false), x86_64::invert(cmov->condition));
 			function.insertBefore<Mov, false>(instruction, cmov->source, cmov->destination, cmov->size);
 			function.insertBefore<Label>(instruction, label);
 

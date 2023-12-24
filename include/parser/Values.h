@@ -169,7 +169,7 @@ namespace LL2X {
 		operator std::string() override { return "\e[32m@" + *name + "\e[39m"; }
 		std::string toString() const override { return "@" + *name; }
 		std::string compile() const override { return *name; }
-		OperandPtr makeOperand() const override { return Op8(*name, true); }
+		OperandPtr makeOperand() const override { return Op8(*name, true, false); }
 	};
 
 	struct GetelementptrValue: Value {
