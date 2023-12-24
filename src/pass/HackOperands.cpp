@@ -25,6 +25,7 @@ namespace LL2X::Passes {
 
 			if (width == 0) {
 				// TODO!: support width == 0
+				function.comment(instruction, "HackOperands: width is 0");
 				continue;
 			}
 

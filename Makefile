@@ -52,6 +52,7 @@ test: $(OUTPUT)
 	# ./$(OUTPUT) ll/diriter3.ll > diriter3.s && clang -g diriter3.s -lstdc++ && ./a.out
 	# ./$(OUTPUT) ll/virtual.ll > virtual.s && clang -g virtual.s -lstdc++ && ./a.out
 	./$(OUTPUT) ll/csmith1.ll > csmith1.s && clang -g csmith1.s -lstdc++ && ./a.out
+	# ./$(OUTPUT) ll/yarpgen1.ll > yarpgen1.s && clang -g yarpgen1.s -lstdc++ && ./a.out
 
 clean:
 	rm -f $(OUTPUT) src/*.o src/**/*.o graph_*.png \

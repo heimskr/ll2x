@@ -10,6 +10,15 @@ namespace LL2X {
 		return lockPrefix + getMnemonic() + " " + source->toString() + ", " + destination->toString();
 	}
 
+	bool Movsx::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+		if (source->similarTo(*to_replace)) {
+			source = replace_with;
+			return true;
+		}
+
+		return false;
+	}
+
 	std::string Movsx::getMnemonic() const {
 		std::string mnemonic = "movs";
 

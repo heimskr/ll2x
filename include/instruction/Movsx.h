@@ -9,6 +9,7 @@ namespace LL2X {
 
 		std::string debugExtra() override;
 		std::string toString() const override;
+		bool replaceSimilarOperand(const OperandPtr &, const OperandPtr &) override;
 
 		std::string getMnemonic() const;
 	};

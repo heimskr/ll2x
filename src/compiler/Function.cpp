@@ -378,8 +378,15 @@ namespace LL2X {
 
 			if (should_insert) {
 				assert(variable);
+
+				if (!definition->replaceSimilarOperand(OpV(variable), Op8(-location.offset, pcRbp))) {
+					// If we couldn't replace the operand (movsx, for example, rejects attempts to change its
+					// destination), we need to cancel the spill.
+					return false;
+				}
+
 				insertBefore<DummyDefiner>(definition, OpV(variable));
-				definition->replaceSimilarOperand(OpV(variable), Op8(-location.offset, pcRbp));
+
 				definition->extract(true);
 
 				// Hopefully the blocks are minimized at this point.
