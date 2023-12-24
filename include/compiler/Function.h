@@ -488,9 +488,10 @@ namespace LL2X {
 					return;
 
 				if (Util::isPowerOfTwo(value)) {
-					auto shl = std::make_shared<Shl>(Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
-						operand);
-					insertBefore(anchor, shl, reindex);
+					// auto shl = std::make_shared<Shl>(Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
+					// 	operand);
+					// insertBefore(anchor, shl, reindex);
+					auto shl = insertShiftBefore<Shl>(anchor, Op4(std::bit_width(static_cast<uint64_t>(value)) - 1), operand);
 					if (debug != -1)
 						shl->setDebug(debug, false);
 					shl->extract(false);
@@ -498,9 +499,16 @@ namespace LL2X {
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
 					auto rax = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
+
 					auto mov_in = std::make_shared<Mov>(operand, rax);
-					auto mul = std::make_shared<I>(Op4(value));
+
+					auto mul_var = newVariable(IntType::make(operand->bitWidth));
+					auto mul_operand = OpV(mul_var);
+					auto mov_mulvar = std::make_shared<Mov>(Op4(value), mul_operand);
+					auto mul = std::make_shared<I>(mul_operand);
+
 					auto mov_out = std::make_shared<Mov>(rax, operand);
+
 					insertBefore(anchor, mov_in, reindex);
 					insertBefore(anchor, mul, reindex);
 					insertBefore(anchor, mov_out, reindex);
