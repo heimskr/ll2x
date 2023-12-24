@@ -30,7 +30,7 @@ namespace LL2X::Passes {
 			BasicBlockPtr block = instruction->parent.lock();
 			auto *global = dynamic_cast<GlobalValue *>(call->name.get());
 			const std::string &name = *global->name;
-			if (name.substr(0, sizeof("llvm.memcpy.") - 1) != "llvm.memcpy.") {
+			if (name.find("llvm.memcpy.") == std::string::npos) {
 				++iter;
 				continue;
 			}
@@ -54,7 +54,7 @@ namespace LL2X::Passes {
 		}
 
 		if (!to_remove.empty()) {
-			for (InstructionPtr &instruction: to_remove)
+			for (const InstructionPtr &instruction: to_remove)
 				function.remove(instruction);
 			function.reindexInstructions();
 		}
