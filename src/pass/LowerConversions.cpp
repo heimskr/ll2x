@@ -62,8 +62,13 @@ namespace LL2X::Passes {
 		if (node->operand->isRegister())
 			node->operand->reg->setType(node->to);
 		function.comment(instruction, "LowerBasicConversion(" + std::string(node->location) + "): " + source->toString()
-			+ " -> " + node->operand->toString());
+			+ " (" + std::to_string(source->bitWidth) + ") -> " + node->operand->toString() + " (" +
+			std::to_string(node->operand->bitWidth) + ')');
 		function.insertBefore<Mov>(instruction, source, node->operand);
+		if (source->bitWidth < 32 && source->bitWidth < node->operand->bitWidth) {
+			function.comment(instruction, "Truncate value to " + std::to_string(source->bitWidth) + " bits");
+			function.insertBefore<And>(instruction, Op4((1 << source->bitWidth) - 1), node->operand);
+		}
 	}
 
 	void lowerTrunc(Function &function, InstructionPtr &instruction, ConversionNode *conversion) {

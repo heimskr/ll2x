@@ -22,14 +22,14 @@ union U0 {
         if (this == &val) {
             return *this;
         }
-        memcpy((union U0*)this, (const union U0*)(&val), sizeof(union U0)); 
+        memcpy((union U0*)this, (const union U0*)(&val), sizeof(union U0));
         return *this;
     }
     volatile union U0& operator=(const volatile union U0& val) volatile {
         if (this == &val) {
             return *this;
         }
-        memcpy((union U0*)this, (const union U0*)(&val), sizeof(union U0)); 
+        memcpy((union U0*)this, (const union U0*)(&val), sizeof(union U0));
         return *this;
     }
 };
@@ -43,14 +43,14 @@ union U1 {
         if (this == &val) {
             return *this;
         }
-        memcpy((union U1*)this, (const union U1*)(&val), sizeof(union U1)); 
+        memcpy((union U1*)this, (const union U1*)(&val), sizeof(union U1));
         return *this;
     }
     volatile union U1& operator=(const volatile union U1& val) volatile {
         if (this == &val) {
             return *this;
         }
-        memcpy((union U1*)this, (const union U1*)(&val), sizeof(union U1)); 
+        memcpy((union U1*)this, (const union U1*)(&val), sizeof(union U1));
         return *this;
     }
 };
@@ -65,14 +65,14 @@ union U2 {
         if (this == &val) {
             return *this;
         }
-        memcpy((union U2*)this, (const union U2*)(&val), sizeof(union U2)); 
+        memcpy((union U2*)this, (const union U2*)(&val), sizeof(union U2));
         return *this;
     }
     volatile union U2& operator=(const volatile union U2& val) volatile {
         if (this == &val) {
             return *this;
         }
-        memcpy((union U2*)this, (const union U2*)(&val), sizeof(union U2)); 
+        memcpy((union U2*)this, (const union U2*)(&val), sizeof(union U2));
         return *this;
     }
 };
@@ -283,7 +283,7 @@ static union U0  func_57(uint64_t  p_58, int8_t  p_59, const uint32_t  p_60, int
 
 /* --- FUNCTIONS --- */
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_2 g_5 g_139 g_140 g_1931 g_2025 g_2324 g_1946 g_1680 g_1681 g_1682 g_448 g_449 g_1899 g_422 g_1944 g_1922 g_1892 g_150 g_149 g_66.f3 g_91 g_124 g_66 g_366 g_367 g_246 g_367.f0 g_666 g_693 g_695 g_2354 g_106 g_2364 g_1910 g_445.f0 g_1907 g_1487 g_1943 g_294 g_1937 g_2382 g_1905 g_337 g_338 g_1117 g_1894 g_2199.f0 g_1904 g_1921 g_837.f1 g_1898 g_1885 g_1948 g_2357 g_1934 g_2423 g_1928 g_1945 g_653 g_654 g_655 g_2424 g_2425 g_2426 g_2427 g_2024.f0 g_1932 g_149.f0 g_2504 g_1930 g_2519 g_2505 g_259 g_2599 g_453.f0 g_452 g_453 g_313
  * writes: g_2 g_5 g_744.f1 g_1221 g_837.f1 g_66.f3 g_106 g_107 g_124 g_120 g_140 g_365 g_245 g_422 g_666 g_695 g_2357 g_338 g_1487 g_259 g_149 g_1904 g_1921 g_1898 g_1944 g_1934 g_693.f0 g_744.f3 g_1928 g_2423 g_655 g_1939 g_2504 g_313.f1 g_837.f3 g_2324
  */
@@ -519,7 +519,7 @@ static union U4  func_1(void)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_744.f3 g_124 g_1058 g_744 g_232 g_422 g_139 g_1915 g_1680 g_1681 g_1554 g_448 g_449 g_1904 g_1682 g_1898 g_837.f2 g_1221 g_1942 g_1900 g_140 g_337 g_338 g_667 g_1356 g_2025
  * writes: g_744.f3 g_124 g_1356 g_120 g_149.f1 g_422 g_140 g_1221 g_203 g_1529 g_837.f2 g_1554 g_117 g_668 g_313.f1 g_245 g_449 g_2024.f3
  */
@@ -734,7 +734,7 @@ static uint64_t  func_19(int32_t  p_20, uint8_t  p_21)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_107 g_422 g_313.f0 g_124 g_337 g_338 g_448 g_449 g_232 g_294 g_5 g_648 g_1221 g_693.f1 g_149.f0 g_117 g_247 g_132.f0 g_150 g_149 g_651 g_136 g_137 g_1331 g_1335 g_654 g_139 g_140 g_445.f0 g_119 g_1356 g_695 g_106 g_91 g_1357.f0 g_1487 g_135 g_653
  * writes: g_107 g_203 g_837.f2 g_117 g_313.f0 g_124 g_449 g_245 g_1221 g_837.f0 g_1331 g_655 g_453.f1 g_106 g_132.f0 g_651 g_648 g_149.f1 g_66.f2 g_91
  */
@@ -976,7 +976,7 @@ static const int8_t  func_25(int16_t  p_26, union U4  p_27)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_648 g_448 g_449 g_245 g_119 g_150 g_149 g_337 g_338 g_107 g_651 g_139 g_5 g_2 g_149.f0 g_1114 g_695 g_120 g_227 g_228 g_140 g_124 g_837.f0 g_693.f1 g_66.f2 g_455.f1
  * writes: g_837.f0 g_648 g_1058 g_693.f1 g_449 g_149 g_140 g_66.f2 g_455.f1 g_124
  */
@@ -1083,7 +1083,7 @@ lbl_1087:
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_693.f0 g_695 g_66.f3 g_693.f1
  * writes: g_693.f0 g_695 g_66.f3 g_693.f1
  */
@@ -1166,7 +1166,7 @@ static union U4  func_37(union U1  p_38)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_5 g_2 g_66.f3 g_91 g_124 g_120 g_139 g_140 g_66 g_422 g_366 g_367 g_448 g_449 g_246 g_367.f0 g_666 g_693 g_695
  * writes: g_66.f3 g_106 g_107 g_124 g_120 g_140 g_365 g_245 g_422 g_666 g_695
  */
@@ -1195,7 +1195,7 @@ static union U1  func_39(int32_t  p_40, union U0  p_41, uint32_t  p_42)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_140 g_5
  * writes:
  */
@@ -1206,7 +1206,7 @@ static int32_t  func_47(int32_t  p_48, uint32_t  p_49, union U4  p_50, uint16_t 
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_422 g_366 g_367 g_448 g_449 g_246 g_367.f0 g_666
  * writes: g_365 g_245 g_422 g_666
  */
@@ -1253,7 +1253,7 @@ static int32_t  func_53(union U1  p_54)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads :
  * writes:
  */
@@ -1265,7 +1265,7 @@ static union U1  func_55(union U0  p_56)
 
 
 /* ------------------------------------------ */
-/* 
+/*
  * reads : g_66.f3 g_2 g_5 g_91 g_124 g_120 g_139 g_140 g_66
  * writes: g_66.f3 g_106 g_107 g_124 g_120 g_140
  */
@@ -1363,11 +1363,12 @@ static union U0  func_57(uint64_t  p_58, int8_t  p_59, const uint32_t  p_60, int
 int main (int argc, char* argv[])
 {
     int i, j, k;
-    int print_hash_value = 0;
+    int print_hash_value = 1;
     if (argc == 2 && strcmp(argv[1], "1") == 0) print_hash_value = 1;
     platform_main_begin();
     crc32_gentab();
-    func_1();
+    auto f1 = func_1();
+    printf("func_1() = %d\n", f1.f1);
     transparent_crc(g_2, "g_2", print_hash_value);
     transparent_crc(g_5, "g_5", print_hash_value);
     transparent_crc(g_91, "g_91", print_hash_value);

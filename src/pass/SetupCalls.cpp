@@ -20,6 +20,8 @@
 #include "util/Timer.h"
 #include "util/Util.h"
 
+#include <cassert>
+
 // TODO: implement floating point support
 // TODO: passing structs
 
@@ -94,11 +96,14 @@ namespace LL2X::Passes {
 
 			if (global_name != nullptr) {
 				global_uptr = std::make_unique<GlobalValue>(*global_name);
-				const auto &name = *global_name->name;
+				const std::string &name = *global_name->name;
+
 				if (function.parent.uselessFunctions.contains(name)) {
+					function.comment(instruction, "Discarded useless call to " + name);
 					to_remove.push_back(instruction);
 					continue;
 				}
+
 				if (function.parent.simpleFunctions.contains(name)) {
 					bool ellipsis = false;
 					const int64_t simple_index = function.parent.simpleFunctions.at(name);
@@ -450,6 +455,22 @@ namespace LL2X::Passes {
 		return 0;
 	}
 
+	static void constrain(Function &function, const InstructionPtr &anchor, const OperandPtr &operand) {
+		if (operand->bitWidth > 16)
+			return;
+
+		function.comment(anchor, "Constraining " + std::to_string(operand->bitWidth) + "-bit operand");
+
+		if (operand->bitWidth == 16) {
+			function.insertBefore<And>(anchor, Op4(0xffff), operand);
+		} else if (operand->bitWidth == 8) {
+			function.insertBefore<And>(anchor, Op4(0xff), operand);
+		} else {
+			assert(operand->bitWidth == 1);
+			function.insertBefore<And>(anchor, Op4(0x1), operand);
+		}
+	}
+
 	InstructionPtr setupCallValue(Function &function, const OperandPtr &new_operand, const InstructionPtr &instruction,
 	                              const ConstantPtr &constant, const ClobberMap &clobbers) {
 		if (constant->conversionSource) {
@@ -464,7 +485,10 @@ namespace LL2X::Passes {
 		signext = signext == 64? 0 : signext;
 		zeroext = zeroext == 64? 0 : zeroext;
 
-		auto insert_signext = [&] {
+		auto insert_signext = [&](int ext = -1) {
+			if (ext == -1)
+				ext = zeroext;
+
 			switch (signext) {
 				case  0:
 				case 64:
@@ -483,12 +507,15 @@ namespace LL2X::Passes {
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';
-					throw std::runtime_error("Invalid sign extension in pushCallValue: " + std::to_string(signext));
+					throw std::runtime_error("Invalid sign extension in pushCallValue: " + std::to_string(ext));
 			}
 		};
 
-		auto insert_zeroext = [&] {
-			switch (zeroext) {
+		auto insert_zeroext = [&](int ext = -1) {
+			if (ext == -1)
+				ext = zeroext;
+
+			switch (ext) {
 				case  0:
 				case 64:
 					return;
@@ -506,7 +533,7 @@ namespace LL2X::Passes {
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';
-					throw std::runtime_error("Invalid zero extension in pushCallValue: " + std::to_string(zeroext));
+					throw std::runtime_error("Invalid zero extension in pushCallValue: " + std::to_string(ext));
 			}
 		};
 
@@ -516,6 +543,7 @@ namespace LL2X::Passes {
 		};
 
 		ValueType value_type = constant->value->valueType();
+
 		if (value_type == ValueType::Local) {
 			// If it's a variable, move it into the argument register.
 			// Moving argument into argument registers can be problematic (e.g., movq %rsi, %rdx, which would take place
@@ -632,11 +660,14 @@ namespace LL2X::Passes {
 					auto semi = clobbers.at(reg)->makeSemi(new_operand);
 					semi->source = operand;
 					out = function.insertBefore(instruction, semi);
+					constrain(function, instruction, operand);
 				}
 			}
 
-			if (!out)
+			if (!out) {
 				out = function.insertBefore<Mov>(instruction, operand, new_operand);
+				constrain(function, instruction, operand);
+			}
 
 			out->setDebug(*instruction, true);
 			insert_exts();

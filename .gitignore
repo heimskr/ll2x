@@ -14,3 +14,4 @@ a.out
 /src/parser/yylex*
 
 /csmith1
+/csmith1_clang

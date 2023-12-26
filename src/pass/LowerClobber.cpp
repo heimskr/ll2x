@@ -56,6 +56,7 @@ namespace LL2X::Passes {
 				} else {
 					for (const auto &semi: clobber->semis) {
 						const std::string reg_name = x86_64::registerName(reg);
+						// TODO!(seminar): investigate widths
 						function.comment(semi, "Semiunclobber %" + reg_name + " into " + semi->destination->toString());
 						OperandPtr precolored = OpV(function.makePrecoloredVariable(reg, instruction->parent.lock()));
 						function.insertBefore<Mov, false>(semi, precolored, semi->destination);

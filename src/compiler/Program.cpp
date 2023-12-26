@@ -4,7 +4,7 @@
 #include <thread>
 
 // #define COMPILE_MULTITHREADED
-// #define SINGLE_FUNCTION "@_ZL6func_1v"
+// #define SINGLE_FUNCTION "@main"
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"
