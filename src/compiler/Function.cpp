@@ -1291,7 +1291,7 @@ namespace LL2X {
 		return blocks.front();
 	}
 
-	bool Function::isLiveInUsingMergeSet(const Node::Map &merges, Node *block, const VariablePtr &var) {
+	bool Function::isLiveInUsingMergeSet(const Node::NMap &merges, Node *block, const VariablePtr &var) {
 		if (!djGraph.has_value())
 			throw std::runtime_error("Can't compute liveness with merge sets when the DJ graph is empty");
 
@@ -1300,11 +1300,11 @@ namespace LL2X {
 		// 	return false;
 		// }
 
-		const Node::Set &merge = merges.at(block);
+		const Node::NSet &merge = merges.at(block);
 		const auto &defs = var->definingBlocks;
 
 		// M^r(n) = M(n) ∪ {n}
-		Node::Set m_r(merge.begin(), merge.end());
+		Node::NSet m_r(merge.begin(), merge.end());
 		m_r.insert(block);
 
 		// for t ∈ uses(a)
@@ -1335,7 +1335,7 @@ namespace LL2X {
 		return false;
 	}
 
-	bool Function::isLiveOutUsingMergeSet(const Node::Map &merges, Node *block, const VariablePtr &var) {
+	bool Function::isLiveOutUsingMergeSet(const Node::NMap &merges, Node *block, const VariablePtr &var) {
 		if (!djGraph.has_value())
 			throw std::runtime_error("Can't compute liveness with merge sets when the DJ graph is empty");
 
@@ -1357,14 +1357,14 @@ namespace LL2X {
 		}
 
 		// M_s(n) = ∅
-		Node::Set m_s;
+		Node::NSet m_s;
 
 		// for w ∈ succ(n)
 		for (Node *successor: block->out()) {
 			// M_s(n) = M_s(n) ∪ M^r(w)
 			// The authors define M^r(n) as {M(n) ∪ {n}}.
 			m_s.insert(successor);
-			const Node::Set &m_r = merges.at(successor);
+			const auto &m_r = merges.at(successor);
 			m_s.insert(m_r.begin(), m_r.end());
 		}
 

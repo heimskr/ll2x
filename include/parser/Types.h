@@ -52,14 +52,14 @@ namespace LL2X {
 		TypeType typeType() const override { return TypeType::Int; }
 		/** The width of the integer in bits. */
 		int intWidth;
-		IntType(int width_): intWidth(width_) {}
+		IntType(int bit_width): intWidth(bit_width) {}
 		operator std::string() override;
 		std::string toString() override;
 		TypePtr copy() const override { return std::make_shared<IntType>(intWidth); }
 		int width() const override { return Util::upalign(intWidth, 8); }
 		int alignment() const override { return Util::alignToPower(intWidth) / 8; }
 		bool operator==(const Type &other) const override;
-		static std::shared_ptr<IntType> make(int width) { return std::make_shared<IntType>(width); }
+		static std::shared_ptr<IntType> make(int bit_width) { return std::make_shared<IntType>(bit_width); }
 	};
 
 	struct AggregateType: Type {

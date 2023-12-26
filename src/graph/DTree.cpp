@@ -210,8 +210,8 @@ namespace LL2X {
 		return out;
 	}
 
-	Node::Map DTree::strictDominators() const {
-		Node::Map out_map;
+	Node::NMap DTree::strictDominators() const {
+		Node::NMap out_map;
 
 		// For each node, add its parent to the set, and its parent's parent, and so on.
 		for (Node *node: nodes()) {

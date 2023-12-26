@@ -2,10 +2,12 @@
 
 #include <functional>
 #include <list>
-#include <vector>
+#include <map>
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+#include <vector>
 
 #include "graph/DFSResult.h"
 #include "graph/Node.h"
@@ -15,14 +17,20 @@ namespace LL2X {
 		public:
 			using Label = std::string;
 
+			template <typename ...Args>
+			using Map = std::unordered_map<Args...>;
+
+			template <typename ...Args>
+			using Set = std::unordered_set<Args...>;
+
 		private:
 			std::list<Node *> nodes_;
-			std::unordered_map<std::string, Node *> labelMap;
+			Map<std::string, Node *> labelMap;
 
-			void bridgeTraverse(const Node &node, std::unordered_map<const Node *, bool> &visited,
-			                    std::unordered_map<const Node *, size_t> &discovered,
-			                    std::unordered_map<const Node *, size_t> &low,
-			                    std::unordered_map<const Node *, const Node *> &parent,
+			void bridgeTraverse(const Node &node, Map<const Node *, bool> &visited,
+			                    Map<const Node *, size_t> &discovered,
+			                    Map<const Node *, size_t> &low,
+			                    Map<const Node *, const Node *> &parent,
 			                    std::vector<std::pair<Label, Label>> &out) const;
 
 		public:
@@ -127,10 +135,10 @@ namespace LL2X {
 			void unlink();
 
 			/** Clones the graph into another graph. */
-			void cloneTo(Graph &, std::unordered_map<Node *, Node *> *rename_map = nullptr);
+			void cloneTo(Graph &, Map<Node *, Node *> *rename_map = nullptr);
 
 			/** Returns a clone of the graph. */
-			Graph clone(std::unordered_map<Node *, Node *> *rename_map = nullptr);
+			Graph clone(Map<Node *, Node *> *rename_map = nullptr);
 
 			/** Takes a space-separated list of colon-separated pairs of labels and links each pair of nodes. */
 			void addEdges(const Label &);
@@ -154,9 +162,9 @@ namespace LL2X {
 			std::vector<Node *> BFS(const Label &) const;
 
 			/** Returns a set of nodes connected to a node. */
-			std::unordered_set<Node *> undirectedSearch(Node &) const;
+			Set<Node *> undirectedSearch(Node &) const;
 			/** Returns a set of nodes connected to a node. */
-			std::unordered_set<Node *> undirectedSearch(const Label &) const;
+			Set<Node *> undirectedSearch(const Label &) const;
 
 			/** Returns a postorder list of nodes. */
 			std::vector<Node *> postOrder(Node &) const;
@@ -170,7 +178,7 @@ namespace LL2X {
 			std::list<Graph> components() const;
 
 			/** Returns a map of nodes to sets of their predecessors. */
-			std::unordered_map<Node *, std::unordered_set<Node *>> predecessors() const;
+			Map<Node *, Set<Node *>> predecessors() const;
 
 			/** Colors all the nodes in the graph according to a given coloring algorithm.
 			 *  Assumes all edges are bidirectional. */

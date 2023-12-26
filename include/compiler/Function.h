@@ -63,8 +63,8 @@ namespace LL2X {
 			/** If a variable is defined in one block and used only in that block, mark it as not live anywhere. */
 			void hackLiveness();
 
-			bool isLiveInUsingMergeSet(const Node::Map &merges, Node *block, const VariablePtr &var);
-			bool isLiveOutUsingMergeSet(const Node::Map &merges, Node *block, const VariablePtr &var);
+			bool isLiveInUsingMergeSet(const Node::NMap &merges, Node *block, const VariablePtr &var);
+			bool isLiveOutUsingMergeSet(const Node::NMap &merges, Node *block, const VariablePtr &var);
 
 			/** Computes liveness using merge sets. Seems to be broken? */
 			void computeLivenessMS();

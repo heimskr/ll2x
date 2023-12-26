@@ -44,7 +44,9 @@ namespace LL2X::x86_64 {
 				case Width::Four:  return "eip";
 				case Width::Eight: return "rip";
 				default:
-					throw std::runtime_error("Invalid width for %rip: " + std::to_string(getWidth(width)));
+					// throw std::runtime_error("Invalid width for %rip: " + std::to_string(getWidth(width)) + " bits");
+					warn() << "Invalid width for %rip: " << getWidth(width) << " bits\n";
+					return "rip";
 			}
 		}
 

@@ -84,16 +84,16 @@ namespace LL2X {
 		throw std::runtime_error("Node not found in parent graph");
 	}
 
-	const Node::Set & Node::out() const {
+	const Node::NSet & Node::out() const {
 		return out_;
 	}
 
-	const Node::Set & Node::in() const {
+	const Node::NSet & Node::in() const {
 		return in_;
 	}
 
-	Node::Set Node::allEdges() const {
-		Set set = out_;
+	Node::NSet Node::allEdges() const {
+		NSet set = out_;
 		set.insert(in_.begin(), in_.end());
 		return set;
 	}

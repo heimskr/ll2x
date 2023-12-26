@@ -31,8 +31,9 @@ namespace LL2X {
 
 		public:
 			using USet = std::unordered_set<Node *>;
-			using Set = std::set<Node *, Node_less>;
-			using Map = std::map<Node *, Set, Node_less>;
+			using OSet = std::set<Node *, Node_less>;
+			using NSet = OSet;
+			using NMap = std::map<Node *, NSet, Node_less>;
 
 			std::any data;
 			std::set<int> colors;
@@ -87,13 +88,13 @@ namespace LL2X {
 			int index();
 
 			/** Returns a const set of the node's outward edges. */
-			const Set & out() const;
+			const NSet & out() const;
 
 			/** Returns a const set of the node's inward edges. */
-			const Set & in() const;
+			const NSet & in() const;
 
 			/** Returns a set of the node's outward and inward edges. */
-			Set allEdges() const;
+			NSet allEdges() const;
 
 			/** Returns whether there exists a path from this node to another. */
 			bool canReach(Node &);

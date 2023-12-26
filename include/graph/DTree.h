@@ -35,7 +35,7 @@ namespace LL2X {
 			std::unordered_map<Node *, Node *> immediateDominators() const;
 
 			/** Returns a map that maps each node to a set of all its strict dominators. */
-			Node::Map strictDominators() const;
+			Node::NMap strictDominators() const;
 
 			/** Returns a map that maps each node's label to a set of the labels of all its strict dominators. */
 			std::unordered_map<std::string, std::unordered_set<std::string>> strictDominatorLabels() const;

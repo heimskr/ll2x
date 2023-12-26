@@ -104,9 +104,9 @@ namespace LL2X {
 		return out.str();
 	}
 
-	Node::Map DJGraph::mergeSets(Node &start, const Node &exit) {
+	Node::NMap DJGraph::mergeSets(Node &start, const Node &exit) {
 		std::vector<Node *> level_order = BFS(start);
-		Node::Map visited;
+		Node::NMap visited;
 		std::unordered_map<Node *, MergeSet> merge;
 
 		std::function<void(Node *)> ensure = [&](Node *node) {
@@ -175,7 +175,7 @@ namespace LL2X {
 			}
 		} while (pass_required);
 
-		Node::Map out;
+		Node::NMap out;
 
 		for (std::pair<Node * const, MergeSet> &pair: merge)
 			out.emplace(pair.first, pair.second.flatten());
@@ -183,7 +183,7 @@ namespace LL2X {
 		return out;
 	}
 
-	const Node::Map & DJGraph::getMergeSets() {
+	const Node::NMap & DJGraph::getMergeSets() {
 		if (hasCachedMergeSets)
 			return cachedMergeSets;
 		cachedMergeSets = mergeSets(*startNode, (*this)["exit"]);
@@ -203,7 +203,7 @@ namespace LL2X {
 		nodes.insert(node);
 	}
 
-	void MergeSet::flatten(Node::Set &out, std::unordered_set<MergeSet *> &processed) {
+	void MergeSet::flatten(Node::NSet &out, std::unordered_set<MergeSet *> &processed) {
 		for (Node *subnode: nodes)
 			out.insert(subnode);
 		for (MergeSet *other: references)
@@ -213,8 +213,8 @@ namespace LL2X {
 			}
 	}
 
-	Node::Set MergeSet::flatten() {
-		Node::Set out;
+	Node::NSet MergeSet::flatten() {
+		Node::NSet out;
 		std::unordered_set<MergeSet *> processed;
 		flatten(out, processed);
 		return out;

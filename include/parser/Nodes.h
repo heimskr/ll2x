@@ -195,7 +195,7 @@ namespace LL2X {
 		IcmpNode(ASTNode *result_, ASTNode *cond_, ASTNode *left_, ASTNode *right_, ASTNode *unibangs);
 		IcmpNode(const std::string *result_, IcmpCond cond_, const ConstantPtr &left_, const ConstantPtr &right_);
 		IcmpNode(const OperandPtr &, IcmpCond cond_, const ConstantPtr &left_, const ConstantPtr &right_);
-		TypePtr getType() const { return left->type; }
+		TypePtr getType() const { return left->type; /* TODO: This should be i1 but that breaks things. */ }
 		std::string debugExtra() const override;
 		NodeType nodeType() const override { return NodeType::Icmp; }
 		std::vector<ValuePtr> allValues() override;

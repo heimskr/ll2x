@@ -369,7 +369,9 @@ static union U4  func_1(void)
         int32_t l_2463 = 0xA7E2C62BL;
         int32_t l_2465 = 0xAFE7670DL;
         int i, j;
+        printf("g_5<0> = 0x%x\n", g_5);
         (**g_139) &= (((safe_rshift_func_uint16_t_u_s(g_1946, 7)) != l_2329) ^ (((safe_mul_func_uint16_t_u_u(((-2L) & (l_2289 &= (****g_1680))), ((*l_2332) = 0x5DE3L))) & (((g_1221 = g_1899) != (nullptr == l_2333)) | 0x1DL)) == 1UL));
+        printf("g_5<1> = 0x%x\n", g_5);
         (*l_2333) = (func_39(((safe_mul_func_uint64_t_u_u((safe_rshift_func_uint32_t_u_s((safe_rshift_func_uint32_t_u_s((*l_2333), 28)), 1)), g_1944[9])) , ((safe_sub_func_uint16_t_u_u(g_422[0], ((safe_sub_func_int8_t_s_s((safe_unary_minus_func_int16_t_s((safe_unary_minus_func_uint64_t_u(0UL)))), (((-3L) | g_1922[1][5]) ^ (safe_sub_func_uint16_t_u_u((*l_2333), 0xCE91L))))) , ((*l_2352) = ((((((!(safe_sub_func_int64_t_s_s((g_1221 = (g_1892[3] != l_44.f0)), l_2286))) , (*g_150)) , (*l_2333)) || l_2351) , l_2301) <= (*l_2333)))))) < 0xE99BL)), l_2353, g_1892[1]) , g_2354);
         for (g_106 = 0; (g_106 > 31); g_106++)
         { /* block id: 947 */
@@ -1405,9 +1407,8 @@ int main (int argc, char* argv[])
     transparent_crc(g_367.f0, "g_367.f0", print_hash_value);
     for (i = 0; i < 6; i++)
     {
+        if (print_hash_value) printf("index = [%d], value = %x\n", i, g_422[i]);
         transparent_crc(g_422[i], "g_422[i]", print_hash_value);
-        if (print_hash_value) printf("index = [%d]\n", i);
-
     }
     transparent_crc(g_445.f0, "g_445.f0", print_hash_value);
     for (i = 0; i < 10; i++)

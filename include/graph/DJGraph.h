@@ -8,7 +8,7 @@ namespace LL2X {
 	class DJGraph: public Graph {
 		private:
 			bool hasCachedMergeSets = false;
-			Node::Map jMap, cachedMergeSets;
+			Node::NMap jMap, cachedMergeSets;
 			bool isJEdge(const Node &, const Node &) const;
 			std::unordered_set<Node *> allInNodes(const Node &) const;
 			static size_t level(const Node &, const Node &start);
@@ -22,9 +22,9 @@ namespace LL2X {
 
 			std::string toDot(const std::string &direction) override;
 
-			Node::Map mergeSets(Node &start, const Node &exit);
+			Node::NMap mergeSets(Node &start, const Node &exit);
 			static Node * parent(const Node &, const Node &start);
-			const Node::Map & getMergeSets();
+			const Node::NMap & getMergeSets();
 	};
 
 	struct MergeSet {
@@ -36,7 +36,7 @@ namespace LL2X {
 		void insert(MergeSet &);
 		void insert(MergeSet *);
 		void insert(Node *);
-		void flatten(Node::Set &out, std::unordered_set<MergeSet *> &processed);
-		Node::Set flatten();
+		void flatten(Node::NSet &out, std::unordered_set<MergeSet *> &processed);
+		Node::NSet flatten();
 	};
 }

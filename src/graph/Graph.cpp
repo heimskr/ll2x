@@ -211,11 +211,11 @@ namespace LL2X {
 			pair.second->unlink();
 	}
 
-	void Graph::cloneTo(Graph &out, std::unordered_map<Node *, Node *> *rename_map) {
+	void Graph::cloneTo(Graph &out, Map<Node *, Node *> *rename_map) {
 		out.reset();
 
 		// Maps old nodes to new nodes.
-		std::unordered_map<Node *, Node *> node_map {};
+		Map<Node *, Node *> node_map {};
 		for (Node *node: nodes_) {
 			Node *new_node = new Node(&out, node->label());
 			node_map.insert({node, new_node});
@@ -234,7 +234,7 @@ namespace LL2X {
 			*rename_map = node_map;
 	}
 
-	Graph Graph::clone(std::unordered_map<Node *, Node *> *rename_map) {
+	Graph Graph::clone(Map<Node *, Node *> *rename_map) {
 		Graph new_graph;
 		cloneTo(new_graph, rename_map);
 		return new_graph;
@@ -296,7 +296,7 @@ namespace LL2X {
 
 	std::vector<Node *> Graph::BFS(Node &start) const {
 		std::list<Node *> queue = {&start};
-		std::unordered_set<Node *> visited;
+		Set<Node *> visited;
 		std::vector<Node *> order;
 		order.reserve(size());
 
@@ -318,11 +318,11 @@ namespace LL2X {
 		return BFS((*this)[start_label]);
 	}
 
-	std::unordered_set<Node *> Graph::undirectedSearch(Node &start) const {
+	auto Graph::undirectedSearch(Node &start) const -> Set<Node *> {
 		std::list<Node *> queue = {&start};
-		std::unordered_set<Node *> visited;
-		std::unordered_set<Node *> out;
-		out.reserve(size());
+		Set<Node *> visited;
+		Set<Node *> out;
+		// out.reserve(size());
 
 		while (!queue.empty()) {
 			Node *next = queue.front();
@@ -339,14 +339,14 @@ namespace LL2X {
 		return out;
 	}
 
-	std::unordered_set<Node *> Graph::undirectedSearch(const std::string &start_label) const {
+	auto Graph::undirectedSearch(const std::string &start_label) const -> Set<Node *> {
 		return undirectedSearch((*this)[start_label]);
 	}
 
 	std::vector<Node *> Graph::postOrder(Node &start) const {
 		std::vector<Node *> out;
 		out.reserve(size());
-		std::unordered_set<Node *> visited;
+		Set<Node *> visited;
 
 		std::function<void(Node *)> visit = [&](Node *node) {
 			visited.insert(node);
@@ -368,23 +368,23 @@ namespace LL2X {
 
 	std::vector<std::pair<Graph::Label, Graph::Label>> Graph::bridges() const {
 		std::vector<std::pair<Label, Label>> out;
-		std::unordered_map<const Node *, bool> visited;
-		std::unordered_map<const Node *, size_t> discovered;
-		std::unordered_map<const Node *, size_t> low;
-		std::unordered_map<const Node *, const Node *> parent;
+		Map<const Node *, bool> visited;
+		Map<const Node *, size_t> discovered;
+		Map<const Node *, size_t> low;
+		Map<const Node *, const Node *> parent;
 		bridgeTraverse(*nodes_.front(), visited, discovered, low, parent, out);
 		return out;
 	}
 
 	std::list<Graph> Graph::components() const {
 		std::list<Graph> out_list;
-		std::unordered_set<Node *> remaining(nodes_.begin(), nodes_.end());
+		Set<Node *> remaining(nodes_.begin(), nodes_.end());
 
 		while (!remaining.empty()) {
 			Graph component_graph;
 			Node *front = *remaining.begin();
 			remaining.erase(front);
-			std::unordered_set<Node *> component_nodes = undirectedSearch(*front);
+			Set<Node *> component_nodes = undirectedSearch(*front);
 			for (Node *node: component_nodes) {
 				component_graph.addNode(node->label_);
 				remaining.erase(node);
@@ -403,8 +403,8 @@ namespace LL2X {
 		return out_list;
 	}
 
-	std::unordered_map<Node *, std::unordered_set<Node *>> Graph::predecessors() const {
-		std::unordered_map<Node *, std::unordered_set<Node *>> out;
+	auto Graph::predecessors() const -> Map<Node *, Set<Node *>> {
+		Map<Node *, Set<Node *>> out;
 		for (const Node *node: nodes())
 			for (Node *successor: node->out_)
 				out[successor].insert(const_cast<Node *>(node));
@@ -556,10 +556,10 @@ namespace LL2X {
 		return labelMap.cend();
 	}
 
-	void Graph::bridgeTraverse(const Node &node, std::unordered_map<const Node *, bool> &visited,
-	                           std::unordered_map<const Node *, size_t> &discovered,
-	                           std::unordered_map<const Node *, size_t> &low,
-	                           std::unordered_map<const Node *, const Node *> &parents,
+	void Graph::bridgeTraverse(const Node &node, Map<const Node *, bool> &visited,
+	                           Map<const Node *, size_t> &discovered,
+	                           Map<const Node *, size_t> &low,
+	                           Map<const Node *, const Node *> &parents,
 	                           std::vector<std::pair<Label, Label>> &out) const {
 		static size_t time = 0;
 		visited[&node] = true;
