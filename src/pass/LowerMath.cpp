@@ -182,6 +182,7 @@ namespace LL2X::Passes {
 		// mov %left, %rax
 		function.insertBefore<Mov, false>(instruction, left, rax);
 		// mul %right
+		// TODO!: use Function::multiply?
 		function.insertBefore<Mul, false>(instruction, right, destination->bitWidth);
 		// mov %rax, %dest
 		function.insertBefore<Mov, false>(instruction, rax, destination);

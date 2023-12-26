@@ -14,7 +14,8 @@ namespace LL2X {
 	}
 
 	static std::string pcrel(const VariablePtr &var) {
-		return (var && var->registers.size() == 1 && *var->registers.begin() == x86_64::rip)? "@GOTPCREL" : "";
+		// return (var && var->registers.size() == 1 && *var->registers.begin() == x86_64::rip)? "@GOTPCREL" : "";
+		return "";
 	}
 
 	Operand::Operand(const VariablePtr &var):

@@ -211,7 +211,7 @@ namespace LL2X::Passes {
 
 			// At this point, we're ready to insert the call.
 			if (global_uptr) {
-				function.insertBefore<Call>(llvm, Op8(*global_uptr->name + (call->usePLT? "@PLT" : ""), false));
+				function.insertBefore<Call>(llvm, Op8(*global_uptr->name + (call->usePLT? "@PLT" : ""), false, false));
 			} else if (call->name->isLocal()) {
 				auto jump_var = std::dynamic_pointer_cast<LocalValue>(call->name)->variable;
 				function.comment(llvm, prefix + "jump to function pointer " + jump_var->plainString());
@@ -363,7 +363,8 @@ namespace LL2X::Passes {
 			auto global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
 			VariablePtr new_var = function.newVariable(constant->type);
 			insert_exts(new_var, new_var);
-			function.insertBefore<Mov, false>(instruction, Op8(*global->name), OpV(new_var));
+			function.comment(instruction, "Perhaps this lea should be the mov it used to be");
+			function.insertBefore<Lea, false>(instruction, Op8(*global->name, true, false), OpV(new_var));
 			function.insertBefore<Mov>(instruction, Op8(new_var), Op8(pushed, function.pcRsp));
 			return size;
 		}
@@ -411,7 +412,8 @@ namespace LL2X::Passes {
 			if (Util::outOfRange(offset))
 				warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 			VariablePtr new_var = function.newVariable(constant->type);
-			function.insertBefore<Mov, false>(instruction, Op8(*gep_global->name), OpV(new_var));
+			function.comment(instruction, "Also maybe this should be reverted from lea to mov?");
+			function.insertBefore<Lea, false>(instruction, Op8(*gep_global->name, true, false), OpV(new_var));
 			if (offset != 0)
 				function.insertBefore<Add, false>(instruction, Op4(offset), OpV(new_var));
 			insert_exts(new_var, new_var);
@@ -596,7 +598,8 @@ namespace LL2X::Passes {
 			if (Util::outOfRange(offset))
 				warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 
-			auto out = function.insertBefore<Mov>(instruction, Op8(*gep_global->name), new_operand);
+			// auto out = function.insertBefore<Mov>(instruction, Op8(*gep_global->name, true, false), new_operand);
+			auto out = function.insertBefore<Lea>(instruction, Op8(*gep_global->name, true, false), new_operand);
 			if (offset != 0)
 				function.insertBefore<Add>(instruction, Op4(offset), new_operand);
 			insert_exts();
@@ -605,7 +608,8 @@ namespace LL2X::Passes {
 
 		if (value_type == ValueType::Global) {
 			auto global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
-			auto mov = function.insertBefore<Mov>(instruction, Op8(*global->name), new_operand);
+			// auto mov = function.insertBefore<Mov>(instruction, Op8(*global->name, true, false), new_operand);
+			auto mov = function.insertBefore<Lea>(instruction, Op8(*global->name, true, false), new_operand);
 			insert_exts();
 			return mov;
 		}

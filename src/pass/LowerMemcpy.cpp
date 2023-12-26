@@ -18,18 +18,23 @@ namespace LL2X::Passes {
 		for (auto iter = linear.begin(), end = linear.end(); iter != end;) {
 			InstructionPtr &instruction = *iter;
 			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
+
 			if (!llvm || llvm->node->nodeType() != NodeType::Call) {
 				++iter;
 				continue;
 			}
+
 			auto *call = dynamic_cast<CallNode *>(llvm->node);
+
 			if (!call->name->isGlobal()) {
 				++iter;
 				continue;
 			}
+
 			BasicBlockPtr block = instruction->parent.lock();
 			auto *global = dynamic_cast<GlobalValue *>(call->name.get());
 			const std::string &name = *global->name;
+
 			if (name.find("llvm.memcpy.") == std::string::npos) {
 				++iter;
 				continue;
@@ -48,8 +53,11 @@ namespace LL2X::Passes {
 				function.insertBefore<LLVMInstruction>(instruction, new_call, -1, true);
 				to_remove.push_back(instruction);
 				++iter;
-			} else
+			} else {
+				error() << instruction->debugExtra() << '\n';
 				throw std::runtime_error("Unhandled memcpy intrinsic: " + name);
+			}
+
 			++iter;
 		}
 

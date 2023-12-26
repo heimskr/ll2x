@@ -30,14 +30,17 @@ namespace LL2X::Passes {
 
 		// Next, we need to save to the stack any registers that are written to. Start by finding the registers.
 		std::set<int> written;
-		for (const InstructionPtr &instruction: function.linearInstructions)
-			for (const VariablePtr &variable: instruction->written)
-				for (const int reg: variable->registers)
+		for (const InstructionPtr &instruction: function.linearInstructions) {
+			for (const VariablePtr &variable: instruction->written) {
+				for (const int reg: variable->registers) {
 					if (!x86_64::isSpecialPurpose(reg) && x86_64::calleeSaved.contains(reg)) {
 						written.insert(reg);
 						const auto &location = function.addToStack(variable, StackLocation::Purpose::CalleeSave, 8, 8);
 						function.calleeSaved.emplace(reg, &location);
 					}
+				}
+			}
+		}
 
 		// Move %rsp down to make room for stack allocations if necessary.
 		if (0 < function.stackSize) {

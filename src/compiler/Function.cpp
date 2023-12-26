@@ -46,6 +46,7 @@
 #include "instruction/DummyDefiner.h"
 #include "instruction/Imul.h"
 #include "instruction/Label.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "instruction/Mul.h"
 #include "instruction/Or.h"
@@ -1931,7 +1932,7 @@ namespace LL2X {
 				VariablePtr new_var = newVariable(out_type);
 				OperandPtr operand = OpV(new_var);
 
-				insertBefore<Mov>(instruction, Op4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name, true,
+				insertBefore<Lea>(instruction, Op4(*dynamic_cast<GlobalValue *>(gep->variable.get())->name, true,
 					false), operand);
 
 				if (offset != 0)
@@ -1964,7 +1965,7 @@ namespace LL2X {
 
 	VariablePtr Function::makeVariable(const ValuePtr &value, const InstructionPtr &instruction, const TypePtr &hint) {
 		VariablePtr new_var;
-		std::shared_ptr<Mov> mov;
+		InstructionPtr mov_or_lea;
 
 		switch (value->valueType()) {
 			case ValueType::Getelementptr:
@@ -1975,7 +1976,9 @@ namespace LL2X {
 			case ValueType::Global: {
 				auto *global = dynamic_cast<GlobalValue *>(value.get());
 				new_var = newVariable(hint? hint : GlobalTemporaryType::make(global->name));
-				mov = std::make_shared<Mov>(Op4(*global->name, true, false), OpV(new_var));
+				// TODO!: maybe lea?
+				// comment(instruction, "Perhaps this should be lea instead of mov");
+				mov_or_lea = std::make_shared<Lea>(Op4(*global->name, true, false), OpV(new_var));
 				break;
 			}
 			case ValueType::Int:
@@ -1983,7 +1986,7 @@ namespace LL2X {
 			case ValueType::Null:
 			case ValueType::Undef: {
 				new_var = newVariable(hint? hint : IntType::make(64));
-				mov = std::make_shared<Mov>(Op8(value->longValue()), OpV(new_var));
+				mov_or_lea = std::make_shared<Mov>(Op8(value->longValue()), OpV(new_var));
 				break;
 			}
 			case ValueType::Icmp: {
@@ -2004,7 +2007,7 @@ namespace LL2X {
 					new_var = operand_value->operand->reg;
 				} else {
 					new_var = newVariable(hint? hint : IntType::make(64));
-					mov = std::make_shared<Mov>(operand_value->operand, OpV(new_var));
+					mov_or_lea = std::make_shared<Mov>(operand_value->operand, OpV(new_var));
 				}
 				break;
 			}
@@ -2016,8 +2019,8 @@ namespace LL2X {
 		if (!new_var)
 			throw std::runtime_error("new_var is null at the end of Function::makeVariable");
 
-		if (mov)
-			insertBefore(instruction, mov)->setDebug(*instruction, true);
+		if (mov_or_lea)
+			insertBefore(instruction, mov_or_lea)->setDebug(*instruction, true);
 
 		return new_var;
 	}

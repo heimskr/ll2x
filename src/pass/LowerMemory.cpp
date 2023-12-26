@@ -5,6 +5,7 @@
 #include "compiler/LLVMInstruction.h"
 #include "compiler/Program.h"
 #include "instruction/Add.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "parser/Enums.h"
 #include "pass/LowerMemory.h"
@@ -41,6 +42,7 @@ namespace LL2X::Passes {
 	}
 
 	void lowerLoad(Function &function, InstructionPtr &instruction, LLVMInstruction &llvm) {
+		function.comment(instruction, "Starting lowerLoad.");
 		auto *node = dynamic_cast<LoadNode *>(llvm.node);
 		ConstantPtr converted = node->constant->convert();
 		if (!converted->value)
@@ -75,8 +77,8 @@ namespace LL2X::Passes {
 				// function.insertBefore<Mov>(instruction, Op8(0, operand->reg), node->operand, width);
 				function.insertBefore<Mov>(instruction, Op8(0, operand->getVariable()), node->operand, width);
 			} else {
-				function.comment(instruction, prefix + ".3: " + operand->toString() + " into " +
-					node->operand->toString());
+				function.comment(instruction, prefix + ".3: " + operand->toString() + " into (" +
+					node->operand->toString() + ')');
 				function.insertBefore<Mov>(instruction, operand, node->operand, width);
 			}
 
@@ -85,8 +87,8 @@ namespace LL2X::Passes {
 			auto global = std::dynamic_pointer_cast<GlobalValue>(converted->value);
 			OperandPtr wide_copy = node->operand->copy()->setWidth(64);
 			function.comment(instruction, prefix + ".4: " + *global->name + " into " + wide_copy->toString());
-			function.insertBefore<Mov, false>(instruction, OpX(width, *global->name), wide_copy, 64);
-			function.insertBefore<Mov>(instruction, wide_copy->toDisplaced(), node->operand);
+			// Maybe this should be an lea, but I'm skeptical
+			function.insertBefore<Mov, false>(instruction, OpX(width, *global->name, true, false), wide_copy, 64);
 
 		} else if (value_type == ValueType::Null) { // In case you're begging for a segfault.
 
@@ -189,7 +191,8 @@ namespace LL2X::Passes {
 				function.insertBefore<Mov>(instruction, Op4(long_value), OpV(temp), width);
 				// mov %temp, (global)
 				function.comment(instruction, prefix + ".2b: mov %temp, (global)");
-				function.insertBefore<Mov>(instruction, OpV(temp), OpX(width, *global->name, true), width);
+				// TODO!: investigate whether to use @GOTPCREL
+				function.insertBefore<Mov>(instruction, OpV(temp), OpX(width, *global->name, true, false), width);
 
 			} else if (operand_value) {
 
@@ -225,7 +228,7 @@ namespace LL2X::Passes {
 				soperand = OpV(function.newVariable(node->source->type));
 				const std::string &global_name = *dynamic_cast<GlobalValue *>(source_value.get())->name;
 				function.comment(instruction, prefix + ".6: load global");
-				function.insertBefore<Mov, false>(instruction, Op4(global_name, true), soperand, width);
+				function.insertBefore<Lea, false>(instruction, Op4(global_name, true, false), soperand, width);
 			} else if (value_type == ValueType::Local) {
 				soperand = OpV(dynamic_cast<LocalValue *>(source_value.get())->getVariable(function));
 			} else {
@@ -244,8 +247,8 @@ namespace LL2X::Passes {
 
 				VariablePtr new_var = function.newVariable(node->destination->type, instruction->parent.lock());
 				// movq var@GOTPCREL(%rip), %temp
-				function.comment(instruction, prefix + ".8a: movq var, %temp");
-				function.insertBefore<Mov, false>(instruction, Op8(*global->name, true), Op8(new_var));
+				function.comment(instruction, prefix + ".8a: leaq var, %temp");
+				function.insertBefore<Lea, false>(instruction, Op8(*global->name, true, false), Op8(new_var));
 				// mov %src, (%temp)
 				function.comment(instruction, prefix + ".8b: movq " + soperand->toString() + ", (%temp)");
 				function.insertBefore<Mov>(instruction, soperand, Op8(0, new_var), width);

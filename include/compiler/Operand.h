@@ -19,7 +19,7 @@ namespace LL2X {
 			Direct,    // mov $0, 0xfff0
 			Label,     // jmp bb0
 			Register,  // mov $0, %rax
-			Displaced, // mov $0, 32(%rax) or mov foo@GOTPCREL(%rip), %rax
+			Displaced, // mov $0, 32(%rax) or mov foo(%rip), %rax
 			Scaled,    // mov $0, 32(%rax, %rbx, 8)
 		};
 

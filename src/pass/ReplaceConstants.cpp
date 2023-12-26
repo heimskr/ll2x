@@ -4,6 +4,7 @@
 #include "compiler/LLVMInstruction.h"
 #include "instruction/Add.h"
 #include "instruction/Invalid.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "pass/LowerIcmp.h"
 #include "pass/ReplaceConstants.h"
@@ -23,12 +24,13 @@ namespace LL2X::Passes {
 			if (reader == nullptr)
 				continue;
 
-			for (const ConstantPtr &constant: reader->allConstants())
+			for (const ConstantPtr &constant: reader->allConstants()) {
 				if (constant->conversion == Conversion::Bitcast) {
 					constant->type = constant->conversionType;
 					constant->value = constant->conversionSource->value;
 					constant->conversion = Conversion::None;
 				}
+			}
 
 			for (ValuePtr *value: reader->allValuePointers()) {
 				if (auto *gep = dynamic_cast<GetelementptrValue *>(value->get())) {
@@ -43,7 +45,8 @@ namespace LL2X::Passes {
 							warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 						TypePtr ptr_type = std::make_shared<PointerType>(out_type);
 						VariablePtr new_var = function.newVariable(ptr_type, instruction->parent.lock());
-						auto mov_addr = std::make_shared<Mov>(Op8(*gep_global->name, true, false), OpV(new_var));
+						function.comment(instruction, "Doing an lea here in ReplaceConstants.");
+						auto mov_addr = std::make_shared<Lea>(Op8(*gep_global->name, true, false), OpV(new_var));
 						function.insertBefore(instruction, mov_addr)->setDebug(*llvm)->extract();
 
 						if (offset != 0)
