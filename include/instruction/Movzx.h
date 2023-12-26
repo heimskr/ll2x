@@ -3,9 +3,9 @@
 #include "instruction/MovxBase.h"
 
 namespace LL2X {
-	struct Movsx: MovxBase {
+	struct Movzx: MovxBase {
 		using MovxBase::MovxBase;
 
-		char getMovType() const override { return 's'; }
+		char getMovType() const override { return 'z'; }
 	};
 }

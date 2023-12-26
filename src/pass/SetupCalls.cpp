@@ -11,6 +11,7 @@
 #include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "instruction/Movsx.h"
+#include "instruction/Movzx.h"
 #include "instruction/Pop.h"
 #include "instruction/Push.h"
 #include "instruction/Sub.h"
@@ -311,28 +312,22 @@ namespace LL2X::Passes {
 				case 64:
 					return;
 				case  1:
-					// mov %src, %dest
-					function.insertBefore<Mov, false>(instruction, Op1(source), Op1(destination), 8);
+					// movz %src, %dest
+					function.insertBefore<Mov, false>(instruction, Op1(source), Op8(destination), 8);
 					// and %dest, $1
 					function.insertBefore<And>(instruction, Op4(1), Op8(destination), 64);
 					return;
 				case  8:
-					// mov %src, %dest
-					function.insertBefore<Mov, false>(instruction, Op1(source), Op1(destination), 8);
-					// and %dest, $0xff
-					function.insertBefore<And>(instruction, Op4(0xff), Op8(destination), 64);
+					// movz %src, %dest
+					function.insertBefore<Movzx>(instruction, Op1(source), Op8(destination));
 					return;
 				case 16:
 					// mov %src, %dest
-					function.insertBefore<Mov, false>(instruction, Op1(source), Op1(destination), 8);
-					// and %dest, $0xffff
-					function.insertBefore<And>(instruction, Op4(0xffff), Op8(destination), 64);
+					function.insertBefore<Movzx>(instruction, Op2(source), Op8(destination));
 					return;
 				case 32:
 					// mov %src, %dest
-					function.insertBefore<Mov, false>(instruction, Op1(source), Op1(destination), 8);
-					// and %dest, $0xffffffff
-					function.insertBefore<And>(instruction, Op4(0xffffffff), Op8(destination), 64);
+					function.insertBefore<Movzx>(instruction, Op4(source), Op8(destination));
 					return;
 				default:
 					std::cerr << instruction->debugExtra() << '\n';
@@ -461,13 +456,16 @@ namespace LL2X::Passes {
 
 		function.comment(anchor, "Constraining " + std::to_string(operand->bitWidth) + "-bit operand");
 
+		OperandPtr wide_operand = operand->copy();
+		wide_operand->setWidth(32);
+
 		if (operand->bitWidth == 16) {
-			function.insertBefore<And>(anchor, Op4(0xffff), operand);
+			function.insertBefore<And>(anchor, Op4(0xffff), wide_operand);
 		} else if (operand->bitWidth == 8) {
-			function.insertBefore<And>(anchor, Op4(0xff), operand);
+			function.insertBefore<And>(anchor, Op4(0xff), wide_operand);
 		} else {
 			assert(operand->bitWidth == 1);
-			function.insertBefore<And>(anchor, Op4(0x1), operand);
+			function.insertBefore<And>(anchor, Op4(0x1), wide_operand);
 		}
 	}
 
@@ -665,8 +663,7 @@ namespace LL2X::Passes {
 			}
 
 			if (!out) {
-				out = function.insertBefore<Mov>(instruction, operand, new_operand);
-				constrain(function, instruction, operand);
+				out = function.insertBefore<Movzx>(instruction, operand, new_operand);
 			}
 
 			out->setDebug(*instruction, true);

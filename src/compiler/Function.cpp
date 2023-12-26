@@ -62,6 +62,7 @@
 #include "pass/FinishMultireg.h"
 #include "pass/FixBigConstants.h"
 #include "pass/FixMemoryOperands.h"
+#include "pass/FixMovzx.h"
 #include "pass/HackOperands.h"
 #include "pass/IgnoreIntrinsics.h"
 #include "pass/InsertLabels.h"
@@ -1057,6 +1058,7 @@ namespace LL2X {
 		Passes::insertLabels(*this);
 		Passes::lowerBranches(*this);
 		Passes::removeUselessTargetBranches(*this);
+		Passes::fixMovzx(*this);
 		Passes::hackOperands(*this);
 		forceLiveness();
 		Passes::lowerClobber(*this);

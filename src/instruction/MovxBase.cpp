@@ -1,16 +1,16 @@
-#include "instruction/Movsx.h"
+#include "instruction/MovxBase.h"
 
 namespace LL2X {
-	std::string Movsx::debugExtra() {
+	std::string MovxBase::debugExtra() {
 		return lockPrefixAnsi + "\e[1m" + getMnemonic() + "\e[22m " + source->ansiString() + ", " +
 			destination->ansiString();
 	}
 
-	std::string Movsx::toString() const {
+	std::string MovxBase::toString() const {
 		return lockPrefix + getMnemonic() + " " + source->toString() + ", " + destination->toString();
 	}
 
-	bool Movsx::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
+	bool MovxBase::replaceSimilarOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
 		if (source->similarTo(*to_replace)) {
 			source = replace_with;
 			return true;
@@ -19,8 +19,10 @@ namespace LL2X {
 		return false;
 	}
 
-	std::string Movsx::getMnemonic() const {
-		std::string mnemonic = "movs";
+	std::string MovxBase::getMnemonic() const {
+		std::string mnemonic = "mov";
+
+		mnemonic += getMovType();
 
 		switch (source->width) {
 			case x86_64::Width::Low:   mnemonic += 'b'; break;

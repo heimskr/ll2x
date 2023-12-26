@@ -5,6 +5,7 @@
 #include "compiler/Instruction.h"
 #include "compiler/LLVMInstruction.h"
 #include "instruction/Cmp.h"
+#include "instruction/Lea.h"
 #include "instruction/Mov.h"
 #include "instruction/Set.h"
 #include "pass/LowerIcmp.h"
@@ -84,7 +85,8 @@ namespace LL2X::Passes {
 				right = function.newVariable(node->getType(), instruction->parent.lock());
 				const std::string &name = *dynamic_cast<GlobalValue *>(value2.get())->name;
 				function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. global " + name);
-				function.insertBefore<Mov, false>(instruction, OpX(width, name, function.pcRip), Op8(right));
+				// function.insertBefore<Mov, false>(instruction, OpX(width, name, function.pcRip), Op8(right));
+				function.insertBefore<Lea, false>(instruction, OpX(width, name, function.pcRip), Op8(right));
 			}
 
 			function.insertBefore<Cmp, false>(instruction, OpX(width, right), OpX(width, left), width);

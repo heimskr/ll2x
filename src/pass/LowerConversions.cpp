@@ -67,7 +67,8 @@ namespace LL2X::Passes {
 		function.insertBefore<Mov>(instruction, source, node->operand);
 		if (source->bitWidth < 32 && source->bitWidth < node->operand->bitWidth) {
 			function.comment(instruction, "Truncate value to " + std::to_string(source->bitWidth) + " bits");
-			function.insertBefore<And>(instruction, Op4((1 << source->bitWidth) - 1), node->operand);
+			function.insertBefore<And>(instruction, Op4((1 << source->bitWidth) - 1),
+				node->operand->copy()->setWidth(32));
 		}
 	}
 

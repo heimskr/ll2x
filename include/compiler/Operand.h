@@ -181,6 +181,18 @@ namespace LL2X {
 		return Operand::make(bit_width, std::forward<Args>(args)...);
 	}
 
+	inline OperandPtr OpN(x86_64::Width width, const OperandPtr &operand) {
+		OperandPtr new_operand = std::make_shared<Operand>(*operand);
+		new_operand->setWidth(x86_64::getWidth(width));
+		return new_operand;
+	}
+
+	inline OperandPtr OpN(int bit_width, const OperandPtr &operand) {
+		OperandPtr new_operand = std::make_shared<Operand>(*operand);
+		new_operand->setWidth(bit_width);
+		return new_operand;
+	}
+
 	inline OperandPtr OpV(const VariablePtr &var) {
 		return Operand::make(var);
 	}

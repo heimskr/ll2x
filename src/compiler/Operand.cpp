@@ -13,7 +13,7 @@ namespace LL2X {
 		return std::holds_alternative<Operand::Number>(variant) && std::get<Operand::Number>(variant) == 0;
 	}
 
-	static std::string pcrel(const VariablePtr &var) {
+	static std::string pcrel(const VariablePtr &) {
 		// return (var && var->registers.size() == 1 && *var->registers.begin() == x86_64::rip)? "@GOTPCREL" : "";
 		return "";
 	}
