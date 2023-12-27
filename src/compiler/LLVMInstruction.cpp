@@ -6,8 +6,13 @@
 #include "parser/Nodes.h"
 #include "util/Util.h"
 
-#define IFLV(x, t) do { if (auto local_value = std::dynamic_pointer_cast<LocalValue>((x))) \
-	readname(local_value, (t)); } while (0)
+#define IFLV(x, t) do { \
+		if (auto local_value = std::dynamic_pointer_cast<LocalValue>((x))) { \
+			read_name(local_value, (t)); \
+		} else if (auto operand_value = std::dynamic_pointer_cast<OperandValue>((x))) { \
+			read_operand(operand_value->operand); \
+		} \
+	} while (0)
 #define FORV(x...) for (const auto &value: {x})
 #define CAST(t) auto *cast = dynamic_cast<t *>(node); if (!cast) break
 
@@ -36,9 +41,14 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		auto readname = [&](const std::shared_ptr<LocalValue> &lv, const TypePtr &type) {
+		auto read_name = [&](const std::shared_ptr<LocalValue> &lv, const TypePtr &type) {
 			if (!secretReads)
 				read.insert(parent.lock()->parent->getVariable(lv->name, type));
+		};
+
+		auto read_operand = [&](const OperandPtr &operand) {
+			if (!secretReads && operand->reg)
+				read.insert(operand->reg);
 		};
 
 		auto write = [&](const std::string *str, const TypePtr &type) {
@@ -95,7 +105,7 @@ namespace LL2X {
 			}
 
 			case NodeType::BrUncond: {
-				// Unconditional branches don't read anything; their PVARs represent labels, not registers.
+				// Unconditional branches don't read anything; their pvars represent labels, not registers.
 				break;
 			}
 
@@ -259,8 +269,8 @@ namespace LL2X {
 	bool LLVMInstruction::replaceOperand(const OperandPtr &to_replace, const OperandPtr &replace_with) {
 		bool out = false;
 
-		if (auto *reader = dynamic_cast<Reader *>(node))
-			for (auto *value: reader->allValuePointers())
+		if (auto *reader = dynamic_cast<Reader *>(node)) {
+			for (ValuePtr *value: reader->allValuePointers()) {
 				if (value != nullptr && *value && (*value)->isOperand()) {
 					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
 					if (*operand == *to_replace) {
@@ -268,12 +278,13 @@ namespace LL2X {
 						out = true;
 					}
 				}
-
-		if (auto *writer = dynamic_cast<Writer *>(node))
-			if (*writer->operand == *to_replace) {
-				writer->operand = replace_with;
-				out = true;
 			}
+		}
+
+		if (auto *writer = dynamic_cast<Writer *>(node); writer && *writer->operand == *to_replace) {
+			writer->operand = replace_with;
+			out = true;
+		}
 
 		return out;
 	}
@@ -282,7 +293,7 @@ namespace LL2X {
 		bool out = false;
 
 		if (auto *reader = dynamic_cast<Reader *>(node))
-			for (auto *value: reader->allValuePointers())
+			for (ValuePtr *value: reader->allValuePointers())
 				if (value != nullptr && *value && (*value)->isOperand()) {
 					OperandPtr &operand = dynamic_cast<OperandValue *>(value->get())->operand;
 					if (operand->similarTo(*to_replace)) {
