@@ -61,7 +61,8 @@ namespace LL2X::Passes {
 			}
 
 			// const TypeType tt = constant_type->typeType();
-			const TypeType tt = node->type->typeType();
+			// const TypeType tt = node->type->typeType();
+			const TypeType tt = TypeType::Pointer;
 			const bool one_pvar = node->indices.size() == 1 && node->indices.at(0).isPvar;
 			const bool any_pvar = anyPvarInIndices(node->indices);
 			const bool dynamic_index = node->indices.size() == 2 && !node->indices[0].isPvar && node->indices[1].isPvar;
@@ -208,8 +209,10 @@ namespace LL2X::Passes {
 				function.insertBefore<Mov, false>(instruction, OpV(index), node->operand);
 				function.multiply(instruction, node->operand, static_cast<int64_t>(width), false, node->debugIndex);
 				function.insertBefore<Add>(instruction, pointer, node->operand);
-			} else
+			} else {
+				warn() << node->location << ": " << node->debugExtra() << '\n';
 				throw std::runtime_error("Unsupported type in getelementptr instruction: " + type_map.at(tt));
+			}
 
 			to_remove.push_back(instruction);
 		}
