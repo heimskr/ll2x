@@ -510,6 +510,7 @@ namespace LL2X {
 					auto mov_out = std::make_shared<Mov>(rax, operand);
 
 					insertBefore(anchor, mov_in, reindex);
+					insertBefore(anchor, mov_mulvar, reindex);
 					insertBefore(anchor, mul, reindex);
 					insertBefore(anchor, mov_out, reindex);
 					if (debug != -1) {
@@ -518,6 +519,7 @@ namespace LL2X {
 						mov_out->setDebug(debug, false);
 					}
 					mov_in->extract(false);
+					mov_mulvar->extract(false);
 					mul->extract(false);
 					mov_out->extract(false);
 					unclobber(anchor, rdx_clobber);

@@ -102,7 +102,7 @@ namespace LL2X::Passes {
 			function.comment(instruction, prefix + "move");
 			function.insertBefore<Mov, false>(instruction, source, destination);
 			function.comment(instruction, prefix + "apply mask");
-			function.insertBefore<And>(instruction, Op4(mask), destination);
+			function.insertBefore<And>(instruction, Op4(mask), destination->copy()->setWidth(64));
 		}
 	}
 

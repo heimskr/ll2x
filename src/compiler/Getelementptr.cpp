@@ -123,9 +123,9 @@ namespace LL2X::Getelementptr {
 	int64_t compute(Program &program, const GetelementptrValue *value, TypePtr *out_type) {
 		std::list<int64_t> indices = getLongIndices(*value);
 
-		TypePtr type = value->ptrType;
+		TypePtr type = value->type;
 
-		// If the pointer type is an opaque pointer, try to look up the type from the global variable if present.
+		// If the type is an opaque pointer, try to look up the type from the global variable if present.
 		if (type->typeType() == TypeType::OpaquePointer && value->variable->isGlobal()) {
 			auto global = std::dynamic_pointer_cast<GlobalValue>(value->variable);
 			type = program.getGlobalType(*global->name);
@@ -134,8 +134,7 @@ namespace LL2X::Getelementptr {
 		if (!type)
 			throw std::runtime_error("Couldn't find type of value " + value->toString());
 
-		if (type->typeType() == TypeType::Array)
-			type = PointerType::make(type);
+		type = PointerType::make(type);
 
 		return compute_mutating(type, indices, out_type);
 	}

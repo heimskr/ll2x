@@ -1521,13 +1521,48 @@ int main (int argc, char* argv[])
     transparent_crc(g_1919, "g_1919", print_hash_value);
     transparent_crc(g_1920, "g_1920", print_hash_value);
     transparent_crc(g_1921, "g_1921", print_hash_value);
+    printf("Hello! [0][0] => %X\n", g_1922[0][0]);
+    printf("Hello! [0][1] => %X\n", g_1922[0][1]);
+    printf("Hello! [0][2] => %X\n", g_1922[0][2]);
+    printf("Hello! [0][3] => %X\n", g_1922[0][3]);
+    printf("Hello! [0][4] => %X\n", g_1922[0][4]);
+    printf("Hello! [0][5] => %X\n", g_1922[0][5]);
+    printf("Hello! [0][6] => %X\n", g_1922[0][6]);
+    printf("Hello! [0][7] => %X\n", g_1922[0][7]);
+    printf("Hello! [0][8] => %X\n", g_1922[0][8]);
+    printf("Hello! [1][0] => %X\n", g_1922[1][0]);
+    printf("Hello! [1][1] => %X\n", g_1922[1][1]);
+    printf("Hello! [1][2] => %X\n", g_1922[1][2]);
+    printf("Hello! [1][3] => %X\n", g_1922[1][3]);
+    printf("Hello! [1][4] => %X\n", g_1922[1][4]);
+    printf("Hello! [1][5] => %X\n", g_1922[1][5]);
+    printf("Hello! [1][6] => %X\n", g_1922[1][6]);
+    printf("Hello! [1][7] => %X\n", g_1922[1][7]);
+    printf("Hello! [1][8] => %X\n", g_1922[1][8]);
+    printf("Hello! [2][0] => %X\n", g_1922[2][0]);
+    printf("Hello! [2][1] => %X\n", g_1922[2][1]);
+    printf("Hello! [2][2] => %X\n", g_1922[2][2]);
+    printf("Hello! [2][3] => %X\n", g_1922[2][3]);
+    printf("Hello! [2][4] => %X\n", g_1922[2][4]);
+    printf("Hello! [2][5] => %X\n", g_1922[2][5]);
+    printf("Hello! [2][6] => %X\n", g_1922[2][6]);
+    printf("Hello! [2][7] => %X\n", g_1922[2][7]);
+    printf("Hello! [2][8] => %X\n", g_1922[2][8]);
+    printf("Hello! [3][0] => %X\n", g_1922[3][0]);
+    printf("Hello! [3][1] => %X\n", g_1922[3][1]);
+    printf("Hello! [3][2] => %X\n", g_1922[3][2]);
+    printf("Hello! [3][3] => %X\n", g_1922[3][3]);
+    printf("Hello! [3][4] => %X\n", g_1922[3][4]);
+    printf("Hello! [3][5] => %X\n", g_1922[3][5]);
+    printf("Hello! [3][6] => %X\n", g_1922[3][6]);
+    printf("Hello! [3][7] => %X\n", g_1922[3][7]);
+    printf("Hello! [3][8] => %X\n", g_1922[3][8]);
     for (i = 0; i < 4; i++)
     {
         for (j = 0; j < 9; j++)
         {
+            if (print_hash_value) printf("index = [%d][%d], value = %X\n", i, j, g_1922[i][j]);
             transparent_crc(g_1922[i][j], "g_1922[i][j]", print_hash_value);
-            if (print_hash_value) printf("index = [%d][%d]\n", i, j);
-
         }
     }
     transparent_crc(g_1923, "g_1923", print_hash_value);

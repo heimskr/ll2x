@@ -5,6 +5,7 @@
 
 // #define COMPILE_MULTITHREADED
 // #define SINGLE_FUNCTION "@_ZL7func_532U1"
+// #define SINGLE_FUNCTION "@main"
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"

@@ -145,12 +145,21 @@ namespace LL2X::Passes {
 				VariablePtr temp = function.newVariable(IntType::make(64), instruction->parent.lock());
 				function.comment(instruction, prefix + "array/pointer-type, dynamic index -> " +
 					node->operand->toString());
+				function.comment(instruction, "index " + index->toString() + " -> temp " + temp->toString());
 				function.insertBefore<Mov, false>(instruction, OpV(index), OpV(temp));
+				function.comment(instruction, "Multiply temp " + temp->toString() + " by " + std::to_string(subwidth) +
+					" start");
 				function.multiply(instruction, OpV(temp), static_cast<uint64_t>(subwidth), false, node->debugIndex);
+				function.comment(instruction, "Multiply end");
+				function.comment(instruction, "temp " + temp->toString() + " -> operand " + node->operand->toString());
 				function.insertBefore<Mov, false>(instruction, OpV(temp), node->operand);
 				// result += skip
+				function.comment(instruction, "Result " + node->operand->toString() + " += skip " +
+					std::to_string(skip));
 				function.insertBefore<Add>(instruction, Op4(skip), node->operand);
 				// result += base pointer (not %rbp)
+				function.comment(instruction, "Result " + node->operand->toString() + " += base pointer " +
+					pointer->toString());
 				function.insertBefore<Add>(instruction, pointer, node->operand);
 			} else if (tt == TypeType::Struct || ((tt == TypeType::Array || tt == TypeType::Pointer || tt == TypeType::OpaquePointer) && !one_pvar)) {
 				std::list<std::variant<int64_t, const std::string *>> indices;
