@@ -78,6 +78,8 @@ namespace LL2X {
 			/** Prints debug information for all the functions in the program. */
 			void debug();
 
+			TypePtr getGlobalType(const std::string &global_name) const;
+
 			int64_t newDebugIndex();
 
 			void declareBuiltins();

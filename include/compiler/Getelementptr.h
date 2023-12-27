@@ -9,6 +9,7 @@
 namespace LL2X {
 	class Function;
 	class Instruction;
+	class Program;
 	class Type;
 	class Variable;
 	struct GetelementptrValue;
@@ -19,7 +20,7 @@ namespace LL2X {
 		int64_t compute(const std::shared_ptr<Type> &, std::list<int64_t>, std::shared_ptr<Type> *out_type = nullptr);
 
 		/** Computes the offset (in bits) of a getelementptr expression. Doesn't support pvar indices. */
-		int64_t compute(const GetelementptrValue *, std::shared_ptr<Type> *out_type = nullptr);
+		int64_t compute(Program &, const GetelementptrValue *, std::shared_ptr<Type> *out_type = nullptr);
 
 		/** Computes the offset (in bits) of a getelementptr expression, inserting instructions before a given base
 		 *  instruction as necessary to support pvar indices. */

@@ -12,6 +12,7 @@
 #include "util/Util.h"
 
 namespace LL2X::Passes {
+
 	void replaceConstants(Function &function) {
 		Timer timer("ReplaceConstants");
 
@@ -40,7 +41,7 @@ namespace LL2X::Passes {
 						function.insertBefore<InvalidInstruction>(instruction);
 					} else {
 						TypePtr out_type;
-						const long offset = Util::updiv(Getelementptr::compute(gep, &out_type), 8l);
+						const long offset = Util::updiv(Getelementptr::compute(function.parent, gep, &out_type), 8l);
 						if (Util::outOfRange(offset))
 							warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 						TypePtr ptr_type = std::make_shared<PointerType>(out_type);

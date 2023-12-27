@@ -1044,6 +1044,8 @@ namespace LL2X {
 #ifdef DEBUG_BEFORE_FINAL
 		debug();
 #endif
+		// if (*name == "@_ZL7func_532U1")
+		// 	debug();
 		// Passes::lowerInsertvalue(*this);
 		// Passes::readjustStackSkip(*this);
 		// Passes::updateArgumentLoads(*this, stackSize - initialStackSize);
@@ -1091,12 +1093,12 @@ namespace LL2X {
 		// }
 		finalDone = true;
 #ifdef FINAL_DEBUG
-		if (*name == "@_ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE")
-			debug();
+		// if (*name == "@_ZL7func_532U1")
+		// 	debug();
 		// allocator->interference.renderTo("interference_final_" + *name + ".png");
 		// allocator->interference.renderTo("interference_final_" + *name + ".svg");
-		if (*name == "@_ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE")
-			allocator->interference.renderTo("interference_final_" + *name + ".svg");
+		// if (*name == "@_ZL7func_532U1")
+		// 	allocator->interference.renderTo("interference_final_" + *name + ".svg");
 #endif
 	}
 

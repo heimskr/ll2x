@@ -4,7 +4,7 @@
 #include <thread>
 
 // #define COMPILE_MULTITHREADED
-// #define SINGLE_FUNCTION "@main"
+// #define SINGLE_FUNCTION "@_ZL7func_532U1"
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"
@@ -59,9 +59,10 @@ namespace LL2X {
 					sourceFilename = node->extractName();
 					break;
 				case LLVM_GLOBAL_DEF:
-					if (auto *global = dynamic_cast<GlobalVarDef *>(node)) {
+					if (auto *global = dynamic_cast<GlobalVarDef *>(node))
 						globals.emplace(*node->lexerInfo, global);
-					} else throw std::runtime_error("Node with token GLOBAL_DEF isn't an instance of GlobalVarDef");
+					else
+						throw std::runtime_error("Node with token GLOBAL_DEF isn't an instance of GlobalVarDef");
 					break;
 				case LLVMTOK_ATTRIBUTES: {
 					const auto *attrnode = dynamic_cast<const AttributesNode *>(node);
@@ -100,16 +101,18 @@ namespace LL2X {
 			}
 		}
 
-		for (auto &[index, location]: locations)
-			if (subprograms.contains(location.scope))
+		for (auto &[index, location]: locations) {
+			if (subprograms.contains(location.scope)) {
 				location.file = subprograms.at(location.scope).file;
-			else if (lexicalBlocks.contains(location.scope)) {
+			} else if (lexicalBlocks.contains(location.scope)) {
 				location.file = lexicalBlocks.at(location.scope).file;
 				do {
 					location.scope = lexicalBlocks.at(location.scope).scope;
 				} while (lexicalBlocks.contains(location.scope));
-			} else
+			} else {
 				warn() << "Couldn't find scope " << location.scope << " from location " << index << ".\n";
+			}
+		}
 	}
 
 	Program::~Program() {
@@ -389,14 +392,14 @@ namespace LL2X {
 				};
 
 				validate(gep);
-				int64_t offset = Getelementptr::compute(gep, nullptr) / 8;
+				int64_t offset = Getelementptr::compute(*this, gep, nullptr) / 8;
 				std::string comment = " // Offsets: " + std::to_string(offset);
 				bool comment_changed = false;
 
 				while (gep->variable->valueType() == ValueType::Getelementptr) {
 					gep = dynamic_cast<GetelementptrValue *>(gep->variable.get());
 					validate(gep);
-					const int64_t new_offset = Getelementptr::compute(gep, nullptr) / 8;
+					const int64_t new_offset = Getelementptr::compute(*this, gep, nullptr) / 8;
 					comment += ", " + std::to_string(new_offset);
 					comment_changed = true;
 					offset += new_offset;
@@ -450,6 +453,19 @@ namespace LL2X {
 #endif
 				pair.second->debug();
 		}
+	}
+
+	TypePtr Program::getGlobalType(const std::string &global_name) const {
+		if (global_name.empty())
+			return nullptr;
+
+		if (global_name.front() != '@')
+			return getGlobalType('@' + global_name);
+
+		if (auto iter = globals.find(global_name); iter != globals.end())
+			return iter->second->type;
+
+		return nullptr;
 	}
 
 	int64_t Program::newDebugIndex() {

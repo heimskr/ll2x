@@ -319,14 +319,17 @@ namespace LL2X::Passes {
 					return;
 				case  8:
 					// movz %src, %dest
+					function.comment(instruction, "movzx from " + std::string(__FILE__) + ':' + std::to_string(__LINE__));
 					function.insertBefore<Movzx>(instruction, Op1(source), Op8(destination));
 					return;
 				case 16:
 					// mov %src, %dest
+					function.comment(instruction, "movzx from " + std::string(__FILE__) + ':' + std::to_string(__LINE__));
 					function.insertBefore<Movzx>(instruction, Op2(source), Op8(destination));
 					return;
 				case 32:
 					// mov %src, %dest
+					function.comment(instruction, "movzx from " + std::string(__FILE__) + ':' + std::to_string(__LINE__));
 					function.insertBefore<Movzx>(instruction, Op4(source), Op8(destination));
 					return;
 				default:
@@ -663,6 +666,7 @@ namespace LL2X::Passes {
 			}
 
 			if (!out) {
+				function.comment(instruction, "movzx from " + std::string(__FILE__) + ':' + std::to_string(__LINE__));
 				out = function.insertBefore<Movzx>(instruction, operand, new_operand);
 			}
 

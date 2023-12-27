@@ -17,11 +17,12 @@ namespace LL2X {
 
 		if (linkage_ != nullptr) {
 			const std::string &link = *linkage_->lexerInfo;
-			for (const std::pair<const Linkage, std::string> &pair: linkage_map)
+			for (const std::pair<const Linkage, std::string> &pair: linkage_map) {
 				if (link == pair.second) {
 					linkage = pair.first;
 					break;
 				}
+			}
 		}
 
 		if (preemption_ != nullptr) {
@@ -69,10 +70,12 @@ namespace LL2X {
 		if (global_or_constant != nullptr)
 			isConstant = *global_or_constant->lexerInfo == "constant";
 
-		if (type_or_constant->symbol == LLVM_CONSTANT)
+		if (type_or_constant->symbol == LLVM_CONSTANT) {
 			constant = std::make_shared<Constant>(type_or_constant);
-		else
+			type = constant->type;
+		} else {
 			type = getType(type_or_constant);
+		}
 
 		for (ASTNode *extra: *gdef_extras) {
 			if (extra->symbol == LLVMTOK_SECTION) {
