@@ -68,20 +68,23 @@ namespace LL2X::PaddedStructs {
 			throw std::runtime_error("ExtractValueNode output variable has no type");
 
 		auto struct_type = initial_struct_type->pad();
-		index = struct_type->paddingMap.at(index);
 
 		// TODO: support ArrayType
 
-		int64_t width_sum = 0;
-		for (int64_t i = 0; i < index; ++i)
-			width_sum += struct_type->node->types.at(i)->width();
+		// int64_t width_sum = 0;
+		// for (int64_t i = 0; i < index; ++i)
+		// 	width_sum += struct_type->node->types.at(i)->width();
+
+		const int64_t offset = struct_type->paddingMap.at(index);
+
+		Util::print(struct_type->paddingMap) << '\n';
 
 		int64_t skip = 0;
 		int64_t source_reg_index = 0;
 
 		// While 64 <= width sum, subtract 64 and skip a source register.
 		// The result will be the number of bits to skip in the first used source register.
-		for (skip = width_sum; 64 <= skip; skip -= 64)
+		for (skip = offset * 8; 64 <= skip; skip -= 64)
 			++source_reg_index;
 
 		auto extracted_type = struct_type->node->types.at(index);
@@ -94,7 +97,8 @@ namespace LL2X::PaddedStructs {
 			VariablePtr from_pack = function.newVariable(OpaqueType::make(), instruction->parent.lock());
 
 			function.comment(instruction, "PaddedStructs(" + source->type->toString() + " -> " +
-				out_var->type->toString() + "): move from pack " + source->toString());
+				out_var->type->toString() + "): move from pack " + source->toString() + " (" + source->type->toString()
+				+ ") to " + from_pack->toString() + " (" + from_pack->type->toString() + "), index = " + std::to_string(source_reg_index));
 			function.insertBefore<DeferredSourceMove, false>(instruction, OpV(source), OpV(from_pack),
 				source_reg_index);
 

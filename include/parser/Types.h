@@ -184,6 +184,7 @@ namespace LL2X {
 		bool operator==(const Type &) const override;
 		/** Assumes that each member in a struct has a width that's a multiple of 8 bits. */
 		std::shared_ptr<StructType> pad();
+		std::string debugElements() const;
 	};
 
 	/** Global variables are specified without a type indicator. This means that when we encounter a global variable, we

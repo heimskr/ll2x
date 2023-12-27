@@ -3,12 +3,14 @@
 #include <algorithm>
 #include <initializer_list>
 #include <iostream>
+#include <map>
 #include <set>
 #include <signal.h>
 #include <sstream>
 #include <stdlib.h>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -213,6 +215,85 @@ namespace LL2X::Util {
 	template <typename T>
 	bool isPowerOfTwo(T num) {
 		return (num & (num - 1)) == 0;
+	}
+
+	template <typename T>
+	concept Map =
+		std::derived_from<T, std::map<typename T::key_type, typename T::mapped_type, typename T::key_compare, typename T::allocator_type>> ||
+		std::derived_from<T, std::unordered_map<typename T::key_type, typename T::mapped_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
+
+	template <typename T>
+	concept Numeric = std::integral<T> || std::floating_point<T>;
+
+	template <typename T>
+	concept Set =
+		std::derived_from<T, std::set<typename T::value_type, typename T::value_compare, typename T::allocator_type>> ||
+		std::derived_from<T, std::unordered_set<typename T::value_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
+
+	template <typename T>
+	concept Linear = requires(T t) {
+		typename T::value_type;
+		t.begin();
+		t.end();
+		requires !Map<T>;
+		requires !Set<T>;
+		requires !std::same_as<T, std::string>;
+		requires !std::same_as<T, std::string_view>;
+	};
+
+	template <typename T>
+	concept LinearOrSet = Set<T> || Linear<T>;
+
+	inline std::ostream & print(const std::string &s, std::ostream &os = std::cerr) {
+		return os << s;
+	}
+
+	template <Numeric T>
+	std::ostream & print(T value, std::ostream &os = std::cerr) {
+		return os << value;
+	}
+
+	template <Map T>
+	std::ostream & print(const T &map, std::ostream &os = std::cerr) {
+		if (map.empty())
+			return os << "\e[2m{}\e[22m";
+
+		os << "\e[2m{\e[22m";
+
+		bool first = true;
+
+		for (const auto &[key, value]: map) {
+			if (first)
+				first = false;
+			else
+				os << "\e[2m, \e[22m";
+			print(key, os);
+			os << " => \e[1m";
+			print(value, os);
+			os << "\e[22m";
+		}
+
+		return os << "\e[2m}\e[22m";
+	}
+
+	template <LinearOrSet T>
+	std::ostream & print(const T &linear, std::ostream &os = std::cerr) {
+		if (linear.empty())
+			return os << "\e[2m[]\e[22m";
+
+		os << "\e[2m[\e[22m";
+
+		bool first = true;
+
+		for (const auto &item: linear) {
+			if (first)
+				first = false;
+			else
+				os << "\e[2m, \e[22m";
+			print(item, os);
+		}
+
+		return os << "\e[2m]\e[22m";
 	}
 }
 

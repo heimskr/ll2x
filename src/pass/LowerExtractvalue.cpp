@@ -45,8 +45,9 @@ namespace LL2X::Passes {
 					throw std::runtime_error("Expected extractvalue operand to be a register");
 				}
 				variable = operand_value->operand->reg;
-			} else if (auto local = std::dynamic_pointer_cast<LocalValue>(ev->aggregateValue))
+			} else if (auto local = std::dynamic_pointer_cast<LocalValue>(ev->aggregateValue)) {
 				variable = local->variable;
+			}
 
 			if (!variable->type) {
 				warn() << "Variable " << variable->ansiString() << " has no type.\n";

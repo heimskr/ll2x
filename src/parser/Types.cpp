@@ -366,7 +366,7 @@ namespace LL2X {
 	}
 
 	std::shared_ptr<StructType> StructType::pad() {
-		warn() << "StructType::pad() is likely buggy.\n";
+		warn() << "StructType::pad(" << toString() << ") is likely buggy.\n";
 
 		if (padded)
 			return shared_from_this();
@@ -379,37 +379,102 @@ namespace LL2X {
 
 		out->node = std::make_shared<StructNode>(StructShape::Packed);
 
-		int64_t largest = 1;
-		int64_t current_width = 0;
-		int64_t padding_items_added = 0;
-		for (TypePtr &subtype: node->types)
-			largest = std::max(largest, static_cast<int64_t>(subtype->width()));
+		if (!node->types.empty()) {
+			int64_t current_offset = 0;
+			out->paddingMap[0] = 0;
+			out->node->types.push_back(node->types.front()->copy());
 
-		for (size_t i = 0; i < node->types.size(); ++i) {
-			const bool is_last = i == node->types.size() - 1;
-			TypePtr &subtype = node->types[i];
-			const int64_t type_width = subtype->width();
-			current_width += type_width;
-			const int64_t next_width = is_last? largest : node->types[i + 1]->width();
-			if (subtype->typeType() == TypeType::Struct)
-				out->node->types.push_back(dynamic_cast<StructType *>(subtype.get())->pad());
-			else
-				out->node->types.push_back(subtype->copy());
-			out->paddingMap.emplace(i, i + padding_items_added);
-			if (next_width != 0) {
-				int64_t remaining = (next_width - current_width % next_width) % next_width;
-				while (0 < remaining) {
-					out->node->types.push_back(std::make_shared<IntType>(8));
-					++padding_items_added;
-					remaining -= 8;
-					current_width += 8;
-				}
+			for (size_t i = 0; i < node->types.size() - 1; ++i) {
+				const TypePtr &type = node->types.at(i + 1);
+				out->node->types.push_back(type->copy());
+				current_offset = Util::upalign(current_offset + type->width() / 8, type->alignment());
+				out->paddingMap[i + 1] = current_offset;
 			}
 		}
+
+
+
+
+
+		// int64_t largest = 1;
+		// int64_t current_width = 0;
+		// int64_t padding_items_added = 0;
+		// for (const TypePtr &subtype: node->types)
+		// 	largest = std::max(largest, static_cast<int64_t>(subtype->width()));
+
+		// for (size_t i = 0; i < node->types.size(); ++i) {
+		// 	const bool is_last = i == node->types.size() - 1;
+		// 	TypePtr &subtype = node->types[i];
+		// 	const int64_t type_width = subtype->width();
+		// 	current_width += type_width;
+		// 	const int64_t next_width = is_last? largest : node->types[i + 1]->width();
+		// 	if (subtype->typeType() == TypeType::Struct)
+		// 		out->node->types.push_back(dynamic_cast<StructType *>(subtype.get())->pad());
+		// 	else
+		// 		out->node->types.push_back(subtype->copy());
+		// 	info() << i << " => " << (i + padding_items_added) << '\n';
+		// 	out->paddingMap.emplace(i, i + padding_items_added);
+		// 	if (next_width != 0) {
+		// 		int64_t remaining = (next_width - current_width % next_width) % next_width;
+		// 		while (0 < remaining) {
+		// 			out->node->types.push_back(std::make_shared<IntType>(8));
+		// 			++padding_items_added;
+		// 			remaining -= 8;
+		// 			current_width += 8;
+		// 		}
+		// 	}
+		// }
+
+		info() << toString() << ": " << debugElements() << '\n';
 
 		out->padded = true;
 		paddedChild = out;
 		return out;
+	}
+
+	std::string StructType::debugElements() const {
+		if (paddedChild)
+			return paddedChild->debugElements();
+
+		if (node->types.empty())
+			return "\e[2m{}\e[22m";
+
+		std::stringstream out;
+		out << "\e[2m{\e[22m";
+
+		auto get_pad = [&](int n) -> int64_t {
+			if (paddingMap.empty()) {
+				if (paddedChild)
+					return paddedChild->paddingMap.at(n);
+			} else {
+				return paddingMap.at(n);
+			}
+
+			return -1;
+		};
+
+		int64_t i = 0;
+		for (const TypePtr &type: node->types) {
+			if (i != 0)
+				out << "\e[2m,\e[22m ";
+
+			out << "\e[1m" << i << "\e[22m";
+
+			if (int64_t pad = get_pad(i); pad != i && pad != -1)
+				out << " (\e[1m" << pad << "\e[22m)";
+
+			out << "\e[2m:\e[22m ";
+
+			if (auto struct_type = std::dynamic_pointer_cast<StructType>(type))
+				out << struct_type->pad()->debugElements();
+			else
+				out << *type;
+
+			++i;
+		}
+
+		out << "\e[2m}\e[22m";
+		return out.str();
 	}
 
 	int GlobalTemporaryType::alignment() const {
