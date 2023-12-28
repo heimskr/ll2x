@@ -42,7 +42,6 @@ namespace LL2X::Passes {
 	}
 
 	void lowerLoad(Function &function, InstructionPtr &instruction, LLVMInstruction &llvm) {
-		function.comment(instruction, "Starting lowerLoad.");
 		auto *node = dynamic_cast<LoadNode *>(llvm.node);
 		ConstantPtr converted = node->constant->convert();
 		if (!converted->value)

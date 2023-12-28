@@ -44,8 +44,8 @@ namespace LL2X::Passes {
 			}
 
 			// When the arguments aren't explicit, we check the parent program's map of functions.
-			if (function.parent.functions.contains("@" + *global)) {
-				Function &func = *function.parent.functions.at("@" + *global);
+			if (function.parent.functions.contains('@' + *global)) {
+				Function &func = *function.parent.functions.at('@' + *global);
 				ellipsis = func.isVariadic();
 				if (argument_types != nullptr) {
 					argument_types->reserve(func.arguments->size());
@@ -68,8 +68,8 @@ namespace LL2X::Passes {
 			}
 
 			// In rare cases, there may be an alias.
-			if (function.parent.aliases.contains(StringSet::intern("@" + *global))) {
-				AliasDef *alias = function.parent.aliases.at(StringSet::intern("@" + *global));
+			if (function.parent.aliases.contains(StringSet::intern('@' + *global))) {
+				AliasDef *alias = function.parent.aliases.at(StringSet::intern('@' + *global));
 				global = alias->aliasTo->front() == '@'? StringSet::intern(alias->aliasTo->substr(1)) : alias->aliasTo;
 			} else
 				throw std::runtime_error("Couldn't find signature for function " + *global);
@@ -273,8 +273,8 @@ namespace LL2X::Passes {
 
 	int pushCallValue(Function &function, const InstructionPtr &instruction, const ConstantPtr &constant, int pushed,
 	                  const ClobberMap &clobbers) {
-		// Stack parameters seem to be passed on a 64-bit boundary.
-		// TOOD!: clobbers.
+		// Stack parameters seem to be passed on a 64-bit boundary in MIPS. Is the same true of x86_64?
+		// TODO!: clobbers.
 
 		int size = 8;
 		ValueType value_type = constant->value->valueType();
@@ -627,17 +627,17 @@ namespace LL2X::Passes {
 			if (Util::outOfRange(offset))
 				warn() << "Getelementptr offset inexplicably out of range: " << offset << '\n';
 
-			// auto out = function.insertBefore<Mov>(instruction, Op8(*gep_global->name, true, false), new_operand);
 			auto out = function.insertBefore<Lea>(instruction, Op8(*gep_global->name, true, false), new_operand);
+
 			if (offset != 0)
 				function.insertBefore<Add>(instruction, Op4(offset), new_operand);
+
 			insert_exts();
 			return out;
 		}
 
 		if (value_type == ValueType::Global) {
 			auto global = std::dynamic_pointer_cast<GlobalValue>(constant->value);
-			// auto mov = function.insertBefore<Mov>(instruction, Op8(*global->name, true, false), new_operand);
 			auto mov = function.insertBefore<Lea>(instruction, Op8(*global->name, true, false), new_operand);
 			insert_exts();
 			return mov;
@@ -666,7 +666,6 @@ namespace LL2X::Passes {
 			}
 
 			if (!out) {
-				function.comment(instruction, "movzx from " + std::string(__FILE__) + ':' + std::to_string(__LINE__));
 				out = function.insertBefore<Movzx>(instruction, operand, new_operand);
 			}
 
