@@ -63,15 +63,54 @@ int pwd(const std::vector<std::string_view> &args) {
 	return 0;
 }
 
+int cd(const std::vector<std::string_view> &args) {
+	if (2 < args.size()) {
+		std::cerr << "Invalid number of arguments: " << args.size() << '\n';
+		return 1;
+	}
+
+	std::filesystem::path path;
+
+	if (args.size() == 2) {
+		path = args[1];
+	} else if (const char *home = getenv("HOME")) {
+		path = home;
+	} else {
+		std::cerr << "Couldn't find a home directory to return to.\n";
+		return 2;
+	}
+
+	if (!std::filesystem::exists(path)) {
+		std::cerr << "Couldn't change directory to " << path.string() << ": not found\n";
+		return 3;
+	}
+
+	if (!std::filesystem::is_directory(path)) {
+		std::cerr << "Couldn't change directory to " << path.string() << ": not a directory\n";
+		return 4;
+	}
+
+	std::filesystem::current_path(path);
+	return 0;
+}
+
+int quit(const std::vector<std::string_view> &args) {
+	std::exit(0);
+	return 0;
+}
+
 int main() {
 	std::map<std::string, std::function<int(const std::vector<std::string_view> &)>> commands {
-		{"ls",  ls },
-		{"pwd", pwd},
+		{"ls",   ls  },
+		{"pwd",  pwd },
+		{"cd",   cd  },
+		{"exit", quit},
+		{"quit", quit},
 	};
 
 	std::string line;
 
-	std::cout << "$ ";
+	std::cout << "\e[32m$\e[39m ";
 
 	while (std::getline(std::cin, line)) {
 		std::vector<std::string_view> args = split(line, " ", true);
@@ -80,11 +119,12 @@ int main() {
 			continue;
 
 		auto iter = commands.find(std::string(args.front()));
-
 		bool success = false;
 
 		if (iter != commands.end()) {
 			success = iter->second(args) == 0;
+		} else {
+			std::cerr << args.front() << ": command not found\n";
 		}
 
 		std::cout << "\e[3" << (success? '2' : '1') << "m$\e[39m ";
