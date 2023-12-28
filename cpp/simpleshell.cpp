@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <filesystem>
 #include <functional>
 #include <iostream>
@@ -30,6 +31,14 @@ std::vector<std::string_view> split(std::string_view str, std::string_view delim
 	return out;
 }
 
+struct LsItem {
+	std::string name;
+	bool isDirectory;
+
+	LsItem(std::string name_, bool is_directory):
+		name(std::move(name_)), isDirectory(is_directory) {}
+};
+
 int ls(const std::vector<std::string_view> &args) {
 	std::filesystem::path path;
 
@@ -47,8 +56,24 @@ int ls(const std::vector<std::string_view> &args) {
 		return 2;
 	}
 
+	std::vector<LsItem> items;
+
 	for (const auto &entry: std::filesystem::directory_iterator(path))
-		std::cout << entry.path().filename().string() << '\n';
+		items.emplace_back(entry.path().filename().string(), entry.is_directory());
+
+	std::sort(items.begin(), items.end(), [](const LsItem &left, const LsItem &right) {
+		if (left.isDirectory != right.isDirectory)
+			return left.isDirectory;
+
+		return left.name < right.name;
+	});
+
+	for (const auto &[name, is_dir]: items) {
+		if (is_dir)
+			std::cout << "\e[36m" << name << "\e[39m\n";
+		else
+			std::cout << name << '\n';
+	}
 
 	return 0;
 }
@@ -73,7 +98,7 @@ int cd(const std::vector<std::string_view> &args) {
 
 	if (args.size() == 2) {
 		path = args[1];
-	} else if (const char *home = getenv("HOME")) {
+	} else if (const char *home = getenv("HOME"); home && home[0]) {
 		path = home;
 	} else {
 		std::cerr << "Couldn't find a home directory to return to.\n";
