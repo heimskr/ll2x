@@ -99,13 +99,19 @@ int quit(const std::vector<std::string_view> &args) {
 	return 0;
 }
 
+int clear(const std::vector<std::string_view> &args) {
+	std::cout << "\e[2J\e[3J\e[H";
+	return 0;
+}
+
 int main() {
 	std::map<std::string, std::function<int(const std::vector<std::string_view> &)>> commands {
-		{"ls",   ls  },
-		{"pwd",  pwd },
-		{"cd",   cd  },
-		{"exit", quit},
-		{"quit", quit},
+		{"ls",    ls   },
+		{"pwd",   pwd  },
+		{"cd",    cd   },
+		{"exit",  quit },
+		{"quit",  quit },
+		{"clear", clear},
 	};
 
 	std::string line;
