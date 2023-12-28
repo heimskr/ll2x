@@ -167,10 +167,13 @@ namespace LL2X::Passes {
 
 			if (0 < constant && Util::isPowerOfTwo(constant)) {
 				auto new_right = Op4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
-				function.insertBefore<Mov>(instruction, left, destination);
+				function.insertBefore<Mov, false>(instruction, left, destination);
 				function.insertShiftBefore<Shl>(instruction, new_right, destination);
 				return;
 			}
+
+			function.multiply(instruction, left, constant, true);
+			return;
 		}
 
 		auto rax_clobber = function.clobber(instruction, x86_64::rax);
@@ -182,7 +185,6 @@ namespace LL2X::Passes {
 		// mov %left, %rax
 		function.insertBefore<Mov, false>(instruction, left, rax);
 		// mul %right
-		// TODO!: use Function::multiply?
 		function.insertBefore<Mul, false>(instruction, right, destination->bitWidth);
 		// mov %rax, %dest
 		function.insertBefore<Mov, false>(instruction, rax, destination);
