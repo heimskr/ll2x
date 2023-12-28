@@ -60,9 +60,8 @@ namespace LL2X::Passes {
 				function.insertBefore<Lea>(instruction, Op8(*global->name, true, false), pointer);
 			}
 
-			// const TypeType tt = constant_type->typeType();
-			// const TypeType tt = node->type->typeType();
 			const TypeType tt = TypeType::Pointer;
+			const TypePtr base_type = node->type;
 			const bool one_pvar = node->indices.size() == 1 && node->indices.at(0).isPvar;
 			const bool any_pvar = anyPvarInIndices(node->indices);
 			const bool dynamic_index = node->indices.size() == 2 && !node->indices[0].isPvar && node->indices[1].isPvar;
@@ -195,7 +194,8 @@ namespace LL2X::Passes {
 
 				function.insertBefore<Mov>(instruction, OpV(source), node->operand);
 
-				Getelementptr::insert(function, node->pointerType, indices, instruction, node->operand, &out_type);
+				Getelementptr::insert(function, PointerType::make(base_type), indices, instruction, node->operand, &out_type);
+
 				function.comment(instruction, "LowerGetelementptr(" + std::string(node->location) + "): type of " + node->operand->toString() + " is "
 					+ out_type->toString());
 				node->operand->reg->setType(out_type);

@@ -23,9 +23,11 @@ namespace LL2X {
 		written.clear();
 		extracted = true;
 
-		if (!secretReads || !secretWrites)
-			if (!(destination->isIndirect()? secretReads : secretWrites))
-				destination->extract(true, read, written);
+		if (!(destination->isIndirect()? secretReads : secretWrites)) {
+			// TODO!: investigate
+			// destination->extract(true, read, written);
+			destination->extract(!destination->isIndirect(), read, written);
+		}
 
 		if (!secretReads && source)
 			source->extract(false, read, written);

@@ -55,7 +55,7 @@ namespace LL2X::Passes {
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			if (auto source_to_dest = std::dynamic_pointer_cast<SourceToDest>(instruction)) {
 				if (source_to_dest->source->isIndirect() && source_to_dest->destination->isIndirect()) {
-					function.comment(instruction, "Fixing " + instruction->toString());
+					function.comment(instruction, "Fixing source-to-dest " + instruction->toString());
 					const int reg = chooseRegister(source_to_dest->source, source_to_dest->destination);
 					const bool live = isLive(reg, instruction);
 					VariablePtr temp = function.makePrecoloredVariable(reg, instruction->parent.lock());
@@ -74,7 +74,7 @@ namespace LL2X::Passes {
 				}
 			} else if (auto overlapping = std::dynamic_pointer_cast<Overlapping>(instruction)) {
 				if (overlapping->sourceOnly->isIndirect() && overlapping->multi->isIndirect()) {
-					function.comment(instruction, "Fixing " + instruction->toString());
+					function.comment(instruction, "Fixing source-only " + instruction->toString());
 					const int reg = chooseRegister(overlapping->sourceOnly, overlapping->multi);
 					const bool live = isLive(reg, instruction);
 					VariablePtr temp = function.makePrecoloredVariable(reg, instruction->parent.lock());

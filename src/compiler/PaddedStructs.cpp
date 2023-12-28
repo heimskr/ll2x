@@ -77,15 +77,10 @@ namespace LL2X::PaddedStructs {
 
 		const int64_t offset = struct_type->paddingMap.at(index);
 
-		Util::print(struct_type->paddingMap) << '\n';
-
-		int64_t skip = 0;
-		int64_t source_reg_index = 0;
-
 		// While 64 <= width sum, subtract 64 and skip a source register.
 		// The result will be the number of bits to skip in the first used source register.
-		for (skip = offset * 8; 64 <= skip; skip -= 64)
-			++source_reg_index;
+		int64_t source_reg_index = offset / 8;
+		int64_t skip = offset * 8 % 64;
 
 		auto extracted_type = struct_type->node->types.at(index);
 		int64_t width_remaining = extracted_type->width();

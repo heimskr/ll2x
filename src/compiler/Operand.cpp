@@ -195,6 +195,10 @@ namespace LL2X {
 		return OpX(width, displacement, reg);
 	}
 
+	bool Operand::hasDisplacement(Number check) const {
+		return std::holds_alternative<Number>(displacement) && std::get<Number>(displacement) == check;
+	}
+
 	VariablePtr Operand::getVariable() const {
 		if (mode != Mode::Register)
 			throw std::runtime_error("Can't get variable from operand: not in register mode");

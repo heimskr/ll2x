@@ -366,8 +366,6 @@ namespace LL2X {
 	}
 
 	std::shared_ptr<StructType> StructType::pad() {
-		warn() << "StructType::pad(" << toString() << ") is likely buggy.\n";
-
 		if (padded)
 			return shared_from_this();
 
@@ -391,41 +389,6 @@ namespace LL2X {
 				out->paddingMap[i + 1] = current_offset;
 			}
 		}
-
-
-
-
-
-		// int64_t largest = 1;
-		// int64_t current_width = 0;
-		// int64_t padding_items_added = 0;
-		// for (const TypePtr &subtype: node->types)
-		// 	largest = std::max(largest, static_cast<int64_t>(subtype->width()));
-
-		// for (size_t i = 0; i < node->types.size(); ++i) {
-		// 	const bool is_last = i == node->types.size() - 1;
-		// 	TypePtr &subtype = node->types[i];
-		// 	const int64_t type_width = subtype->width();
-		// 	current_width += type_width;
-		// 	const int64_t next_width = is_last? largest : node->types[i + 1]->width();
-		// 	if (subtype->typeType() == TypeType::Struct)
-		// 		out->node->types.push_back(dynamic_cast<StructType *>(subtype.get())->pad());
-		// 	else
-		// 		out->node->types.push_back(subtype->copy());
-		// 	info() << i << " => " << (i + padding_items_added) << '\n';
-		// 	out->paddingMap.emplace(i, i + padding_items_added);
-		// 	if (next_width != 0) {
-		// 		int64_t remaining = (next_width - current_width % next_width) % next_width;
-		// 		while (0 < remaining) {
-		// 			out->node->types.push_back(std::make_shared<IntType>(8));
-		// 			++padding_items_added;
-		// 			remaining -= 8;
-		// 			current_width += 8;
-		// 		}
-		// 	}
-		// }
-
-		info() << toString() << ": " << debugElements() << '\n';
 
 		out->padded = true;
 		paddedChild = out;

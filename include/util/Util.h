@@ -268,7 +268,7 @@ namespace LL2X::Util {
 			else
 				os << "\e[2m, \e[22m";
 			print(key, os);
-			os << " => \e[1m";
+			os << " \e[2m=> \e[22;1m";
 			print(value, os);
 			os << "\e[22m";
 		}

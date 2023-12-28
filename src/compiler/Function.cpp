@@ -1010,7 +1010,6 @@ namespace LL2X {
 #endif
 		Passes::lowerMemory(*this);
 		// Passes::lowerInlineAsm(*this);
-		// if (*name == "@_ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE") debug();
 		Passes::lowerExtractvalue(*this);
 		// Passes::transformInstructions(*this);
 		// for (BasicBlockPtr &block: blocks)
@@ -1056,6 +1055,8 @@ namespace LL2X {
 		Passes::finishMultireg(*this);
 		// Passes::removeRedundantMoves(*this);
 		Passes::removeUselessSourceBranches(*this);
+		Passes::fixMemoryOperands(*this);
+		Passes::lowerClobber(*this);
 		Passes::mergeAllBlocks(*this);
 		forceLiveness();
 		Passes::insertLabels(*this);
@@ -1064,7 +1065,6 @@ namespace LL2X {
 		Passes::fixMovzx(*this);
 		Passes::hackOperands(*this);
 		forceLiveness();
-		Passes::lowerClobber(*this);
 		const bool naked = isNaked();
 		if (!naked)
 			Passes::insertPrologue(*this);
@@ -1079,7 +1079,6 @@ namespace LL2X {
 		Passes::replaceBigMov(*this);
 		Passes::transformLabels(*this);
 		forceLiveness(); // Hack: some other pass is forgetting to extract after changing operands.
-		Passes::fixMemoryOperands(*this);
 		Passes::removeDummies(*this);
 		hackVariables();
 		forceLiveness();

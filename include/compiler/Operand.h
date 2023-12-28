@@ -129,6 +129,8 @@ namespace LL2X {
 		 *  Throws an exception if this isn't a register operand. */
 		std::shared_ptr<Operand> toDisplaced(int displacement = 0) const;
 
+		bool hasDisplacement(Number) const;
+
 		VariablePtr getVariable() const;
 
 		inline OperandPtr setType(const std::shared_ptr<Type> &new_type) {

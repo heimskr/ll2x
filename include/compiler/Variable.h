@@ -115,7 +115,7 @@ namespace LL2X {
 			/** Returns true if the variable has been assigned more than one register. */
 			bool multireg() const;
 			/** Returns a string containing all the assigned registers.
-			 *  The string is of the form "$reg" or "($reg1 $reg2 ...)". */
+			 *  The string is of the form "%reg" or "(%reg1 %reg2 ...)". */
 			std::string registersString() const;
 			void resetRegisters();
 
