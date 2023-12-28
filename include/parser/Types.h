@@ -214,7 +214,7 @@ namespace LL2X {
 		std::string toString() override { return "opaque"; }
 		TypePtr copy() const override { return std::make_shared<OpaqueType>(); }
 		int width() const override { return 64; }
-		int alignment() const override { warn() << "Opaque alignment is unspecified!\n"; return 8; }
+		int alignment() const override { return 8; }
 		bool operator==(const Type &type) const override { return dynamic_cast<const OpaqueType *>(&type) != nullptr; }
 	};
 
