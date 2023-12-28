@@ -13,8 +13,6 @@ a.out
 /src/parser/yyparse*
 /src/parser/yylex*
 
-/csmith1
-/csmith1_clang
 /core
-/csmith1_ll2x
-/diriter0
+/diriter*
+/csmith*
