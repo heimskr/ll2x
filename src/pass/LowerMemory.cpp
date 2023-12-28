@@ -198,7 +198,7 @@ namespace LL2X::Passes {
 				OperandPtr operand = operand_value->operand;
 				if (operand->isRegister()) {
 					// mov $imm, (operand)
-					function.comment(instruction, prefix + ".3: mov $imm, " + operand->toString());
+					function.comment(instruction, prefix + ".3: mov $imm, (" + operand->toString() + ')');
 					function.insertBefore<Mov>(instruction, Op4(long_value), operand->toDisplaced(), width);
 				} else {
 					// mov $imm, operand

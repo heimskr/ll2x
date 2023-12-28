@@ -151,6 +151,16 @@ namespace LL2X {
 		});
 	}
 
+	bool BasicBlock::isPrimordial() const {
+		if (!parent)
+			throw std::runtime_error("Can't get primordiality of a basic block that has no parent");
+
+		if (BasicBlockPtr entry = parent->getEntry(); entry && label == entry->label)
+			return preds.empty();
+
+		return preds.size() == 1 && parent->getBlock(preds.front())->isPrimordial();
+	}
+
 	std::ostream & operator<<(std::ostream &os, const BasicBlock &block) {
 		return os << "%" << *block.label;
 	}

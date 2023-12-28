@@ -119,6 +119,8 @@ namespace LL2X {
 
 			virtual bool isPhi() const { return false; }
 
+			virtual bool isComment() const { return false; }
+
 			/** Whether it's valid for this instruction to have a debug intbang inserted after it. */
 			virtual bool showDebug() const { return true; }
 

@@ -248,6 +248,10 @@ namespace LL2X::Util {
 		return os << s;
 	}
 
+	inline std::ostream & print(const std::string *s, std::ostream &os = std::cerr) {
+		return os << *s;
+	}
+
 	template <Numeric T>
 	std::ostream & print(T value, std::ostream &os = std::cerr) {
 		return os << value;

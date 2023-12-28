@@ -27,12 +27,20 @@ namespace LL2X::Passes {
 
 		VariablePtr alloca_reg = rsp;
 
+		InstructionPtr previous_aligner;
+		BasicBlockPtr previous_block;
+
 		// Loop over all instructions, ignoring everything except allocas.
 		for (InstructionPtr &instruction: function.linearInstructions) {
 			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
 
-			if (!llvm || llvm->node->nodeType() != NodeType::Alloca)
+			if (!llvm || llvm->node->nodeType() != NodeType::Alloca) {
+				if (!instruction->isComment()) {
+					previous_aligner.reset();
+					previous_block.reset();
+				}
 				continue;
+			}
 
 			auto *alloca = dynamic_cast<AllocaNode *>(llvm->node);
 
@@ -44,7 +52,17 @@ namespace LL2X::Passes {
 
 			BasicBlockPtr block = llvm->parent.lock();
 
-			if (block == entry && block->preds.empty()) {
+			auto placed = [&](InstructionPtr aligner) {
+				previous_aligner = aligner;
+				previous_block = block;
+			};
+
+			// If the previous instruction processed was an alloca, we can remove its aligner and replace it.
+			if (block == previous_block && previous_aligner) {
+				to_remove.push_back(previous_aligner);
+			}
+
+			if (block->isPrimordial()) {
 				// If we know the alloca runs only once and has a fixed size, we can assign a static location on the
 				// stack for it instead of doing runtime stack pointer math.
 
@@ -74,7 +92,7 @@ namespace LL2X::Passes {
 			if (alloca->align == 16 || alloca->align == 8 || alloca->align == 4 || alloca->align == 2) {
 				function.insertBefore<And, false>(instruction, Op4(-alloca->align), Op8(rsp));
 			} else if (0 < alloca->align) {
-				const int64_t align = Util::upalign(alloca->align, 8);
+				const int64_t align = Util::upalign(alloca->align, 16);
 				VariablePtr   temp  = function.newVariable(IntType::make(64), block);
 				OperandPtr    rax   = Op8(function.makePrecoloredVariable(x86_64::rax, block));
 				OperandPtr    rdx   = Op8(function.makePrecoloredVariable(x86_64::rdx, block));
@@ -119,27 +137,8 @@ namespace LL2X::Passes {
 					auto *local = dynamic_cast<LocalValue *>(value);
 					function.comment(instruction, prefix + "mov %rsp, %var");
 					function.insertBefore<Mov, false>(instruction, OpV(alloca_reg), alloca->operand);
-
 					if (width != 0) {
-						// TODO: use shifts for widths that are powers of two.
-
-						OperandPtr rax = Op8(function.makePrecoloredVariable(x86_64::rax, block));
-						OperandPtr rdx = Op8(function.makePrecoloredVariable(x86_64::rdx, block));
-
-						// clobber %rax
-						auto rax_clobber = function.clobber(instruction, x86_64::rax);
-						// clobber %rdx
-						auto rdx_clobber = function.clobber(instruction, x86_64::rdx);
-						// mov $width, %rax
-						function.insertBefore<Mov, false>(instruction, Op4(width), rax);
-						// mul %var
-						function.insertBefore<Mul, false>(instruction, Op8(local->variable));
-						// sub %rax, %rsp
-						function.insertBefore<Sub, false>(instruction, rax, Op8(rsp));
-						// unclobber %rdx
-						function.unclobber(instruction, rdx_clobber);
-						// unclobber %rax
-						function.unclobber(instruction, rax_clobber);
+						function.multiply(instruction, OpV(local->variable), int64_t(width));
 					}
 				} else
 					throw std::runtime_error("Unsupported value for numelementsValue: " + std::string(*value));
@@ -160,10 +159,12 @@ namespace LL2X::Passes {
 
 				function.comment(mov, prefix + "mov %rsp, " + alloca->operand->toString());
 			}
+
+			placed(function.insertBefore<And>(instruction, Op4(-16), Op8(rsp)));
 		}
 
 		// Remove the alloca instructions to complete their replacement.
-		for (InstructionPtr &instruction: to_remove)
+		for (const InstructionPtr &instruction: to_remove)
 			function.remove(instruction);
 
 		if (replaced_count == 0) {

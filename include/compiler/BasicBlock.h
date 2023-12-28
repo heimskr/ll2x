@@ -71,6 +71,11 @@ namespace LL2X {
 
 			bool isLiveIn(const VariablePtr &) const;
 			bool isLiveOut(const VariablePtr &) const;
+
+			/** If this block is the entry, this function returns true. Otherwise, this function returns true if this
+			 *  block's only predicate is the entry block, or another block whose only predicate is the entry block,
+			 *  or so on. */
+			bool isPrimordial() const;
 	};
 
 	using BasicBlockPtr = std::shared_ptr<BasicBlock>;

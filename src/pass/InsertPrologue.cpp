@@ -1,5 +1,6 @@
 #include "compiler/Function.h"
 #include "compiler/Program.h"
+#include "instruction/And.h"
 #include "instruction/Comment.h"
 #include "instruction/Label.h"
 #include "instruction/Mov.h"
@@ -43,19 +44,15 @@ namespace LL2X::Passes {
 		}
 
 		// Move %rsp down to make room for stack allocations if necessary.
-		// Because we push %rbp to the stack, simply subtracting an amount upaligned to 16 would leave %rsp
-		// only 8-byte aligned and not 16-byte aligned, so we need to add an extra 8 bytes to the amount to subtract.
 		if (0 < function.stackSize) {
 			function.comment(first, "upalign(" + std::to_string(function.stackSize) + " + " +
 				std::to_string(function.maxPushedForCalls) + ", 16)", false);
 			function.insertBefore<Sub, false>(first, Op4(Util::upalign(function.stackSize + function.maxPushedForCalls,
-				16) + 8), Op8(rsp));
-		} else {
-			// If we haven't made any room on the stack for anything, we still need to subtract 8 bytes to keep the
-			// stack pointer 16-byte aligned.
-			function.comment(first, "Align stack pointer to 16-byte boundary", false);
-			function.insertBefore<Sub, false>(first, Op4(8), Op8(rsp));
+				16)), Op8(rsp));
 		}
+
+		function.comment(first, "Align stack pointer to 16-byte boundary", false);
+		function.insertBefore<And, false>(first, Op4(-16), Op8(rsp));
 
 		function.savedRegisters.clear();
 		for (const int reg: written) {

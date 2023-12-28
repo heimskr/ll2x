@@ -10,6 +10,8 @@ namespace LL2X {
 
 		bool showDebug() const override { return false; }
 
+		bool isComment() const override { return true; }
+
 		std::string debugExtra() override;
 		std::string toString() const override;
 	};

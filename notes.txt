@@ -1,0 +1,33 @@
+[2023/12/26 07:46] SetupCalls: globals use lea instead of mov
+[2023/12/26 07:54] No, that wasn't it.
+[2023/12/26 08:17] LowerStore.6 was using mov instead of lea.
+[2023/12/26 08:??] LowerIcmp inverted some arguments
+[2023/12/26 08:35] LowerIcmp was double-loading globals
+[2023/12/26 08:39] Compiled program (csmith1) produces different checksum each time for ll2x, but always 5229C7B0 for clang
+[2023/12/26 09:26] The call to platform_main_begin is completely missing from ll2x's output.
+[2023/12/26 09:26] 16-bit return values aren't being truncated.
+[2023/12/26 09:31] The call to platform_main_begin being missing is fine; the function is known to do absolutely nothing.
+[2023/12/26 10:22] Zero-extension from 16 to 32 bits just did a 32-bit register to 32-bit register copy without truncation.
+[2023/12/26 12:11] LowerIcmp is using mov for globals, but Clang is using lea.
+[2023/12/26 15:32] IcmpNode uses the left constant's type as its return type. It should be i1.
+[2023/12/26 15:43] Changing IcmpNode's return type to i1 broke a lot of things.
+[2023/12/26 15:55] Constraining the output of icmp with `and $1, %reg` fixed g_5=500 and made the output consistent(ly wrong).
+[2023/12/26 16:50] Extraction of BrCond (and who knows what else) is broken because LocalValues are handled but OperandValues aren't.
+[2023/12/26 17:45] Getelementptr expressions with globals needed to look up the type of the global. Also, globals didn't set their types properly.
+[2023/12/26 18:46] Actually, they needed to get the type from the getelementptr value itself. Also, dynamic offsets aren't being calculated correctly.
+[2023/12/26 18:56] Function::multiply wasn't moving the multiplicand into the register in some cases.
+[2023/12/27 17:39] Fixed it a while ago, but PaddedStructs was providing a byte width to something expected a bit width.
+[2023/12/27 18:18] LowerGetelementptr was using the wrong type (always an opaque pointer) for structs. Let's see whether this works.
+[2023/12/27 18:20] It got perhaps slightly further along before segfaulting.
+[2023/12/27 19:03] The problem was that liveness checking wasn't quite right during FixMemoryOperands, so I moved the pass to occur before block merging.
+                   Now the problem occurs quite a bit later... or so it seems? Yeah, it seems main continues for another 64 lines.
+[2023/12/27 19:31] I moved LowerClobber to occur before MergeAllBlocks and now it just. Compiles. And runs. And produces the correct output for diriter0. What even.
+[2023/12/28 09:30] Simpleshell is crashing because of an unaligned memory operand in movaps. Need to check alignment.
+[2023/12/28 09:32] When I call _ZSt7getlineIcSt11char_traitsIcESaIcEERSt13basic_istreamIT_T0_ES7_RNSt7__cxx1112basic_stringIS4_S5_T1_EE,
+                   both %rdi and %rsi are 16-byte aligned. I need to track where the operand is coming from.
+[2023/12/28 09:33] The memory operand is coming from... the stack pointer. It's only 8-byte aligned at the call to the function. Apparently it needs to be 16-byte aligned.
+[2023/12/28 09:39] Just subtracted an extra 8 bytes from %rsp. Now simpleshell accepts input and only then crashes.
+[2023/12/28 10:14] LowerSelect wasn't lea'ing global values. Now the problem is that comparison is backwards. Proper unit tests would've found this.
+[2023/12/28 10:39] Another crash due to misaligned stack with a movaps.
+[2023/12/28 11:17] Fixed. The issue was with dynamic allocas. I made the entry detection smarter (see BasicBlock::isPrimordial) to static-ify more allocas.
+                   I also added `andq $-16, $rsp` instructions after dynamic allocas.
