@@ -3,6 +3,7 @@
 #include "compiler/Function.h"
 #include "compiler/Instruction.h"
 #include "compiler/LLVMInstruction.h"
+#include "compiler/Program.h"
 #include "instruction/Jmp.h"
 #include "instruction/Label.h"
 #include "instruction/Mov.h"
@@ -16,7 +17,7 @@ namespace LL2X::Passes {
 	size_t lowerRet(Function &function) {
 		Timer timer("LowerRet");
 		std::list<InstructionPtr> to_remove;
-		
+
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
 			if (llvm == nullptr)
@@ -47,7 +48,7 @@ namespace LL2X::Passes {
 
 			} else if (ret->value->isLocal()) {
 
-				VariablePtr var = dynamic_cast<LocalValue *>(ret->value.get())->variable;
+				VariablePtr var = std::dynamic_pointer_cast<LocalValue>(ret->value)->variable;
 				function.extraVariables.emplace(var->id, var);
 
 				if (var->multireg()) {
@@ -85,9 +86,22 @@ namespace LL2X::Passes {
 					}
 				}
 
-			} else if (ret->value->valueType() != ValueType::Void)
+			} else if (ret->value->valueType() == ValueType::Global) {
+
+				auto global = std::dynamic_pointer_cast<GlobalValue>(ret->value);
+				const std::string &global_name = *global->name;
+				TypePtr type = function.parent.getGlobalType(global_name);
+
+				x86_64::Width width = x86_64::Width::Eight;
+				if (type)
+					width = x86_64::getWidth(type->width());
+
+				function.insertBefore<Mov, false>(instruction, OpX(width, global_name, true, false), OpX(width, rax));
+
+			} else if (ret->value->valueType() != ValueType::Void) {
 				throw std::runtime_error("Unhandled return value in " + *function.name + ": " +
 					std::string(*ret->value));
+			}
 
 			// Restore all the registers that were saved in the prologue.
 			for (auto begin = function.savedRegisters.rbegin(), iter = begin, end = function.savedRegisters.rend();
