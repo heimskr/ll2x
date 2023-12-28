@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <unordered_set>
 #include <variant>
@@ -118,6 +119,8 @@ namespace LL2X {
 		/** Returns true iff the mode is Displaced or Scaled. */
 		bool isIndirect() const;
 		bool isDisplaced(const VariablePtr &) const;
+		std::optional<std::string> getGlobal() const;
+		bool isGlobal() const;
 
 		void extract(bool is_write, std::unordered_set<VariablePtr> &read, std::unordered_set<VariablePtr> &written)
 			const;

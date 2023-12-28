@@ -420,6 +420,10 @@ namespace LL2X {
 			void multiply(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
 			              int64_t debug = -1);
 
+			/** Inserts an lea instruction if the source is a global variable. Inserts a mov instruction otherwise. */
+			InstructionPtr insertLeaOrMov(const InstructionPtr &anchor, const OperandPtr &source,
+			                              const OperandPtr &destination, bool reindex = true);
+
 			VariablePtr pcRax;
 			VariablePtr pcRdx;
 			VariablePtr pcRsp;

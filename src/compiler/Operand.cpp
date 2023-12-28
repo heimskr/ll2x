@@ -164,6 +164,20 @@ namespace LL2X {
 		return mode == Mode::Displaced && reg == variable;
 	}
 
+	std::optional<std::string> Operand::getGlobal() const {
+		if (mode == Mode::Displaced && std::holds_alternative<std::string>(displacement))
+			return std::get<std::string>(displacement);
+
+		if (mode == Mode::Label)
+			return label;
+
+		return std::nullopt;
+	}
+
+	bool Operand::isGlobal() const {
+		return mode == Mode::Label || (mode == Mode::Displaced && std::holds_alternative<std::string>(displacement));
+	}
+
 	void Operand::extract(bool is_write, std::unordered_set<VariablePtr> &read,
 	                      std::unordered_set<VariablePtr> &written) const {
 		if (is_write && (mode == Mode::Displaced || mode == Mode::Scaled))

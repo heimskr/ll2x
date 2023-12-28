@@ -773,13 +773,13 @@ namespace LL2X {
 
 	void Function::reindexInstructions() {
 		int index = -1;
-		for (InstructionPtr &instruction: linearInstructions)
+		for (const InstructionPtr &instruction: linearInstructions)
 			instruction->index = ++index;
 	}
 
 	void Function::reindexBlocks() {
 		int index = -1;
-		for (BasicBlockPtr &block: blocks)
+		for (const BasicBlockPtr &block: blocks)
 			block->index = ++index;
 	}
 
@@ -2129,5 +2129,21 @@ namespace LL2X {
 	void Function::multiply(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
 	                        int64_t debug) {
 		multiply_impl<Mul>(anchor, operand, value, reindex, debug);
+	}
+
+	InstructionPtr Function::insertLeaOrMov(const InstructionPtr &anchor, const OperandPtr &source,
+	                                        const OperandPtr &destination, bool reindex) {
+		InstructionPtr out;
+
+		if (source->isGlobal()) {
+			out = insertBefore<Lea, false>(anchor, source, destination);
+		} else {
+			out = insertBefore<Mov, false>(anchor, source, destination);
+		}
+
+		if (reindex)
+			reindexInstructions();
+
+		return out;
 	}
 }
