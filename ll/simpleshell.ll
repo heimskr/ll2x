@@ -39,6 +39,7 @@ module asm ".globl _ZSt21ios_base_library_initv"
 %"struct.std::__detail::_Quoted_string" = type <{ ptr, i8, i8, [6 x i8] }>
 %"class.std::allocator.0" = type { i8 }
 %"class.std::filesystem::__cxx11::directory_entry" = type <{ %"class.std::filesystem::__cxx11::path", i8, [7 x i8] }>
+%"class.std::filesystem::__cxx11::path::iterator" = type <{ ptr, ptr, i8, [7 x i8] }>
 %"class.std::map" = type { %"class.std::_Rb_tree" }
 %"class.std::_Rb_tree" = type { %"struct.std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::function<int (const std::vector<std::basic_string_view<char>> &)>>, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::function<int (const std::vector<std::basic_string_view<char>> &)>>>, std::less<std::__cxx11::basic_string<char>>>::_Rb_tree_impl" }
 %"struct.std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::function<int (const std::vector<std::basic_string_view<char>> &)>>, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::function<int (const std::vector<std::basic_string_view<char>> &)>>>, std::less<std::__cxx11::basic_string<char>>>::_Rb_tree_impl" = type { %"struct.std::_Rb_tree_key_compare", %"struct.std::_Rb_tree_header" }
@@ -58,6 +59,7 @@ module asm ".globl _ZSt21ios_base_library_initv"
 %"struct.std::__cxx11::basic_string<char>::__sv_wrapper" = type { %"class.std::basic_string_view" }
 %"class.std::_Sp_counted_base" = type { ptr, i32, i32 }
 %"struct.std::less.12" = type { i8 }
+%"struct.std::filesystem::__cxx11::path::_Cmpt" = type { %"class.std::filesystem::__cxx11::path", i64 }
 %struct._Guard = type { ptr }
 %"struct.std::integral_constant" = type { i8 }
 %"struct.std::__invoke_other" = type { i8 }
@@ -119,6 +121,8 @@ $_ZNSt10filesystem7__cxx113endENS0_18directory_iteratorE = comdat any
 $_ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3_ = comdat any
 
 $_ZNKSt10filesystem7__cxx1115directory_entry4pathEv = comdat any
+
+$_ZNKSt10filesystem7__cxx114path8filenameEv = comdat any
 
 $_ZNKSt10filesystem7__cxx114path6stringEv = comdat any
 
@@ -203,6 +207,40 @@ $_ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2E
 $_ZNKSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EE7_M_lessERKS2_ = comdat any
 
 $_ZNKSt4lessIPSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EEEclES4_S4_ = comdat any
+
+$_ZNKSt10filesystem7__cxx114path5emptyEv = comdat any
+
+$_ZNKSt10filesystem7__cxx114path7_M_typeEv = comdat any
+
+$_ZNSt10filesystem7__cxx114pathC2ERKS1_ = comdat any
+
+$_ZNKSt10filesystem7__cxx114path3endEv = comdat any
+
+$_ZNSt10filesystem7__cxx114path8iteratormmEv = comdat any
+
+$_ZNKSt10filesystem7__cxx114path8iteratorptEv = comdat any
+
+$_ZNKSt10filesystem7__cxx114path8iteratordeEv = comdat any
+
+$_ZNKSt10filesystem7__cxx114path5_List4typeEv = comdat any
+
+$_ZNKSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE3getEv = comdat any
+
+$_ZNKSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE6_M_ptrEv = comdat any
+
+$_ZSt3getILm0EJPNSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEERKNSt13tuple_elementIXT_ESt5tupleIJDpT0_EEE4typeERKSB_ = comdat any
+
+$_ZSt12__get_helperILm0EPNSt10filesystem7__cxx114path5_List5_ImplEJNS3_13_Impl_deleterEEERKT0_RKSt11_Tuple_implIXT_EJS7_DpT1_EE = comdat any
+
+$_ZNSt11_Tuple_implILm0EJPNSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEE7_M_headERKS7_ = comdat any
+
+$_ZNSt10_Head_baseILm0EPNSt10filesystem7__cxx114path5_List5_ImplELb0EE7_M_headERKS6_ = comdat any
+
+$_ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_PKNS1_5_CmptE = comdat any
+
+$_ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_b = comdat any
+
+$_ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv = comdat any
 
 $_ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112basic_stringIT_T0_T1_EERKSA_ = comdat any
 
@@ -968,102 +1006,105 @@ define dso_local noundef i32 @_Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_t
   %11 = alloca %"class.std::filesystem::__cxx11::directory_iterator", align 8
   %12 = alloca ptr, align 8
   %13 = alloca %"class.std::__cxx11::basic_string", align 8
+  %14 = alloca %"class.std::filesystem::__cxx11::path", align 8
   store ptr %0, ptr %3, align 8
   call void @_ZNSt10filesystem7__cxx114pathC2Ev(ptr noundef nonnull align 8 dereferenceable(40) %4) #11
-  %14 = load ptr, ptr %3, align 8
-  %15 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %14) #11
-  %16 = icmp eq i64 %15, 1
-  br i1 %16, label %17, label %19
+  %15 = load ptr, ptr %3, align 8
+  %16 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %15) #11
+  %17 = icmp eq i64 %16, 1
+  br i1 %17, label %18, label %20
 
-17:                                               ; preds = %1
-  %18 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS5_(ptr noundef nonnull align 8 dereferenceable(40) %4, ptr noundef nonnull align 1 dereferenceable(2) @.str)
+18:                                               ; preds = %1
+  %19 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS5_(ptr noundef nonnull align 8 dereferenceable(40) %4, ptr noundef nonnull align 1 dereferenceable(2) @.str)
+  br label %35
+
+20:                                               ; preds = %1
+  %21 = load ptr, ptr %3, align 8
+  %22 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %21) #11
+  %23 = icmp eq i64 %22, 2
+  br i1 %23, label %24, label %28
+
+24:                                               ; preds = %20
+  %25 = load ptr, ptr %3, align 8
+  %26 = call noundef nonnull align 8 dereferenceable(16) ptr @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEixEm(ptr noundef nonnull align 8 dereferenceable(24) %25, i64 noundef 1) #11
+  %27 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS8_(ptr noundef nonnull align 8 dereferenceable(40) %4, ptr noundef nonnull align 8 dereferenceable(16) %26)
   br label %34
 
-19:                                               ; preds = %1
-  %20 = load ptr, ptr %3, align 8
-  %21 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %20) #11
-  %22 = icmp eq i64 %21, 2
-  br i1 %22, label %23, label %27
-
-23:                                               ; preds = %19
-  %24 = load ptr, ptr %3, align 8
-  %25 = call noundef nonnull align 8 dereferenceable(16) ptr @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEixEm(ptr noundef nonnull align 8 dereferenceable(24) %24, i64 noundef 1) #11
-  %26 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS8_(ptr noundef nonnull align 8 dereferenceable(40) %4, ptr noundef nonnull align 8 dereferenceable(16) %25)
-  br label %33
-
-27:                                               ; preds = %19
-  %28 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, ptr noundef @.str.1)
-  %29 = load ptr, ptr %3, align 8
-  %30 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %29) #11
-  %31 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEm(ptr noundef nonnull align 8 dereferenceable(8) %28, i64 noundef %30)
-  %32 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %31, i8 noundef signext 10)
+28:                                               ; preds = %20
+  %29 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, ptr noundef @.str.1)
+  %30 = load ptr, ptr %3, align 8
+  %31 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %30) #11
+  %32 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEm(ptr noundef nonnull align 8 dereferenceable(8) %29, i64 noundef %31)
+  %33 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %32, i8 noundef signext 10)
   store i32 1, ptr %2, align 4
   store i32 1, ptr %5, align 4
-  br label %55
+  br label %56
 
-33:                                               ; preds = %23
-  br label %34
+34:                                               ; preds = %24
+  br label %35
 
-34:                                               ; preds = %33, %17
-  %35 = call noundef zeroext i1 @_ZNSt10filesystem6existsERKNS_7__cxx114pathE(ptr noundef nonnull align 8 dereferenceable(40) %4)
-  br i1 %35, label %40, label %36
+35:                                               ; preds = %34, %18
+  %36 = call noundef zeroext i1 @_ZNSt10filesystem6existsERKNS_7__cxx114pathE(ptr noundef nonnull align 8 dereferenceable(40) %4)
+  br i1 %36, label %41, label %37
 
-36:                                               ; preds = %34
-  %37 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, ptr noundef @.str.2)
-  %38 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE(ptr noundef nonnull align 8 dereferenceable(8) %37, ptr noundef nonnull align 8 dereferenceable(40) %4)
-  %39 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %38, i8 noundef signext 10)
+37:                                               ; preds = %35
+  %38 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, ptr noundef @.str.2)
+  %39 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE(ptr noundef nonnull align 8 dereferenceable(8) %38, ptr noundef nonnull align 8 dereferenceable(40) %4)
+  %40 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %39, i8 noundef signext 10)
   store i32 2, ptr %2, align 4
   store i32 1, ptr %5, align 4
-  br label %55
+  br label %56
 
-40:                                               ; preds = %34
+41:                                               ; preds = %35
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathE(ptr noundef nonnull align 8 dereferenceable(16) %7, ptr noundef nonnull align 8 dereferenceable(40) %4)
   store ptr %7, ptr %6, align 8
-  %41 = load ptr, ptr %6, align 8
-  call void @_ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(16) %9, ptr noundef nonnull align 8 dereferenceable(16) %41) #11
+  %42 = load ptr, ptr %6, align 8
+  call void @_ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(16) %9, ptr noundef nonnull align 8 dereferenceable(16) %42) #11
   call void @_ZNSt10filesystem7__cxx115beginENS0_18directory_iteratorE(ptr sret(%"class.std::filesystem::__cxx11::directory_iterator") align 8 %8, ptr noundef %9) #11
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorD2Ev(ptr noundef nonnull align 8 dereferenceable(16) %9) #11
-  %42 = load ptr, ptr %6, align 8
-  call void @_ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(16) %11, ptr noundef nonnull align 8 dereferenceable(16) %42) #11
+  %43 = load ptr, ptr %6, align 8
+  call void @_ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(16) %11, ptr noundef nonnull align 8 dereferenceable(16) %43) #11
   call void @_ZNSt10filesystem7__cxx113endENS0_18directory_iteratorE(ptr sret(%"class.std::filesystem::__cxx11::directory_iterator") align 8 %10, ptr noundef %11) #11
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorD2Ev(ptr noundef nonnull align 8 dereferenceable(16) %11) #11
-  br label %43
+  br label %44
 
-43:                                               ; preds = %52, %40
-  %44 = call noundef zeroext i1 @_ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3_(ptr noundef nonnull align 8 dereferenceable(16) %8, ptr noundef nonnull align 8 dereferenceable(16) %10) #11
-  br i1 %44, label %46, label %45
+44:                                               ; preds = %53, %41
+  %45 = call noundef zeroext i1 @_ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3_(ptr noundef nonnull align 8 dereferenceable(16) %8, ptr noundef nonnull align 8 dereferenceable(16) %10) #11
+  br i1 %45, label %47, label %46
 
-45:                                               ; preds = %43
+46:                                               ; preds = %44
   store i32 2, ptr %5, align 4
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorD2Ev(ptr noundef nonnull align 8 dereferenceable(16) %10) #11
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorD2Ev(ptr noundef nonnull align 8 dereferenceable(16) %8) #11
   call void @_ZNSt10filesystem7__cxx1118directory_iteratorD2Ev(ptr noundef nonnull align 8 dereferenceable(16) %7) #11
-  br label %54
-
-46:                                               ; preds = %43
-  %47 = call noundef nonnull align 8 dereferenceable(41) ptr @_ZNKSt10filesystem7__cxx1118directory_iteratordeEv(ptr noundef nonnull align 8 dereferenceable(16) %8) #11
-  store ptr %47, ptr %12, align 8
-  %48 = load ptr, ptr %12, align 8
-  %49 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNKSt10filesystem7__cxx1115directory_entry4pathEv(ptr noundef nonnull align 8 dereferenceable(41) %48) #11
-  call void @_ZNKSt10filesystem7__cxx114path6stringEv(ptr sret(%"class.std::__cxx11::basic_string") align 8 %13, ptr noundef nonnull align 8 dereferenceable(40) %49)
-  %50 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, ptr noundef nonnull align 8 dereferenceable(32) %13)
-  %51 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %50, i8 noundef signext 10)
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(ptr noundef nonnull align 8 dereferenceable(32) %13) #11
-  br label %52
-
-52:                                               ; preds = %46
-  %53 = call noundef nonnull align 8 dereferenceable(16) ptr @_ZNSt10filesystem7__cxx1118directory_iteratorppEv(ptr noundef nonnull align 8 dereferenceable(16) %8)
-  br label %43
-
-54:                                               ; preds = %45
-  store i32 0, ptr %2, align 4
-  store i32 1, ptr %5, align 4
   br label %55
 
-55:                                               ; preds = %54, %36, %27
+47:                                               ; preds = %44
+  %48 = call noundef nonnull align 8 dereferenceable(41) ptr @_ZNKSt10filesystem7__cxx1118directory_iteratordeEv(ptr noundef nonnull align 8 dereferenceable(16) %8) #11
+  store ptr %48, ptr %12, align 8
+  %49 = load ptr, ptr %12, align 8
+  %50 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNKSt10filesystem7__cxx1115directory_entry4pathEv(ptr noundef nonnull align 8 dereferenceable(41) %49) #11
+  call void @_ZNKSt10filesystem7__cxx114path8filenameEv(ptr sret(%"class.std::filesystem::__cxx11::path") align 8 %14, ptr noundef nonnull align 8 dereferenceable(40) %50)
+  call void @_ZNKSt10filesystem7__cxx114path6stringEv(ptr sret(%"class.std::__cxx11::basic_string") align 8 %13, ptr noundef nonnull align 8 dereferenceable(40) %14)
+  %51 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, ptr noundef nonnull align 8 dereferenceable(32) %13)
+  %52 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %51, i8 noundef signext 10)
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(ptr noundef nonnull align 8 dereferenceable(32) %13) #11
+  call void @_ZNSt10filesystem7__cxx114pathD2Ev(ptr noundef nonnull align 8 dereferenceable(40) %14) #11
+  br label %53
+
+53:                                               ; preds = %47
+  %54 = call noundef nonnull align 8 dereferenceable(16) ptr @_ZNSt10filesystem7__cxx1118directory_iteratorppEv(ptr noundef nonnull align 8 dereferenceable(16) %8)
+  br label %44
+
+55:                                               ; preds = %46
+  store i32 0, ptr %2, align 4
+  store i32 1, ptr %5, align 4
+  br label %56
+
+56:                                               ; preds = %55, %37, %28
   call void @_ZNSt10filesystem7__cxx114pathD2Ev(ptr noundef nonnull align 8 dereferenceable(40) %4) #11
-  %56 = load i32, ptr %2, align 4
-  ret i32 %56
+  %57 = load i32, ptr %2, align 4
+  ret i32 %57
 }
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
@@ -1275,6 +1316,79 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(40) ptr @_
   ret ptr %4
 }
 
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local void @_ZNKSt10filesystem7__cxx114path8filenameEv(ptr noalias sret(%"class.std::filesystem::__cxx11::path") align 8 %0, ptr noundef nonnull align 8 dereferenceable(40) %1) #1 comdat align 2 {
+  %3 = alloca ptr, align 8
+  %4 = alloca ptr, align 8
+  %5 = alloca %"class.std::filesystem::__cxx11::path::iterator", align 8
+  %6 = alloca %"class.std::filesystem::__cxx11::path::iterator", align 8
+  store ptr %0, ptr %3, align 8
+  store ptr %1, ptr %4, align 8
+  %7 = load ptr, ptr %4, align 8
+  %8 = call noundef zeroext i1 @_ZNKSt10filesystem7__cxx114path5emptyEv(ptr noundef nonnull align 8 dereferenceable(40) %7) #11
+  br i1 %8, label %9, label %10
+
+9:                                                ; preds = %2
+  call void @_ZNSt10filesystem7__cxx114pathC2Ev(ptr noundef nonnull align 8 dereferenceable(40) %0) #11
+  br label %35
+
+10:                                               ; preds = %2
+  %11 = call noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path7_M_typeEv(ptr noundef nonnull align 8 dereferenceable(40) %7) #11
+  %12 = icmp eq i8 %11, 3
+  br i1 %12, label %13, label %14
+
+13:                                               ; preds = %10
+  call void @_ZNSt10filesystem7__cxx114pathC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(40) %0, ptr noundef nonnull align 8 dereferenceable(40) %7)
+  br label %35
+
+14:                                               ; preds = %10
+  %15 = call noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path7_M_typeEv(ptr noundef nonnull align 8 dereferenceable(40) %7) #11
+  %16 = icmp eq i8 %15, 0
+  br i1 %16, label %17, label %32
+
+17:                                               ; preds = %14
+  %18 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %7, i32 0, i32 0
+  %19 = call noundef nonnull align 1 dereferenceable(1) ptr @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4backEv(ptr noundef nonnull align 8 dereferenceable(32) %18) #11
+  %20 = load i8, ptr %19, align 1
+  %21 = sext i8 %20 to i32
+  %22 = icmp eq i32 %21, 47
+  br i1 %22, label %23, label %24
+
+23:                                               ; preds = %17
+  call void @_ZNSt10filesystem7__cxx114pathC2Ev(ptr noundef nonnull align 8 dereferenceable(40) %0) #11
+  br label %35
+
+24:                                               ; preds = %17
+  call void @_ZNKSt10filesystem7__cxx114path3endEv(ptr sret(%"class.std::filesystem::__cxx11::path::iterator") align 8 %6, ptr noundef nonnull align 8 dereferenceable(40) %7) #11
+  %25 = call noundef nonnull align 8 dereferenceable(17) ptr @_ZNSt10filesystem7__cxx114path8iteratormmEv(ptr noundef nonnull align 8 dereferenceable(17) %6) #11
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %5, ptr align 8 %25, i64 24, i1 false)
+  %26 = call noundef ptr @_ZNKSt10filesystem7__cxx114path8iteratorptEv(ptr noundef nonnull align 8 dereferenceable(17) %5) #11
+  %27 = call noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path7_M_typeEv(ptr noundef nonnull align 8 dereferenceable(40) %26) #11
+  %28 = icmp eq i8 %27, 3
+  br i1 %28, label %29, label %31
+
+29:                                               ; preds = %24
+  %30 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNKSt10filesystem7__cxx114path8iteratordeEv(ptr noundef nonnull align 8 dereferenceable(17) %5) #11
+  call void @_ZNSt10filesystem7__cxx114pathC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(40) %0, ptr noundef nonnull align 8 dereferenceable(40) %30)
+  br label %35
+
+31:                                               ; preds = %24
+  br label %32
+
+32:                                               ; preds = %31, %14
+  br label %33
+
+33:                                               ; preds = %32
+  br label %34
+
+34:                                               ; preds = %33
+  call void @_ZNSt10filesystem7__cxx114pathC2Ev(ptr noundef nonnull align 8 dereferenceable(40) %0) #11
+  br label %35
+
+35:                                               ; preds = %34, %29, %23, %13, %9
+  ret void
+}
+
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
 define linkonce_odr dso_local void @_ZNKSt10filesystem7__cxx114path6stringEv(ptr noalias sret(%"class.std::__cxx11::basic_string") align 8 %0, ptr noundef nonnull align 8 dereferenceable(40) %1) #0 comdat align 2 {
   %3 = alloca ptr, align 8
@@ -1300,8 +1414,6 @@ define linkonce_odr dso_local void @_ZNKSt10filesystem7__cxx114path6stringEv(ptr
 ; Function Attrs: nounwind
 declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(ptr noundef nonnull align 8 dereferenceable(32)) unnamed_addr #5
 
-declare noundef nonnull align 8 dereferenceable(16) ptr @_ZNSt10filesystem7__cxx1118directory_iteratorppEv(ptr noundef nonnull align 8 dereferenceable(16)) #4
-
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
 define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114pathD2Ev(ptr noundef nonnull align 8 dereferenceable(40) %0) unnamed_addr #0 comdat align 2 {
   %2 = alloca ptr, align 8
@@ -1314,37 +1426,42 @@ define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114pathD2Ev(ptr nound
   ret void
 }
 
+declare noundef nonnull align 8 dereferenceable(16) ptr @_ZNSt10filesystem7__cxx1118directory_iteratorppEv(ptr noundef nonnull align 8 dereferenceable(16)) #4
+
 ; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
 define dso_local noundef i32 @_Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE(ptr noundef nonnull align 8 dereferenceable(24) %0) #1 {
   %2 = alloca i32, align 4
   %3 = alloca ptr, align 8
-  %4 = alloca %"class.std::filesystem::__cxx11::path", align 8
+  %4 = alloca %"class.std::__cxx11::basic_string", align 8
+  %5 = alloca %"class.std::filesystem::__cxx11::path", align 8
   store ptr %0, ptr %3, align 8
-  %5 = load ptr, ptr %3, align 8
-  %6 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %5) #11
-  %7 = icmp ne i64 %6, 1
-  br i1 %7, label %8, label %14
+  %6 = load ptr, ptr %3, align 8
+  %7 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %6) #11
+  %8 = icmp ne i64 %7, 1
+  br i1 %8, label %9, label %15
 
-8:                                                ; preds = %1
-  %9 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, ptr noundef @.str.1)
-  %10 = load ptr, ptr %3, align 8
-  %11 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %10) #11
-  %12 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEm(ptr noundef nonnull align 8 dereferenceable(8) %9, i64 noundef %11)
-  %13 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %12, i8 noundef signext 10)
+9:                                                ; preds = %1
+  %10 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cerr, ptr noundef @.str.1)
+  %11 = load ptr, ptr %3, align 8
+  %12 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv(ptr noundef nonnull align 8 dereferenceable(24) %11) #11
+  %13 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEm(ptr noundef nonnull align 8 dereferenceable(8) %10, i64 noundef %12)
+  %14 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %13, i8 noundef signext 10)
   store i32 1, ptr %2, align 4
-  br label %17
+  br label %18
 
-14:                                               ; preds = %1
-  call void @_ZNSt10filesystem12current_pathB5cxx11Ev(ptr sret(%"class.std::filesystem::__cxx11::path") align 8 %4)
-  %15 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, ptr noundef nonnull align 8 dereferenceable(40) %4)
-  %16 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %15, i8 noundef signext 10)
-  call void @_ZNSt10filesystem7__cxx114pathD2Ev(ptr noundef nonnull align 8 dereferenceable(40) %4) #11
+15:                                               ; preds = %1
+  call void @_ZNSt10filesystem12current_pathB5cxx11Ev(ptr sret(%"class.std::filesystem::__cxx11::path") align 8 %5)
+  call void @_ZNKSt10filesystem7__cxx114path6stringEv(ptr sret(%"class.std::__cxx11::basic_string") align 8 %4, ptr noundef nonnull align 8 dereferenceable(40) %5)
+  %16 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, ptr noundef nonnull align 8 dereferenceable(32) %4)
+  %17 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8) %16, i8 noundef signext 10)
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(ptr noundef nonnull align 8 dereferenceable(32) %4) #11
+  call void @_ZNSt10filesystem7__cxx114pathD2Ev(ptr noundef nonnull align 8 dereferenceable(40) %5) #11
   store i32 0, ptr %2, align 4
-  br label %17
+  br label %18
 
-17:                                               ; preds = %14, %8
-  %18 = load i32, ptr %2, align 4
-  ret i32 %18
+18:                                               ; preds = %15, %9
+  %19 = load i32, ptr %2, align 4
+  ret i32 %19
 }
 
 declare void @_ZNSt10filesystem12current_pathB5cxx11Ev(ptr sret(%"class.std::filesystem::__cxx11::path") align 8) #4
@@ -2588,6 +2705,294 @@ define linkonce_odr dso_local noundef zeroext i1 @_ZNKSt4lessIPSt16_Sp_counted_b
   %11 = ptrtoint ptr %10 to i64
   %12 = icmp ult i64 %9, %11
   ret i1 %12
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef zeroext i1 @_ZNKSt10filesystem7__cxx114path5emptyEv(ptr noundef nonnull align 8 dereferenceable(40) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %3, i32 0, i32 0
+  %5 = call noundef zeroext i1 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5emptyEv(ptr noundef nonnull align 8 dereferenceable(32) %4) #11
+  ret i1 %5
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path7_M_typeEv(ptr noundef nonnull align 8 dereferenceable(40) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %3, i32 0, i32 1
+  %5 = call noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path5_List4typeEv(ptr noundef nonnull align 8 dereferenceable(8) %4) #11
+  ret i8 %5
+}
+
+; Function Attrs: noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114pathC2ERKS1_(ptr noundef nonnull align 8 dereferenceable(40) %0, ptr noundef nonnull align 8 dereferenceable(40) %1) unnamed_addr #0 comdat align 2 {
+  %3 = alloca ptr, align 8
+  %4 = alloca ptr, align 8
+  store ptr %0, ptr %3, align 8
+  store ptr %1, ptr %4, align 8
+  %5 = load ptr, ptr %3, align 8
+  %6 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %5, i32 0, i32 0
+  %7 = load ptr, ptr %4, align 8
+  %8 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %7, i32 0, i32 0
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_(ptr noundef nonnull align 8 dereferenceable(32) %6, ptr noundef nonnull align 8 dereferenceable(32) %8)
+  %9 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %5, i32 0, i32 1
+  %10 = load ptr, ptr %4, align 8
+  %11 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %10, i32 0, i32 1
+  call void @_ZNSt10filesystem7__cxx114path5_ListC1ERKS2_(ptr noundef nonnull align 8 dereferenceable(8) %9, ptr noundef nonnull align 8 dereferenceable(8) %11)
+  ret void
+}
+
+; Function Attrs: nounwind
+declare noundef nonnull align 1 dereferenceable(1) ptr @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4backEv(ptr noundef nonnull align 8 dereferenceable(32)) #5
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local void @_ZNKSt10filesystem7__cxx114path3endEv(ptr noalias sret(%"class.std::filesystem::__cxx11::path::iterator") align 8 %0, ptr noundef nonnull align 8 dereferenceable(40) %1) #1 comdat align 2 {
+  %3 = alloca ptr, align 8
+  store ptr %1, ptr %3, align 8
+  %4 = load ptr, ptr %3, align 8
+  %5 = call noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path7_M_typeEv(ptr noundef nonnull align 8 dereferenceable(40) %4) #11
+  %6 = icmp eq i8 %5, 0
+  br i1 %6, label %7, label %10
+
+7:                                                ; preds = %2
+  %8 = getelementptr inbounds %"class.std::filesystem::__cxx11::path", ptr %4, i32 0, i32 1
+  %9 = call noundef ptr @_ZNKSt10filesystem7__cxx114path5_List3endEv(ptr noundef nonnull align 8 dereferenceable(8) %8) #11
+  call void @_ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_PKNS1_5_CmptE(ptr noundef nonnull align 8 dereferenceable(17) %0, ptr noundef %4, ptr noundef %9) #11
+  br label %11
+
+10:                                               ; preds = %2
+  call void @_ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_b(ptr noundef nonnull align 8 dereferenceable(17) %0, ptr noundef %4, i1 noundef zeroext true) #11
+  br label %11
+
+11:                                               ; preds = %10, %7
+  ret void
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(17) ptr @_ZNSt10filesystem7__cxx114path8iteratormmEv(ptr noundef nonnull align 8 dereferenceable(17) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  br label %4
+
+4:                                                ; preds = %1
+  br label %5
+
+5:                                                ; preds = %4
+  %6 = call noundef zeroext i1 @_ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv(ptr noundef nonnull align 8 dereferenceable(17) %3) #11
+  br i1 %6, label %7, label %13
+
+7:                                                ; preds = %5
+  br label %8
+
+8:                                                ; preds = %7
+  br label %9
+
+9:                                                ; preds = %8
+  %10 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %3, i32 0, i32 1
+  %11 = load ptr, ptr %10, align 8
+  %12 = getelementptr inbounds %"struct.std::filesystem::__cxx11::path::_Cmpt", ptr %11, i32 -1
+  store ptr %12, ptr %10, align 8
+  br label %17
+
+13:                                               ; preds = %5
+  br label %14
+
+14:                                               ; preds = %13
+  br label %15
+
+15:                                               ; preds = %14
+  %16 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %3, i32 0, i32 2
+  store i8 0, ptr %16, align 8
+  br label %17
+
+17:                                               ; preds = %15, %9
+  ret ptr %3
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef ptr @_ZNKSt10filesystem7__cxx114path8iteratorptEv(ptr noundef nonnull align 8 dereferenceable(17) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = call noundef nonnull align 8 dereferenceable(40) ptr @_ZNKSt10filesystem7__cxx114path8iteratordeEv(ptr noundef nonnull align 8 dereferenceable(17) %3) #11
+  ret ptr %4
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(40) ptr @_ZNKSt10filesystem7__cxx114path8iteratordeEv(ptr noundef nonnull align 8 dereferenceable(17) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  %3 = alloca ptr, align 8
+  store ptr %0, ptr %3, align 8
+  %4 = load ptr, ptr %3, align 8
+  br label %5
+
+5:                                                ; preds = %1
+  br label %6
+
+6:                                                ; preds = %5
+  %7 = call noundef zeroext i1 @_ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv(ptr noundef nonnull align 8 dereferenceable(17) %4) #11
+  br i1 %7, label %8, label %13
+
+8:                                                ; preds = %6
+  br label %9
+
+9:                                                ; preds = %8
+  br label %10
+
+10:                                               ; preds = %9
+  %11 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %4, i32 0, i32 1
+  %12 = load ptr, ptr %11, align 8
+  store ptr %12, ptr %2, align 8
+  br label %16
+
+13:                                               ; preds = %6
+  %14 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %4, i32 0, i32 0
+  %15 = load ptr, ptr %14, align 8
+  store ptr %15, ptr %2, align 8
+  br label %16
+
+16:                                               ; preds = %13, %10
+  %17 = load ptr, ptr %2, align 8
+  ret ptr %17
+}
+
+; Function Attrs: nounwind
+declare noundef zeroext i1 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5emptyEv(ptr noundef nonnull align 8 dereferenceable(32)) #5
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path5_List4typeEv(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"struct.std::filesystem::__cxx11::path::_List", ptr %3, i32 0, i32 0
+  %5 = call noundef ptr @_ZNKSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE3getEv(ptr noundef nonnull align 8 dereferenceable(8) %4) #11
+  %6 = ptrtoint ptr %5 to i64
+  %7 = and i64 %6, 3
+  %8 = trunc i64 %7 to i8
+  ret i8 %8
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef ptr @_ZNKSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE3getEv(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"class.std::unique_ptr", ptr %3, i32 0, i32 0
+  %5 = call noundef ptr @_ZNKSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE6_M_ptrEv(ptr noundef nonnull align 8 dereferenceable(8) %4) #11
+  ret ptr %5
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef ptr @_ZNKSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE6_M_ptrEv(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"class.std::__uniq_ptr_impl", ptr %3, i32 0, i32 0
+  %5 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZSt3getILm0EJPNSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEERKNSt13tuple_elementIXT_ESt5tupleIJDpT0_EEE4typeERKSB_(ptr noundef nonnull align 8 dereferenceable(8) %4) #11
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) ptr @_ZSt3getILm0EJPNSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEERKNSt13tuple_elementIXT_ESt5tupleIJDpT0_EEE4typeERKSB_(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZSt12__get_helperILm0EPNSt10filesystem7__cxx114path5_List5_ImplEJNS3_13_Impl_deleterEEERKT0_RKSt11_Tuple_implIXT_EJS7_DpT1_EE(ptr noundef nonnull align 8 dereferenceable(8) %3) #11
+  ret ptr %4
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) ptr @_ZSt12__get_helperILm0EPNSt10filesystem7__cxx114path5_List5_ImplEJNS3_13_Impl_deleterEEERKT0_RKSt11_Tuple_implIXT_EJS7_DpT1_EE(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt11_Tuple_implILm0EJPNSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEE7_M_headERKS7_(ptr noundef nonnull align 8 dereferenceable(8) %3) #11
+  ret ptr %4
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt11_Tuple_implILm0EJPNSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEE7_M_headERKS7_(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = call noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt10_Head_baseILm0EPNSt10filesystem7__cxx114path5_List5_ImplELb0EE7_M_headERKS6_(ptr noundef nonnull align 8 dereferenceable(8) %3) #11
+  ret ptr %4
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) ptr @_ZNSt10_Head_baseILm0EPNSt10filesystem7__cxx114path5_List5_ImplELb0EE7_M_headERKS6_(ptr noundef nonnull align 8 dereferenceable(8) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"struct.std::_Head_base.4", ptr %3, i32 0, i32 0
+  ret ptr %4
+}
+
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_(ptr noundef nonnull align 8 dereferenceable(32), ptr noundef nonnull align 8 dereferenceable(32)) unnamed_addr #4
+
+declare void @_ZNSt10filesystem7__cxx114path5_ListC1ERKS2_(ptr noundef nonnull align 8 dereferenceable(8), ptr noundef nonnull align 8 dereferenceable(8)) unnamed_addr #4
+
+; Function Attrs: nounwind
+declare noundef ptr @_ZNKSt10filesystem7__cxx114path5_List3endEv(ptr noundef nonnull align 8 dereferenceable(8)) #5
+
+; Function Attrs: noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_PKNS1_5_CmptE(ptr noundef nonnull align 8 dereferenceable(17) %0, ptr noundef %1, ptr noundef %2) unnamed_addr #0 comdat align 2 {
+  %4 = alloca ptr, align 8
+  %5 = alloca ptr, align 8
+  %6 = alloca ptr, align 8
+  store ptr %0, ptr %4, align 8
+  store ptr %1, ptr %5, align 8
+  store ptr %2, ptr %6, align 8
+  %7 = load ptr, ptr %4, align 8
+  %8 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %7, i32 0, i32 0
+  %9 = load ptr, ptr %5, align 8
+  store ptr %9, ptr %8, align 8
+  %10 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %7, i32 0, i32 1
+  %11 = load ptr, ptr %6, align 8
+  store ptr %11, ptr %10, align 8
+  %12 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %7, i32 0, i32 2
+  store i8 0, ptr %12, align 8
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_b(ptr noundef nonnull align 8 dereferenceable(17) %0, ptr noundef %1, i1 noundef zeroext %2) unnamed_addr #0 comdat align 2 {
+  %4 = alloca ptr, align 8
+  %5 = alloca ptr, align 8
+  %6 = alloca i8, align 1
+  store ptr %0, ptr %4, align 8
+  store ptr %1, ptr %5, align 8
+  %7 = zext i1 %2 to i8
+  store i8 %7, ptr %6, align 1
+  %8 = load ptr, ptr %4, align 8
+  %9 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %8, i32 0, i32 0
+  %10 = load ptr, ptr %5, align 8
+  store ptr %10, ptr %9, align 8
+  %11 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %8, i32 0, i32 1
+  store ptr null, ptr %11, align 8
+  %12 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %8, i32 0, i32 2
+  %13 = load i8, ptr %6, align 1
+  %14 = trunc i8 %13 to i1
+  %15 = zext i1 %14 to i8
+  store i8 %15, ptr %12, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define linkonce_odr dso_local noundef zeroext i1 @_ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv(ptr noundef nonnull align 8 dereferenceable(17) %0) #1 comdat align 2 {
+  %2 = alloca ptr, align 8
+  store ptr %0, ptr %2, align 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = getelementptr inbounds %"class.std::filesystem::__cxx11::path::iterator", ptr %3, i32 0, i32 0
+  %5 = load ptr, ptr %4, align 8
+  %6 = call noundef zeroext i8 @_ZNKSt10filesystem7__cxx114path7_M_typeEv(ptr noundef nonnull align 8 dereferenceable(40) %5) #11
+  %7 = icmp eq i8 %6, 0
+  ret i1 %7
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
@@ -6170,8 +6575,6 @@ define linkonce_odr dso_local void @_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11c
   call void @_ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA_(ptr noundef nonnull align 8 dereferenceable(32) %10, ptr noundef nonnull align 8 dereferenceable(32) %12)
   ret void
 }
-
-declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_(ptr noundef nonnull align 8 dereferenceable(32), ptr noundef nonnull align 8 dereferenceable(32)) unnamed_addr #4
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
 define linkonce_odr dso_local void @_ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA_(ptr noundef nonnull align 8 dereferenceable(32) %0, ptr noundef nonnull align 8 dereferenceable(32) %1) unnamed_addr #0 comdat align 2 {

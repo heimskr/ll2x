@@ -48,7 +48,7 @@ int ls(const std::vector<std::string_view> &args) {
 	}
 
 	for (const auto &entry: std::filesystem::directory_iterator(path))
-		std::cout << entry.path().string() << '\n';
+		std::cout << entry.path().filename().string() << '\n';
 
 	return 0;
 }
@@ -59,7 +59,7 @@ int pwd(const std::vector<std::string_view> &args) {
 		return 1;
 	}
 
-	std::cout << std::filesystem::current_path() << '\n';
+	std::cout << std::filesystem::current_path().string() << '\n';
 	return 0;
 }
 
