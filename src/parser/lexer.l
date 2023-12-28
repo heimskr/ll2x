@@ -311,7 +311,6 @@ LLVM_MEMORY_KIND		("none"|"read"|"write"|"readwrite")
 "sysroot"					{ LLVMRTOKEN(SYSROOT) }
 "sdk"						{ LLVMRTOKEN(SDK) }
 "None"						{ LLVMRTOKEN(NONE) }
-"none"						{ LLVMRTOKEN(NONE_LOWER) }
 "filename"					{ LLVMRTOKEN(FILENAME) }
 "directory"					{ LLVMRTOKEN(DIRECTORY) }
 "checksumkind"				{ LLVMRTOKEN(CHECKSUMKIND) }

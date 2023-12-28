@@ -233,7 +233,7 @@ define linkonce_odr dso_local void @_ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERK
   %22 = load i64, ptr %21, align 8
   %23 = getelementptr inbounds { i64, ptr }, ptr %11, i32 0, i32 1
   %24 = load ptr, ptr %23, align 8
-  %25 = call { i64, ptr } @_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaT_(i64 %22, ptr %24) #7 ; 1467
+  %25 = call { i64, ptr } @_ZNSt10filesystem7__cxx114path10_S_convertISt17basic_string_viewIcSt11char_traitsIcEEEEDaT_(i64 %22, ptr %24) #7
   %26 = getelementptr inbounds { i64, ptr }, ptr %10, i32 0, i32 0
   %27 = extractvalue { i64, ptr } %25, 0
   store i64 %27, ptr %26, align 8

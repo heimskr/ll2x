@@ -202,7 +202,6 @@ using AN = LL2X::ASTNode;
 %token LLVMTOK_SPLITDEBUGINLINING "splitDebugInlining"
 %token LLVMTOK_NAMETABLEKIND "nameTableKind"
 %token LLVMTOK_NONE "None"
-%token LLVMTOK_NONE_LOWER "none"
 %token LLVMTOK_DIFILE "!DIFile"
 %token LLVMTOK_FILENAME "filename"
 %token LLVMTOK_DIRECTORY "directory"
@@ -833,8 +832,8 @@ anybang: LLVMTOK_INTBANG
        | diarglist;
 
 // Example: call void @llvm.assume(i1 true) [ "align"(i8* %10, i64 %9) ]
-i_assume: "call" "void" "@llvm.assume" "(" LLVMTOK_INTTYPE LLVMTOK_BOOL ")" "[" assume_list "]" _cdebug
-          { $$ = $3; D($1, $2, $4, $5, $6, $7, $8, $9, $10, $11); };
+i_assume: "call" "void" "@llvm.assume" "(" constant ")" assume_trailing { $$ = $3; D($1, $2, $4, $5, $6, $7); };
+assume_trailing: "[" assume_list "]" _cdebug { $$ = nullptr; D($1, $2, $3, $4); } | { $$ = nullptr; };
 assume_list: assume_list "," LLVMTOK_STRING "(" constants ")" { $$ = nullptr; D($1, $2, $3, $4, $5, $6); }
            | LLVMTOK_STRING "(" constants ")"                 { $$ = nullptr; D($1, $2, $3, $4); };
 
