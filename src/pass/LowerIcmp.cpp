@@ -51,10 +51,7 @@ namespace LL2X::Passes {
 				std::swap(value1, value2);
 				cond = cond_rev_map.at(cond);
 			} else {
-				ValuePtr local = LocalValue::make(function.makeVariable(value1, instruction));
-				std::swap(value1, local);
-				// node->debug();
-				// throw std::runtime_error("First value of icmp instruction expected to be a pvar");
+				value1 = LocalValue::make(function.makeVariable(value1, instruction));
 			}
 		}
 
@@ -88,11 +85,10 @@ namespace LL2X::Passes {
 				const std::string &name = *dynamic_cast<GlobalValue *>(value2.get())->name;
 				function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. global "
 					+ name);
-				// function.insertBefore<Mov, false>(instruction, OpX(width, name, function.pcRip), Op8(right));
 				function.insertBefore<Lea, false>(instruction, OpX(width, name, function.pcRip), Op8(right));
 			}
 
-			function.insertBefore<Cmp, false>(instruction, OpX(width, right), OpX(width, left), width);
+			function.insertBefore<Cmp, false>(instruction, OpX(width, left), OpX(width, right), width);
 			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 
 		} else if (type2 == ValueType::Operand) {
@@ -102,7 +98,7 @@ namespace LL2X::Passes {
 			// TODO: verify right operand width
 			function.comment(instruction, prefix + left->type->toString() + ' ' + left->toString() + " vs. operand " +
 				operand->type->toString() + ' ' + operand->toString());
-			function.insertBefore<Cmp, false>(instruction, operand, OpX(width, left), width);
+			function.insertBefore<Cmp, false>(instruction, OpX(width, left), operand, width);
 			function.insertBefore<Set, false>(instruction, destination, x86_64::getCondition(cond));
 
 		} else {
