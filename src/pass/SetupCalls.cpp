@@ -251,7 +251,7 @@ namespace LL2X::Passes {
 					auto result = OpV(function.getVariable(*call->result));
 					// mov %rax, %result
 					auto move = std::make_shared<Mov>(OpV(rax), result);
-					function.comment(llvm, prefix + "move result from %rax");
+					function.comment(llvm, prefix + "move " + result->type->toString() + " result from %rax");
 					function.insertBefore(llvm, move, false)->setDebug(*llvm, false)->setSecret(true, false)->extract();
 				} else
 					throw std::runtime_error("Unsupported return size: " + std::to_string(return_size));

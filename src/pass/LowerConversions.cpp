@@ -61,9 +61,9 @@ namespace LL2X::Passes {
 		OperandPtr source = std::dynamic_pointer_cast<OperandValue>(node->value)->operand;
 		if (node->operand->isRegister())
 			node->operand->reg->setType(node->to);
-		function.comment(instruction, "LowerBasicConversion(" + std::string(node->location) + "): " + source->toString()
-			+ " (" + std::to_string(source->bitWidth) + ") -> " + node->operand->toString() + " (" +
-			std::to_string(node->operand->bitWidth) + ')');
+		function.comment(instruction, "LowerBasicConversion(" + std::string(node->location) + "): " +
+			source->type->toString() + ' ' + source->toString() + " -> " + node->operand->type->toString() + ' ' +
+			node->operand->toString());
 		function.insertBefore<Mov>(instruction, source, node->operand);
 		if (source->bitWidth < 32 && source->bitWidth < node->operand->bitWidth) {
 			function.comment(instruction, "Truncate value to " + std::to_string(source->bitWidth) + " bits");

@@ -50,7 +50,7 @@ namespace LL2X::Util {
 	std::string unquote(std::string_view);
 
 	template <template <typename...> typename C, typename T, typename D>
-	std::string join(const C<T> &container, D &&delimiter) {
+	std::string join(const C<T> &container, const D &delimiter) {
 		std::stringstream ss;
 		bool first = true;
 		for (const T &item: container) {
@@ -59,6 +59,48 @@ namespace LL2X::Util {
 			else
 				ss << delimiter;
 			ss << item;
+		}
+		return ss.str();
+	}
+
+	template <template <typename...> typename C, typename T, typename D, typename Fn>
+	std::string join(const C<T> &container, const D &delimiter, const Fn &transformer) {
+		std::stringstream ss;
+		bool first = true;
+		for (const T &item: container) {
+			if (first)
+				first = false;
+			else
+				ss << delimiter;
+			ss << transformer(item);
+		}
+		return ss.str();
+	}
+
+	template <typename Iter, typename D>
+	std::string join(Iter begin, Iter end, const D &delimiter) {
+		std::stringstream ss;
+		bool first = true;
+		for (; begin != end; ++begin) {
+			if (first)
+				first = false;
+			else
+				ss << delimiter;
+			ss << *begin;
+		}
+		return ss.str();
+	}
+
+	template <typename Iter, typename D, typename Fn>
+	std::string join(Iter begin, Iter end, const D &delimiter, const Fn &transformer) {
+		std::stringstream ss;
+		bool first = true;
+		for (; begin != end; ++begin) {
+			if (first)
+				first = false;
+			else
+				ss << delimiter;
+			ss << transformer(*begin);
 		}
 		return ss.str();
 	}

@@ -22,6 +22,7 @@
 #include "instruction/Xor.h"
 #include "pass/LowerMath.h"
 #include "util/Timer.h"
+#include "util/Util.h"
 
 namespace LL2X::Passes {
 	static void
@@ -33,10 +34,12 @@ namespace LL2X::Passes {
 		if (right->isConstant()) {
 			const int64_t constant = right->getConstant();
 
+			function.insertBefore<Mov, false>(instruction, left, destination);
+
 			if (is_signed) {
-				function.divOrRem(instruction, left, constant, is_rem);
+				function.divOrRem(instruction, destination, constant, is_rem);
 			} else {
-				function.divOrRem(instruction, left, uint64_t(constant), is_rem);
+				function.divOrRem(instruction, destination, uint64_t(constant), is_rem);
 			}
 
 			return;
@@ -166,7 +169,8 @@ namespace LL2X::Passes {
 				return;
 			}
 
-			function.multiply(instruction, left, constant, true);
+			function.insertBefore<Mov, false>(instruction, left, destination);
+			function.multiply(instruction, destination, constant, true);
 			return;
 		}
 
@@ -214,28 +218,64 @@ namespace LL2X::Passes {
 
 			const NodeType type = llvm->node->nodeType();
 
+			const std::string location(llvm->node->location);
+
+			std::string end;
+
+			if (auto *reader = dynamic_cast<Reader *>(llvm->node)) {
+				end = Util::join(reader->allValues(), ", ", [](const ValuePtr &value) {
+					return value->toString();
+				});
+			}
+
+			if (auto *writer = dynamic_cast<Writer *>(llvm->node)) {
+				if (end.empty())
+					end = "?";
+
+				if (writer->operand) {
+					if (TypePtr &type = writer->operand->type)
+						end += " into " + type->toString() + ' ' + writer->operand->toString();
+					else
+						end += " into " + writer->operand->toString() + " (unknown type)";
+				} else {
+					end += " into unknown operand";
+				}
+			}
+
 			if (type == NodeType::BasicMath) {
-				lowerMath(function, instruction, dynamic_cast<BasicMathNode *>(llvm->node));
+				auto *node = dynamic_cast<BasicMathNode *>(llvm->node);
+				function.comment(instruction, "LowerMath(" + location + "): " + end);
+				lowerMath(function, instruction, node);
 			} else if (type == NodeType::Logic) {
+				function.comment(instruction, "LowerLogic(" + location + "): " + end);
 				lowerLogic(function, instruction, dynamic_cast<LogicNode *>(llvm->node));
 			} else if (type == NodeType::Div) {
 				auto *div = dynamic_cast<DivNode *>(llvm->node);
-				if (div->divType == DivNode::DivType::Udiv)
+				if (div->divType == DivNode::DivType::Udiv) {
+					function.comment(instruction, "LowerUdiv(" + location + "): " + end);
 					lowerDiv(function, instruction, div, false, false);
-				else if (div->divType == DivNode::DivType::Sdiv)
+				} else if (div->divType == DivNode::DivType::Sdiv) {
+					function.comment(instruction, "LowerSdiv(" + location + "): " + end);
 					lowerDiv(function, instruction, div, false, true);
+				}
 			} else if (type == NodeType::Rem) {
 				auto *rem = dynamic_cast<RemNode *>(llvm->node);
-				if (rem->remType == RemNode::RemType::Srem)
+				if (rem->remType == RemNode::RemType::Srem) {
+					function.comment(instruction, "LowerSrem(" + location + "): " + end);
 					lowerDiv(function, instruction, rem, true, true);
-				else
+				} else {
+					function.comment(instruction, "LowerUrem(" + location + "): " + end);
 					lowerDiv(function, instruction, rem, true, false);
+				}
 			} else if (type == NodeType::Shr) {
 				auto *shr = dynamic_cast<ShrNode *>(llvm->node);
-				if (shr->shrType == ShrNode::ShrType::Ashr)
+				if (shr->shrType == ShrNode::ShrType::Ashr) {
+					function.comment(instruction, "LowerAshr(" + location + "): " + end);
 					lowerShift<Sar>(function, instruction, shr);
-				else
+				} else {
+					function.comment(instruction, "LowerLshr(" + location + "): " + end);
 					lowerShift<Shr>(function, instruction, shr);
+				}
 			} else {
 				continue;
 			}

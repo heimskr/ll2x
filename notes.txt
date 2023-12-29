@@ -31,3 +31,15 @@
 [2023/12/28 10:39] Another crash due to misaligned stack with a movaps.
 [2023/12/28 11:17] Fixed. The issue was with dynamic allocas. I made the entry detection smarter (see BasicBlock::isPrimordial) to static-ify more allocas.
                    I also added `andq $-16, $rsp` instructions after dynamic allocas.
+[2023/12/28 19:32] Fixed division. Added support for llvm.ctlz. Now simpleshell crashes with std::bad_alloc. It's passing what looks like a pointer to operator new.
+                   It's shifted left by 4 bits though.
+[2023/12/28 19:45] This pointer-looking thing that should be a regular i64 is being passed around numerous functions. I'm tracing it back to its origin right now.
+[2023/12/28 20:49] Division isn't handling its operands properly.
+                       # LowerMath(4754:3): ^21, ^22 into i64 ^23
+                       movq %rbx, %rcx
+                       subq %rax, %rcx
+                       # LowerSdiv(4755:3): ^23, 16 into i64 ^24
+                       sarq $4, %rcx
+                       # LowerStore(4756:3).9: mov i64 ^24, (^13)
+[2023/12/28 20:52] Inserting a mov before the sarq (or whatever else the sdiv would insert) fixed it. Did the same for multiplication. There's still a bug though.
+                   malloc(): unaligned tcache chunk detected

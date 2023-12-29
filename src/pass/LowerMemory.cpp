@@ -72,12 +72,12 @@ namespace LL2X::Passes {
 			OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(converted->value)->operand;
 			if (operand->isRegister()) {
 				function.comment(instruction, prefix + ".2: (" + operand->toString() + ") into " +
-					node->operand->toString());
+					node->operand->type->toString() + ' ' + node->operand->toString());
 				// function.insertBefore<Mov>(instruction, Op8(0, operand->reg), node->operand, width);
 				function.insertBefore<Mov>(instruction, Op8(0, operand->getVariable()), node->operand, width);
 			} else {
-				function.comment(instruction, prefix + ".3: " + operand->toString() + " into (" +
-					node->operand->toString() + ')');
+				function.comment(instruction, prefix + ".3: " + operand->type->toString() + ' ' + operand->toString() +
+					" into (" + node->operand->toString() + ')');
 				function.insertBefore<Mov>(instruction, operand, node->operand, width);
 			}
 
@@ -258,8 +258,8 @@ namespace LL2X::Passes {
 
 				if (doperand->isRegister()) {
 					// mov %src, (dest)
-					function.comment(instruction, prefix + ".9: mov " + soperand->toString() + ", (" +
-						doperand->toString() + ")");
+					function.comment(instruction, prefix + ".9: mov " + soperand->type->toString() + ' ' +
+						soperand->toString() + ", (" + doperand->toString() + ")");
 					function.insertBefore<Mov>(instruction, soperand, doperand->toDisplaced(), width);
 				} else {
 					// mov %src, dest
