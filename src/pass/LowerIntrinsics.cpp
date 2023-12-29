@@ -11,7 +11,7 @@
 
 namespace LL2X::Passes {
 	size_t lowerIntrinsics(Function &function) {
-		Timer timer("LowerMemcpy");
+		Timer timer("LowerIntrinsics");
 
 		std::list<InstructionPtr> to_remove;
 		std::list<InstructionPtr> &linear = function.linearInstructions;
