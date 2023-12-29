@@ -75,6 +75,9 @@ int ls(const std::vector<std::string_view> &args) {
 			std::cout << name << '\n';
 	}
 
+	// for (const auto &entry: std::filesystem::directory_iterator(path))
+	// 	std::cout << entry.path().filename().string() << '\n';
+
 	return 0;
 }
 
@@ -160,4 +163,8 @@ int main() {
 
 		std::cout << "\e[3" << (success? '2' : '1') << "m$\e[39m ";
 	}
+}
+
+extern "C" void pr(void *x, void *y) {
+	fprintf(stderr, "ptr[%p, %p]\n", x, y);
 }

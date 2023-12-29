@@ -777,18 +777,20 @@ $_ZTIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE = comdat
 @.str.19 = private unnamed_addr constant [21 x i8] c": command not found\0A\00", align 1
 @.str.20 = private unnamed_addr constant [4 x i8] c"\1B[3\00", align 1
 @.str.21 = private unnamed_addr constant [9 x i8] c"m$\1B[39m \00", align 1
-@.str.22 = private unnamed_addr constant [26 x i8] c"basic_string_view::substr\00", align 1
-@.str.23 = private unnamed_addr constant [49 x i8] c"%s: __pos (which is %zu) > __size (which is %zu)\00", align 1
+@stderr = external global ptr, align 8
+@.str.22 = private unnamed_addr constant [13 x i8] c"ptr[%p, %p]\0A\00", align 1
+@.str.23 = private unnamed_addr constant [26 x i8] c"basic_string_view::substr\00", align 1
+@.str.24 = private unnamed_addr constant [49 x i8] c"%s: __pos (which is %zu) > __size (which is %zu)\00", align 1
 @__libc_single_threaded = external global i8, align 1
-@.str.24 = private unnamed_addr constant [50 x i8] c"basic_string: construction from null is not valid\00", align 1
+@.str.25 = private unnamed_addr constant [50 x i8] c"basic_string: construction from null is not valid\00", align 1
 @_ZTVN10__cxxabiv119__pointer_type_infoE = external global ptr
 @_ZTSPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE = linkonce_odr dso_local constant [67 x i8] c"PFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE\00", comdat, align 1
 @_ZTVN10__cxxabiv120__function_type_infoE = external global ptr
 @_ZTSFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE = linkonce_odr dso_local constant [66 x i8] c"FiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE\00", comdat, align 1
 @_ZTIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE = linkonce_odr dso_local constant { ptr, ptr } { ptr getelementptr inbounds (ptr, ptr @_ZTVN10__cxxabiv120__function_type_infoE, i64 2), ptr @_ZTSFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE }, comdat, align 8
 @_ZTIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE = linkonce_odr dso_local constant { ptr, ptr, i32, ptr } { ptr getelementptr inbounds (ptr, ptr @_ZTVN10__cxxabiv119__pointer_type_infoE, i64 2), ptr @_ZTSPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE, i32 0, ptr @_ZTIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE }, comdat, align 8
-@.str.25 = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
-@.str.26 = private unnamed_addr constant [26 x i8] c"vector::_M_realloc_insert\00", align 1
+@.str.26 = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
+@.str.27 = private unnamed_addr constant [26 x i8] c"vector::_M_realloc_insert\00", align 1
 
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
 define dso_local void @_Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b(ptr noalias sret(%"class.std::vector") align 8 %0, i64 %1, ptr %2, i64 %3, ptr %4, i1 noundef zeroext %5) #0 {
@@ -1049,7 +1051,7 @@ define linkonce_odr dso_local { i64, ptr } @_ZNKSt17basic_string_viewIcSt11char_
   %10 = load ptr, ptr %5, align 8
   %11 = call noundef i64 @_ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv(ptr noundef nonnull align 8 dereferenceable(16) %10) #13
   %12 = load i64, ptr %6, align 8
-  %13 = call noundef i64 @_ZSt10__sv_checkmmPKc(i64 noundef %11, i64 noundef %12, ptr noundef @.str.22)
+  %13 = call noundef i64 @_ZSt10__sv_checkmmPKc(i64 noundef %11, i64 noundef %12, ptr noundef @.str.23)
   store i64 %13, ptr %6, align 8
   %14 = getelementptr inbounds %"class.std::basic_string_view", ptr %10, i32 0, i32 0
   %15 = load i64, ptr %14, align 8
@@ -2632,6 +2634,21 @@ define linkonce_odr dso_local void @_ZNSt3mapINSt7__cxx1112basic_stringIcSt11cha
   ret void
 }
 
+; Function Attrs: mustprogress noinline nounwind optnone sspstrong uwtable
+define dso_local void @pr(ptr noundef %0, ptr noundef %1) #1 {
+  %3 = alloca ptr, align 8
+  %4 = alloca ptr, align 8
+  store ptr %0, ptr %3, align 8
+  store ptr %1, ptr %4, align 8
+  %5 = load ptr, ptr @stderr, align 8
+  %6 = load ptr, ptr %3, align 8
+  %7 = load ptr, ptr %4, align 8
+  %8 = call i32 (ptr, ptr, ...) @fprintf(ptr noundef %5, ptr noundef @.str.22, ptr noundef %6, ptr noundef %7)
+  ret void
+}
+
+declare i32 @fprintf(ptr noundef, ptr noundef, ...) #4
+
 ; Function Attrs: noinline nounwind optnone sspstrong uwtable
 define linkonce_odr dso_local void @_ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2Ev(ptr noundef nonnull align 8 dereferenceable(24) %0) unnamed_addr #0 comdat align 2 {
   %2 = alloca ptr, align 8
@@ -2889,7 +2906,7 @@ define linkonce_odr dso_local noundef i64 @_ZSt10__sv_checkmmPKc(i64 noundef %0,
   %11 = load ptr, ptr %6, align 8
   %12 = load i64, ptr %5, align 8
   %13 = load i64, ptr %4, align 8
-  call void (ptr, ...) @_ZSt24__throw_out_of_range_fmtPKcz(ptr noundef @.str.23, ptr noundef %11, i64 noundef %12, i64 noundef %13) #15
+  call void (ptr, ...) @_ZSt24__throw_out_of_range_fmtPKcz(ptr noundef @.str.24, ptr noundef %11, i64 noundef %12, i64 noundef %13) #15
   unreachable
 
 14:                                               ; preds = %3
@@ -3985,7 +4002,7 @@ define linkonce_odr dso_local void @_ZNSt7__cxx1112basic_stringIcSt11char_traits
   br i1 %14, label %15, label %16
 
 15:                                               ; preds = %3
-  call void @_ZSt19__throw_logic_errorPKc(ptr noundef @.str.24) #15
+  call void @_ZSt19__throw_logic_errorPKc(ptr noundef @.str.25) #15
   unreachable
 
 16:                                               ; preds = %3
@@ -4886,7 +4903,7 @@ define linkonce_odr dso_local noundef i64 @_ZNSt6vectorISt17basic_string_viewIcS
   br i1 %17, label %19, label %20
 
 19:                                               ; preds = %2
-  call void @_ZSt20__throw_length_errorPKc(ptr noundef @.str.25) #15
+  call void @_ZSt20__throw_length_errorPKc(ptr noundef @.str.26) #15
   unreachable
 
 20:                                               ; preds = %2
@@ -5277,7 +5294,7 @@ define linkonce_odr dso_local void @_ZNSt6vectorISt17basic_string_viewIcSt11char
   store ptr %0, ptr %11, align 8
   store ptr %2, ptr %12, align 8
   %21 = load ptr, ptr %11, align 8
-  %22 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc(ptr noundef nonnull align 8 dereferenceable(24) %21, i64 noundef 1, ptr noundef @.str.26)
+  %22 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc(ptr noundef nonnull align 8 dereferenceable(24) %21, i64 noundef 1, ptr noundef @.str.27)
   store i64 %22, ptr %13, align 8
   %23 = getelementptr inbounds %"struct.std::_Vector_base", ptr %21, i32 0, i32 0
   %24 = getelementptr inbounds %"struct.std::_Vector_base<std::basic_string_view<char>, std::allocator<std::basic_string_view<char>>>::_Vector_impl_data", ptr %23, i32 0, i32 0
@@ -5740,7 +5757,7 @@ define linkonce_odr dso_local void @_ZNSt6vectorISt17basic_string_viewIcSt11char
   store ptr %0, ptr %11, align 8
   store ptr %2, ptr %12, align 8
   %21 = load ptr, ptr %11, align 8
-  %22 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc(ptr noundef nonnull align 8 dereferenceable(24) %21, i64 noundef 1, ptr noundef @.str.26)
+  %22 = call noundef i64 @_ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc(ptr noundef nonnull align 8 dereferenceable(24) %21, i64 noundef 1, ptr noundef @.str.27)
   store i64 %22, ptr %13, align 8
   %23 = getelementptr inbounds %"struct.std::_Vector_base", ptr %21, i32 0, i32 0
   %24 = getelementptr inbounds %"struct.std::_Vector_base<std::basic_string_view<char>, std::allocator<std::basic_string_view<char>>>::_Vector_impl_data", ptr %23, i32 0, i32 0
@@ -6485,7 +6502,7 @@ define linkonce_odr dso_local void @_ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_ins
   store ptr %2, ptr %16, align 8
   store ptr %3, ptr %17, align 8
   %26 = load ptr, ptr %15, align 8
-  %27 = call noundef i64 @_ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc(ptr noundef nonnull align 8 dereferenceable(24) %26, i64 noundef 1, ptr noundef @.str.26)
+  %27 = call noundef i64 @_ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc(ptr noundef nonnull align 8 dereferenceable(24) %26, i64 noundef 1, ptr noundef @.str.27)
   store i64 %27, ptr %18, align 8
   %28 = getelementptr inbounds %"struct.std::_Vector_base.6", ptr %26, i32 0, i32 0
   %29 = getelementptr inbounds %"struct.std::_Vector_base<LsItem, std::allocator<LsItem>>::_Vector_impl_data", ptr %28, i32 0, i32 0

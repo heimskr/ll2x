@@ -12,12 +12,13 @@ namespace LL2X {
 
 		// TODO: verify
 		if (!secretReads || !secretWrites) {
-			if (!secretReads)
+			if (!secretReads) {
 				multi->extract(false, read, written);
+				sourceOnly->extract(false, read, written);
+			}
+
 			if (!secretWrites)
 				multi->extract(true, read, written);
-			if (!secretReads)
-				sourceOnly->extract(false, read, written);
 		}
 
 		return {read.size(), written.size()};

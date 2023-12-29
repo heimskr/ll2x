@@ -190,7 +190,6 @@ namespace LL2X::Passes {
 				function.insertBefore<Mov>(instruction, Op4(long_value), OpV(temp), width);
 				// mov %temp, (global)
 				function.comment(instruction, prefix + ".2b: mov %temp, (global)");
-				// TODO!: investigate whether to use @GOTPCREL
 				function.insertBefore<Mov>(instruction, OpV(temp), OpX(width, *global->name, true, false), width);
 
 			} else if (operand_value) {

@@ -276,6 +276,8 @@ namespace LL2X::Passes {
 		// Stack parameters seem to be passed on a 64-bit boundary in MIPS. Is the same true of x86_64?
 		// TODO!: clobbers.
 
+		function.comment(instruction, "PushCallValue", false);
+
 		int size = 8;
 		ValueType value_type = constant->value->valueType();
 		int signext = constant->parattrs.signext? constant->type->width() : 0;

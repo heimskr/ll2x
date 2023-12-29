@@ -30,6 +30,8 @@ namespace LL2X {
 			virtual TypePtr copy() const = 0;
 			/** Returns the width of the type in bits. */
 			virtual int width() const = 0;
+			/** Returns the true, unaligned width of the type in bits. */
+			virtual int trueWidth() const { return width(); }
 			/** Returns the alignment of the type in bytes. */
 			virtual int alignment() const = 0;
 			virtual bool operator==(const Type &other) const { return typeType() == other.typeType(); }
@@ -57,6 +59,7 @@ namespace LL2X {
 		std::string toString() override;
 		TypePtr copy() const override { return std::make_shared<IntType>(intWidth); }
 		int width() const override { return Util::upalign(intWidth, 8); }
+		int trueWidth() const override { return intWidth; }
 		int alignment() const override { return Util::alignToPower(intWidth) / 8; }
 		bool operator==(const Type &other) const override;
 		static std::shared_ptr<IntType> make(int bit_width) { return std::make_shared<IntType>(bit_width); }

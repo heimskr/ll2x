@@ -83,8 +83,8 @@ namespace LL2X::Passes {
 		assert(source != nullptr);
 		assert(destination != nullptr);
 
-		const int from = conversion->from->width();
-		const int to = conversion->to->width();
+		const int from = conversion->from->trueWidth();
+		const int to = conversion->to->trueWidth();
 		const std::string prefix = "LowerTrunc(" + std::string(conversion->location) + "): " + std::to_string(from) +
 			" to " + std::to_string(to) + ", ";
 
@@ -97,8 +97,11 @@ namespace LL2X::Passes {
 			function.insertShiftBefore<Shl, false>(instruction, Op4(64 - to), destination);
 			function.comment(instruction, prefix + "right shift");
 			function.insertShiftBefore<Shr>(instruction, Op4(64 - to), destination);
+		} else if (to == 32) {
+			function.comment(instruction, prefix + "move and clear upper bits");
+			function.insertBefore<Mov>(instruction, source->copy()->setWidth(32), destination->copy()->setWidth(32));
 		} else {
-			const int64_t mask = (1l << conversion->to->width()) - 1;
+			const int64_t mask = (1l << to) - 1;
 			function.comment(instruction, prefix + "move");
 			function.insertBefore<Mov, false>(instruction, source, destination);
 			function.comment(instruction, prefix + "apply mask");
@@ -122,6 +125,7 @@ namespace LL2X::Passes {
 			if (to == 64 || to == 32 || to == 16) {
 				// Credit for formula: Sean Eron Anderson <seander@cs.stanford.edu>
 				// http://graphics.stanford.edu/~seander/bithacks.html
+				function.comment(instruction, "Suspicious sign extension formula", false);
 				VariablePtr temp_var = function.newVariable(IntType::make(x86_64::getWidth(destination->width)),
 					instruction->parent.lock());
 				// mov $1, %temp
