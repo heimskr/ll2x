@@ -29,22 +29,23 @@ namespace LL2X {
 	std::string Operand::ansiString() const {
 		switch (mode) {
 			case Mode::Constant:
-				return "\e[32m$" + stringify(displacement) + "\e[39m";
+				return "\e[32m$" + Util::unquote(stringify(displacement)) + "\e[39m";
 			case Mode::Direct:
-				return stringify(displacement);
+				return Util::unquote(stringify(displacement));
 			case Mode::Label:
-				return useRip? label + (useGotpcrel? "@GOTPCREL" : "") + "(%rip)" : "\e[36m" + label + "\e[39m";
+				return useRip? Util::unquote(label) + (useGotpcrel? "@GOTPCREL" : "") + "(%rip)" :
+					"\e[36m" + Util::unquote(label) + "\e[39m";
 			case Mode::Register:
 				return reg->ansiString(width);
 			case Mode::Displaced:
 				if (isZero(displacement))
 					return '(' + reg->ansiString(width) + ')';
-				return stringify(displacement) + pcrel(reg) + '(' + reg->ansiString(width) + ')';
+				return Util::unquote(stringify(displacement)) + pcrel(reg) + '(' + reg->ansiString(width) + ')';
 			case Mode::Scaled:
 				if (isZero(displacement))
 					return '(' + reg->ansiString(width) + ", " + index->ansiString(width) + ", " + std::to_string(scale)
 						+ ')';
-				return stringify(displacement) + pcrel(reg) + '(' + reg->ansiString(width) + ", " +
+				return Util::unquote(stringify(displacement)) + pcrel(reg) + '(' + reg->ansiString(width) + ", " +
 					index->ansiString(width) + ", " + std::to_string(scale) + ')';
 			default:
 				return "\e[31m???\e[39m";
@@ -54,23 +55,23 @@ namespace LL2X {
 	std::string Operand::toString() const {
 		switch (mode) {
 			case Mode::Constant:
-				return '$' + stringify(displacement);
+				return '$' + Util::unquote(stringify(displacement));
 			case Mode::Direct:
-				return stringify(displacement);
+				return Util::unquote(stringify(displacement));
 			case Mode::Label:
-				return useRip? label + (useGotpcrel? "@GOTPCREL" : "") + "(%rip)" : label;
+				return useRip? Util::unquote(label) + (useGotpcrel? "@GOTPCREL" : "") + "(%rip)" : Util::unquote(label);
 			case Mode::Register:
 				return reg->toString(width);
 			case Mode::Displaced:
 				if (isZero(displacement))
 					return '(' + reg->toString(width) + ')';
-				return stringify(displacement) + pcrel(reg) + '(' + reg->toString(width) + ')';
+				return Util::unquote(stringify(displacement)) + pcrel(reg) + '(' + reg->toString(width) + ')';
 			case Mode::Scaled:
 				if (isZero(displacement))
 					return '(' + reg->toString(width) + ", " + index->toString(width) + ", " + std::to_string(scale)
 						+ ')';
-				return stringify(displacement) + pcrel(reg) + '(' + reg->toString(width) + ", " + index->toString(width)
-					+ ", " + std::to_string(scale) + ')';
+				return Util::unquote(stringify(displacement)) + pcrel(reg) + '(' + reg->toString(width) + ", " +
+					index->toString(width) + ", " + std::to_string(scale) + ')';
 			default:
 				return "???";
 		}

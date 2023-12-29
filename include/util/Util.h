@@ -47,6 +47,8 @@ namespace LL2X::Util {
 
 	std::string escape(const std::string &);
 
+	std::string unquote(std::string_view);
+
 	template <template <typename...> typename C, typename T, typename D>
 	std::string join(const C<T> &container, D &&delimiter) {
 		std::stringstream ss;

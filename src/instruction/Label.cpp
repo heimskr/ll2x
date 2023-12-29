@@ -1,5 +1,6 @@
 #include "compiler/Variable.h"
 #include "instruction/Label.h"
+#include "util/Util.h"
 
 namespace LL2X {
 	Label::Label(const std::string &name_, int index_):
@@ -10,6 +11,6 @@ namespace LL2X {
 	}
 
 	std::string Label::toString() const {
-		return name + ':';
+		return Util::unquote(name) + ':';
 	}
 }

@@ -58,6 +58,39 @@ namespace LL2X::Util {
 		return out.str();
 	}
 
+	static std::string toHex(uint8_t ch) {
+		std::string out;
+
+		for (char nybble: {ch >> 4, ch & 0xf}) {
+			if (nybble < 0xa)
+				out += '0' + nybble;
+			else
+				out += 'a' + (nybble - 0xa);
+		}
+
+		return out;
+	}
+
+	std::string unquote(std::string_view str) {
+		if (str.size() < 2 || (str[0] != '"' && !(str[0] == '.' && str[1] == '"')))
+			return std::string(str);
+
+		std::string out;
+		out.reserve(str.size());
+
+		for (const char ch: str) {
+			if (std::isalnum(ch) || ch == '_' || ch == '$' || ch == '.') {
+				out += ch;
+			} else if (ch != '"') {
+				out += "_0x";
+				out += toHex(ch);
+				out += '_';
+			}
+		}
+
+		return out;
+	}
+
 	std::vector<std::string> split(const std::string &str, const std::string &delimiter, bool condense) {
 		if (str.empty())
 			return {};

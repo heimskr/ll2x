@@ -16,7 +16,7 @@ namespace LL2X {
 	std::string Jmp::getMnemonic() const {
 		if (condition == x86_64::Condition::Unconditional)
 			return "jmp";
-		return "j" + x86_64::conditionSuffix(condition);
+		return 'j' + x86_64::conditionSuffix(condition);
 	}
 
 	bool Jmp::replaceLabel(const std::string *to_replace, const std::string *replace_with) {

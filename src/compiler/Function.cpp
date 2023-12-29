@@ -1614,14 +1614,16 @@ namespace LL2X {
 			out << ".section " << *section << '\n';
 		else
 			out << ".section .text\n";
-		auto chopped = std::string_view(*name).substr(1);
+
+		std::string chopped = Util::unquote(std::string_view(*name).substr(1));
+
 #ifdef USE_UNDERSCORE
 		out << ".global _" << chopped << "\n.p2align 4, 0x90\n_" << chopped << ":\n";
 #else
 		out << ".global " << chopped << "\n.p2align 4, 0x90\n" << chopped << ":\n";
 #endif
 
-		for (InstructionPtr &instruction: linearInstructions) {
+		for (const InstructionPtr &instruction: linearInstructions) {
 #ifdef SPACE_COUNT
 			out << std::string(' ', SPACE_COUNT);
 #else
