@@ -31,21 +31,15 @@ namespace LL2X::Passes {
 		OperandPtr destination = node->operand;
 
 		if (right->isConstant()) {
-			const auto constant = right->getConstant();
-			if (constant == 0) {
-				warn() << "Division by zero at " << node->location << ". This is unadvisable.\n";
-			} else if (constant == 1) {
-				function.insertBefore<Mov>(instruction, left, destination);
-				return;
-			} else if (0 < constant && Util::isPowerOfTwo(constant)) {
-				auto new_right = Op4(std::bit_width(static_cast<uint64_t>(constant)) - 1);
-				function.insertBefore<Mov>(instruction, left, destination);
-				if (is_signed)
-					function.insertShiftBefore<Sar>(instruction, new_right, destination);
-				else
-					function.insertShiftBefore<Shr>(instruction, new_right, destination);
-				return;
+			const int64_t constant = right->getConstant();
+
+			if (is_signed) {
+				function.divOrRem(instruction, left, constant, is_rem);
+			} else {
+				function.divOrRem(instruction, left, uint64_t(constant), is_rem);
 			}
+
+			return;
 		}
 
 		auto rax_clobber = function.clobber(instruction, x86_64::rax);

@@ -43,7 +43,9 @@
 #include "instruction/Add.h"
 #include "instruction/Clobber.h"
 #include "instruction/Comment.h"
+#include "instruction/Div.h"
 #include "instruction/DummyDefiner.h"
+#include "instruction/Idiv.h"
 #include "instruction/Imul.h"
 #include "instruction/Label.h"
 #include "instruction/Lea.h"
@@ -2131,6 +2133,36 @@ namespace LL2X {
 	void Function::multiply(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
 	                        int64_t debug) {
 		multiply_impl<Mul>(anchor, operand, value, reindex, debug);
+	}
+
+	void Function::divide(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool reindex,
+	                      int64_t debug) {
+		divide_impl<Idiv>(anchor, operand, value, reindex, debug, false);
+	}
+
+	void Function::divide(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
+	                      int64_t debug) {
+		divide_impl<Div>(anchor, operand, value, reindex, debug, false);
+	}
+
+	void Function::remainder(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool reindex,
+	                         int64_t debug) {
+		divide_impl<Idiv>(anchor, operand, value, reindex, debug, true);
+	}
+
+	void Function::remainder(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
+	                         int64_t debug) {
+		divide_impl<Div>(anchor, operand, value, reindex, debug, true);
+	}
+
+	void Function::divOrRem(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool is_rem,
+	                        bool reindex, int64_t debug) {
+		divide_impl<Idiv>(anchor, operand, value, reindex, debug, is_rem);
+	}
+
+	void Function::divOrRem(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool is_rem,
+	                        bool reindex, int64_t debug) {
+		divide_impl<Div>(anchor, operand, value, reindex, debug, is_rem);
 	}
 
 	InstructionPtr Function::insertLeaOrMov(const InstructionPtr &anchor, const OperandPtr &source,

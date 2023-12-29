@@ -15,6 +15,7 @@
 #include "graph/DJGraph.h"
 #include "graph/DTree.h"
 #include "instruction/Mov.h"
+#include "instruction/Sar.h"
 #include "instruction/Shl.h"
 #include "instruction/Xor.h"
 #include "parser/FunctionArgs.h"
@@ -420,6 +421,24 @@ namespace LL2X {
 			void multiply(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
 			              int64_t debug = -1);
 
+			void divide(const InstructionPtr &anchor, const OperandPtr &, int64_t, bool reindex = true,
+			            int64_t debug = -1);
+
+			void divide(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
+			            int64_t debug = -1);
+
+			void remainder(const InstructionPtr &anchor, const OperandPtr &, int64_t, bool reindex = true,
+			               int64_t debug = -1);
+
+			void remainder(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool reindex = true,
+			               int64_t debug = -1);
+
+			void divOrRem(const InstructionPtr &anchor, const OperandPtr &, int64_t, bool is_rem, bool reindex = true,
+			               int64_t debug = -1);
+
+			void divOrRem(const InstructionPtr &anchor, const OperandPtr &, uint64_t, bool is_rem, bool reindex = true,
+			               int64_t debug = -1);
+
 			/** Inserts an lea instruction if the source is a global variable. Inserts a mov instruction otherwise. */
 			InstructionPtr insertLeaOrMov(const InstructionPtr &anchor, const OperandPtr &source,
 			                              const OperandPtr &destination, bool reindex = true);
@@ -492,10 +511,8 @@ namespace LL2X {
 					return;
 
 				if (Util::isPowerOfTwo(value)) {
-					// auto shl = std::make_shared<Shl>(Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
-					// 	operand);
-					// insertBefore(anchor, shl, reindex);
-					auto shl = insertShiftBefore<Shl>(anchor, Op4(std::bit_width(static_cast<uint64_t>(value)) - 1), operand);
+					auto shl = insertShiftBefore<Shl>(anchor, Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
+						operand);
 					if (debug != -1)
 						shl->setDebug(debug, false);
 					shl->extract(false);
@@ -525,6 +542,53 @@ namespace LL2X {
 					mov_in->extract(false);
 					mov_mulvar->extract(false);
 					mul->extract(false);
+					mov_out->extract(false);
+					unclobber(anchor, rdx_clobber);
+					unclobber(anchor, rax_clobber);
+				}
+			}
+
+			// TODO: consolidate with multiply_impl a bit
+			template <typename I, typename N>
+			void divide_impl(const InstructionPtr &anchor, const OperandPtr &operand, N value, bool is_rem,
+			                 bool reindex, int debug) {
+				if (value == 1)
+					return;
+
+				if (Util::isPowerOfTwo(value)) {
+					auto sar = insertShiftBefore<Sar>(anchor, Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
+						operand);
+					if (debug != -1)
+						sar->setDebug(debug, false);
+					sar->extract(false);
+				} else {
+					auto rax_clobber = clobber(anchor, x86_64::rax);
+					auto rdx_clobber = clobber(anchor, x86_64::rdx);
+
+					auto rax = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
+					auto rdx = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rdx, anchor->parent.lock()));
+
+					auto mov_in = std::make_shared<Mov>(operand, rax);
+
+					auto div_var = newVariable(IntType::make(operand->bitWidth));
+					auto div_operand = OpV(div_var);
+					auto mov_divvar = std::make_shared<Mov>(Op4(value), div_operand);
+					auto div = std::make_shared<I>(div_operand);
+
+					auto mov_out = std::make_shared<Mov>(is_rem? rdx : rax, operand);
+
+					insertBefore(anchor, mov_in, reindex);
+					insertBefore(anchor, mov_divvar, reindex);
+					insertBefore(anchor, div, reindex);
+					insertBefore(anchor, mov_out, reindex);
+					if (debug != -1) {
+						mov_in->setDebug(debug, false);
+						div->setDebug(debug, false);
+						mov_out->setDebug(debug, false);
+					}
+					mov_in->extract(false);
+					mov_divvar->extract(false);
+					div->extract(false);
 					mov_out->extract(false);
 					unclobber(anchor, rdx_clobber);
 					unclobber(anchor, rax_clobber);
