@@ -81,11 +81,9 @@
 #include "pass/LowerIcmp.h"
 // #include "pass/LowerInlineAsm.h"
 // #include "pass/LowerInsertvalue.h"
+#include "pass/LowerIntrinsics.h"
 #include "pass/LowerMath.h"
-#include "pass/LowerMemcpy.h"
-#include "pass/LowerMemmove.h"
 #include "pass/LowerMemory.h"
-#include "pass/LowerMemset.h"
 // #include "pass/LowerObjectsize.h"
 #include "pass/LowerRet.h"
 #include "pass/LowerSelect.h"
@@ -1000,9 +998,7 @@ namespace LL2X {
 		// Passes::lowerStackrestore(*this);
 		Passes::makeCFG(*this);
 		// Passes::lowerVarargsFirst(*this);
-		Passes::lowerMemcpy(*this);
-		Passes::lowerMemmove(*this);
-		Passes::lowerMemset(*this);
+		Passes::lowerIntrinsics(*this);
 #ifdef DEBUG_BEFORE_SETUPCALLS
 		debug();
 #endif
@@ -1984,8 +1980,6 @@ namespace LL2X {
 			case ValueType::Global: {
 				auto *global = dynamic_cast<GlobalValue *>(value.get());
 				new_var = newVariable(hint? hint : GlobalTemporaryType::make(global->name));
-				// TODO!: maybe lea?
-				// comment(instruction, "Perhaps this should be lea instead of mov");
 				mov_or_lea = std::make_shared<Lea>(Op4(*global->name, true, false), OpV(new_var));
 				break;
 			}
