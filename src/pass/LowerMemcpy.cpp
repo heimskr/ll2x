@@ -15,30 +15,24 @@ namespace LL2X::Passes {
 		std::list<InstructionPtr> to_remove;
 		std::list<InstructionPtr> &linear = function.linearInstructions;
 
-		for (auto iter = linear.begin(), end = linear.end(); iter != end;) {
+		for (auto iter = linear.begin(), end = linear.end(); iter != end; ++iter) {
 			InstructionPtr &instruction = *iter;
 			auto llvm = std::dynamic_pointer_cast<LLVMInstruction>(instruction);
 
-			if (!llvm || llvm->node->nodeType() != NodeType::Call) {
-				++iter;
+			if (!llvm || llvm->node->nodeType() != NodeType::Call)
 				continue;
-			}
 
 			auto *call = dynamic_cast<CallNode *>(llvm->node);
 
-			if (!call->name->isGlobal()) {
-				++iter;
+			if (!call->name->isGlobal())
 				continue;
-			}
 
 			BasicBlockPtr block = instruction->parent.lock();
 			auto *global = dynamic_cast<GlobalValue *>(call->name.get());
 			const std::string &name = *global->name;
 
-			if (name.find("llvm.memcpy.") == std::string::npos) {
-				++iter;
+			if (name.find("llvm.memcpy.") == std::string::npos)
 				continue;
-			}
 
 			if (name == "llvm.memcpy.p0i8.p0i8.i64" || name == "llvm.memcpy.p0.p0.i64") {
 				auto *new_call = (new CallNode(nullptr, PointerType::make(VoidType::make()),
@@ -52,13 +46,10 @@ namespace LL2X::Passes {
 
 				function.insertBefore<LLVMInstruction>(instruction, new_call, -1, true);
 				to_remove.push_back(instruction);
-				++iter;
 			} else {
 				error() << instruction->debugExtra() << '\n';
 				throw std::runtime_error("Unhandled memcpy intrinsic: " + name);
 			}
-
-			++iter;
 		}
 
 		if (!to_remove.empty()) {

@@ -213,6 +213,7 @@ namespace LL2X::Passes {
 				continue;
 
 			const NodeType type = llvm->node->nodeType();
+
 			if (type == NodeType::BasicMath) {
 				lowerMath(function, instruction, dynamic_cast<BasicMathNode *>(llvm->node));
 			} else if (type == NodeType::Logic) {
@@ -235,8 +236,9 @@ namespace LL2X::Passes {
 					lowerShift<Sar>(function, instruction, shr);
 				else
 					lowerShift<Shr>(function, instruction, shr);
-			} else
+			} else {
 				continue;
+			}
 
 			to_remove.push_back(instruction);
 		}
