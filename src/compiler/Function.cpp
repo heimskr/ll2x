@@ -978,7 +978,6 @@ namespace LL2X {
 			block->extract(true);
 		precolorArguments();
 		Passes::lowerGetelementptrValues(*this);
-		debug();
 		Passes::trimBlocks(*this);
 		Passes::splitBlocks(*this);
 		// Passes::copyArguments(*this);

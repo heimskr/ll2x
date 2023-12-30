@@ -9,25 +9,12 @@
 
 namespace LL2X::Passes {
 	namespace {
-		std::vector<GetelementptrNode::Index> convertDecimals(const decltype(GetelementptrValue::decimals) &decimals) {
-			std::vector<GetelementptrNode::Index> out;
-			out.reserve(decimals.size());
-
-			for (const auto &decimal: decimals) {
-				const auto &[width, variant] = decimal;
-				out.emplace_back(width, variant, false,
-					/* TODO: verify */ std::holds_alternative<const std::string *>(variant));
-			}
-
-			return out;
-		}
-
 		std::shared_ptr<OperandValue> convertValue(Function &function,
 		                                           const std::shared_ptr<GetelementptrValue> &gep_value,
 		                                           const std::shared_ptr<LLVMInstruction> &llvm) {
 			ConstantPtr constant = Constant::make(gep_value->type, gep_value->variable);
 			TypePtr base_type = gep_value->type;
-			VariablePtr new_variable = function.newVariable(base_type, llvm->parent.lock());
+			VariablePtr new_variable = function.newVariable(PointerType::make(base_type), llvm->parent.lock());
 			OperandPtr operand = OpV(new_variable);
 			lowerGetelementptr(function, llvm, llvm->node->location, constant, base_type,
 				convertDecimals(gep_value->decimals), operand, llvm->node->debugIndex);

@@ -19,7 +19,7 @@ namespace LL2X {
 	}
 
 	Operand::Operand(const VariablePtr &var):
-	mode(Mode::Register), width(x86_64::getWidth(var->type? var->type->width() : 64)),
+	mode(Mode::Register), width(x86_64::getWidth(var->type? var->type->trueWidth() : 64)),
 	bitWidth(var->type? var->type->width() : 64), reg(var) {
 		if (!var->type)
 			throw std::runtime_error("Variable provided to Operand() has no type");

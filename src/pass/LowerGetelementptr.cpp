@@ -16,6 +16,19 @@
 #include <vector>
 
 namespace LL2X::Passes {
+	std::vector<GetelementptrNode::Index> convertDecimals(const decltype(GetelementptrValue::decimals) &decimals) {
+		std::vector<GetelementptrNode::Index> out;
+		out.reserve(decimals.size());
+
+		for (const auto &decimal: decimals) {
+			const auto &[width, variant] = decimal;
+			out.emplace_back(width, variant, false,
+				/* TODO: verify */ std::holds_alternative<const std::string *>(variant));
+		}
+
+		return out;
+	}
+
 	void lowerGetelementptr(Function &function, const InstructionPtr &anchor, const ASTLocation &location,
 	                        const ConstantPtr &constant, TypePtr &base_type,
 	                        const std::vector<GetelementptrNode::Index> &indices, OperandPtr &operand,
@@ -34,20 +47,28 @@ namespace LL2X::Passes {
 		ValuePtr constant_value = constant->value;
 		TypePtr constant_type = constant->type;
 
-		if (!constant_value->isLocal() && !constant_value->isGlobal() && !constant_value->isOperand()) {
+		OperandPtr pointer;
+
+		if (constant_value->isGetelementptr()) {
+			function.comment(anchor, "Recursive LowerGetelementptr");
+			auto gep_value = std::static_pointer_cast<GetelementptrValue>(constant_value);
+			ConstantPtr constant = Constant::make(gep_value->type, gep_value->variable);
+			TypePtr base_type = gep_value->type;
+			VariablePtr new_variable = function.newVariable(PointerType::make(base_type), anchor->parent.lock());
+			pointer = OpV(new_variable);
+			lowerGetelementptr(function, anchor, location, constant, base_type,
+				convertDecimals(gep_value->decimals), pointer, debug_index);
+		} else if (!constant_value->isLocal() && !constant_value->isOperand() && !constant_value->isGlobal()) {
 			warn() << location << ": " << *constant_value << '\n';
 			throw std::runtime_error("Expected a pvar, operand or gvar as the pointer value in a getelementptr "
 				"instruction");
-		}
-
-		OperandPtr pointer;
-		if (constant_value->isLocal()) {
+		} else if (constant_value->isLocal()) {
 			pointer = OpV(std::dynamic_pointer_cast<LocalValue>(constant_value)->variable);
 		} else if (constant_value->isOperand()) {
 			pointer = std::dynamic_pointer_cast<OperandValue>(constant_value)->operand;
-		} else {
+		} else if (constant_value->isGlobal()) {
 			auto *global = dynamic_cast<GlobalValue *>(constant_value.get());
-			pointer = OpV(function.newVariable(constant_type));
+			pointer = OpV(function.newVariable(PointerType::make(constant_type)));
 			function.insertBefore<Lea>(anchor, Op8(*global->name, true, false), pointer);
 		}
 
@@ -109,7 +130,7 @@ namespace LL2X::Passes {
 			if (constant_value->isLocal())
 				source = static_cast<LocalValue *>(constant_value.get())->getVariable(function);
 			else
-				source = function.makeVariable(constant_value, anchor, constant_type);
+				source = function.makeVariable(constant_value, anchor, pointer->type);
 
 			function.comment(anchor, "LowerGetelementptr(" + std::string(location) + "): struct-type: " +
 				constant_type->toString() + ' ' + source->toString() + " -> " + operand->toString() +

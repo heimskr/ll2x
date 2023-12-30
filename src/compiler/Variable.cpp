@@ -423,6 +423,7 @@ namespace LL2X {
 				       << ".\n";
 			return 1;
 		}
+
 		return Util::updiv(type->width(), 64);
 	}
 
