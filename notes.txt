@@ -63,3 +63,5 @@
 [2023/12/29 16:29] I'm not clearing %rdx before division.
 [2023/12/29 16:32] That wasn't it either.
 [2023/12/29 18:04] I've noticed when trying a -no-opaque-pointers version of the IR that sometimes rdx is used as an operand to idivq. Didn't happen with the opaque IR.
+[2023/12/29 22:21] The bug is with multiplication (un)clobbering.
+[2023/12/29 22:29] I adjusted the placement of the unclobbers in Function::multiply and now simpleshell works!

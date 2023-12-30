@@ -533,7 +533,9 @@ namespace LL2X {
 					insertBefore(anchor, mov_in, reindex);
 					insertBefore(anchor, mov_mulvar, reindex);
 					insertBefore(anchor, mul, reindex);
+					unclobber(anchor, rdx_clobber);
 					insertBefore(anchor, mov_out, reindex);
+					unclobber(anchor, rax_clobber);
 					if (debug != -1) {
 						mov_in->setDebug(debug, false);
 						mul->setDebug(debug, false);
@@ -543,8 +545,6 @@ namespace LL2X {
 					mov_mulvar->extract(false);
 					mul->extract(false);
 					mov_out->extract(false);
-					unclobber(anchor, rdx_clobber);
-					unclobber(anchor, rax_clobber);
 				}
 			}
 
