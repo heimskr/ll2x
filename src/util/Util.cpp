@@ -33,8 +33,21 @@ namespace LL2X::Util {
 		return isNumeric(*str);
 	}
 
-	bool isHex(const char ch) {
+	bool isHex(char ch) {
 		return ('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'f') || ('A' <= ch && ch <= 'F');
+	}
+
+	uint8_t fromHex(char ch) {
+		if ('0' <= ch && ch <= '9')
+			return ch - '0';
+
+		if ('a' <= ch && ch <= 'f')
+			return ch - 'a' + 10;
+
+		if ('A' <= ch && ch <= 'F')
+			return ch - 'A' + 10;
+
+		throw std::invalid_argument("Not a hex char: " + std::string{ch});
 	}
 
 	bool outOfRange(int64_t value) {

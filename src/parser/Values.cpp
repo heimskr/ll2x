@@ -380,10 +380,13 @@ namespace LL2X {
 		for (size_t i = 0, max = value->size(); i < max; ++i) {
 			const char ch0 = (*value)[i];
 			if (i < max - 2) {
-				const char ch1 = (*value)[i + 1];
-				const char ch2 = (*value)[i + 2];
+				const uint8_t ch1 = (*value)[i + 1];
+				const uint8_t ch2 = (*value)[i + 2];
 				if (ch0 == '\\' && Util::isHex(ch1) && Util::isHex(ch2)) {
-					out += std::string("\\x") + ch1 + ch2;
+					const uint8_t byte = (Util::fromHex(ch1) << 4) | Util::fromHex(ch2);
+					out += std::string{
+						'\\', char('0' + (byte >> 6)), char('0' + ((byte >> 3) & 7)), char('0' + (byte & 7))
+					};
 					i += 2;
 				} else
 					out += ch0;

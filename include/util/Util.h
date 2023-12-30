@@ -38,7 +38,9 @@ namespace LL2X::Util {
 	bool isNumeric(std::string_view);
 	bool isNumeric(const std::string *);
 
-	bool isHex(const char);
+	bool isHex(char);
+
+	uint8_t fromHex(char);
 
 	/** Returns true if the argument is lower than INT32_MIN or higher than INT32_MAX. */
 	bool outOfRange(int64_t);
