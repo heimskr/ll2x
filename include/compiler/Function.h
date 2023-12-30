@@ -517,6 +517,7 @@ namespace LL2X {
 						shl->setDebug(debug, false);
 					shl->extract(false);
 				} else {
+					// TODO: make sure I really understand what's going on with clobbering.
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
 					auto rax = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
