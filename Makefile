@@ -55,7 +55,8 @@ test: $(OUTPUT)
 	@# clang++ -S -fno-exceptions -emit-llvm -O0 cpp/diriter.cpp -o ll/diriter0.ll && ./$(OUTPUT) ll/diriter0.ll > diriter0.s && clang -g diriter0.s -lstdc++ && ./a.out
 	@# clang++ -S -fno-exceptions -emit-llvm -O3 cpp/diriter.cpp -o ll/diriter3.ll && ./$(OUTPUT) ll/diriter3.ll > diriter3.s && clang -g diriter3.s -lstdc++ && ./a.out
 	@# clang++ -S -fno-exceptions -emit-llvm cpp/simpleshell.cpp -o ll/simpleshell.ll && ./$(OUTPUT) ll/simpleshell.ll > simpleshell.s && clang -g simpleshell.s -lstdc++ && ./a.out
-	clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith6.cpp 2>/dev/null -o ll/csmith6.ll && ./$(OUTPUT) ll/csmith6.ll > csmith6.s && clang -g csmith6.s -lstdc++ && ./a.out
+	@# clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith6.cpp 2>/dev/null -o ll/csmith6.ll && ./$(OUTPUT) ll/csmith6.ll > csmith6.s && clang -g csmith6.s -lstdc++ && ./a.out
+	clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith7.cpp 2>/dev/null -o ll/csmith7.ll && ./$(OUTPUT) ll/csmith7.ll > csmith7.s && clang -g csmith7.s -lstdc++ && ./a.out
 
 clean:
 	rm -f $(OUTPUT) src/*.o src/**/*.o graph_*.png \
