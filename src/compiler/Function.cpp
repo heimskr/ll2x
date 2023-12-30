@@ -78,6 +78,7 @@
 #include "pass/LowerExtractvalue.h"
 // #include "pass/LowerFreeze.h"
 #include "pass/LowerGetelementptr.h"
+#include "pass/LowerGetelementptrValues.h"
 #include "pass/LowerIcmp.h"
 // #include "pass/LowerInlineAsm.h"
 // #include "pass/LowerInsertvalue.h"
@@ -976,6 +977,8 @@ namespace LL2X {
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
 		precolorArguments();
+		Passes::lowerGetelementptrValues(*this);
+		debug();
 		Passes::trimBlocks(*this);
 		Passes::splitBlocks(*this);
 		// Passes::copyArguments(*this);
