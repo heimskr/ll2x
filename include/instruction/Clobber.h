@@ -2,7 +2,7 @@
 
 #include "compiler/x86_64.h"
 #include "instruction/DestinationOnly.h"
-#include "instruction/Intermediate.h"
+#include "instruction/HasPrecolored.h"
 #include "instruction/OneDestination.h"
 #include "instruction/OneSource.h"
 #include "util/Makeable.h"
@@ -11,13 +11,13 @@ namespace LL2X {
 	struct SemiUnclobber;
 	struct Unclobber;
 
-	struct Clobber: IntermediateInstruction, Makeable<Clobber> {
+	struct Clobber: Instruction, HasPrecolored, Makeable<Clobber> {
 		int reg;
 		std::shared_ptr<Unclobber> unclobber;
 		std::vector<std::shared_ptr<SemiUnclobber>> semis;
 
 		Clobber(int reg_, int index_ = -1):
-			IntermediateInstruction(index_), reg(reg_) {}
+			Instruction(index_), reg(reg_) {}
 
 		std::string debugExtra() override { return toString(); }
 
@@ -26,16 +26,18 @@ namespace LL2X {
 		}
 
 		bool maySpill() const override { return false; }
+		bool isTerminal() const override { return false; }
+		ExtractionResult extract(bool) override { return {0, 0}; }
 
 		std::shared_ptr<SemiUnclobber> makeSemi(const OperandPtr &destination);
 	};
 
 	/** Ideally not to be instantiated directly—use Function::unclobber instead. */
-	struct Unclobber: IntermediateInstruction, Makeable<Unclobber> {
+	struct Unclobber: Instruction, HasPrecolored, Makeable<Unclobber> {
 		int reg;
 
 		Unclobber(int reg_, int index_ = -1):
-			IntermediateInstruction(index_), reg(reg_) {}
+			Instruction(index_), reg(reg_) {}
 
 		std::string debugExtra() override { return toString(); }
 
@@ -44,6 +46,8 @@ namespace LL2X {
 		}
 
 		bool maySpill() const override { return false; }
+		bool isTerminal() const override { return false; }
+		ExtractionResult extract(bool) override { return {0, 0}; }
 
 		std::pair<int, int> extractPrecolored() override {
 			precoloredWritten = {reg};
@@ -51,17 +55,18 @@ namespace LL2X {
 		}
 	};
 
-	struct SemiUnclobber: IntermediateInstruction, OneDestination, OneSource, Makeable<SemiUnclobber> {
+	struct SemiUnclobber: Instruction, HasPrecolored, OneDestination, OneSource, Makeable<SemiUnclobber> {
 		int reg;
 
 		SemiUnclobber(int reg_, OperandPtr destination_, int index_ = -1):
-			IntermediateInstruction(index_), OneDestination(std::move(destination_)), OneSource(nullptr), reg(reg_) {}
+			Instruction(index_), OneDestination(std::move(destination_)), OneSource(nullptr), reg(reg_) {}
 
 		std::string debugExtra() override { return toString(); }
 		std::string toString() const override;
 
 		ExtractionResult extract(bool force) override;
 
+		bool isTerminal() const override { return false; }
 		std::pair<int, int> extractPrecolored() override;
 	};
 }

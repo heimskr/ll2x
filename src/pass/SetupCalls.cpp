@@ -136,7 +136,7 @@ namespace LL2X::Passes {
 				for (ConstantPtr &ptr: call->constants)
 					argument_types.push_back(ptr->type);
 
-			const auto return_size = call->returnType->width();
+			const auto return_size = call->returnType->trueWidth();
 			const bool huge_return = 128 < return_size;
 			const int  arg_offset  = huge_return? 1 : 0;
 
@@ -231,6 +231,7 @@ namespace LL2X::Passes {
 
 			// Move the stack pointer up past the variables that were pushed onto the stack with pushCallValue.
 			if (0 < bytes_pushed) {
+				function.comment(llvm, "Stack pointer would be readjusted here");
 				// function.comment(llvm, prefix + "readjust stack pointer");
 				// function.insertBefore<Add, false>(instruction, Op4(bytes_pushed), Op8(function.pcRsp), 64);
 			}
@@ -280,8 +281,8 @@ namespace LL2X::Passes {
 
 		int size = 8;
 		ValueType value_type = constant->value->valueType();
-		int signext = constant->parattrs.signext? constant->type->width() : 0;
-		int zeroext = constant->parattrs.zeroext? constant->type->width() : 0;
+		int signext = constant->parattrs.signext? constant->type->trueWidth() : 0;
+		int zeroext = constant->parattrs.zeroext? constant->type->trueWidth() : 0;
 		signext = signext == 64? 0 : signext;
 		zeroext = zeroext == 64? 0 : zeroext;
 
@@ -481,10 +482,10 @@ namespace LL2X::Passes {
 			return nullptr;
 		}
 
-		new_operand->bitWidth = constant->type->width();
+		new_operand->bitWidth = constant->type->trueWidth();
 
-		int signext = constant->parattrs.signext? constant->type->width() : 0;
-		int zeroext = constant->parattrs.zeroext? constant->type->width() : 0;
+		int signext = constant->parattrs.signext? constant->type->trueWidth() : 0;
+		int zeroext = constant->parattrs.zeroext? constant->type->trueWidth() : 0;
 		signext = signext == 64? 0 : signext;
 		zeroext = zeroext == 64? 0 : zeroext;
 

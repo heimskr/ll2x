@@ -2131,32 +2131,32 @@ namespace LL2X {
 
 	void Function::divide(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool reindex,
 	                      int64_t debug) {
-		divide_impl<Idiv>(anchor, operand, value, reindex, debug, false);
+		divide_impl<Idiv>(anchor, operand, value, false, reindex, debug);
 	}
 
 	void Function::divide(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
 	                      int64_t debug) {
-		divide_impl<Div>(anchor, operand, value, reindex, debug, false);
+		divide_impl<Div>(anchor, operand, value, false, reindex, debug);
 	}
 
 	void Function::remainder(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool reindex,
 	                         int64_t debug) {
-		divide_impl<Idiv>(anchor, operand, value, reindex, debug, true);
+		divide_impl<Idiv>(anchor, operand, value, true, reindex, debug);
 	}
 
 	void Function::remainder(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool reindex,
 	                         int64_t debug) {
-		divide_impl<Div>(anchor, operand, value, reindex, debug, true);
+		divide_impl<Div>(anchor, operand, value, true, reindex, debug);
 	}
 
 	void Function::divOrRem(const InstructionPtr &anchor, const OperandPtr &operand, int64_t value, bool is_rem,
 	                        bool reindex, int64_t debug) {
-		divide_impl<Idiv>(anchor, operand, value, reindex, debug, is_rem);
+		divide_impl<Idiv>(anchor, operand, value, is_rem, reindex, debug);
 	}
 
 	void Function::divOrRem(const InstructionPtr &anchor, const OperandPtr &operand, uint64_t value, bool is_rem,
 	                        bool reindex, int64_t debug) {
-		divide_impl<Div>(anchor, operand, value, reindex, debug, is_rem);
+		divide_impl<Div>(anchor, operand, value, is_rem, reindex, debug);
 	}
 
 	InstructionPtr Function::insertLeaOrMov(const InstructionPtr &anchor, const OperandPtr &source,

@@ -43,3 +43,23 @@
                        # LowerStore(4756:3).9: mov i64 ^24, (^13)
 [2023/12/28 20:52] Inserting a mov before the sarq (or whatever else the sdiv would insert) fixed it. Did the same for multiplication. There's still a bug though.
                    malloc(): unaligned tcache chunk detected
+[2023/12/29 16:06] The remainder register %rdx is being moved from an idiv operation lowered from sdiv instead of the quotient register %rax.
+
+                   simpleshell.2.ll:6705:
+
+                        %14 = sdiv exact i64 %13, 40
+
+                   simpleshell.2.s:31417:
+
+                        movq %rbx, %rcx
+                        movq %rcx, %rax
+                        movq $40, %rax
+                        idivq %rax
+                        movq %rdx, %rcx
+                        movq %rcx, %rax
+
+                   In Function::divide, Function::remainder and Function::divOrRem, I was passing arguments in the wrong order!
+[2023/12/29 16:13] Still getting `malloc(): unaligned tcache chunk detected`. Very disappointing.
+[2023/12/29 16:29] I'm not clearing %rdx before division.
+[2023/12/29 16:32] That wasn't it either.
+[2023/12/29 18:04] I've noticed when trying a -no-opaque-pointers version of the IR that sometimes rdx is used as an operand to idivq. Didn't happen with the opaque IR.

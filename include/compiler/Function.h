@@ -565,21 +565,26 @@ namespace LL2X {
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
 
-					auto rax = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
-					auto rdx = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rdx, anchor->parent.lock()));
+					VariablePtr rax_var = makePrecoloredVariable(x86_64::rax, anchor->parent.lock());
+					VariablePtr rdx_var = makePrecoloredVariable(x86_64::rdx, anchor->parent.lock());
+
+					OperandPtr rax = OpX(operand->bitWidth, rax_var);
+					OperandPtr rdx = OpX(operand->bitWidth, rdx_var);
 
 					auto mov_in = std::make_shared<Mov>(operand, rax);
+					auto clear_rdx = std::make_shared<Mov>(Op4(0), Op8(rdx_var));
 
-					auto div_var = newVariable(IntType::make(operand->bitWidth));
-					auto div_operand = OpV(div_var);
+					VariablePtr div_var = newVariable(IntType::make(operand->bitWidth));
+					OperandPtr div_operand = OpV(div_var);
 					auto mov_divvar = std::make_shared<Mov>(Op4(value), div_operand);
 					auto div = std::make_shared<I>(div_operand);
 
 					auto mov_out = std::make_shared<Mov>(is_rem? rdx : rax, operand);
 
-					insertBefore(anchor, mov_in, reindex);
-					insertBefore(anchor, mov_divvar, reindex);
-					insertBefore(anchor, div, reindex);
+					insertBefore(anchor, clear_rdx, false);
+					insertBefore(anchor, mov_in, false);
+					insertBefore(anchor, mov_divvar, false);
+					insertBefore(anchor, div, false);
 					insertBefore(anchor, mov_out, reindex);
 					if (debug != -1) {
 						mov_in->setDebug(debug, false);

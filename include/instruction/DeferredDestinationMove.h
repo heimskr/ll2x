@@ -1,6 +1,6 @@
 #pragma once
 
-#include "instruction/Intermediate.h"
+#include "instruction/HasPrecolored.h"
 #include "instruction/SourceToDest.h"
 
 namespace LL2X {

@@ -10,7 +10,7 @@
 #include "compiler/x86_64.h"
 #include "exception/NoChoiceError.h"
 #include "graph/UncolorableError.h"
-#include "instruction/Intermediate.h"
+#include "instruction/HasPrecolored.h"
 #include "pass/MakeCFG.h"
 #include "pass/SplitBlocks.h"
 #include "util/Timer.h"
@@ -412,35 +412,38 @@ namespace LL2X {
 			const size_t size = vec.size();
 			if (size < 2)
 				continue;
-			for (size_t i = 0; i < size - 1; ++i)
-				for (size_t j = i + 1; j < size; ++j)
+
+			for (size_t i = 0; i < size - 1; ++i) {
+				for (size_t j = i + 1; j < size; ++j) {
 					if (interference.hasLabel(*vec[i]) && interference.hasLabel(*vec[j])) {
 						interference.link(*vec[i], *vec[j], true);
 						++links;
 					}
+				}
+			}
 		}
 #endif
 
 		// With all that out of the way, we have to add some precolored nodes to tell the graph coloring algorithm not
-		// to assign certain registers to certain variables. As of this writing, only unclobber instructions cause
-		// precolored nodes to be made.
+		// to assign certain registers to certain variables.
 		int precolored_added = 0;
 		for (const InstructionPtr &instruction: function->linearInstructions) {
-			if (auto intermediate = std::dynamic_pointer_cast<IntermediateInstruction>(instruction)) {
-				// TODO: maybe we'll have to care about precoloredReads someday. Probably not.
-				intermediate->extractPrecolored();
-				const auto &written = intermediate->precoloredWritten;
-				if (written.empty())
+			if (auto has_precolored = std::dynamic_pointer_cast<HasPrecolored>(instruction)) {
+				has_precolored->extractPrecolored();
+				const auto &read    = has_precolored->precoloredRead;
+				const auto &written = has_precolored->precoloredWritten;
+				if (read.empty() && written.empty())
 					continue;
 
 				const std::string label = "__ll2x_pc" + std::to_string(precolored_added++);
 				Node &node = interference.addNode(label);
 				node.colors = {written.begin(), written.end()};
+				node.colors.insert(read.begin(), read.end());
 				// Assumption: each basic block contains one instruction (i.e., they've all been minimized).
 				// Though does that assumption matter here?
-				BasicBlockPtr block = intermediate->parent.lock();
+				BasicBlockPtr block = instruction->parent.lock();
 				for (const VariablePtr &var: block->allLive) {
-					const auto &pid = *var->parentID();
+					const std::string &pid = *var->parentID();
 					if (interference.hasLabel(pid))
 						interference.link(label, pid, true);
 				}
