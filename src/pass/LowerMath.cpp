@@ -224,7 +224,7 @@ namespace LL2X::Passes {
 
 			if (auto *reader = dynamic_cast<Reader *>(llvm->node)) {
 				end = Util::join(reader->allValues(), ", ", [](const ValuePtr &value) {
-					return value->toString();
+					return value? value->toString() : "(null)";
 				});
 			}
 
