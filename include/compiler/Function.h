@@ -596,6 +596,8 @@ namespace LL2X {
 					mov_divvar->extract(false);
 					div->extract(false);
 					mov_out->extract(false);
+					// TODO: Probably need to adjust these too.
+					// If anything is ever subtly messed up, this is probably the culprit.
 					unclobber(anchor, rdx_clobber);
 					unclobber(anchor, rax_clobber);
 				}
