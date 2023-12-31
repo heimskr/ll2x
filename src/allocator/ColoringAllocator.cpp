@@ -24,8 +24,8 @@
 
 namespace LL2X {
 	namespace {
-		constexpr int DEBUG_COLORING = 1;
-		constexpr int DEBUG_SELECTMOSTLIVE = 1;
+		constexpr int DEBUG_COLORING = 0;
+		constexpr int DEBUG_SELECTMOSTLIVE = 0;
 	}
 
 	ColoringAllocator::Result ColoringAllocator::attempt() {
@@ -81,10 +81,10 @@ namespace LL2X {
 
 			recentSpillAttempts.insert(to_spill);
 
-			while (auto parent = to_spill->getParent()) {
-				to_spill = parent;
-				recentSpillAttempts.insert(to_spill);
-			}
+			// while (auto parent = to_spill->getParent()) {
+			// 	to_spill = parent;
+			// 	recentSpillAttempts.insert(to_spill);
+			// }
 
 			if constexpr (DEBUG_COLORING > 1)
 				info() << "Variable after climbing parents: " << *to_spill << " (OID: " << to_spill->originalID <<

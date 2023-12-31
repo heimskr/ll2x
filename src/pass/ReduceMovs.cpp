@@ -79,7 +79,7 @@ namespace LL2X::Passes {
 				continue;
 
 			if (canReduce(mov)) {
-				info() << "Reducing " << mov->debugExtra() << '\n';
+				// info() << "Reducing " << mov->debugExtra() << '\n';
 				mov->source->reg->makeAliasOf(mov->destination->reg);
 				to_remove.push_back(mov);
 			}

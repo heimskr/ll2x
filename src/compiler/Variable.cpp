@@ -257,13 +257,13 @@ namespace LL2X {
 		std::cerr << "\n";
 #endif
 		// info() << "\e[36m" << functionName() << "\e[39m: " << *this << "[\e[1m" << this << "\e[22m].makeAliasOf("
-		//        << new_parent << "[\e[1m" << new_parent.get() << "\e[22m])\n";
+		//        << *new_parent << "[\e[1m" << new_parent.get() << "\e[22m])\n";
 		weakParent = new_parent;
 		new_parent->data->aliases.insert(shared);
 
 		for (const std::weak_ptr<Variable> &weak_alias: data->aliases) {
 			if (VariablePtr alias = weak_alias.lock()) {
-				info() << "Alias " << alias << "->parent = " << &new_parent << "\n";
+				// info() << "Alias " << alias << "->parent = " << &new_parent << "\n";
 				alias->weakParent = new_parent;
 			}
 		}
@@ -405,7 +405,7 @@ namespace LL2X {
 	}
 
 	void Variable::debug() {
-		std::cerr << "Debug information for " << *this << " in function \e[1m";
+		std::cerr << "Debug information for " << *this << " (originally " << *originalID << ") in function \e[1m";
 		if (!data->definingBlocks.empty())
 			std::cerr << *data->definingBlocks.begin()->lock()->parent->name;
 		else
@@ -432,7 +432,7 @@ namespace LL2X {
 			std::cerr << "\e[2mnone\e[22m\n";
 
 		if (data->definitions.empty()) {
-			std::cerr << "   No data->definitions.\n";
+			std::cerr << "   No definitions.\n";
 		} else {
 			std::cerr << "   Definitions (" << data->definitions.size() << "):\n";
 			for (const std::weak_ptr<Instruction> &instruction: data->definitions)

@@ -9,7 +9,7 @@
 // #define DEBUG_LINEAR
 #define DEBUG_VARS
 // #define DEBUG_RENDER
-#define DEBUG_SPILL
+// #define DEBUG_SPILL
 // #define DEBUG_SPLIT
 #define DEBUG_READ_WRITTEN
 // #define DISABLE_COMMENTS
@@ -22,7 +22,7 @@
 // #define DEBUG_MINILABELS
 // #define DEBUG_BEFORE_SETUPCALLS
 // #define DEBUG_AFTER_SETUPCALLS
-#define DEBUG_BEFORE_ALLOC
+// #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
 #define FINAL_DEBUG
 #define STRICT_READ_CHECK
@@ -1033,15 +1033,13 @@ namespace LL2X {
 
 		forceLiveness();
 
-		Passes::reduceMovs(*this);
-		Passes::mergeAllBlocks(*this);
-		Passes::minimizeBlocks(*this);
-		for (BasicBlockPtr &block: blocks)
-			block->extract();
-
-		Passes::makeCFG(*this);
-
-		forceLiveness();
+		// Passes::reduceMovs(*this);
+		// Passes::mergeAllBlocks(*this);
+		// Passes::minimizeBlocks(*this);
+		// for (BasicBlockPtr &block: blocks)
+		// 	block->extract();
+		// Passes::makeCFG(*this);
+		// forceLiveness();
 
 		updateInstructionNodes();
 		reindexBlocks();
@@ -1049,8 +1047,7 @@ namespace LL2X {
 
 
 #ifdef DEBUG_BEFORE_ALLOC
-		if (*name == "@_ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_ET0_T_S9_S8_")
-			debug();
+		debug();
 #endif
 	}
 
