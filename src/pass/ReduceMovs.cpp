@@ -66,26 +66,109 @@ namespace LL2X::Passes {
 
 			return true;
 		}
+
+		void strategy1(Function &function) {
+			Timer timer("ReduceMovs[1]");
+			std::list<InstructionPtr> to_remove;
+
+			for (const InstructionPtr &instruction: function.linearInstructions) {
+				auto mov = std::dynamic_pointer_cast<Mov>(instruction);
+
+				if (!mov)
+					continue;
+
+				if (canReduce(mov)) {
+					info() << "Reducing " << mov->debugExtra() << '\n';
+					mov->source->reg->makeAliasOf(mov->destination->reg);
+					to_remove.push_back(mov);
+				}
+			}
+
+			for (const InstructionPtr &instruction: to_remove)
+				function.remove(instruction);
+		}
+
+		void strategy2(Function &function) {
+			Timer timer("ReduceMovs[2]");
+			std::unordered_set<InstructionPtr> to_remove;
+
+			for (const InstructionPtr &instruction: function.linearInstructions) {
+				if (to_remove.contains(instruction))
+					continue;
+
+				auto mov = std::dynamic_pointer_cast<Mov>(instruction);
+
+				if (!mov)
+					continue;
+
+				auto next_mov = std::dynamic_pointer_cast<Mov>(function.after(instruction));
+
+				if (!next_mov)
+					continue;
+
+				// We have two consecutive movs. We want them to be in this form:
+				//   mov X, %b
+				//   mov %b, Y
+
+				OperandPtr destination = mov->destination;
+				OperandPtr source = next_mov->source;
+
+				if (!destination->isRegister() || !source->isRegister() || *destination->reg != *source->reg)
+					continue;
+
+				// If %b isn't live-out at the second mov, it's valid to merge the movs together.
+
+				BasicBlockPtr block = next_mov->parent.lock();
+
+				if (block->isLiveOut(source->reg))
+					continue;
+
+				mov->destination = next_mov->destination;
+				to_remove.insert(next_mov);
+			}
+
+			for (const InstructionPtr &instruction: to_remove)
+				function.remove(instruction);
+		}
+
+		void strategy3(Function &function) {
+			Timer timer("ReduceMovs[3]");
+			std::unordered_set<InstructionPtr> to_remove;
+
+			for (const InstructionPtr &instruction: function.linearInstructions) {
+				if (to_remove.contains(instruction))
+					continue;
+
+				auto mov = std::dynamic_pointer_cast<Mov>(instruction);
+
+				if (!mov)
+					continue;
+
+				auto next = std::dynamic_pointer_cast<Mov>(function.after(instruction));
+
+				if (!next)
+					continue;
+
+				// We have two consecutive movs. We want them to be in this form:
+				//   mov A, B
+				//   mov B, A
+
+				OperandPtr destination = mov->destination;
+				OperandPtr source = next->source;
+
+				if (*mov->source != *next->destination || *mov->destination != *next->source)
+					continue;
+
+				to_remove.insert(next);
+			}
+
+			for (const InstructionPtr &instruction: to_remove)
+				function.remove(instruction);
+		}
 	}
 
 	void reduceMovs(Function &function) {
-		Timer timer("ReduceMovs");
-		std::list<InstructionPtr> to_remove;
-
-		for (const InstructionPtr &instruction: function.linearInstructions) {
-			auto mov = std::dynamic_pointer_cast<Mov>(instruction);
-
-			if (!mov)
-				continue;
-
-			if (canReduce(mov)) {
-				// info() << "Reducing " << mov->debugExtra() << '\n';
-				mov->source->reg->makeAliasOf(mov->destination->reg);
-				to_remove.push_back(mov);
-			}
-		}
-
-		for (const InstructionPtr &instruction: to_remove)
-			function.remove(instruction);
+		strategy2(function);
+		strategy3(function);
 	}
 }

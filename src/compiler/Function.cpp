@@ -623,10 +623,17 @@ namespace LL2X {
 
 	InstructionPtr Function::after(const InstructionPtr &instruction) {
 		auto iter = std::find(linearInstructions.begin(), linearInstructions.end(), instruction);
+
 		if (iter == linearInstructions.end())
 			return nullptr;
-		++iter;
-		return iter == linearInstructions.end()? nullptr : *iter;
+
+		do {
+			++iter;
+			if (iter == linearInstructions.end())
+				return nullptr;
+		} while ((*iter)->isComment());
+
+		return *iter;
 	}
 
 	BasicBlockPtr Function::after(const BasicBlockPtr &block) {
@@ -1033,18 +1040,19 @@ namespace LL2X {
 
 		forceLiveness();
 
-		// Passes::reduceMovs(*this);
-		// Passes::mergeAllBlocks(*this);
-		// Passes::minimizeBlocks(*this);
-		// for (BasicBlockPtr &block: blocks)
-		// 	block->extract();
-		// Passes::makeCFG(*this);
-		// forceLiveness();
+		// debug();
+
+		Passes::reduceMovs(*this);
+		Passes::mergeAllBlocks(*this);
+		Passes::minimizeBlocks(*this);
+		for (BasicBlockPtr &block: blocks)
+			block->extract();
+		Passes::makeCFG(*this);
+		forceLiveness();
 
 		updateInstructionNodes();
 		reindexBlocks();
 		initialDone = true;
-
 
 #ifdef DEBUG_BEFORE_ALLOC
 		debug();

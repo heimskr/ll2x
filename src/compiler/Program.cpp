@@ -6,6 +6,7 @@
 // #define COMPILE_MULTITHREADED
 // #define SINGLE_FUNCTION "@_ZL7func_532U1"
 // #define SINGLE_FUNCTION "@main"
+// #define SINGLE_FUNCTION "@_ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEbEEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_"
 
 #include "allocator/ColoringAllocator.h"
 #include "compiler/BasicBlock.h"
