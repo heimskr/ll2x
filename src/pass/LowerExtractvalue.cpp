@@ -16,8 +16,9 @@ namespace LL2X::Passes {
 
 		for (InstructionPtr &instruction: function.linearInstructions) {
 			auto *llvm = dynamic_cast<LLVMInstruction *>(instruction.get());
-			if (llvm == nullptr || llvm->node->nodeType() != NodeType::ExtractValue)
+			if (!llvm || llvm->node->nodeType() != NodeType::ExtractValue)
 				continue;
+
 			auto *ev = dynamic_cast<ExtractValueNode *>(llvm->node);
 
 			ValueType aggregate_type = ev->aggregateValue->valueType();
@@ -31,8 +32,7 @@ namespace LL2X::Passes {
 				continue;
 			}
 
-			if (ev->decimals.size() != 1 ||
-				(aggregate_type != ValueType::Local && aggregate_type != ValueType::Operand)) {
+			if (ev->decimals.size() != 1 || (aggregate_type != ValueType::Local && aggregate_type != ValueType::Operand)) {
 				warn() << "Skipping unsupported extractvalue node: " << ev->debugExtra() << '\n';
 				continue;
 			}
@@ -49,14 +49,13 @@ namespace LL2X::Passes {
 				variable = local->variable;
 			}
 
-			if (!variable->type) {
+			if (!variable->getType()) {
 				warn() << "Variable " << variable->ansiString() << " has no type.\n";
 				continue;
 			}
 
-			if (variable->type->typeType() != TypeType::Struct) {
-				warn() << "Type of variable " << variable->ansiString() << " (" << *variable->type
-				       << ") isn't Struct.\n";
+			if (variable->getType()->typeType() != TypeType::Struct) {
+				warn() << "Type of variable " << variable->ansiString() << " (" << *variable->getType() << ") isn't Struct.\n";
 				continue;
 			}
 

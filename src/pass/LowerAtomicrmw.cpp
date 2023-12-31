@@ -67,7 +67,7 @@ namespace LL2X::Passes {
 			OperandPtr result = atomicrmw->operand;
 			assert(result->isRegister());
 
-			const bool result_used = !result->reg->uses.empty();
+			const bool result_used = !result->reg->getUses().empty();
 
 			if (op == AtomicrmwNode::Op::Add || op == AtomicrmwNode::Op::Sub) {
 				function.insertBefore<Mov, false>(instruction, reg_only, result);

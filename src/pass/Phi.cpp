@@ -88,9 +88,9 @@ namespace LL2X::Passes {
 						// temporary.
 						try {
 							VariablePtr to_rename = function.getVariable(*local->name);
-							if (to_rename->id != to_rename->parentID()) {
+							if (to_rename->getID() != to_rename->parentID()) {
 								// info() << "Retiring " << *to_rename << " (pid = " << *to_rename->parentID() << ")\n";
-								function.extraVariables.emplace(to_rename->id, to_rename);
+								function.extraVariables.emplace(to_rename->getID(), to_rename);
 								vars_to_erase.insert(to_rename.get());
 								// TODO: verify whether this is unneeded.
 								// to_rename->makeAliasOf(target);
@@ -134,7 +134,7 @@ namespace LL2X::Passes {
 
 		for (const Variable *var: vars_to_erase) {
 			// warn() << "Erasing " << *var << " (OID: " << var->originalID << ")\n";
-			function.variableStore.erase(var->id);
+			function.variableStore.erase(var->getID());
 		}
 
 		for (InstructionPtr &ptr: to_remove)
@@ -430,7 +430,7 @@ namespace LL2X::Passes {
 				// Can't add definitions while iterating over definitions.
 				std::list<InstructionPtr> definitions_to_add;
 				std::list<BasicBlockPtr> definers_to_add;
-				for (const auto &definition: destination->definitions) {
+				for (const auto &definition: destination->getDefinitions()) {
 					auto *llvm = dynamic_cast<LLVMInstruction *>(definition.lock().get());
 					if (llvm == nullptr || !llvm->isPhi()) {
 						if (insertions.contains(definition.lock())) {

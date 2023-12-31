@@ -75,14 +75,12 @@ namespace LL2X::Passes {
 						warn() << "Alloca size at " << alloca->location << " is too large: " << size << '\n';
 
 					VariablePtr destination = function.getVariable(*alloca->result);
-					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size,
-						alloca->align);
+					const auto &location = function.addToStack(destination, StackLocation::Purpose::Alloca, size, alloca->align);
 
 					// function.replaceSimilarOperand(OpV(destination), Op8(-location.offset, rbp));
 
 					function.comment(instruction, prefix + "size = " + std::to_string(size) + ", type = " +
-						(destination->type? destination->type->toString() : "?") + ", var = " +
-						destination->toString());
+						(destination->getType()? destination->getType()->toString() : "?") + ", var = " + destination->toString());
 					function.insertBefore<Lea, false>(instruction, Op8(-location.offset, rbp), Op8(destination));
 					continue;
 				}
@@ -170,8 +168,8 @@ namespace LL2X::Passes {
 		if (replaced_count == 0) {
 			// If we never ended up finding and replacing any alloca instructions, erase the precolored base pointer and
 			// stack pointer variables.
-			function.variableStore.erase(rbp->id);
-			function.variableStore.erase(rsp->id);
+			function.variableStore.erase(rbp->getID());
+			function.variableStore.erase(rsp->getID());
 		} else {
 			// If we replaced any alloca instructions, we added a bunch of instructions in its place. This makes it
 			// necessary to reindex all instructions.

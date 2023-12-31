@@ -126,6 +126,9 @@ namespace LL2X {
 			inline void setUses(decltype(data->uses) uses) { data->uses = std::move(uses); }
 			inline void setLastUse(decltype(data->lastUse) last_use) { data->lastUse = std::move(last_use); }
 
+			inline bool hasRegister(int reg) const { return data->registers.contains(reg); }
+			inline void addRegister(int reg) { data->registers.insert(reg); }
+
 			void addDefiner(const std::shared_ptr<BasicBlock> &);
 			void removeDefiner(const std::shared_ptr<BasicBlock> &);
 			void addUsingBlock(const std::shared_ptr<BasicBlock> &);

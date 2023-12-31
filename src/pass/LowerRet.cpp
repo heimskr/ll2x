@@ -49,14 +49,14 @@ namespace LL2X::Passes {
 			} else if (ret->value->isLocal()) {
 
 				VariablePtr var = std::dynamic_pointer_cast<LocalValue>(ret->value)->variable;
-				function.extraVariables.emplace(var->id, var);
+				function.extraVariables.emplace(var->getID(), var);
 
 				if (var->multireg()) {
 					VariablePtr rdx = function.makePrecoloredVariable(x86_64::rdx, block);
-					if (2 < var->registers.size())
+					if (2 < var->getRegisters().size())
 						throw std::runtime_error("Too many registers for " + var->plainString() + " in LowerRet");
-					auto iter = var->registers.begin();
-					for (size_t i = 0; i < var->registers.size(); ++i) {
+					auto iter = var->getRegisters().begin();
+					for (size_t i = 0; i < var->getRegisters().size(); ++i) {
 						auto subvar = function.makePrecoloredVariable(*iter++, block);
 						function.insertBefore<Mov, false>(instruction, OpV(subvar), Op8(i == 0? rax : rdx));
 					}
@@ -67,15 +67,15 @@ namespace LL2X::Passes {
 
 				OperandPtr operand = std::dynamic_pointer_cast<OperandValue>(ret->value)->operand;
 				if (!operand->isRegisters({x86_64::rax})) {
-					if (operand->isRegister() && 1 < operand->reg->registers.size()) {
-						const size_t reg_count = operand->reg->registers.size();
+					if (operand->isRegister() && 1 < operand->reg->getRegisters().size()) {
+						const size_t reg_count = operand->reg->getRegisters().size();
 						if (reg_count != 2)
 							throw std::runtime_error("Can't return a variable that requires three or more registers");
 						if (operand->bitWidth != 128)
 							throw std::runtime_error("Expected a bitwidth of 128 for a two-register return operand, "
 								"got " + std::to_string(operand->bitWidth));
 						VariablePtr rdx = function.makePrecoloredVariable(x86_64::rdx, block);
-						auto iter = operand->reg->registers.begin();
+						auto iter = operand->reg->getRegisters().begin();
 						VariablePtr to_rax = function.makePrecoloredVariable(*iter, block);
 						VariablePtr to_rdx = function.makePrecoloredVariable(*++iter, block);
 						function.comment(instruction, "LowerRet: two-register return");

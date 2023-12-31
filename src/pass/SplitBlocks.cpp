@@ -25,7 +25,7 @@ namespace LL2X::Passes {
 					int regular_written_count = 0;
 
 					for (const VariablePtr &variable: instruction->written) {
-						if (variable->registers.empty())
+						if (variable->getRegisters().empty())
 							regular_written_count += variable->registersRequired();
 						else
 							regular_written_count += variable->nonSpecialCount();

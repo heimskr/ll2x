@@ -175,7 +175,7 @@ namespace LL2X::Passes {
 			if (call->result != nullptr && huge_return) {
 				big_result = function.newVariable(call->returnType, block);
 				const StackLocation &location = function.addToStack(big_result, StackLocation::Purpose::BigStruct, -1,
-					big_result->type->alignment());
+					big_result->getType()->alignment());
 				OperandPtr pointer = Op8(-location.offset, function.pcRbp);
 				OperandPtr rdi = Op8(function.makePrecoloredVariable(x86_64::rdi, block));
 				function.insertBefore<Lea, false>(instruction, pointer, rdi);
@@ -194,8 +194,7 @@ namespace LL2X::Passes {
 			for (i = arg_count + arg_offset - 1; reg_max <= i; --i) {
 				// info() << "arg_offset[" << arg_offset << "], i[" << i << "]\n";
 				function.comment(instruction, prefix + "push " + call->constants.at(i - arg_offset)->toString());
-				bytes_pushed += pushCallValue(function, instruction, call->constants.at(i - arg_offset), bytes_pushed,
-				                              clobbers_by_reg);
+				bytes_pushed += pushCallValue(function, instruction, call->constants.at(i - arg_offset), bytes_pushed, clobbers_by_reg);
 			}
 
 			function.maxPushedForCalls = std::max(function.maxPushedForCalls, bytes_pushed);
@@ -242,8 +241,8 @@ namespace LL2X::Passes {
 				if (return_size == 128) {
 					auto result = OpV(function.getVariable(*call->result));
 					VariablePtr pack = function.makePrecoloredVariable(x86_64::rax, instruction->parent.lock());
-					pack->registers.insert(x86_64::rdx);
-					pack->type = IntType::make(128);
+					pack->addRegister(x86_64::rdx);
+					pack->setType(IntType::make(128));
 					// mov %pack, %result
 					auto move = std::make_shared<Mov>(OpV(pack), result);
 					function.comment(llvm, prefix + "move 128-bit result from %rax and %rdx");
@@ -554,8 +553,8 @@ namespace LL2X::Passes {
 			// after %rsi is overwritten!), so we use the clobbered memory locations for those.
 			auto local = std::dynamic_pointer_cast<LocalValue>(constant->value);
 			InstructionPtr out;
-			if (local->variable->registers.size() == 1 && clobbers.contains(*local->variable->registers.begin())) {
-				const int reg = *local->variable->registers.begin();
+			if (local->variable->getRegisters().size() == 1 && clobbers.contains(*local->variable->getRegisters().begin())) {
+				const int reg = *local->variable->getRegisters().begin();
 				out = function.insertBefore(instruction, clobbers.at(reg)->makeSemi(new_operand));
 			} else
 				out = function.insertBefore<Mov>(instruction, OpV(local->variable), new_operand, 64);
@@ -658,8 +657,8 @@ namespace LL2X::Passes {
 			const auto &operand = std::dynamic_pointer_cast<OperandValue>(constant->value)->operand;
 
 			InstructionPtr out;
-			if (operand->isRegister() && operand->reg->registers.size() == 1) {
-				const int reg = *operand->reg->registers.begin();
+			if (operand->isRegister() && operand->reg->getRegisters().size() == 1) {
+				const int reg = *operand->reg->getRegisters().begin();
 				if (clobbers.contains(reg)) {
 					auto semi = clobbers.at(reg)->makeSemi(new_operand);
 					semi->source = operand;

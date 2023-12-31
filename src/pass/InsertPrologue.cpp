@@ -33,7 +33,7 @@ namespace LL2X::Passes {
 		std::set<int> written;
 		for (const InstructionPtr &instruction: function.linearInstructions) {
 			for (const VariablePtr &variable: instruction->written) {
-				for (const int reg: variable->registers) {
+				for (const int reg: variable->getRegisters()) {
 					if (!x86_64::isSpecialPurpose(reg) && x86_64::calleeSaved.contains(reg)) {
 						written.insert(reg);
 						const auto &location = function.addToStack(variable, StackLocation::Purpose::CalleeSave, 8, 8);

@@ -32,7 +32,7 @@ namespace LL2X::Passes {
 		auto pool = pool_start;
 
 		for (const VariablePtr &variable: read_vars)
-			for (const int reg: variable->registers)
+			for (const int reg: variable->getRegisters())
 				pool.erase(reg);
 
 		if (pool.empty()) // Unlikely.
@@ -43,7 +43,7 @@ namespace LL2X::Passes {
 
 	static bool isLive(int reg, const InstructionPtr &instruction) {
 		return std::ranges::any_of(instruction->parent.lock()->allLive, [reg](const VariablePtr &variable) {
-			return variable->registers.contains(reg);
+			return variable->getRegisters().contains(reg);
 		});
 	}
 

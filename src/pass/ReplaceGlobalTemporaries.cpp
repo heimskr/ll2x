@@ -12,7 +12,7 @@ namespace LL2X::Passes {
 
 		for (const auto *map: {&function.variableStore, &function.extraVariables}) {
 			for (const auto &[id, variable]: *map) {
-				TypePtr type = variable->type;
+				TypePtr type = variable->getType();
 
 				if (type->typeType() != TypeType::GlobalTemporary)
 					continue;
