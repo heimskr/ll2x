@@ -24,7 +24,7 @@
 // #define DEBUG_AFTER_SETUPCALLS
 // #define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
-#define FINAL_DEBUG
+// #define FINAL_DEBUG
 #define STRICT_READ_CHECK
 #define STRICT_WRITTEN_CHECK
 // #define FN_CATCH_EXCEPTIONS
@@ -1021,9 +1021,6 @@ namespace LL2X {
 		Passes::lowerMemory(*this);
 		// Passes::lowerInlineAsm(*this);
 		Passes::lowerExtractvalue(*this);
-		// Passes::transformInstructions(*this);
-		// for (BasicBlockPtr &block: blocks)
-		// 	block->extract(true);
 		Passes::movePhi(*this);
 		for (BasicBlockPtr &block: blocks)
 			block->extract(true);
@@ -1031,25 +1028,9 @@ namespace LL2X {
 		Passes::fixBigConstants(*this);
 		Passes::minimizeBlocks(*this);
 		Passes::replaceGlobalTemporaries(*this);
-
-		// for (BasicBlockPtr &block: blocks)
-		// 	block->extract(true);
-		// extractVariables(true);
-		// resetLiveness();
-		// computeLiveness();
-
 		forceLiveness();
-
-		// debug();
-
 		Passes::reduceMovs(*this);
-		Passes::mergeAllBlocks(*this);
-		Passes::minimizeBlocks(*this);
-		for (BasicBlockPtr &block: blocks)
-			block->extract();
-		Passes::makeCFG(*this);
 		forceLiveness();
-
 		updateInstructionNodes();
 		reindexBlocks();
 		initialDone = true;
@@ -1502,8 +1483,8 @@ namespace LL2X {
 		} while (working);
 
 		for (auto &block: blocks) {
-			block->liveIn  = std::unordered_set<VariablePtr>(in[block->label].cbegin(),  in[block->label].cend());
-			block->liveOut = std::unordered_set<VariablePtr>(out[block->label].cbegin(), out[block->label].cend());
+			block->liveIn  = {in[block->label].cbegin(),  in[block->label].cend()};
+			block->liveOut = {out[block->label].cbegin(), out[block->label].cend()};
 			block->allLive = Util::merge(block->liveIn, block->liveOut);
 		}
 	}
