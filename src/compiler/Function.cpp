@@ -1826,7 +1826,7 @@ namespace LL2X {
 					else
 						stream << " \e[2m??\e[22m";
 				const int spill_cost = var->getSpillCost();
-				stream << "\e[2m  cost = \e[1m" << (spill_cost == INT_MAX? "∞" : std::to_string(spill_cost))
+				stream << "\e[2m  cost = \e[1m" << (spill_cost == Variable::SPILL_MAX? "∞" : std::to_string(spill_cost))
 				       << "\e[0;2m";
 				if (var->getDefiningBlocks().size() > 1)
 					stream << " (multiple defs)";
