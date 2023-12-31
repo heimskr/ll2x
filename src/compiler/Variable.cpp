@@ -68,8 +68,8 @@ namespace LL2X {
 		data->usingBlocks = std::move(using_blocks);
 	}
 
-	ssize_t Variable::weight() const {
-		ssize_t sum = 0;
+	SpillCost Variable::weight() const {
+		SpillCost sum = 0;
 		for (const std::weak_ptr<BasicBlock> &weak_use: data->usingBlocks)
 			if (BasicBlockPtr use = weak_use.lock())
 				sum += use->estimatedExecutions;
@@ -80,7 +80,7 @@ namespace LL2X {
 		return data->id;
 	}
 
-	ssize_t Variable::getSpillCost() {
+	SpillCost Variable::getSpillCost() {
 		if (spillCost.has_value())
 			return spillCost.value();
 
@@ -147,14 +147,14 @@ namespace LL2X {
 		});
 	}
 
-	bool Variable::isAliasOf(Variable &other) {
+	bool Variable::isAliasOf(const Variable &other) const {
 		if (*this == other)
 			return true;
 
-		if (getAliases().contains(other.shared_from_this()))
+		if (getAliases().contains(std::const_pointer_cast<Variable>(other.shared_from_this())))
 			return true;
 
-		return other.getAliases().contains(shared_from_this());
+		return other.getAliases().contains(std::const_pointer_cast<Variable>(shared_from_this()));
 	}
 
 	std::string Variable::ansiString(x86_64::Width width) const {

@@ -170,7 +170,7 @@ namespace LL2X {
 
 	void Reader::replaceRead(const VariablePtr &to_replace, const VariablePtr &new_var) {
 		for (const auto &value: allLocals())
-			if (value->variable->id == to_replace->id)
+			if (value->variable->getID() == to_replace->getID())
 				value->variable = new_var;
 	}
 

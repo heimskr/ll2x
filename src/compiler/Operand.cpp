@@ -14,16 +14,18 @@ namespace LL2X {
 	}
 
 	static std::string pcrel(const VariablePtr &) {
-		// return (var && var->registers.size() == 1 && *var->registers.begin() == x86_64::rip)? "@GOTPCREL" : "";
+		// return (var && var->getRegisters().size() == 1 && *var->getRegisters().begin() == x86_64::rip)? "@GOTPCREL" : "";
 		return "";
 	}
 
 	Operand::Operand(const VariablePtr &var):
-	mode(Mode::Register), width(x86_64::getWidth(var->type? var->type->trueWidth() : 64)),
-	bitWidth(var->type? var->type->width() : 64), reg(var) {
-		if (!var->type)
+	mode(Mode::Register),
+	width(x86_64::getWidth(var->getType()? var->getType()->trueWidth() : 64)),
+	bitWidth(var->getType()? var->getType()->width() : 64),
+	reg(var) {
+		if (!var->getType())
 			throw std::runtime_error("Variable provided to Operand() has no type");
-		type = var->type;
+		type = var->getType();
 	}
 
 	std::string Operand::ansiString() const {
@@ -96,12 +98,12 @@ namespace LL2X {
 	bool Operand::replaceID(const Variable &to_replace, const VariablePtr &replace_with) {
 		bool changed = false;
 
-		if (reg && reg->id == to_replace.id) {
+		if (reg && reg->getID() == to_replace.getID()) {
 			reg = replace_with;
 			changed = true;
 		}
 
-		if (index && index->id == to_replace.id) {
+		if (index && index->getID() == to_replace.getID()) {
 			index = replace_with;
 			return true;
 		}
@@ -112,12 +114,12 @@ namespace LL2X {
 	bool Operand::replace(const Variable &to_replace, const VariablePtr &replace_with) {
 		bool changed = false;
 
-		if (reg && (reg->id == to_replace.id || reg->isAliasOf(to_replace))) {
+		if (reg && (reg->getID() == to_replace.getID() || reg->isAliasOf(to_replace))) {
 			reg = replace_with;
 			changed = true;
 		}
 
-		if (index && (index->id == to_replace.id || index->isAliasOf(to_replace))) {
+		if (index && (index->getID() == to_replace.getID() || index->isAliasOf(to_replace))) {
 			index = replace_with;
 			return true;
 		}
@@ -126,11 +128,11 @@ namespace LL2X {
 	}
 
 	bool Operand::isRegister(int check_reg) const {
-		return isRegister() && reg && reg->registers.size() == 1 && *reg->registers.begin() == check_reg;
+		return isRegister() && reg && reg->getRegisters().size() == 1 && *reg->getRegisters().begin() == check_reg;
 	}
 
 	bool Operand::isRegisters(const std::set<int> &check_regs) const {
-		return isRegister() && reg && Util::equal(reg->registers, check_regs);
+		return isRegister() && reg && Util::equal(reg->getRegisters(), check_regs);
 	}
 
 	bool Operand::isAliasOf(const Variable &var) const {
@@ -255,12 +257,12 @@ namespace LL2X {
 		if (label != other.label)
 			return false;
 
-		if (reg && !reg->registers.empty()) {
-			if (!other.reg || !Util::equal(reg->registers, other.reg->registers))
+		if (reg && !reg->getRegisters().empty()) {
+			if (!other.reg || !Util::equal(reg->getRegisters(), other.reg->getRegisters()))
 				return false;
 
 			if (index) {
-				if (!other.index || !Util::equal(index->registers, other.index->registers))
+				if (!other.index || !Util::equal(index->getRegisters(), other.index->getRegisters()))
 					return false;
 			} else if (index != other.index)
 				return false;

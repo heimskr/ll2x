@@ -41,9 +41,9 @@ namespace LL2X::PaddedStructs {
 
 	VariablePtr extract(const VariablePtr &source, int64_t index, Function &function,
 	                    const InstructionPtr &instruction) {
-		std::list<int64_t> source_regs(source->registers.begin(), source->registers.end());
+		std::list<int64_t> source_regs(source->getRegisters().begin(), source->getRegisters().end());
 
-		TypePtr type = source->type;
+		TypePtr type = source->getType();
 		if (!type)
 			throw std::runtime_error("PaddedStructs::extract: source variable has dno type");
 
@@ -64,7 +64,7 @@ namespace LL2X::PaddedStructs {
 			throw std::runtime_error("out_operand isn't a valid register operand in PaddedStructs::extract");
 		const VariablePtr &out_var = out_operand->reg;
 
-		if (!out_var->type)
+		if (!out_var->getType())
 			throw std::runtime_error("ExtractValueNode output variable has no type");
 
 		auto struct_type = initial_struct_type->pad();
@@ -91,11 +91,11 @@ namespace LL2X::PaddedStructs {
 			const int64_t to_take = std::min({64 - skip, target_remaining, width_remaining});
 			VariablePtr from_pack = function.newVariable(OpaqueType::make(), instruction->parent.lock());
 
-			function.comment(instruction, "PaddedStructs(" + source->type->toString() + " -> " +
-				out_var->type->toString() + "): move from pack " + source->toString() + " (" + source->type->toString()
-				+ ") to " + from_pack->toString() + " (" + from_pack->type->toString() + "), index = " + std::to_string(source_reg_index));
-			function.insertBefore<DeferredSourceMove, false>(instruction, OpV(source), OpV(from_pack),
-				source_reg_index);
+			function.comment(instruction, "PaddedStructs(" + source->getType()->toString() + " -> " +
+				out_var->getType()->toString() + "): move from pack " + source->toString() + " (" + source->getType()->toString()
+				+ ") to " + from_pack->toString() + " (" + from_pack->getType()->toString() + "), index = " + std::to_string(source_reg_index));
+
+			function.insertBefore<DeferredSourceMove, false>(instruction, OpV(source), OpV(from_pack), source_reg_index);
 
 			if (skip != 0) {
 				// Normally I'd use a mask and an `and` instruction, but our mask would often be larger than the 32 bits
@@ -112,7 +112,7 @@ namespace LL2X::PaddedStructs {
 
 				// If the output is, say, an i16 type, then we want the data to be right-aligned without the left
 				// alignment we use for structs. We can accomplish that by simply not shifting it back to the left here.
-				if (out_var->type->typeType() == TypeType::Struct)
+				if (out_var->getType()->typeType() == TypeType::Struct)
 					function.insertShiftBefore<Shl, false>(instruction, Op4(64 - skip - to_take), OpV(from_pack), 32);
 			}
 

@@ -19,36 +19,35 @@ namespace LL2X {
 		return "\e[91m<invalid>\e[39m: " + const_cast<Instruction *>(this)->debugExtra();
 	}
 
-	VariablePtr Instruction::doesRead(const VariablePtr &var) const {
-		if (read.contains(var))
-			return var;
-		std::shared_ptr<BasicBlock> block = parent.lock();
-		for (const VariablePtr &read_var: read)
-			if (read_var->id == var->id)
-				return read_var;
-		for (Variable *alias: var->getAliases()) {
-			VariablePtr shared_alias = block->parent->getVariable(alias->id);
-			if (read.contains(shared_alias))
-				return shared_alias;
-		}
+	namespace {
+		VariablePtr doesAccess(const Instruction &instruction, const VariablePtr &var, std::unordered_set<VariablePtr> Instruction::*member) {
+			if ((instruction.*member).contains(var))
+				return var;
 
-		return nullptr;
+			BasicBlockPtr block = instruction.parent.lock();
+
+			for (const VariablePtr &accessed_var: instruction.*member)
+				if (accessed_var->getID() == var->getID())
+					return accessed_var;
+
+			for (const WeakVariablePtr &weak_alias: var->getAliases()) {
+				if (VariablePtr alias = weak_alias.lock()) {
+					VariablePtr shared_alias = block->parent->getVariable(alias->getID());
+					if ((instruction.*member).contains(shared_alias))
+						return shared_alias;
+				}
+			}
+
+			return nullptr;
+		}
+	}
+
+	VariablePtr Instruction::doesRead(const VariablePtr &var) const {
+		return doesAccess(*this, var, &Instruction::read);
 	}
 
 	VariablePtr Instruction::doesWrite(const VariablePtr &var) const {
-		if (written.contains(var))
-			return var;
-		std::shared_ptr<BasicBlock> block = parent.lock();
-		for (const VariablePtr &written_var: written)
-			if (written_var->id == var->id)
-				return written_var;
-		for (Variable *alias: var->getAliases()) {
-			VariablePtr shared_alias = block->parent->getVariable(alias->id);
-			if (written.contains(shared_alias))
-				return shared_alias;
-		}
-
-		return nullptr;
+		return doesAccess(*this, var, &Instruction::written);
 	}
 
 	Instruction * Instruction::setDebug(const ASTNode &node) {

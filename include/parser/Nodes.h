@@ -96,8 +96,13 @@ namespace LL2X {
 	struct Writer {
 		protected:
 			Writer() = default;
-			Writer(const std::string *result_): result(result_) {}
-			Writer(OperandPtr operand_): result(operand_->reg->id), operand(std::move(operand_)) {}
+
+			Writer(const std::string *result_):
+				result(result_) {}
+
+			Writer(OperandPtr operand_):
+				result(operand_->reg->getID()),
+				operand(std::move(operand_)) {}
 
 		public:
 			const std::string *result = nullptr;

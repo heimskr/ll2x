@@ -139,7 +139,7 @@ namespace LL2X {
 		if (liveIn.contains(var))
 			return true;
 		return std::ranges::any_of(liveIn, [&var](const auto &live_in) {
-			return live_in->id == var->id;
+			return live_in->getID() == var->getID();
 		});
 	}
 
@@ -147,7 +147,7 @@ namespace LL2X {
 		if (liveOut.contains(var))
 			return true;
 		return std::ranges::any_of(liveOut, [&var](const auto &live_out) {
-			return live_out->id == var->id;
+			return live_out->getID() == var->getID();
 		});
 	}
 

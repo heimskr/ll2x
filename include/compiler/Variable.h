@@ -22,6 +22,8 @@ namespace LL2X {
 
 	using VariableID = const std::string *;
 
+	using SpillCost = int64_t;
+
 	struct VariableData {
 		VariableID id;
 		TypePtr type;
@@ -46,9 +48,11 @@ namespace LL2X {
 		private:
 			std::list<Instruction *> useOrder;
 			std::weak_ptr<Variable> weakParent;
-			std::optional<ssize_t> spillCost;
+			std::optional<SpillCost> spillCost;
 
 		public:
+			constexpr static SpillCost SPILL_MAX = SSIZE_MAX;
+
 			const VariableID originalID;
 
 			std::shared_ptr<VariableData> data = std::make_shared<VariableData>();
@@ -67,10 +71,10 @@ namespace LL2X {
 			VariableID getID() const;
 
 			/** Calculates the sum of each use's estimated execution count. */
-			ssize_t weight() const;
+			SpillCost weight() const;
 
 			/** Calculates the variable's spill cost. */
-			ssize_t getSpillCost();
+			SpillCost getSpillCost();
 			void clearSpillCost();
 
 			/** Returns whether the variable has only one using block and whose single using block is the same as its
@@ -91,7 +95,7 @@ namespace LL2X {
 			/** Sets up this variable so that changes to a different variable will be reflected in this one. */
 			void makeAliasOf(const std::shared_ptr<Variable> &);
 
-			inline VariablePtr getParent() const { return weakParent.lock(); }
+			inline std::shared_ptr<Variable> getParent() const { return weakParent.lock(); }
 
 			inline const auto & getAliases() const { return data->aliases; }
 
@@ -106,6 +110,21 @@ namespace LL2X {
 
 			inline auto & getUses() { return data->uses; }
 			inline const auto & getUses() const { return data->uses; }
+
+			inline auto & getDefiningBlocks() { return data->definingBlocks; }
+			inline const auto & getDefiningBlocks() const { return data->definingBlocks; }
+
+			inline auto & getUsingBlocks() { return data->usingBlocks; }
+			inline const auto & getUsingBlocks() const { return data->usingBlocks; }
+
+			inline void setFixed(bool fixed) { data->fixed = fixed; }
+			inline void setRegisters(decltype(data->registers) registers) { data->registers = std::move(registers); }
+			inline void setType(TypePtr type) { data->type = std::move(type); }
+			inline void setDefiningBlocks(decltype(data->definingBlocks) defining_blocks) { data->definingBlocks = std::move(defining_blocks); }
+			inline void setUsingBlocks(decltype(data->usingBlocks) using_blocks) { data->usingBlocks = std::move(using_blocks); }
+			inline void setDefinitions(decltype(data->definitions) definitions) { data->definitions = std::move(definitions); }
+			inline void setUses(decltype(data->uses) uses) { data->uses = std::move(uses); }
+			inline void setLastUse(decltype(data->lastUse) last_use) { data->lastUse = std::move(last_use); }
 
 			void addDefiner(const std::shared_ptr<BasicBlock> &);
 			void removeDefiner(const std::shared_ptr<BasicBlock> &);
@@ -151,7 +170,7 @@ namespace LL2X {
 
 			/** Returns whether this variable is an alias of the other variable. Variables are considered aliases of
 			 *  themselves for the purposes of this function. */
-			bool isAliasOf(Variable &);
+			bool isAliasOf(const Variable &) const;
 
 			void debug();
 
@@ -165,4 +184,5 @@ namespace LL2X {
 	std::ostream & operator<<(std::ostream &, const LL2X::Variable &);
 
 	using VariablePtr = std::shared_ptr<Variable>;
+	using WeakVariablePtr = std::weak_ptr<Variable>;
 }

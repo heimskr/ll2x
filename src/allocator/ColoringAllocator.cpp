@@ -81,8 +81,8 @@ namespace LL2X {
 
 			recentSpillAttempts.insert(to_spill);
 
-			while (auto sparent = to_spill->getParent().lock()) {
-				to_spill = sparent;
+			while (auto parent = to_spill->getParent()) {
+				to_spill = parent;
 				recentSpillAttempts.insert(to_spill);
 			}
 
@@ -90,8 +90,8 @@ namespace LL2X {
 				info() << "Variable after climbing parents: " << *to_spill << " (OID: " << to_spill->originalID <<
 					")\n";
 
-			triedIDs.insert(to_spill->id);
-			triedLabels.insert(*to_spill->id);
+			triedIDs.insert(to_spill->getID());
+			triedLabels.insert(*to_spill->getID());
 
 			if (function->spill(to_spill)) {
 				if constexpr (DEBUG_COLORING > 0)
@@ -145,16 +145,17 @@ namespace LL2X {
 				for (const int color: node->colors)
 					std::cerr << color << ' ';
 				std::cerr << ") aliases =";
-				for (const Variable *alias: ptr->getAliases())
-					std::cerr << ' ' << *alias;
+				for (const std::weak_ptr<Variable> &weak_alias: ptr->getAliases())
+					if (VariablePtr alias = weak_alias.lock())
+						std::cerr << ' ' << *alias;
 				std::cerr << '\n';
 			}
 
-			if (ptr->registers.empty()) {
+			if (ptr->getRegisters().empty()) {
 				std::set<int> assigned;
 				for (const int color: node->colors)
 					assigned.insert(color);
-				ptr->setRegisters(assigned);
+				ptr->setRegisters(std::move(assigned));
 			}
 		}
 
@@ -197,9 +198,11 @@ namespace LL2X {
 		for (const auto &[id, var]: function->variableStore) {
 			if (var->allRegistersSpecial())
 				continue;
+
 			var->clearSpillCost();
-			const int cost = var->spillCost();
-			if (cost != -1 && !triedIDs.contains(var->id) && cost < lowest && !var->isSimple()) {
+			const auto cost = var->getSpillCost();
+
+			if (cost != -1 && !triedIDs.contains(var->getID()) && cost < lowest && !var->isSimple()) {
 				lowest = cost;
 				ptr = var;
 			}
@@ -263,6 +266,7 @@ namespace LL2X {
 	VariablePtr ColoringAllocator::selectChaitin() const {
 		VariablePtr out;
 		int64_t lowest = INT64_MAX;
+
 		for (const Node *node: interference.nodes()) {
 			if (!node->data.has_value())
 				continue;
@@ -273,8 +277,8 @@ namespace LL2X {
 				continue;
 
 			var->clearSpillCost();
-			const int cost = var->spillCost();
-			if (cost == INT_MAX)
+			const auto cost = var->getSpillCost();
+			if (cost == Variable::SPILL_MAX)
 				continue;
 
 			const size_t degree = node->degree();
@@ -312,7 +316,7 @@ namespace LL2X {
 			if (!interference.hasLabel(*parent_id)) { // Use only one variable from a set of aliases.
 				Node &node = interference.addNode(*parent_id);
 				node.data = var;
-				node.colors = var->registers;
+				node.colors = var->getRegisters();
 #ifdef DEBUG_COLORING
 				info() << *var << ": " << var->registersRequired() << " required.";
 				if (var->type)
@@ -333,19 +337,19 @@ namespace LL2X {
 		std::map<VariableID, std::unordered_set<int>> live;
 
 		for (const auto &[id, var]: function->variableStore) {
-			if (!var->registers.empty())
+			if (!var->getRegisters().empty())
 				continue;
 #ifdef DEBUG_COLORING
 			info() << "Variable " << *var << ":\n";
 #endif
 			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
-				live[var->id].insert(bptr.lock()->index);
+				live[var->getID()].insert(bptr.lock()->index);
 #ifdef DEBUG_COLORING
 				std::cerr << "  definer: " << *bptr.lock()->label << " (" << bptr.lock()->index << ")\n";
 #endif
 			}
 			for (const std::weak_ptr<BasicBlock> &bptr: var->usingBlocks) {
-				live[var->id].insert(bptr.lock()->index);
+				live[var->getID()].insert(bptr.lock()->index);
 #ifdef DEBUG_COLORING
 				std::cerr << "  user: " << *bptr.lock()->label << " (" << bptr.lock()->index << ")\n";
 #endif
@@ -358,18 +362,18 @@ namespace LL2X {
 				warn() << "block is null?\n";
 #endif
 			for (const VariablePtr &var: block->liveIn)
-				if (var->registers.empty()) {
+				if (var->getRegisters().empty()) {
 #ifdef DEBUG_COLORING
 					info() << "Variable " << *var << " is live-in at block " << *block->label << "\n";
 #endif
-					live[var->id].insert(block->index);
+					live[var->getID()].insert(block->index);
 				}
 			for (const VariablePtr &var: block->liveOut)
-				if (var->registers.empty()) {
+				if (var->getRegisters().empty()) {
 #ifdef DEBUG_COLORING
 					info() << "Variable " << *var << " is live-out at block " << *block->label << "\n";
 #endif
-					live[var->id].insert(block->index);
+					live[var->getID()].insert(block->index);
 				}
 		}
 
@@ -402,14 +406,14 @@ namespace LL2X {
 			const VariableID parent_id = var->parentID();
 			// if (!var->registers.empty())
 			// 	continue;
-			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
+			for (const std::weak_ptr<BasicBlock> &bptr: var->getDefiningBlocks()) {
 				const auto index = bptr.lock()->index;
 				if (!sets[index].contains(parent_id)) {
 					vecs[index].push_back(parent_id);
 					sets[index].insert(parent_id);
 				}
 			}
-			for (const std::weak_ptr<BasicBlock> &bptr: var->usingBlocks) {
+			for (const std::weak_ptr<BasicBlock> &bptr: var->getUsingBlocks()) {
 				const auto index = bptr.lock()->index;
 				if (!sets[index].contains(parent_id)) {
 					vecs[index].push_back(parent_id);

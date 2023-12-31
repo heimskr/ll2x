@@ -212,7 +212,7 @@ namespace LL2X {
 				instruction->extract();
 				for (const std::unordered_set<VariablePtr> *variables: {&instruction->read, &instruction->written})
 					for (const VariablePtr &vptr: *variables)
-						variableStore.emplace(vptr->id, vptr);
+						variableStore.emplace(vptr->getID(), vptr);
 			}
 		};
 
@@ -285,14 +285,14 @@ namespace LL2X {
 
 		for (const auto &map: {variableStore, extraVariables})
 			for (const auto &[id, var]: map)
-				if (var->definingBlocks.empty()) {
+				if (var->getDefiningBlocks().empty()) {
 					// Function arguments aren't defined by any instruction.
 					// They're implicitly defined in the first block.
 					if (isArgument(id)) {
 						var->addDefiner(blocks.front());
 						blocks.front()->written.insert(var);
-					} else if (!var->usingBlocks.empty()) {
-						BasicBlockPtr block = var->usingBlocks.begin()->lock();
+					} else if (!var->getUsingBlocks().empty()) {
+						BasicBlockPtr block = var->getUsingBlocks().begin()->lock();
 						// info() << "Adding definer " << *block->label << " to " << var->ansiString() << '\n';
 						var->addDefiner(block);
 						block->written.insert(var);
@@ -341,7 +341,7 @@ namespace LL2X {
 		// Right after the definition of the variable to be spilled, store its value onto the stack in the proper
 		// location. For each use of the original variable, replace the original variable with a new variable, and right
 		// before the use insert a definition for the variable by loading it from the stack.
-		if (variable->definitions.empty()) {
+		if (variable->getDefinitions().empty()) {
 			debug();
 			variable->debug();
 			throw std::runtime_error("Can't spill variable " + variable->toString() + ": no definitions");
@@ -349,7 +349,7 @@ namespace LL2X {
 
 		const StackLocation &location = getSpill(variable, true);
 
-		for (const std::weak_ptr<Instruction> &weak_definition: variable->definitions) {
+		for (const std::weak_ptr<Instruction> &weak_definition: variable->getDefinitions()) {
 			InstructionPtr definition = weak_definition.lock();
 			// Because ϕ-instructions are eventually removed after aliasing the variables, they don't count as a real
 			// definition here.
@@ -450,7 +450,7 @@ namespace LL2X {
 							// operand with the new variable.
 							if (operand->isIndirect() && operand->reg == read) {
 								if (!new_var)
-									new_var = newVariable(read->type, instruction->parent.lock());
+									new_var = newVariable(read->getType(), instruction->parent.lock());
 								insertBefore<Mov>(instruction, replacement, OpV(new_var));
 								operand->reg = new_var;
 #ifdef DEBUG_SPILL
@@ -505,7 +505,7 @@ namespace LL2X {
 	}
 
 	bool Function::canSpill(const VariablePtr &variable) {
-		if (variable->definitions.empty()) {
+		if (variable->getDefinitions().empty()) {
 #ifdef DEBUG_CANSPILL
 			std::cerr << "Can't spill " << variable->ansiString() << ": no definitions\n";
 #endif
@@ -520,8 +520,8 @@ namespace LL2X {
 		}
 
 		// If the only definition is a stack store, the variable can't be spilled.
-		if (variable->definitions.size() == 1) {
-			InstructionPtr single_def = variable->definitions.begin()->lock();
+		if (variable->getDefinitions().size() == 1) {
+			InstructionPtr single_def = variable->getDefinitions().begin()->lock();
 			auto *store = dynamic_cast<Mov *>(single_def.get());
 			if (store != nullptr && store->meta.contains(InstructionMeta::StackStore) &&
 				store->source->reg == variable) {
@@ -532,7 +532,7 @@ namespace LL2X {
 			}
 		}
 
-		for (const std::weak_ptr<Instruction> &weak_definition: variable->definitions) {
+		for (const std::weak_ptr<Instruction> &weak_definition: variable->getDefinitions()) {
 			InstructionPtr definition = weak_definition.lock();
 			// Because ϕ-instructions are eventually removed after aliasing the variables, they don't count as a real
 			// definition here.
@@ -938,14 +938,12 @@ namespace LL2X {
 			if (auto *reader = dynamic_cast<Reader *>(node)) {
 				for (const std::shared_ptr<LocalValue> &value: reader->allLocals()) {
 					if (value->variable)
-						value->name = value->variable->id;
+						value->name = value->variable->getID();
 				}
 			}
 
-			if (auto *writer = dynamic_cast<Writer *>(node)) {
-				if (writer->operand && writer->operand->isRegister())
-					writer->result = writer->operand->reg->id;
-			}
+			if (Writer *writer = dynamic_cast<Writer *>(node); writer && writer->operand && writer->operand->isRegister())
+				writer->result = writer->operand->reg->getID();
 		}
 	}
 
@@ -957,11 +955,11 @@ namespace LL2X {
 		else
 			for (const auto &[id, var]: variableStore) {
 				std::unordered_set<int> to_remove;
-				for (const int reg: var->registers)
+				for (const int reg: var->getRegisters())
 					if (!x86_64::isSpecialPurpose(reg))
 						to_remove.insert(reg);
 				for (const int reg: to_remove)
-					var->registers.erase(reg);
+					var->getRegisters().erase(reg);
 			}
 	}
 
@@ -1187,7 +1185,7 @@ namespace LL2X {
 				for (int j = 0; j < required; ++j)
 					registers.insert(regs[i++ + j]);
 				argument->setRegisters(registers);
-				argument->fixed = true;
+				argument->setFixed(true);
 			}
 		} catch (const std::out_of_range &) {
 			warn() << "VariableStore (" << variableStore.size() << ") in " << *name << ":\n";
@@ -1202,19 +1200,18 @@ namespace LL2X {
 			throw std::invalid_argument("Index too high: " + std::to_string(index));
 		VariablePtr new_var = getVariable("pc" + std::to_string(precoloredCount++), IntType::make(64), definer);
 		new_var->setRegisters({index});
-		new_var->fixed = true;
+		new_var->setFixed(true);
 		return new_var;
 	}
 
-	StackLocation & Function::addToStack(const VariablePtr &variable, StackLocation::Purpose purpose, int64_t width,
-	                                     int64_t align) {
+	StackLocation & Function::addToStack(const VariablePtr &variable, StackLocation::Purpose purpose, int64_t width, int64_t align) {
 		for (auto &[offset, location]: stack)
 			if (*location.variable == *variable && location.purpose == purpose)
 				return location;
 
 		if (width == -1) {
-			width = !variable || !variable->type? 8 : Util::upalign(variable->type->width() < 8? 1 :
-				variable->type->width() / 8, 8);
+			TypePtr type = variable->getType();
+			width = !variable || !type? 8 : Util::upalign(type->width() < 8? 1 : type->width() / 8, 8);
 		}
 
 		if (align == 0)
@@ -1224,6 +1221,7 @@ namespace LL2X {
 		auto &added = stack.try_emplace(stackSize, this, variable, purpose, stackSize, width).first->second;
 		if (purpose == StackLocation::Purpose::Spill)
 			spillSize += width;
+
 		return added;
 	}
 
@@ -1314,20 +1312,20 @@ namespace LL2X {
 		if (!djGraph.has_value())
 			throw std::runtime_error("Can't compute liveness with merge sets when the DJ graph is empty");
 
-		// if (var->definingBlocks.size() != 1) {
-		// 	warn() << "Variable " << *var << " has " << var->definingBlocks.size() << " defining blocks, not 1.\n";
+		// if (var->getDefiningBlocks().size() != 1) {
+		// 	warn() << "Variable " << *var << " has " << var->getDefiningBlocks().size() << " defining blocks, not 1.\n";
 		// 	return false;
 		// }
 
 		const Node::NSet &merge = merges.at(block);
-		const auto &defs = var->definingBlocks;
+		const auto &defs = var->getDefiningBlocks();
 
 		// M^r(n) = M(n) ∪ {n}
 		Node::NSet m_r(merge.begin(), merge.end());
 		m_r.insert(block);
 
 		// for t ∈ uses(a)
-		for (const auto &weak_t: var->usingBlocks) {
+		for (const auto &weak_t: var->getUsingBlocks()) {
 			auto t = weak_t.lock();
 			if (!t)
 				throw std::runtime_error("Couldn't lock std::weak_ptr while computing liveness");
@@ -1358,19 +1356,19 @@ namespace LL2X {
 		if (!djGraph.has_value())
 			throw std::runtime_error("Can't compute liveness with merge sets when the DJ graph is empty");
 
-		// if (var->definingBlocks.size() != 1) {
-		// 	warn() << "Variable " << *var << " has " << var->definingBlocks.size() << " defining blocks, not 1.\n";
+		// if (var->getDefiningBlocks().size() != 1) {
+		// 	warn() << "Variable " << *var << " has " << var->getDefiningBlocks().size() << " defining blocks, not 1.\n";
 		// 	return false;
 		// }
 
-		const auto &defs = var->definingBlocks;
+		const auto &defs = var->getDefiningBlocks();
 
 		// if def(a) = n
 		if (defs.contains(bbMap.at(StringSet::intern(block->label())))) {
 			// return uses(a)\def(a) = ∅
 			// At least, I assume the use of φ in the PDF actually refers to the empty set.
-			auto difference = var->usingBlocks;
-			for (const auto &weak_block: var->definingBlocks)
+			auto difference = var->getUsingBlocks();
+			for (const auto &weak_block: var->getDefiningBlocks())
 				difference.erase(weak_block);
 			return !difference.empty();
 		}
@@ -1388,7 +1386,7 @@ namespace LL2X {
 		}
 
 		// for t ∈ uses(a)
-		for (const auto &weak_t: var->usingBlocks) {
+		for (const auto &weak_t: var->getUsingBlocks()) {
 			auto t = weak_t.lock();
 			if (!t)
 				throw std::runtime_error("Couldn't lock std::weak_ptr while computing liveness");
@@ -1573,8 +1571,8 @@ namespace LL2X {
 
 	void Function::hackLiveness() {
 		for (const auto &[id, var]: variableStore) {
-			const auto &defines = var->definingBlocks;
-			const auto &uses = var->usingBlocks;
+			const auto &defines = var->getDefiningBlocks();
+			const auto &uses = var->getUsingBlocks();
 			if (defines.size() == 1 && uses.size() == 1 && defines.begin()->lock() == uses.begin()->lock())
 				for (const BasicBlockPtr &block: blocks) {
 					block->liveIn.erase(var);
@@ -1595,17 +1593,22 @@ namespace LL2X {
 	std::unordered_set<BasicBlockPtr> Function::getLive(const VariablePtr &var,
 	const std::function<std::unordered_set<std::shared_ptr<Variable>> &(const BasicBlockPtr &)> &getter) const {
 		Timer timer("GetLive");
+
 		std::unordered_set<BasicBlockPtr> out;
 		const auto &alias_pointers = var->getAliases();
 		std::unordered_set<std::shared_ptr<Variable>> aliases;
+
 		for (const auto &[id, subvar]: variableStore)
-			if (alias_pointers.contains(subvar.get()))
+			if (alias_pointers.contains(subvar))
 				aliases.insert(subvar);
+
 		aliases.insert(var);
+
 		for (const auto &alias: aliases)
 			for (const auto &block: blocks)
 				if (getter(block).contains(alias))
 					out.insert(block);
+
 		return out;
 	}
 
@@ -1752,7 +1755,7 @@ namespace LL2X {
 					std::set<std::string> uses;
 					for (const InstructionPtr &instruction: block->instructions)
 						for (const VariablePtr &var: instruction->written)
-							uses.insert(*var->id);
+							uses.insert(*var->getID());
 					if (!uses.empty()) {
 						stream << "; writes =";
 						for (auto begin = uses.begin(), iter = begin, end = uses.end(); iter != end; ++iter) {
@@ -1768,7 +1771,7 @@ namespace LL2X {
 						for (auto begin = liveIn.begin(), iter = begin, end = liveIn.end(); iter != end; ++iter) {
 							if (iter != begin)
 								stream << ',';
-							stream << " %" << *(*iter)->id;
+							stream << " %" << *(*iter)->getID();
 						}
 					}
 
@@ -1778,7 +1781,7 @@ namespace LL2X {
 						for (auto begin = liveOut.begin(), iter = begin, end = liveOut.end(); iter != end; ++iter) {
 							if (iter != begin)
 								stream << ',';
-							stream << " %" << *(*iter)->id;
+							stream << " %" << *(*iter)->getID();
 						}
 					}
 				}
@@ -1823,50 +1826,49 @@ namespace LL2X {
 					stream << "\e[31m[e]\e[39m";
 				else
 					stream << "   ";
-				stream << " \e[2m; \e[1m%" << *id << "/" << *var->id << "/" << *var->originalID << "\e[0;2m  defs ("
-				       << var->definitions.size() << " inst) =";
-				for (const std::weak_ptr<BasicBlock> &def: var->definingBlocks)
+				stream << " \e[2m; \e[1m%" << *id << "/" << *var->getID() << "/" << *var->originalID
+				       << "\e[0;2m  defs (" << var->getDefinitions().size() << " inst) =";
+				for (const std::weak_ptr<BasicBlock> &def: var->getDefiningBlocks())
 					if (auto locked = def.lock())
 						stream << " \e[1;2m" << std::setw(2) << *locked->label << "\e[22m";
 					else
 						stream << " \e[2m??\e[22m";
 				stream << "  \e[2muses =";
-				for (const std::weak_ptr<BasicBlock> &use: var->usingBlocks)
+				for (const std::weak_ptr<BasicBlock> &use: var->getUsingBlocks())
 					if (auto locked = use.lock())
 						stream << " \e[1;2m" << std::setw(2) << *locked->label << "\e[22m";
 					else
 						stream << " \e[2m??\e[22m";
-				const int spill_cost = var->spillCost();
+				const int spill_cost = var->getSpillCost();
 				stream << "\e[2m  cost = \e[1m" << (spill_cost == INT_MAX? "∞" : std::to_string(spill_cost))
 				       << "\e[0;2m";
-				if (var->definingBlocks.size() > 1)
+				if (var->getDefiningBlocks().size() > 1)
 					stream << " (multiple defs)";
 				stream << "  pid = \e[1m" << *var->parentID() << "\e[22;2m";
-				const auto aliases = var->getAliases();
+				const auto &aliases = var->getAliases();
 				if (!aliases.empty()) {
 					stream << "  aliases =\e[1m";
-					for (const Variable *alias: aliases)
-						stream << " " << *alias->id;
+					for (const auto &weak_alias: aliases)
+						if (auto alias = weak_alias.lock())
+							stream << " " << *alias->getID();
 					stream << "\e[22;2m";
 				}
-				if (!var->registers.empty()) {
+				if (!var->getRegisters().empty()) {
 					stream << " \e[32;1m";
-					for (const int reg: var->registers)
+					for (const int reg: var->getRegisters())
 						stream << " %" << x86_64::registerName(reg);
 				}
 				stream << "\e[0m\n";
 				if (varLiveness) {
 					stream << "    \e[2m;      \e[32min   =\e[1m";
-					for (const BasicBlockPtr &block: blocks) {
+					for (const BasicBlockPtr &block: blocks)
 						if (block->isLiveIn(var))
 							stream << " %" << *block->label;
-					}
 					stream << "\e[0m\n";
 					stream << "    \e[2m;      \e[31mout  =\e[1m";
-					for (const BasicBlockPtr &block: blocks) {
+					for (const BasicBlockPtr &block: blocks)
 						if (block->isLiveOut(var))
 							stream << " %" << *block->label;
-					}
 					stream << "\e[0m\n";
 				}
 			}
@@ -1877,11 +1879,12 @@ namespace LL2X {
 			stream << "<Aliases>\n";
 			for (auto &[id, var]: variableStore) {
 				stream << *id << " = " << *var;
-				if (auto vparent = var->getParent().lock())
+				if (auto vparent = var->getParent())
 					stream << "(parent = " << *vparent << ")";
 				stream << ":";
-				for (Variable *alias: var->getAliases())
-					stream << " " << *alias;
+				for (const WeakVariablePtr &weak_alias: var->getAliases())
+					if (VariablePtr alias = weak_alias.lock())
+						stream << " " << *alias;
 				stream << "\n";
 			}
 			stream << "</Aliases>\n";
@@ -1925,14 +1928,18 @@ namespace LL2X {
 	StackLocation & Function::getSpill(const VariablePtr &variable, bool create, bool *created) {
 		if (created != nullptr)
 			*created = false;
+
 		for (std::pair<const int, StackLocation> &pair: stack)
-			if (pair.second.variable->id == variable->id && pair.second.purpose == StackLocation::Purpose::Spill)
+			if (pair.second.variable->getID() == variable->getID() && pair.second.purpose == StackLocation::Purpose::Spill)
 				return pair.second;
+
 		if (create) {
 			if (created != nullptr)
 				*created = true;
-			if (variable->type)
-				return addToStack(variable, StackLocation::Purpose::Spill, -1, variable->type->alignment());
+
+			if (TypePtr type = variable->getType())
+				return addToStack(variable, StackLocation::Purpose::Spill, -1, type->alignment());
+
 			return addToStack(variable, StackLocation::Purpose::Spill);
 		}
 		throw std::out_of_range("Couldn't find a spill location for " + variable->plainString(x86_64::Width::Eight));
@@ -2031,8 +2038,7 @@ namespace LL2X {
 				break;
 			}
 			default:
-				throw std::runtime_error("Unhandled value in Function::makeVariable: " +
-					value_map.at(value->valueType()));
+				throw std::runtime_error("Unhandled value in Function::makeVariable: " + value_map.at(value->valueType()));
 		}
 
 		if (!new_var)
@@ -2052,32 +2058,40 @@ namespace LL2X {
 		for (auto &pair: variableStore)
 			all_vars.push_back(pair.second);
 		for (VariablePtr &var: all_vars) {
-			auto var_parent = var->getParent().lock();
+			auto var_parent = var->getParent();
 
-			if (var->registers.empty() && var_parent != nullptr)
-				var->registers = var_parent->registers;
+			auto &registers = var->getRegisters();
 
-			if (var->registers.empty()) {
-				for (Variable *alias: var->getAliases())
-					if (!alias->registers.empty()) {
-						var->registers = alias->registers;
+			if (registers.empty() && var_parent != nullptr)
+				registers = var_parent->getRegisters();
+
+			if (registers.empty()) {
+				for (const WeakVariablePtr &weak_alias: var->getAliases()) {
+					if (VariablePtr alias = weak_alias.lock(); alias && !alias->getRegisters().empty()) {
+						registers = alias->getRegisters();
 						break;
 					}
+				}
+
 				// As a last resort, if this variable *still* has no register assigned, check all other known variables
 				// for a variable with the same id and try to absorb its register assignment.
-				if (var->registers.empty()) {
-					for (VariablePtr &other: all_vars)
-						if (other != var && other->id == var->id && !other->registers.empty()) {
-							var->registers = other->registers;
+
+				if (registers.empty()) {
+					for (VariablePtr &other: all_vars) {
+						if (other != var && other->getID() == var->getID() && !other->getRegisters().empty()) {
+							registers = other->getRegisters();
 							break;
 						}
-					if (var->registers.empty())
+					}
+
+					if (registers.empty())
 						warn() << "hackVariables: last resort failed in " << *name << '\n';
 				}
-			} else
-				for (Variable *alias: var->getAliases())
-					if (alias->registers.empty())
-						alias->registers = var->registers;
+			} else {
+				for (const WeakVariablePtr &weak_alias: var->getAliases())
+					if (VariablePtr alias = weak_alias.lock(); alias && alias->getRegisters().empty())
+						alias->setRegisters(registers);
+			}
 		}
 	}
 

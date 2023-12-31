@@ -12,7 +12,7 @@ namespace LL2X {
 		function(function_), purpose(purpose_), offset(offset_), width(width_), align(align_), type(type_->copy()) {}
 
 	TypePtr StackLocation::getType() const {
-		return type? type : variable->type;
+		return type? type : variable->getType();
 	}
 
 	std::string StackLocation::getName() const {
@@ -20,7 +20,7 @@ namespace LL2X {
 	}
 
 	bool StackLocation::operator==(const StackLocation &other) const {
-		return function == other.function && offset == other.offset && width == other.width && align == other.align &&
-			type == other.type && variable == other.variable;
+		return function == other.function && offset == other.offset && width == other.width && align == other.align && type == other.type &&
+			variable == other.variable;
 	}
 }

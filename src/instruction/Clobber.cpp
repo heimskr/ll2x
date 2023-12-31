@@ -37,7 +37,7 @@ namespace LL2X {
 
 	std::pair<int, int> SemiUnclobber::extractPrecolored() {
 		if (destination->isRegister())
-			precoloredWritten = destination->reg->registers;
+			precoloredWritten = destination->reg->getRegisters();
 		else
 			precoloredWritten.clear();
 		return {0, precoloredWritten.size()};

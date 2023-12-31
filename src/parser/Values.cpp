@@ -109,7 +109,7 @@ namespace LL2X {
 	}
 
 	LocalValue::LocalValue(const VariablePtr &variable_):
-		VariableValue(variable_->id), variable(variable_) {}
+		VariableValue(variable_->getID()), variable(variable_) {}
 
 	LocalValue::LocalValue(const ASTNode *node): VariableValue(nullptr) {
 		name = node->lexerInfo->at(0) == '%'? StringSet::intern(node->lexerInfo->substr(1)) : node->lexerInfo;
@@ -122,13 +122,12 @@ namespace LL2X {
 	}
 
 	LocalValue::operator std::string() {
-		return "\e[32m" + (variable? variable->ansiString(x86_64::getWidth(variable->type? variable->type->width()
-			: 64)) : "%" + *name) + "\e[39m";
+		return "\e[32m" + (variable? variable->ansiString(x86_64::getWidth(variable->getType()? variable->getType()->width() : 64)) : "%" + *name) +
+			"\e[39m";
 	}
 
 	std::string LocalValue::toString() const {
-		return variable? variable->plainString(x86_64::getWidth(variable->type? variable->type->width() : 64)) :
-			"%" + *name;
+		return variable? variable->plainString(x86_64::getWidth(variable->getType()? variable->getType()->width() : 64)) : "%" + *name;
 	}
 
 	VariablePtr LocalValue::getVariable(Function &function) {
