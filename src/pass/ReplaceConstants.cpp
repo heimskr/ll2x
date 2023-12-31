@@ -30,6 +30,8 @@ namespace LL2X::Passes {
 					constant->type = constant->conversionType;
 					constant->value = constant->conversionSource->value;
 					constant->conversion = Conversion::None;
+				} else if (constant->conversion == Conversion::Zext) {
+					// TODO!(seminar)
 				}
 			}
 

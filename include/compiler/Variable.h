@@ -17,44 +17,60 @@ namespace LL2X {
 	class Variable;
 
 	struct VariableCompare {
-		bool operator()(const Variable *left, const Variable *right) const;
+		bool operator()(const std::weak_ptr<Variable> &left, const std::weak_ptr<Variable> &right) const;
 	};
 
-	class Variable {
+	using VariableID = const std::string *;
+
+	struct VariableData {
+		VariableID id;
+		TypePtr type;
+		WeakSet<BasicBlock>  definingBlocks, usingBlocks;
+		WeakSet<Instruction> definitions, uses;
+		std::weak_ptr<Instruction> lastUse;
+		std::set<int> registers;
+		std::set<std::weak_ptr<Variable>, VariableCompare> aliases;
+		/** Whether the variable's register assignment is important and shouldn't be cleared. Useful for precolored
+		 *  variables. */
+		bool fixed = false;
+
+		VariableData() = default;
+		VariableData(VariableID id_, TypePtr type_, WeakSet<BasicBlock> defining_blocks,
+		             WeakSet<BasicBlock> using_blocks, WeakSet<Instruction> definitions_, WeakSet<Instruction> uses_,
+		             std::weak_ptr<Instruction> last_use, std::set<int> registers_, bool fixed_);
+
+		void adopt(const VariableData &);
+	};
+
+	class Variable: public std::enable_shared_from_this<Variable> {
 		private:
 			std::list<Instruction *> useOrder;
-			std::set<Variable *, VariableCompare> aliases;
-			std::weak_ptr<Variable> parent;
-			std::optional<int> spillCost_;
+			std::weak_ptr<Variable> weakParent;
+			std::optional<ssize_t> spillCost;
 
 		public:
-			using ID = const std::string *;
+			const VariableID originalID;
 
-			const ID originalID;
-			ID id;
-			TypePtr type = nullptr;
-			WeakSet<BasicBlock>  definingBlocks, usingBlocks;
-			WeakSet<Instruction> definitions, uses;
-			std::weak_ptr<Instruction> lastUse;
-			std::set<int> registers;
+			std::shared_ptr<VariableData> data = std::make_shared<VariableData>();
+
 			std::unordered_set<Variable *> phiParents, phiChildren;
+
 			/** Whether the variable was defined by a ϕ-instruction. */
 			bool fromPhi = false;
-			/** Whether the variable's register assignment is important and shouldn't be cleared. Useful for precolored
-			 *  variables. */
-			bool fixed = false;
 
 			Variable *spilledFrom = nullptr; // Tentative.
 			std::list<Variable *> spilledTo; // Also tentative.
 
-			Variable(ID id_, TypePtr type_ = nullptr,
-			         const WeakSet<BasicBlock> &defining_blocks = {}, const WeakSet<BasicBlock> &using_blocks = {});
+			Variable(VariableID id, TypePtr type = {}, WeakSet<BasicBlock> defining_blocks = {},
+			         WeakSet<BasicBlock> using_blocks = {});
+
+			VariableID getID() const;
 
 			/** Calculates the sum of each use's estimated execution count. */
-			int weight() const;
+			ssize_t weight() const;
 
 			/** Calculates the variable's spill cost. */
-			int spillCost();
+			ssize_t getSpillCost();
 			void clearSpillCost();
 
 			/** Returns whether the variable has only one using block and whose single using block is the same as its
@@ -70,13 +86,26 @@ namespace LL2X {
 
 			/** If this variable has a parent, the parent's ID is returned. Otherwise, this variable's ID is returned.
 			 */
-			ID parentID() const;
+			VariableID parentID() const;
 
 			/** Sets up this variable so that changes to a different variable will be reflected in this one. */
-			void makeAliasOf(std::shared_ptr<Variable>);
+			void makeAliasOf(const std::shared_ptr<Variable> &);
 
-			std::weak_ptr<Variable> getParent() const { return parent; }
-			const std::set<Variable *, VariableCompare> & getAliases() const { return aliases; }
+			inline VariablePtr getParent() const { return weakParent.lock(); }
+
+			inline const auto & getAliases() const { return data->aliases; }
+
+			inline TypePtr & getType() { return data->type; }
+			inline const TypePtr & getType() const { return data->type; }
+
+			inline auto & getRegisters() { return data->registers; }
+			inline const auto & getRegisters() const { return data->registers; }
+
+			inline auto & getDefinitions() { return data->definitions; }
+			inline const auto & getDefinitions() const { return data->definitions; }
+
+			inline auto & getUses() { return data->uses; }
+			inline const auto & getUses() const { return data->uses; }
 
 			void addDefiner(const std::shared_ptr<BasicBlock> &);
 			void removeDefiner(const std::shared_ptr<BasicBlock> &);
@@ -89,15 +118,6 @@ namespace LL2X {
 
 			std::shared_ptr<BasicBlock> onlyDefiner() const;
 			std::shared_ptr<Instruction> onlyDefinition() const;
-
-			void setID(ID);
-			void setType(const TypePtr &);
-			void setDefiningBlocks(const decltype(definingBlocks) &);
-			void setDefinitions(const decltype(definitions) &);
-			void setUses(const decltype(uses) &);
-			void setUsingBlocks(const decltype(usingBlocks) &);
-			void setLastUse(const decltype(lastUse) &);
-			void setRegisters(const decltype(registers) &);
 
 			/** Returns true if the variable has at least one register that is special purpose. */
 			bool hasSpecialRegister() const;
@@ -131,7 +151,7 @@ namespace LL2X {
 
 			/** Returns whether this variable is an alias of the other variable. Variables are considered aliases of
 			 *  themselves for the purposes of this function. */
-			bool isAliasOf(const Variable &) const;
+			bool isAliasOf(Variable &);
 
 			void debug();
 
@@ -139,7 +159,7 @@ namespace LL2X {
 			bool isLess(int64_t) const;
 
 			/** Returns true if the given variable ID is numeric and less than the given number. */
-			static bool isLess(Variable::ID, int64_t);
+			static bool isLess(VariableID, int64_t);
 	};
 
 	std::ostream & operator<<(std::ostream &, const LL2X::Variable &);

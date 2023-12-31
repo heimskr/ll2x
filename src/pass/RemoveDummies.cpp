@@ -2,7 +2,7 @@
 #include "compiler/Instruction.h"
 #include "compiler/LLVMInstruction.h"
 #include "instruction/Jmp.h"
-#include "pass/RemoveUselessBranches.h"
+#include "pass/RemoveDummies.h"
 #include "util/Timer.h"
 
 namespace LL2X::Passes {

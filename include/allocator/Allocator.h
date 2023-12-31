@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_set>
 
 namespace LL2X {
 	class Function;
@@ -16,10 +17,13 @@ namespace LL2X {
 		public:
 			enum class Result: int {Invalid = 0, Spilled = 1, NotSpilled = 2, Success = 3};
 
-			std::shared_ptr<Variable> lastSpill, lastSpillAttempt;
+			std::shared_ptr<Variable> lastSpill;
+			std::unordered_set<std::shared_ptr<Variable>> recentSpillAttempts;
 
-			Allocator(Function &function_): function(&function_) {}
-			virtual ~Allocator() {}
+			Allocator(Function &function_):
+				function(&function_) {}
+
+			virtual ~Allocator() = default;
 
 			virtual Result attempt() = 0;
 			int getAttempts() const { return attempts; }

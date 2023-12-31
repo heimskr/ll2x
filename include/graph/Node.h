@@ -2,6 +2,7 @@
 
 #include <any>
 #include <map>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
@@ -27,7 +28,7 @@ namespace LL2X {
 			std::set<Node *, Node_less> out_;
 			std::set<Node *, Node_less> in_;
 			int index_ = -1;
-			std::unordered_map<Node *, bool> reachability;
+			std::optional<std::unordered_map<Node *, bool>> reachability;
 
 		public:
 			using USet = std::unordered_set<Node *>;

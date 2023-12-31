@@ -9,7 +9,7 @@
 // #define DEBUG_LINEAR
 #define DEBUG_VARS
 // #define DEBUG_RENDER
-// #define DEBUG_SPILL
+#define DEBUG_SPILL
 // #define DEBUG_SPLIT
 #define DEBUG_READ_WRITTEN
 // #define DISABLE_COMMENTS
@@ -22,7 +22,7 @@
 // #define DEBUG_MINILABELS
 // #define DEBUG_BEFORE_SETUPCALLS
 // #define DEBUG_AFTER_SETUPCALLS
-// #define DEBUG_BEFORE_ALLOC
+#define DEBUG_BEFORE_ALLOC
 // #define DEBUG_BEFORE_FINAL
 #define FINAL_DEBUG
 #define STRICT_READ_CHECK
@@ -97,6 +97,7 @@
 #include "pass/MergeAllBlocks.h"
 #include "pass/MinimizeBlocks.h"
 #include "pass/Phi.h"
+#include "pass/ReduceMovs.h"
 #include "pass/RemoveDummies.h"
 // #include "pass/RemoveRedundantMoves.h"
 // #include "pass/RemoveUnreachable.h"
@@ -161,7 +162,7 @@ namespace LL2X {
 								*value_out = ret->value;
 							return analyzedType = Type::Constant;
 						case ValueType::Local: {
-							const Variable::ID pvar = dynamic_cast<const LocalValue *>(ret->value.get())->name;
+							const VariableID pvar = dynamic_cast<const LocalValue *>(ret->value.get())->name;
 							if (isArgument(pvar)) {
 								if (simple_index_out != nullptr) {
 									if (!Util::isNumeric(pvar)) {
@@ -315,7 +316,7 @@ namespace LL2X {
 			}
 	}
 
-	Variable::ID Function::newLabel() const {
+	VariableID Function::newLabel() const {
 		auto label = getArity();
 		const std::string *interned = nullptr;
 		for (;;) {
@@ -353,7 +354,7 @@ namespace LL2X {
 			// Because ϕ-instructions are eventually removed after aliasing the variables, they don't count as a real
 			// definition here.
 			// TODO: the above was true for coalescePhi. Is it true for movePhi as well?
-			if (definition->isPhi())
+			if (!definition || definition->isPhi())
 				continue;
 #ifdef DEBUG_SPILL
 			std::cerr << "  Trying to spill " << *variable << " (definition: " << definition->debugExtra() << " at "
@@ -385,6 +386,10 @@ namespace LL2X {
 				if (!definition->replaceSimilarOperand(OpV(variable), Op8(-location.offset, pcRbp))) {
 					// If we couldn't replace the operand (movsx, for example, rejects attempts to change its
 					// destination), we need to cancel the spill.
+#ifdef DEBUG_SPILL
+					warn() << "Couldn't replace operand " << *OpV(variable) << " with -" << location.offset
+					       << "(%rbp) in definition " << definition->debugExtra() << ".\n";
+#endif
 					return false;
 				}
 
@@ -594,7 +599,7 @@ namespace LL2X {
 		return false;
 	}
 
-	bool Function::isArgument(Variable::ID id) const {
+	bool Function::isArgument(VariableID id) const {
 		return Variable::isLess(id, static_cast<int64_t>(getArity()));
 	}
 
@@ -1030,12 +1035,24 @@ namespace LL2X {
 
 		forceLiveness();
 
+		Passes::reduceMovs(*this);
+		Passes::mergeAllBlocks(*this);
+		Passes::minimizeBlocks(*this);
+		for (BasicBlockPtr &block: blocks)
+			block->extract();
+
+		Passes::makeCFG(*this);
+
+		forceLiveness();
+
 		updateInstructionNodes();
 		reindexBlocks();
 		initialDone = true;
 
+
 #ifdef DEBUG_BEFORE_ALLOC
-		debug();
+		if (*name == "@_ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_ET0_T_S9_S8_")
+			debug();
 #endif
 	}
 
@@ -1247,7 +1264,7 @@ namespace LL2X {
 		return var;
 	}
 
-	VariablePtr Function::getVariable(Variable::ID id, bool add_arguments) {
+	VariablePtr Function::getVariable(VariableID id, bool add_arguments) {
 		if (variableStore.contains(id))
 			return variableStore.at(id);
 		if (add_arguments && isArgument(id))
@@ -1265,7 +1282,7 @@ namespace LL2X {
 		return getVariable(StringSet::intern(label));
 	}
 
-	VariablePtr Function::getVariable(Variable::ID id, const TypePtr &type, const BasicBlockPtr &definer) {
+	VariablePtr Function::getVariable(VariableID id, const TypePtr &type, const BasicBlockPtr &definer) {
 		const size_t vcount = variableStore.count(id);
 		const size_t ecount = extraVariables.count(id);
 		if (vcount == 0 && ecount == 0) {
@@ -1575,11 +1592,10 @@ namespace LL2X {
 		}
 	}
 
-	std::unordered_set<std::shared_ptr<BasicBlock>> Function::getLive(const VariablePtr &var,
-	const std::function<std::unordered_set<std::shared_ptr<Variable>> &(const std::shared_ptr<BasicBlock> &)> &getter)
-	const {
+	std::unordered_set<BasicBlockPtr> Function::getLive(const VariablePtr &var,
+	const std::function<std::unordered_set<std::shared_ptr<Variable>> &(const BasicBlockPtr &)> &getter) const {
 		Timer timer("GetLive");
-		std::unordered_set<std::shared_ptr<BasicBlock>> out;
+		std::unordered_set<BasicBlockPtr> out;
 		const auto &alias_pointers = var->getAliases();
 		std::unordered_set<std::shared_ptr<Variable>> aliases;
 		for (const auto &[id, subvar]: variableStore)
@@ -1593,18 +1609,17 @@ namespace LL2X {
 		return out;
 	}
 
-	std::unordered_set<std::shared_ptr<BasicBlock>> Function::getLiveIn(const VariablePtr &var) const {
+	std::unordered_set<BasicBlockPtr> Function::getLiveIn(const VariablePtr &var) const {
 		return getLive(var, [&](const auto &block) -> auto & {
 			return block->liveIn;
 		});
 	}
 
-	std::unordered_set<std::shared_ptr<BasicBlock>> Function::getLiveOut(const VariablePtr &var) const {
+	std::unordered_set<BasicBlockPtr> Function::getLiveOut(const VariablePtr &var) const {
 		return getLive(var, [&](const auto &block) -> auto & {
 			return block->liveOut;
 		});
 	}
-
 
 	std::string Function::toString() {
 		Timer timer("Function::toString");
@@ -1794,12 +1809,12 @@ namespace LL2X {
 			stream << "    \e[2m; Variables:\e[0m\n";
 
 			struct Compare {
-				bool operator()(const Variable::ID &left, const Variable::ID &right) const {
+				bool operator()(const VariableID &left, const VariableID &right) const {
 					return strnatcmp(left->c_str(), right->c_str()) == -1;
 				}
 			};
 
-			std::map<Variable::ID, VariablePtr, Compare> all_vars;
+			std::map<VariableID, VariablePtr, Compare> all_vars;
 			all_vars.insert(variableStore.cbegin(), variableStore.cend());
 			all_vars.insert(extraVariables.cbegin(), extraVariables.cend());
 
@@ -2175,5 +2190,11 @@ namespace LL2X {
 			reindexInstructions();
 
 		return out;
+	}
+
+	bool Function::canReach(const BasicBlockPtr &from, const BasicBlockPtr &to) const {
+		Node &from_node = *bbNodeMap.at(from.get());
+		Node &to_node = *bbNodeMap.at(to.get());
+		return from_node.canReach(to_node);
 	}
 }

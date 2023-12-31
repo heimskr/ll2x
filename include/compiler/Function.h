@@ -102,13 +102,13 @@ namespace LL2X {
 			std::list<InstructionPtr> linearInstructions;
 
 			/** Maps numeric labels to variables. This is the main storage for the function's variables. */
-			std::map<Variable::ID, VariablePtr> variableStore;
+			std::map<VariableID, VariablePtr> variableStore;
 
 			/** A map of variables that have been removed but are likely to be still referenced somewhere, or that
 			 *  aren't in variableStore but need to be processed by hackVariables. */
-			std::map<Variable::ID, VariablePtr> extraVariables;
+			std::map<VariableID, VariablePtr> extraVariables;
 
-			std::unordered_set<Variable::ID> spilledVariables;
+			std::unordered_set<VariableID> spilledVariables;
 
 			/** A list of physical registers that were pushed to the stack in the prologue. Filled in by
 			 *  InsertPrologue. */
@@ -202,7 +202,7 @@ namespace LL2X {
 			void relinearize();
 
 			/** Returns a label that hasn't yet been used for a basic block or variable. */
-			Variable::ID newLabel() const;
+			VariableID newLabel() const;
 
 			/** Produces a new variable with an as yet unused label. */
 			VariablePtr newVariable(const TypePtr & = nullptr, const BasicBlockPtr & = nullptr);
@@ -216,7 +216,7 @@ namespace LL2X {
 
 			bool canSpill(const VariablePtr &);
 
-			bool isArgument(Variable::ID) const;
+			bool isArgument(VariableID) const;
 
 			/** Returns the first instruction in the function that isn't a label or a comment. */
 			InstructionPtr firstInstruction(bool includeComments = false);
@@ -336,7 +336,7 @@ namespace LL2X {
 			/** Returns the variable with a given label. If the variable doesn't exist, an exception will be thrown,
 			 *  unless the second argument is true and the variable is one of the argument variables, in which case
 			 *  it'll be added to the variable store and returned. */
-			VariablePtr getVariable(Variable::ID, bool add_arguments = true);
+			VariablePtr getVariable(VariableID, bool add_arguments = true);
 
 			/** Returns the variable with a given label. If the variable doesn't exist, an exception will be thrown,
 			 *  unless the second argument is true and the variable is one of the argument variables, in which case
@@ -348,7 +348,7 @@ namespace LL2X {
 
 			/** Returns the variable with a given label. If the variable doesn't exist, it will be created with the
 			 *  given type and defining block options. */
-			VariablePtr getVariable(Variable::ID, const TypePtr &, const BasicBlockPtr & = nullptr);
+			VariablePtr getVariable(VariableID, const TypePtr &, const BasicBlockPtr & = nullptr);
 
 			/** Returns the variable with a given label. If the variable doesn't exist, it will be created with the
 			 *  given type and defining block options. */
@@ -376,7 +376,9 @@ namespace LL2X {
 			std::string headerString() const;
 
 			/** Prints debug information about the function. */
-			void debug(std::ostream & = std::cerr);
+			void debug(std::ostream &);
+
+			void debug() { debug(std::cerr); }
 
 			/** Prints debug information about the function. */
 			void debug(bool doBlocks, bool linear, bool vars, bool blockLiveness, bool readWritten, bool varLiveness,
@@ -442,6 +444,9 @@ namespace LL2X {
 			/** Inserts an lea instruction if the source is a global variable. Inserts a mov instruction otherwise. */
 			InstructionPtr insertLeaOrMov(const InstructionPtr &anchor, const OperandPtr &source,
 			                              const OperandPtr &destination, bool reindex = true);
+
+			/** Returns whether there exists a path from one basic block to another in the CFG. */
+			bool canReach(const std::shared_ptr<BasicBlock> &from, const std::shared_ptr<BasicBlock> &to) const;
 
 			VariablePtr pcRax;
 			VariablePtr pcRdx;

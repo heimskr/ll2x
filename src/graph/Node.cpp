@@ -49,7 +49,9 @@ namespace LL2X {
 		bool exists = out_.count(other) == 1;
 		out_.erase(other);
 		other->in_.erase(this);
-		reachability.erase(other);
+
+		if (reachability)
+			reachability->erase(other);
 
 		if (bidirectional && other != this)
 			other->unlink(*this, false);
@@ -102,8 +104,10 @@ namespace LL2X {
 		if (other.owner != owner)
 			return false;
 
-		if (reachability.contains(&other))
-			return reachability.at(&other);
+		if (reachability)
+			return reachability->contains(&other);
+
+		reachability.emplace();
 
 		std::unordered_set<Node *> visited;
 		std::list<Node *> queue {this};
@@ -112,7 +116,7 @@ namespace LL2X {
 			queue.pop_front();
 			for (Node *out_node: node->out()) {
 				if (out_node == &other) {
-					reachability.emplace(&other, true);
+					(*reachability)[&other] = true;
 					return true;
 				}
 
@@ -123,12 +127,12 @@ namespace LL2X {
 			}
 		}
 
-		reachability.emplace(&other, false);
+		(*reachability)[&other] = false;
 		return false;
 	}
 
 	void Node::clearReachability() {
-		reachability.clear();
+		reachability.reset();
 	}
 
 	size_t Node::degree() const {

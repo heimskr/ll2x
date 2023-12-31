@@ -305,7 +305,7 @@ namespace LL2X {
 	struct GetelementptrNode: public InstructionNode, public Writer, public Reader, public CachedConstantValue {
 		struct Index {
 			int64_t width;
-			std::variant<int64_t, Variable::ID> value;
+			std::variant<int64_t, VariableID> value;
 			bool hasMinrange;
 			bool isPvar;
 			Index(int64_t width_, const decltype(value) &value_, bool has_minrange, bool is_pvar):

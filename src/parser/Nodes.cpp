@@ -760,7 +760,7 @@ namespace LL2X {
 			if (std::holds_alternative<int64_t>(value))
 				out << std::get<int64_t>(value) << "\e[0m";
 			else
-				out << *std::get<Variable::ID>(value) << "\e[0m";
+				out << *std::get<VariableID>(value) << "\e[0m";
 		}
 		return out.str();
 	}

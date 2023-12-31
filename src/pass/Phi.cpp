@@ -117,9 +117,9 @@ namespace LL2X::Passes {
 		// Iterate over the graph component by component, choosing one node arbitrarily from each component, running
 		// a breadth-first search from that node and making the variables corresponding to each node reachable from
 		// the source node an alias of the variable corresponding to the chosen node.
-		std::unordered_set<Variable::ID> visited;
+		std::unordered_set<VariableID> visited;
 		for (const auto &[id, var]: function.variableStore) {
-			Variable::ID name = var->originalID;
+			VariableID name = var->originalID;
 			if (visited.contains(name))
 				continue;
 			visited.insert(name);

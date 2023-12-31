@@ -17,28 +17,32 @@
 #include "util/Util.h"
 
 // #define DEBUG_COLORING
-// #define DEBUG_SELECTMOSTLIVE
 #define CONSTRUCT_BY_BLOCK
 // #define SELECT_LOWEST_COST
 #define SELECT_MOST_LIVE
 // #define SELECT_CHAITIN
 
 namespace LL2X {
+	namespace {
+		constexpr int DEBUG_COLORING = 1;
+		constexpr int DEBUG_SELECTMOSTLIVE = 1;
+	}
+
 	ColoringAllocator::Result ColoringAllocator::attempt() {
 		++attempts;
-#ifdef DEBUG_COLORING
-		info() << "Allocating for \e[1m" << *function->name << "\e[22m.\n";
-#endif
+		if constexpr (DEBUG_COLORING > 0) {
+			info() << "Allocating for \e[1m" << *function->name << "\e[22m.\n";
+		}
 
 		makeInterferenceGraph();
 
 		try {
 			interference.color(Graph::ColoringAlgorithm::Greedy, x86_64::rax, x86_64::r15);
 		} catch (const UncolorableError &err) {
-#ifdef DEBUG_COLORING
-			error() << "Coloring failed.\n";
-#endif
+			if constexpr (DEBUG_COLORING > 0)
+				error() << "Coloring failed.\n";
 			int highest_degree = -1;
+
 #ifdef SELECT_LOWEST_COST
 			VariablePtr to_spill = selectLowestSpillCost();
 			(void) highest_degree;
@@ -58,80 +62,97 @@ namespace LL2X {
 				error() << "to_spill is null!\n";
 				throw std::runtime_error("to_spill is null");
 			}
-#ifdef DEBUG_COLORING
-			info() << "Going to spill " << *to_spill;
+
+			if constexpr (DEBUG_COLORING > 0) {
+				info() << "Going to spill " << *to_spill;
 #if !defined(SELECT_LOWEST_COST) && !defined(SELECT_MOST_LIVE) && !defined(SELECT_CHAITIN)
-			std::cerr << " (degree: " << highest_degree << ")";
+				std::cerr << " (degree: " << highest_degree << ")";
 #endif
-			std::cerr << ". Likely name: " << function->variableStore.size() << "\n";
-			info() << "Can spill: " << std::boolalpha << function->canSpill(to_spill) << "\n";
-#endif
+				std::cerr << ". Likely name: " << function->variableStore.size() << "\n";
+				info() << "Can spill: " << std::boolalpha << function->canSpill(to_spill) << "\n";
+			}
+
 			triedIDs.insert(to_spill->originalID);
 			triedLabels.insert(*to_spill->originalID);
-#ifdef DEBUG_COLORING
-			info() << "Variable before climbing parents: " << *to_spill << " (OID: " << to_spill->originalID << ")\n";
-#endif
-			while (auto sparent = to_spill->getParent().lock())
+
+			if constexpr (DEBUG_COLORING > 1)
+				info() << "Variable before climbing parents: " << *to_spill << " (OID: " << to_spill->originalID <<
+					")\n";
+
+			recentSpillAttempts.insert(to_spill);
+
+			while (auto sparent = to_spill->getParent().lock()) {
 				to_spill = sparent;
-#ifdef DEBUG_COLORING
-			info() << "Variable after climbing parents: " << *to_spill << " (OID: " << to_spill->originalID << ")\n";
-#endif
-			lastSpillAttempt = to_spill;
+				recentSpillAttempts.insert(to_spill);
+			}
+
+			if constexpr (DEBUG_COLORING > 1)
+				info() << "Variable after climbing parents: " << *to_spill << " (OID: " << to_spill->originalID <<
+					")\n";
+
 			triedIDs.insert(to_spill->id);
 			triedLabels.insert(*to_spill->id);
 
 			if (function->spill(to_spill)) {
-#ifdef DEBUG_COLORING
-				std::cerr << "Spilled " << *to_spill << ". Variables: " << function->variableStore.size()
-				          << ". Stack locations: " << function->stack.size() << "\n";
-#endif
+				if constexpr (DEBUG_COLORING > 0)
+					std::cerr << "Spilled " << *to_spill << ". Variables: " << function->variableStore.size()
+						<< ". Stack locations: " << function->stack.size() << "\n";
+
 				lastSpill = to_spill;
 				++spillCount;
-				int split = 0;
-				Passes::splitBlocks(*function);
+
+				// int split = 0;
+				// Passes::splitBlocks(*function);
+
+				size_t split = Passes::splitBlocks(*function);
+
 				if (0 < split) {
-#ifdef DEBUG_COLORING
-					std::cerr << split << " block" << (split == 1? " was" : "s were") << " split.\n";
-#endif
+					if constexpr (DEBUG_COLORING > 0)
+						std::cerr << split << " block" << (split == 1? " was" : "s were") << " split.\n";
+
 					for (BasicBlockPtr &block: function->blocks)
 						block->extract();
+
 					Passes::makeCFG(*function);
 					function->extractVariables(true);
 					function->resetLiveness();
 					function->computeLiveness();
+				} else if constexpr (DEBUG_COLORING > 0) {
+					std::cerr << "No blocks were split.\n";
 				}
-#ifdef DEBUG_COLORING
-				else std::cerr << "No blocks were split.\n";
-#endif
+
+				recentSpillAttempts.clear();
 				return Result::Spilled;
+			} else if constexpr (DEBUG_COLORING > 0) {
+				std::cerr << *to_spill << " wasn't spilled.\n";
 			}
-#ifdef DEBUG_COLORING
-			else std::cerr << *to_spill << " wasn't spilled.\n";
-#endif
+
 			return Result::NotSpilled;
 		}
 
-#ifdef DEBUG_COLORING
-		info() << "Spilling process complete. There " << (spillCount == 1? "was " : "were ") << spillCount << " spill"
-		       << (spillCount == 1? ".\n" : "s.\n");
-#endif
+		if constexpr (DEBUG_COLORING > 0)
+			info() << "Spilling process complete. There " << (spillCount == 1? "was " : "were ") << spillCount <<
+				" spill" << (spillCount == 1? ".\n" : "s.\n");
 
-		for (const std::pair<const std::string, Node *> &pair: interference) {
-			if (!pair.second->data.has_value())
+		for (const auto &[id, node]: interference) {
+			if (!node->data.has_value())
 				continue;
-			auto ptr = pair.second->get<VariablePtr>();
-#ifdef DEBUG_COLORING
-			std::cerr << "Variable " << ptr->ansiString() << " -> registers = ( ";
-			for (const int color: pair.second->colors)
-				std::cerr << color << ' ';
-			std::cerr << ") aliases =";
-			for (const Variable *alias: ptr->getAliases())
-				std::cerr << ' ' << *alias;
-			std::cerr << '\n';
-#endif
+
+			VariablePtr ptr = node->get<VariablePtr>();
+
+			if constexpr (DEBUG_COLORING > 1) {
+				std::cerr << "Variable " << ptr->ansiString() << " -> registers = ( ";
+				for (const int color: node->colors)
+					std::cerr << color << ' ';
+				std::cerr << ") aliases =";
+				for (const Variable *alias: ptr->getAliases())
+					std::cerr << ' ' << *alias;
+				std::cerr << '\n';
+			}
+
 			if (ptr->registers.empty()) {
 				std::set<int> assigned;
-				for (const int color: pair.second->colors)
+				for (const int color: node->colors)
 					assigned.insert(color);
 				ptr->setRegisters(assigned);
 			}
@@ -148,8 +169,8 @@ namespace LL2X {
 			const size_t degree = node->degree();
 			// if (highest < degree && triedLabels.count(node->label()) == 0) {
 			// if (highest < degree && function->canSpill(node->get<VariablePtr>())) {
-			if (highest == SIZE_MAX || (highest < degree && !triedLabels.contains(node->label())
-					&& function->canSpill(node->get<VariablePtr>()))) {
+			if (highest == SIZE_MAX || (highest < degree && !triedLabels.contains(node->label()) &&
+					node->data.has_value() && function->canSpill(node->get<VariablePtr>()))) {
 				highest_node = node;
 				highest = degree;
 			}
@@ -196,19 +217,24 @@ namespace LL2X {
 		Timer timer("SelectMostLive");
 		VariablePtr ptr;
 		size_t highest = SIZE_MAX;
+
 		for (const auto *map: {&function->variableStore, &function->extraVariables}) {
 			for (const auto &[id, var]: *map) {
 				if (var->allRegistersSpecial()) {
-#ifdef DEBUG_SELECTMOSTLIVE
-					std::cerr << "Skipping " << var->ansiString() << ": all registers are special\n";
-#endif
+					if (DEBUG_SELECTMOSTLIVE > 0)
+						std::cerr << "Skipping " << var->ansiString() << ": all registers are special\n";
 					continue;
 				}
 
 				if (!function->canSpill(var)) {
-#ifdef DEBUG_SELECTMOSTLIVE
-					std::cerr << "Skipping " << var->ansiString() << ": can't spill\n";
-#endif
+					if (DEBUG_SELECTMOSTLIVE > 0)
+						std::cerr << "Skipping " << var->ansiString() << ": can't spill\n";
+					continue;
+				}
+
+				if (recentSpillAttempts.contains(var)) {
+					if (DEBUG_SELECTMOSTLIVE > 0)
+						std::cerr << "Skipping " << var->ansiString() << ": already attempted recently\n";
 					continue;
 				}
 
@@ -238,13 +264,19 @@ namespace LL2X {
 		VariablePtr out;
 		int64_t lowest = INT64_MAX;
 		for (const Node *node: interference.nodes()) {
-			auto var = node->get<VariablePtr>();
+			if (!node->data.has_value())
+				continue;
+
+			VariablePtr var = node->get<VariablePtr>();
+
 			if (var->allRegistersSpecial() || !function->canSpill(var))
 				continue;
+
 			var->clearSpillCost();
 			const int cost = var->spillCost();
 			if (cost == INT_MAX)
 				continue;
+
 			const size_t degree = node->degree();
 			const int64_t chaitin = static_cast<int64_t>(cost * 10000l / degree);
 			if (chaitin < lowest) {
@@ -271,7 +303,7 @@ namespace LL2X {
 
 		for (const auto &[id, var]: function->variableStore) {
 #ifdef DEBUG_COLORING
-			std::cerr << "%% " << *id << ' ' << var->ansiString() << "; aliases:";
+			std::cerr << "%" << *id << " / " << var->ansiString() << "; aliases:";
 			for (Variable *alias: var->getAliases())
 				std::cerr << ' ' << alias->ansiString();
 			std::cerr << '\n';
@@ -291,14 +323,14 @@ namespace LL2X {
 			}
 		}
 
-		std::vector<Variable::ID> labels;
+		std::vector<VariableID> labels;
 		labels.reserve(function->variableStore.size());
 		for (const auto &[id, var]: function->variableStore)
 			labels.push_back(id);
 
 #ifndef CONSTRUCT_BY_BLOCK
 		// Maps a variable ID to a set of blocks in which the variable is live-in or live-out.
-		std::map<Variable::ID, std::unordered_set<int>> live;
+		std::map<VariableID, std::unordered_set<int>> live;
 
 		for (const auto &[id, var]: function->variableStore) {
 			if (!var->registers.empty())
@@ -363,11 +395,11 @@ namespace LL2X {
 #endif
 		}
 #else
-		std::unordered_map<int, std::vector<Variable::ID>> vecs;
-		std::unordered_map<int, std::unordered_set<Variable::ID>> sets;
+		std::unordered_map<int, std::vector<VariableID>> vecs;
+		std::unordered_map<int, std::unordered_set<VariableID>> sets;
 
 		for (const auto &[id, var]: function->variableStore) {
-			const Variable::ID parent_id = var->parentID();
+			const VariableID parent_id = var->parentID();
 			// if (!var->registers.empty())
 			// 	continue;
 			for (const std::weak_ptr<BasicBlock> &bptr: var->definingBlocks) {
@@ -390,14 +422,14 @@ namespace LL2X {
 			auto &vec = vecs[block->index];
 			auto &set = sets[block->index];
 			for (const VariablePtr &var: block->liveIn) {
-				const Variable::ID parent_id = var->parentID();
+				const VariableID parent_id = var->parentID();
 				if (!set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);
 				}
 			}
 			for (const VariablePtr &var: block->liveOut) {
-				const Variable::ID parent_id = var->parentID();
+				const VariableID parent_id = var->parentID();
 				if (!set.contains(parent_id)) {
 					vec.push_back(parent_id);
 					set.insert(parent_id);

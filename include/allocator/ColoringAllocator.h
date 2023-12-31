@@ -11,7 +11,7 @@ namespace LL2X {
 	/** Assigns registers using a graph coloring algorithm. */
 	class ColoringAllocator: public Allocator {
 		private:
-			std::unordered_set<Variable::ID> triedIDs;
+			std::unordered_set<VariableID> triedIDs;
 			std::unordered_set<std::string> triedLabels;
 
 		public:

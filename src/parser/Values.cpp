@@ -211,8 +211,8 @@ namespace LL2X {
 		out << " \e[2m(\e[22m" << *type << "\e[2m,\e[22m " << *ptrType << ' ' << *variable;
 		for (const auto &decimal: decimals) {
 			out << "\e[2m,\e[22m \e[33mi" << decimal.first << " \e[32m";
-			if (std::holds_alternative<Variable::ID>(decimal.second))
-				out << *std::get<Variable::ID>(decimal.second);
+			if (std::holds_alternative<VariableID>(decimal.second))
+				out << *std::get<VariableID>(decimal.second);
 			else
 				out << std::get<int64_t>(decimal.second);
 			out << "\e[39m";
@@ -229,8 +229,8 @@ namespace LL2X {
 		out << " (" << type->toString() << ", " << ptrType->toString() << ' ' << variable->toString();
 		for (const auto &decimal: decimals) {
 			out << ", i" << decimal.first << ' ';
-			if (std::holds_alternative<Variable::ID>(decimal.second))
-				out << *std::get<Variable::ID>(decimal.second);
+			if (std::holds_alternative<VariableID>(decimal.second))
+				out << *std::get<VariableID>(decimal.second);
 			else
 				out << std::get<int64_t>(decimal.second);
 		}

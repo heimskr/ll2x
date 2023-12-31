@@ -82,7 +82,7 @@ namespace LL2X::Passes {
 		if (dynamic_index) {
 			// result = (base pointer) + (width * first index value) + (subwidth * second index variable)
 			const int64_t skip = Util::updiv(base_type->width(), 8) * std::get<int64_t>(indices[0].value);
-			VariablePtr index = function.getVariable(std::get<Variable::ID>(indices[1].value));
+			VariablePtr index = function.getVariable(std::get<VariableID>(indices[1].value));
 
 			int subwidth = 0;
 			if (auto *has_subtype = dynamic_cast<HasSubtype *>(base_type.get()))
@@ -145,7 +145,7 @@ namespace LL2X::Passes {
 			base_type = out_type;
 		} else if (one_pvar) {
 			// result = (base pointer) + (width * index value)
-			VariablePtr index = function.getVariable(std::get<Variable::ID>(indices.at(0).value));
+			VariablePtr index = function.getVariable(std::get<VariableID>(indices.at(0).value));
 			const int width = Util::updiv(base_type->width(), 8);
 			function.comment(anchor, "LowerGetelementptr(" + std::string(location) + "): pointer-type -> " +
 				operand->toString());

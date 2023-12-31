@@ -136,7 +136,7 @@ namespace LL2X {
 						// Because we're assuming that these variables have already been defined earlier in the
 						// function, we can get them from the Function that contains this Instruction.
 						if (pvar)
-							read.insert(parent.lock()->parent->getVariable(std::get<Variable::ID>(value), true));
+							read.insert(parent.lock()->parent->getVariable(std::get<VariableID>(value), true));
 					}
 				}
 				break;

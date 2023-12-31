@@ -731,6 +731,7 @@ unibang: "," "!prof"          LLVMTOK_INTBANG { $$ = $2->adopt($3); D($1); }
        | "," "!heapallocsite" LLVMTOK_INTBANG { $$ = $2->adopt($3); D($1); }
        | "," "!range"         LLVMTOK_INTBANG { $$ = $2->adopt($3); D($1); }
        | "," "!tbaa.struct"   LLVMTOK_INTBANG { $$ = $2->adopt($3); D($1); }
+       | tbaa
        | "," "!noalias"       LLVMTOK_INTBANG { $$ = $2->adopt($3); D($1); }
        | "," "!alias.scope"   LLVMTOK_INTBANG { $$ = $2->adopt($3); D($1); }
        | cdebug;
@@ -750,7 +751,6 @@ i_store: "store" _volatile constant "," constant _align store_bangs
          { $$ = (new StoreNode($2, $3, $5, $6, $7))->locate($1); D($1, $4); };
 _volatile: LLVMTOK_VOLATILE | { $$ = nullptr; };
 store_bangs: store_bangs invariant_group { $$ = $1->adopt($2); }
-           | store_bangs tbaa            { $$ = $1->adopt($2); }
            | store_bangs nontemporal     { $$ = $1->adopt($2); }
            | store_bangs unibang         { $$ = $1->adopt($2); }
            | { $$ = new AN(llvmParser, LLVM_BANGS); };
@@ -770,7 +770,6 @@ load_bangs: load_bangs invariant_load          { $$ = $1->adopt($2); }
           | load_bangs dereferenceable         { $$ = $1->adopt($2); }
           | load_bangs dereferenceable_or_null { $$ = $1->adopt($2); }
           | load_bangs bang_align              { $$ = $1->adopt($2); }
-          | load_bangs tbaa                    { $$ = $1->adopt($2); }
           | load_bangs nontemporal             { $$ = $1->adopt($2); }
           | load_bangs invariant_group         { $$ = $1->adopt($2); }
           | load_bangs unibang                 { $$ = $1->adopt($2); }
