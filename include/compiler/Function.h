@@ -30,10 +30,19 @@ namespace LL2X {
 	class ColoringAllocator;
 	class Program;
 	struct Clobber;
+	struct Div;
 	struct FunctionArgs;
 	struct Idiv;
+	struct Imul;
+	struct Mul;
 	struct Operand;
 	struct Unclobber;
+
+	template <typename T>
+	concept Divider = std::is_same_v<T, Div> || std::is_same_v<T, Idiv>;
+
+	template <typename T>
+	concept Multiplier = std::is_same_v<T, Mul> || std::is_same_v<T, Imul>;
 
 	using InstructionPtr = std::shared_ptr<Instruction>;
 
@@ -503,10 +512,9 @@ namespace LL2X {
 			}
 
 		private:
-
 			size_t precoloredCount = 0;
 
-			template <typename I, typename N>
+			template <Multiplier I, typename N>
 			void multiply_impl(const InstructionPtr &anchor, const OperandPtr &operand, N value, bool reindex,
 			                   int debug) {
 				if (value == 0) {
@@ -561,7 +569,7 @@ namespace LL2X {
 			}
 
 			// TODO: consolidate with multiply_impl a bit
-			template <typename I, typename N>
+			template <Divider I, typename N>
 			void divide_impl(const InstructionPtr &anchor, const OperandPtr &operand, N value, bool is_rem,
 			                 bool reindex, int debug) {
 				if (value == 1)
