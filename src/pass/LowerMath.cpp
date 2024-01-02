@@ -118,13 +118,17 @@ namespace LL2X::Passes {
 		const auto width = node->type->width();
 
 		if (right->isRegister()) {
-			VariablePtr cl = function.makePrecoloredVariable(x86_64::rcx, instruction->parent.lock());
-			cl->setType(IntType::make(8));
-			OperandPtr cl_operand = Op1(cl);
-			cl_operand->sizeForced = true;
+			VariablePtr rcx = function.makePrecoloredVariable(x86_64::rcx, instruction->parent.lock());
+			rcx->setType(right->type);
+			OperandPtr rcx_operand = OpV(rcx);
 			function.comment(instruction, "LowerShift(" + std::string(node->location) + "): operand " +
-				right->toString() + " changed to " + cl_operand->toString());
-			function.insertBefore<Mov, false>(instruction, right, cl_operand, 8);
+				right->toString() + " changed to " + rcx_operand->toString());
+			function.insertBefore<Mov, false>(instruction, right, rcx_operand);
+
+			VariablePtr cl = function.makePrecoloredVariable(x86_64::rcx, instruction->parent.lock());
+			OperandPtr cl_operand = Op1(cl);
+			cl->setType(IntType::make(8));
+			cl_operand->sizeForced = true;
 			right = cl_operand;
 		}
 
@@ -169,6 +173,7 @@ namespace LL2X::Passes {
 				return;
 			}
 
+			function.comment(instruction, "LowerMult(" + std::string(node->location) + "): delegating to Function::multiply");
 			function.insertBefore<Mov, false>(instruction, left, destination);
 			function.multiply(instruction, destination, constant, true);
 			return;
