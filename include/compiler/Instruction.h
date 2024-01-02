@@ -53,7 +53,9 @@ namespace LL2X {
 
 			/** Examines the instruction node to determine which virtual registers are read/written. Returns a pair of
 			 *  the number of registers read and the number of registers written. */
-			virtual ExtractionResult extract(bool force = false) = 0;
+			virtual ExtractionResult extract(bool force) = 0;
+
+			ExtractionResult extract() { return extract(false); }
 
 			virtual std::vector<std::reference_wrapper<OperandPtr>> getOperands() { return {}; }
 

@@ -8,7 +8,7 @@ namespace LL2X::Passes {
 		Timer timer("TransformLabels");
 		size_t changed = 0;
 
-		for (const InstructionPtr &instruction: function.linearInstructions)
+		for (const InstructionPtr &instruction: function.linearInstructions) {
 			for (const auto &operand_wrapper: instruction->getOperands()) {
 				OperandPtr operand = operand_wrapper.get();
 				if (operand->labelNeedsTransformation) {
@@ -17,6 +17,7 @@ namespace LL2X::Passes {
 					++changed;
 				}
 			}
+		}
 
 		return changed;
 	}

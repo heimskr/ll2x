@@ -84,10 +84,9 @@ namespace LL2X::Passes {
 		} else if (value_type == ValueType::Global) {
 
 			auto global = std::dynamic_pointer_cast<GlobalValue>(converted->value);
-			OperandPtr wide_copy = node->operand->copy()->setWidth(64);
+			OperandPtr wide_copy = node->operand->copy()->setWidth(width);
 			function.comment(instruction, prefix + ".4: " + *global->name + " into " + wide_copy->toString());
-			// Maybe this should be an lea, but I'm skeptical
-			function.insertBefore<Mov, false>(instruction, OpX(width, *global->name, true, false), wide_copy, 64);
+			function.insertBefore<Mov, false>(instruction, OpX(width, *global->name, true, false), wide_copy, width);
 
 		} else if (value_type == ValueType::Null) { // In case you're begging for a segfault.
 
