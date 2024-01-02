@@ -20,14 +20,20 @@
 #include "instruction/Xor.h"
 #include "parser/FunctionArgs.h"
 
+
 namespace LL2X {
+	namespace {
+		constexpr bool UNSAFE_IDIV_APPROXIMATION = false;
+	}
+
 	class ASTNode;
 	class ColoringAllocator;
-	struct FunctionArgs;
 	class Program;
 	struct Clobber;
-	struct Unclobber;
+	struct FunctionArgs;
+	struct Idiv;
 	struct Operand;
+	struct Unclobber;
 
 	using InstructionPtr = std::shared_ptr<Instruction>;
 
@@ -561,51 +567,53 @@ namespace LL2X {
 				if (value == 1)
 					return;
 
-				if (Util::isPowerOfTwo(value)) {
+				// Approximating idiv with sar is unsafe because sar rounds towards zero, while idiv rounds towards negative infinity.
+				if ((UNSAFE_IDIV_APPROXIMATION || !std::is_same_v<I, Idiv>) && Util::isPowerOfTwo(value)) {
 					auto sar = insertShiftBefore<Sar>(anchor, Op4(std::bit_width(static_cast<uint64_t>(value)) - 1),
 						operand);
 					if (debug != -1)
 						sar->setDebug(debug, false);
 					sar->extract(false);
-				} else {
-					auto rax_clobber = clobber(anchor, x86_64::rax);
-					auto rdx_clobber = clobber(anchor, x86_64::rdx);
-
-					VariablePtr rax_var = makePrecoloredVariable(x86_64::rax, anchor->parent.lock());
-					VariablePtr rdx_var = makePrecoloredVariable(x86_64::rdx, anchor->parent.lock());
-
-					OperandPtr rax = OpX(operand->bitWidth, rax_var);
-					OperandPtr rdx = OpX(operand->bitWidth, rdx_var);
-
-					auto mov_in = std::make_shared<Mov>(operand, rax);
-					auto clear_rdx = std::make_shared<Mov>(Op4(0), Op8(rdx_var));
-
-					VariablePtr div_var = newVariable(IntType::make(operand->bitWidth));
-					OperandPtr div_operand = OpV(div_var);
-					auto mov_divvar = std::make_shared<Mov>(Op4(value), div_operand);
-					auto div = std::make_shared<I>(div_operand);
-
-					auto mov_out = std::make_shared<Mov>(is_rem? rdx : rax, operand);
-
-					insertBefore(anchor, clear_rdx, false);
-					insertBefore(anchor, mov_in, false);
-					insertBefore(anchor, mov_divvar, false);
-					insertBefore(anchor, div, false);
-					insertBefore(anchor, mov_out, reindex);
-					if (debug != -1) {
-						mov_in->setDebug(debug, false);
-						div->setDebug(debug, false);
-						mov_out->setDebug(debug, false);
-					}
-					mov_in->extract(false);
-					mov_divvar->extract(false);
-					div->extract(false);
-					mov_out->extract(false);
-					// TODO: Probably need to adjust these too.
-					// If anything is ever subtly messed up, this is probably the culprit.
-					unclobber(anchor, rdx_clobber);
-					unclobber(anchor, rax_clobber);
+					return;
 				}
+
+				auto rax_clobber = clobber(anchor, x86_64::rax);
+				auto rdx_clobber = clobber(anchor, x86_64::rdx);
+
+				VariablePtr rax_var = makePrecoloredVariable(x86_64::rax, anchor->parent.lock());
+				VariablePtr rdx_var = makePrecoloredVariable(x86_64::rdx, anchor->parent.lock());
+
+				OperandPtr rax = OpX(operand->bitWidth, rax_var);
+				OperandPtr rdx = OpX(operand->bitWidth, rdx_var);
+
+				auto mov_in = std::make_shared<Mov>(operand, rax);
+				auto clear_rdx = std::make_shared<Mov>(Op4(0), Op8(rdx_var));
+
+				VariablePtr div_var = newVariable(IntType::make(operand->bitWidth));
+				OperandPtr div_operand = OpV(div_var);
+				auto mov_divvar = std::make_shared<Mov>(Op4(value), div_operand);
+				auto div = std::make_shared<I>(div_operand);
+
+				auto mov_out = std::make_shared<Mov>(is_rem? rdx : rax, operand);
+
+				insertBefore(anchor, clear_rdx, false);
+				insertBefore(anchor, mov_in, false);
+				insertBefore(anchor, mov_divvar, false);
+				insertBefore(anchor, div, false);
+				insertBefore(anchor, mov_out, reindex);
+				if (debug != -1) {
+					mov_in->setDebug(debug, false);
+					div->setDebug(debug, false);
+					mov_out->setDebug(debug, false);
+				}
+				mov_in->extract(false);
+				mov_divvar->extract(false);
+				div->extract(false);
+				mov_out->extract(false);
+				// TODO: Probably need to adjust these too.
+				// If anything is ever subtly messed up, this is probably the culprit.
+				unclobber(anchor, rdx_clobber);
+				unclobber(anchor, rax_clobber);
 			}
 	};
 }

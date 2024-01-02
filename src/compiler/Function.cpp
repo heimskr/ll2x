@@ -648,7 +648,7 @@ namespace LL2X {
 	                                     bool reindex) {
 		BasicBlockPtr block = base->parent.lock();
 		if (!block) {
-			std::cerr << "\e[31;1m!\e[0m " << base->debugExtra() << "\n";
+			std::cerr << "\e[31;1m!\e[22;39m " << base->debugExtra() << "\n";
 			throw std::runtime_error("Couldn't lock instruction's parent block");
 		}
 
@@ -1127,8 +1127,8 @@ namespace LL2X {
 		allocateRegisters();
 		finalCompile();
 #ifdef DEBUG_SPILL
-		info() << "Total spills: \e[1m" << allocator->getSpillCount() << "\e[0m. Finished \e[1m" << *name
-		       << "\e[0m.\n\n";
+		info() << "Total spills: \e[1m" << allocator->getSpillCount() << "\e[22m. Finished \e[1m" << *name
+		       << "\e[22m.\n\n";
 #endif
 	}
 
@@ -1654,12 +1654,12 @@ namespace LL2X {
 		out << *returnType << " \e[35m" << *name << "\e[94m(\e[39m";
 		for (auto begin = arguments->begin(), iter = begin, end = arguments->end(); iter != end; ++iter) {
 			if (iter != begin)
-				out << "\e[2m,\e[0m ";
+				out << "\e[2m,\e[22m ";
 			out << *iter->type;
 			if (iter->name != nullptr)
 				out << " " << *iter->name;
 		}
-		out << "\e[94m)\e[0m";
+		out << "\e[94m)\e[39m";
 		return out.str();
 	}
 
@@ -1779,7 +1779,7 @@ namespace LL2X {
 						int written = 0;
 						std::tie(read, written) = instruction->extract();
 						stream << "\e[s    " << instruction->debugExtra() << "\e[u\e[2m" << read << " " << written
-						       << "\e[0m\n";
+						       << "\e[22m\n";
 					}
 				else
 					for (const InstructionPtr &instruction: block->instructions)
@@ -1792,10 +1792,10 @@ namespace LL2X {
 				int read = 0;
 				int written = 0;
 				std::tie(read, written) = instruction->extract();
-				stream << "\e[s    " << instruction->debugExtra() << "\e[u\e[2m" << read << " " << written << "\e[0m\n";
+				stream << "\e[s    " << instruction->debugExtra() << "\e[u\e[2m" << read << " " << written << "\e[22m\n";
 			}
 		if (vars) {
-			stream << "    \e[2m; Variables:\e[0m\n";
+			stream << "    \e[2m; Variables:\e[22m\n";
 
 			struct Compare {
 				bool operator()(const VariableID &left, const VariableID &right) const {
@@ -1813,7 +1813,7 @@ namespace LL2X {
 				else
 					stream << "   ";
 				stream << " \e[2m; \e[1m%" << *id << "/" << *var->getID() << "/" << *var->originalID
-				       << "\e[0;2m  defs (" << var->getDefinitions().size() << " inst) =";
+				       << "\e[22;2m  defs (" << var->getDefinitions().size() << " inst) =";
 				for (const std::weak_ptr<BasicBlock> &def: var->getDefiningBlocks())
 					if (auto locked = def.lock())
 						stream << " \e[1;2m" << std::setw(2) << *locked->label << "\e[22m";
@@ -1825,9 +1825,8 @@ namespace LL2X {
 						stream << " \e[1;2m" << std::setw(2) << *locked->label << "\e[22m";
 					else
 						stream << " \e[2m??\e[22m";
-				const int spill_cost = var->getSpillCost();
-				stream << "\e[2m  cost = \e[1m" << (spill_cost == Variable::SPILL_MAX? "∞" : std::to_string(spill_cost))
-				       << "\e[0;2m";
+				const auto spill_cost = var->getSpillCost();
+				stream << "\e[2m  cost = \e[1m" << (spill_cost == Variable::SPILL_MAX? "∞" : std::to_string(spill_cost)) << "\e[22;2m";
 				if (var->getDefiningBlocks().size() > 1)
 					stream << " (multiple defs)";
 				stream << "  pid = \e[1m" << *var->parentID() << "\e[22;2m";
@@ -1844,18 +1843,18 @@ namespace LL2X {
 					for (const int reg: var->getRegisters())
 						stream << " %" << x86_64::registerName(reg);
 				}
-				stream << "\e[0m\n";
+				stream << "\e[22;39m\n";
 				if (varLiveness) {
 					stream << "    \e[2m;      \e[32min   =\e[1m";
 					for (const BasicBlockPtr &block: blocks)
 						if (block->isLiveIn(var))
 							stream << " %" << *block->label;
-					stream << "\e[0m\n";
+					stream << "\e[22;39m\n";
 					stream << "    \e[2m;      \e[31mout  =\e[1m";
 					for (const BasicBlockPtr &block: blocks)
 						if (block->isLiveOut(var))
 							stream << " %" << *block->label;
-					stream << "\e[0m\n";
+					stream << "\e[22;39m\n";
 				}
 			}
 		}
