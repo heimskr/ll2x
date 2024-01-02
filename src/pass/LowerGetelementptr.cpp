@@ -101,10 +101,12 @@ namespace LL2X::Passes {
 			function.comment(anchor, "Multiply end");
 			function.comment(anchor, "temp " + temp->toString() + " -> operand " + operand->toString());
 			function.insertBefore<Mov, false>(anchor, OpV(temp), operand);
-			// result += skip
-			function.comment(anchor, "Result " + operand->toString() + " += skip " +
-				std::to_string(skip));
-			function.insertBefore<Add>(anchor, Op4(skip), operand);
+			if (skip != 0) {
+				// result += skip
+				function.comment(anchor, "Result " + operand->toString() + " += skip " +
+					std::to_string(skip));
+				function.insertBefore<Add>(anchor, Op4(skip), operand);
+			}
 			// result += base pointer (not %rbp)
 			function.comment(anchor, "Result " + operand->toString() + " += base pointer " +
 				pointer->toString());
