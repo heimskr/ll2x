@@ -63,6 +63,7 @@
 #include "pass/FillOperands.h"
 #include "pass/FinishMultireg.h"
 #include "pass/FixBigConstants.h"
+#include "pass/FixCmp.h"
 #include "pass/FixMemoryOperands.h"
 #include "pass/FixMovzx.h"
 #include "pass/HackOperands.h"
@@ -107,6 +108,7 @@
 #include "pass/ReplaceConstants.h"
 #include "pass/ReplaceGlobalTemporaries.h"
 // #include "pass/ReplaceStoresAndLoads.h"
+#include "pass/ResizeMovs.h"
 #include "pass/SetupCalls.h"
 #include "pass/SplitBlocks.h"
 // #include "pass/SplitResultMoves.h"
@@ -1026,6 +1028,7 @@ namespace LL2X {
 			block->extract(true);
 		Passes::lowerSwitch(*this);
 		Passes::fixBigConstants(*this);
+		Passes::fixCmp(*this);
 		Passes::minimizeBlocks(*this);
 		Passes::replaceGlobalTemporaries(*this);
 		forceLiveness();
@@ -1083,6 +1086,7 @@ namespace LL2X {
 		Passes::removeDummies(*this);
 		hackVariables();
 		forceLiveness();
+		Passes::resizeMovs(*this);
 		// for (InstructionPtr &instruction: linearInstructions) {
 		// 	if (instruction->debugIndex != -1) {
 		// 		auto lock = parent.getLock();
