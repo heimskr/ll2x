@@ -1,7 +1,7 @@
 *.o
 *.png
 *.svg
-*.s
+/*.s
 a.out
 
 /ll2x
