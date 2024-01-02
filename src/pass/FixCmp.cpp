@@ -45,10 +45,12 @@ namespace LL2X::Passes {
 				// cmp.
 				if (auto set = std::dynamic_pointer_cast<Set>(function.after(instruction))) {
 					if (equalLike.contains(set->condition)) {
+						function.comment(cmp, "Fixing always true comparison");
 						function.insertBefore<Mov, false>(set, Op4(1), set->destination);
 						to_remove.push_back(cmp);
 						to_remove.push_back(set);
 					} else if (unequalLike.contains(set->condition)) {
+						function.comment(cmp, "Fixing always false comparison");
 						function.insertBefore<Mov, false>(set, Op4(0), set->destination);
 						to_remove.push_back(cmp);
 						to_remove.push_back(set);
@@ -57,6 +59,7 @@ namespace LL2X::Passes {
 			}
 
 			if (!first->isRegister() && !second->isRegister()) {
+				function.comment(cmp, "Splitting up cmp with incompatible operands");
 				VariablePtr temp_var = function.newVariable(second->type, cmp->parent.lock());
 				OperandPtr temp_operand = OpV(temp_var);
 				function.insertBefore<Mov, false>(cmp, second, temp_operand)->extract(false);
