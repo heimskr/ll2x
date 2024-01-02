@@ -10,15 +10,41 @@
 #include "util/Timer.h"
 
 namespace LL2X::Passes {
-	static bool isLive(const InstructionPtr &instruction, int reg) {
-		BasicBlockPtr block = instruction->parent.lock();
+	namespace {
+		bool isLive(const InstructionPtr &instruction, int reg) {
+			BasicBlockPtr block = instruction->parent.lock();
 
-		if (!block)
-			throw std::runtime_error("Couldn't lock instruction block in LowerClobber");
+			if (!block)
+				throw std::runtime_error("Couldn't lock instruction block in LowerClobber");
 
-		return std::ranges::any_of(block->allLive, [reg](const VariablePtr &var) {
-			return var->hasRegister(reg);
-		});
+			return std::ranges::any_of(block->allLive, [reg](const VariablePtr &var) {
+				return var->hasRegister(reg);
+			});
+		}
+
+		bool isLive(const std::shared_ptr<Clobber> &clobber) {
+			BasicBlockPtr block = clobber->parent.lock();
+
+			if (!block)
+				throw std::runtime_error("Couldn't lock instruction block in LowerClobber");
+
+			const int reg = clobber->reg;
+
+			if (!std::ranges::any_of(block->allLive, [reg](const VariablePtr &var) { return var->hasRegister(reg); }))
+				return false;
+
+			return isLive(clobber->unclobber, reg);
+		}
+
+		std::string joinLive(const BasicBlockPtr &block, int reg) {
+			if (!block)
+				return "???";
+			std::vector<std::string> filtered;
+			for (const VariablePtr &live: block->allLive)
+				if (live->hasRegister(reg))
+					filtered.push_back(live->plainString());
+			return Util::join(filtered, ", ");
+		}
 	}
 
 	size_t lowerClobber(Function &function) {
@@ -29,7 +55,7 @@ namespace LL2X::Passes {
 			if (auto clobber = std::dynamic_pointer_cast<Clobber>(instruction)) {
 				const int reg = clobber->reg;
 				assert(reg == clobber->unclobber->reg);
-				if (isLive(instruction, reg)) {
+				if (isLive(clobber)) {
 					// TODO: check liveness of register at unclobber location?
 					VariablePtr precolored = function.makePrecoloredVariable(reg, instruction->parent.lock());
 					const StackLocation *location = nullptr;
@@ -44,11 +70,16 @@ namespace LL2X::Passes {
 					const int offset = -location->offset;
 					const std::string reg_name = x86_64::registerName(reg);
 
+					if (isLive(clobber->unclobber, reg)) {
+						std::string live = joinLive(clobber->unclobber->parent.lock(), reg);
+						function.comment(clobber->unclobber, "Unclobber %" + reg_name + ", live inside " + live);
+						function.insertBefore<Mov, false>(clobber->unclobber, Op8(offset, function.pcRbp), Op8(precolored));
+					}
+
 					auto mov = std::make_shared<Mov>(Op8(precolored), Op8(offset, function.pcRbp));
 					function.comment(clobber, "Clobber %" + reg_name);
 					function.insertBefore(clobber, mov, false)->setDebug(*instruction, false)->setSecret()->extract();
-					function.comment(clobber->unclobber, "Unclobber %" + reg_name);
-					function.insertBefore<Mov, false>(clobber->unclobber, Op8(offset, function.pcRbp), Op8(precolored));
+
 					for (const auto &semi: clobber->semis) {
 						function.comment(semi, "Semiunclobber live %" + reg_name + " into " +
 							semi->destination->toString());

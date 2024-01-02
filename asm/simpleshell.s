@@ -199,15 +199,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE4findERS7___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(200 + 0, 16)
-	subq $208, %rsp
+	# upalign(184 + 0, 16)
+	subq $192, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -112(%rbp)
-	movq %r12, -104(%rbp)
-	movq %r13, -120(%rbp)
-	movq %r14, -88(%rbp)
-	movq %r15, -80(%rbp)
+	movq %rbx, -96(%rbp)
+	movq %r12, -88(%rbp)
+	movq %r13, -104(%rbp)
+	movq %r14, -72(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(9979:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -48(%rbp)
 	leaq -8(%rbp), %r15
@@ -242,8 +242,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq %rax, %r15
 	# LowerLoad(9989:3).2: (^5) into ptr ^11
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(9990:3): move argument ptr nonnull dereferenceable(48) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -259,8 +257,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_lower_boundEPSt13_Rb_tree_nodeISI_EPSt18_Rb_tree_node_baseRS7_
 	# SetupCalls(9990:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(9991:3): struct-type: ptr ^6 -> ^13, indices=0,0
 	movq -56(%rbp), %rax
@@ -306,16 +302,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(10003:3): type of ^21 is ptr*
 	# LowerLoad(10004:3).2: (^21) into ptr ^22
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -72(%rbp)
 	# SetupCalls(10005:3): move argument ptr ^22
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(10005:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -72(%rbp), %rcx
 	# SetupCalls(10006:3): move argument ptr nonnull dereferenceable(1) align 1 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -363,11 +355,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(10021:3).2: (^30) into ptr ^31
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -80(%rbp), %r15
-	movq -88(%rbp), %r14
-	movq -120(%rbp), %r13
-	movq -104(%rbp), %r12
-	movq -112(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -72(%rbp), %r14
+	movq -104(%rbp), %r13
+	movq -88(%rbp), %r12
+	movq -96(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -406,12 +398,12 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv:
 	.___ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(9934:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator.24"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(9935:3): size = 8, type = ptr*, var = ^3
@@ -428,8 +420,6 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv:
 	movq %rbx, %rax
 	addq $8, %rax
 	# LowerGetelementptr(9939:3): type of ^6 is ptr*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9940:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -437,16 +427,14 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx17__normal_iteratorIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEEC2ERKS6_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator.24"
 	# LowerGetelementptr(9941:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(9941:3): type of ^7 is ptr*
 	# LowerLoad(9942:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -524,12 +512,12 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	.___ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2ERKSH___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(9813:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(9814:3): size = 8, type = ptr*, var = ^4
@@ -551,10 +539,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(9821:3): struct-type: ptr ^8 -> ^9, indices=0,0
 	# LowerGetelementptr(9821:3): type of ^9 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rcx
-	movq %rcx, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(9822:3): move argument ptr nonnull dereferenceable(32) align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -562,10 +546,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_@PLT
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rcx
-	movq -24(%rbp), %rcx
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(9823:3): struct-type: ptr ^5 -> ^10, indices=0,1
 	movq %rbx, %rcx
@@ -577,10 +557,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerGetelementptr(9825:3): struct-type: ptr ^11 -> ^12, indices=0,1
 	addq $32, %rax
 	# LowerGetelementptr(9825:3): type of ^12 is %"class.std::function"*
-	# Clobber %rcx
-	movq %rcx, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(9826:3): move argument ptr nonnull dereferenceable(32) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -588,12 +564,8 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA_
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rcx
-	movq -24(%rbp), %rcx
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -605,13 +577,13 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE11_M_get_nodeEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -48(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -40(%rbp)
 	# LowerAlloca(9725:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(9726:3): size = 8, type = i64*, var = ^3
@@ -622,16 +594,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq %rdi, (%rbx)
 	# LowerLoad(9729:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(9730:3): move argument ptr nonnull dereferenceable(48) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE21_M_get_Node_allocatorEv
 	# SetupCalls(9730:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerStore(9731:3).9: mov ptr ^6, (^2)
 	movq %rbx, (%r12)
 	# LowerStore(9732:3).3: mov $imm, (^3)
@@ -640,8 +608,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%r12), %rbx
 	# LowerLoad(9734:3).2: (^3) into i64 ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(9735:3): move argument ptr nonnull dereferenceable(1) align 1 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -653,12 +619,10 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS5_ESaISC_EEEEEEE8allocateEmPKv
 	# SetupCalls(9735:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	movq %rbx, %rax
-	movq -48(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -40(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -670,14 +634,14 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_create_nodeIJRKSI_EEEPSt13_Rb_tree_nodeISI_EDpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -72(%rbp)
-	movq %r13, -56(%rbp)
-	movq %r14, -48(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -40(%rbp)
+	movq %r14, -32(%rbp)
 	# LowerAlloca(9708:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(9709:3): size = 8, type = ptr*, var = ^4
@@ -702,10 +666,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%r13), %rax
 	# LowerLoad(9717:3).2: (^4) into ptr ^9
 	movq (%r14), %rcx
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(9718:3): move argument ptr nonnull dereferenceable(48) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -716,16 +676,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdx
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE17_M_construct_nodeIJRKSI_EEEvPSt13_Rb_tree_nodeISI_EDpOT_
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# LowerLoad(9719:3).2: (^5) into ptr ^10
 	movq (%r13), %rax
-	movq -48(%rbp), %r14
-	movq -56(%rbp), %r13
-	movq -72(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -32(%rbp), %r14
+	movq -40(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -737,11 +693,11 @@ _ZNKSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_
 	.___ZNKSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE11_Alloc_nodeclIRKSI_EEPSt13_Rb_tree_nodeISI_EOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(9691:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(9692:3): size = 8, type = ptr*, var = ^4
@@ -759,8 +715,6 @@ _ZNKSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_
 	movq (%rax), %rbx
 	# LowerLoad(9698:3).2: (^4) into ptr ^8
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9699:3): move argument ptr nonnull dereferenceable(48) align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -770,10 +724,8 @@ _ZNKSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_create_nodeIJRKSI_EEEPSt13_Rb_tree_nodeISI_EDpOT_
 	# SetupCalls(9699:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movq %rbx, %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -1039,15 +991,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE24_M_get_insert_unique_posERS7___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(368 + 0, 16)
-	subq $368, %rsp
+	# upalign(352 + 0, 16)
+	subq $352, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -200(%rbp)
-	movq %r12, -240(%rbp)
-	movq %r13, -272(%rbp)
-	movq %r14, -280(%rbp)
-	movq %r15, -168(%rbp)
+	movq %rbx, -184(%rbp)
+	movq %r12, -224(%rbp)
+	movq %r13, -256(%rbp)
+	movq %r14, -264(%rbp)
+	movq %r15, -152(%rbp)
 	# LowerAlloca(9429:3): size = 16, type = %"struct.std::pair.21"*, var = ^3
 	# Fixing source-to-dest leaq -16(%rbp), -88(%rbp)
 	pushq %r15
@@ -1159,16 +1111,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9459:3).2: (^6) into ptr ^23
 	movq -104(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(9460:3): move argument ptr ^23
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt13_Rb_tree_nodeISI_E
 	# SetupCalls(9460:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# SetupCalls(9461:3): move argument ptr nonnull dereferenceable(1) align 1 ^21
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -1196,16 +1144,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9469:3).2: (^6) into ptr ^30
 	movq -104(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(9470:3): move argument ptr ^30
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE7_S_leftEPSt18_Rb_tree_node_base
 	# SetupCalls(9470:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# MovePhi: ^31 -> ^36
 	movq %r12, %r15
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE24_M_get_insert_unique_posERS7___M217
@@ -1213,16 +1157,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9474:3).2: (^6) into ptr ^33
 	movq -104(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -160(%rbp)
 	# SetupCalls(9475:3): move argument ptr ^33
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_S_rightEPSt18_Rb_tree_node_base
 	# SetupCalls(9475:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
-	movq -160(%rbp), %rcx
 	# MovePhi: ^34 -> ^36
 	movq %r12, %r15
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE24_M_get_insert_unique_posERS7___M217:
@@ -1234,8 +1174,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9484:3).2: (^7) into ptr ^38
 	movq -96(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -160(%rbp)
 	# SetupCalls(9485:3): move argument ptr nonnull dereferenceable(8) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -120(%rbp), %rdi
@@ -1243,8 +1181,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEC2EPSt18_Rb_tree_node_base
-	# Unclobber %rcx
-	movq -160(%rbp), %rcx
 	# LowerLoad(9486:3).2: (^8) into i8 ^39
 	movb (%rbx), %al
 	# LowerTrunc(9487:3): 8 to 1, move
@@ -1311,21 +1247,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9511:3): type of ^52 is ptr*
 	# LowerLoad(9512:3).2: (^52) into ptr ^53
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -160(%rbp)
 	# SetupCalls(9513:3): move argument ptr ^53
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9513:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
-	movq -160(%rbp), %rcx
 	# LowerLoad(9514:3).2: (^5) into ptr ^55
 	movq -128(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(9515:3): move argument ptr nonnull dereferenceable(1) align 1 ^51
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -1338,8 +1268,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_
 	# SetupCalls(9515:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	cmpb $0, %bl
 	jne .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE24_M_get_insert_unique_posERS7___M425
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE24_M_get_insert_unique_posERS7___M451
@@ -1382,11 +1310,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerRet: two-register return
 	movq %rbx, %rax
 	movq %rcx, %rdx
-	movq -168(%rbp), %r15
-	movq -280(%rbp), %r14
-	movq -272(%rbp), %r13
-	movq -240(%rbp), %r12
-	movq -200(%rbp), %rbx
+	movq -152(%rbp), %r15
+	movq -264(%rbp), %r14
+	movq -256(%rbp), %r13
+	movq -224(%rbp), %r12
+	movq -184(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -1454,11 +1382,11 @@ _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_:
 	.___ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(40 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(9373:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(9374:3): size = 8, type = ptr*, var = ^5
@@ -1477,10 +1405,6 @@ _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_:
 	movq (%rcx), %rax
 	# LowerLoad(9381:3).2: (^6) into ptr ^9
 	movq (%rbx), %rcx
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(9382:3): move argument ptr nonnull dereferenceable(32) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -1490,12 +1414,8 @@ _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_:
 	callq _ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_
 	# SetupCalls(9382:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	movb %bl, %al
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -1621,15 +1541,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE17_M_insert_unique_IRKSI_NSO_11_Alloc_nodeEEESt17_Rb_tree_iteratorISI_ESt23_Rb_tree_const_iteratorISI_EOT_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(264 + 0, 16)
-	subq $272, %rsp
+	# upalign(240 + 0, 16)
+	subq $240, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -136(%rbp)
-	movq %r12, -176(%rbp)
-	movq %r13, -160(%rbp)
-	movq %r14, -168(%rbp)
-	movq %r15, -128(%rbp)
+	movq %rbx, -112(%rbp)
+	movq %r12, -152(%rbp)
+	movq %r13, -136(%rbp)
+	movq %r14, -144(%rbp)
+	movq %r15, -104(%rbp)
 	# LowerAlloca(8955:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^5
 	# Fixing source-to-dest leaq -8(%rbp), -80(%rbp)
 	leaq -8(%rbp), %r15
@@ -1680,8 +1600,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(8970:3).2: (^8) into ptr ^15
 	movq -88(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -104(%rbp)
 	# SetupCalls(8971:3): move argument ptr nonnull dereferenceable(1) align 1 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -1691,16 +1609,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt10_Select1stISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEclERKSI_
 	# SetupCalls(8971:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -104(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_const_iterator"
 	# LowerGetelementptr(8972:3): struct-type: ptr ^11 -> ^17, indices=0,0
 	movq %r14, %rax
 	# LowerGetelementptr(8972:3): type of ^17 is ptr*
 	# LowerLoad(8973:3).2: (^17) into ptr ^18
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -112(%rbp)
 	# SetupCalls(8974:3): move argument ptr nonnull dereferenceable(48) align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdi
@@ -1715,8 +1629,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Multireg move: <%hax %hdx> -> <%hbx %hr12>
 	movq %rax, %rbx
 	movq %rdx, %r12
-	# Unclobber %rcx
-	movq -112(%rbp), %rcx
 	# tt = Pointer, type = {ptr, ptr}
 	# LowerGetelementptr(8975:3): struct-type: ptr ^10 -> ^20, indices=0,0
 	movq %r13, %rcx
@@ -1772,12 +1684,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(8992:3).2: (^9) into ptr ^33
 	movq -96(%rbp), %rdx
 	movq (%rdx), %r9
-	# Clobber %rcx
-	movq %rcx, -112(%rbp)
-	# Clobber %r9
-	movq %r9, -120(%rbp)
-	# Clobber %rax
-	movq %rax, -104(%rbp)
 	# SetupCalls(8993:3): move argument ptr nonnull dereferenceable(48) align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdi
@@ -1796,12 +1702,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE10_M_insert_IRKSI_NSO_11_Alloc_nodeEEESt17_Rb_tree_iteratorISI_EPSt18_Rb_tree_node_baseSW_OT_RT0_
 	# SetupCalls(8993:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -104(%rbp), %rax
-	# Unclobber %r9
-	movq -120(%rbp), %r9
-	# Unclobber %rcx
-	movq -112(%rbp), %rcx
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(8994:3): struct-type: ptr ^5 -> ^35, indices=0,0
 	movq -80(%rbp), %rax
@@ -1831,11 +1731,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9006:3).2: (^40) into ptr ^41
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -128(%rbp), %r15
-	movq -168(%rbp), %r14
-	movq -160(%rbp), %r13
-	movq -176(%rbp), %r12
-	movq -136(%rbp), %rbx
+	movq -104(%rbp), %r15
+	movq -144(%rbp), %r14
+	movq -136(%rbp), %r13
+	movq -152(%rbp), %r12
+	movq -112(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -1992,14 +1892,14 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EEC2ERKSM_RKSN___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(120 + 0, 16)
-	subq $128, %rsp
+	# upalign(104 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r15, -112(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -72(%rbp)
+	movq %r13, -88(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(8773:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(8774:3): size = 8, type = ptr*, var = ^5
@@ -2042,10 +1942,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerStore(8791:3).9: mov ptr ^16, (^4)
 	# LowerLoad(8792:3).2: (^4) into ptr ^17
 	movq (%r8), %rbx
-	# Clobber %rdx
-	movq %rdx, -72(%rbp)
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(8793:3): move argument ptr nonnull dereferenceable(48) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rdx, %rdi
@@ -2056,26 +1952,18 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdx
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE13_Rb_tree_implISM_Lb1EEC2ERKSM_OSaISt13_Rb_tree_nodeISI_EE
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	# Unclobber %rdx
-	movq -72(%rbp), %rdx
 	# LowerStore(8794:3).9: mov %"class.std::allocator.10"* ^11, (^5)
 	movq %r13, (%r12)
 	# LowerLoad(8795:3).2: (^5) into ptr ^18
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(8796:3): move argument ptr nonnull dereferenceable(1) align 1 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS5_ESaISC_EEEEEEED2Ev
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	movq -112(%rbp), %r15
-	movq -104(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -88(%rbp), %r13
+	movq -72(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2087,12 +1975,12 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIPKcEEDaRKT_:
 	.___ZNSt10filesystem7__cxx118__detail17__effective_rangeIPKcEEDaRKT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(8753:3): size = 16, type = %"class.std::basic_string_view"*, var = ^2
 	leaq -16(%rbp), %r12
 	# LowerAlloca(8754:3): size = 8, type = ptr*, var = ^3
@@ -2103,8 +1991,6 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIPKcEEDaRKT_:
 	movq (%rax), %rbx
 	# LowerLoad(8757:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(8758:3): move argument ptr nonnull dereferenceable(16) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -2112,8 +1998,6 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIPKcEEDaRKT_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKc
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(8759:3).2: (^2) into {i64, ptr} ^6
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%r12), %rax
@@ -2121,8 +2005,8 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIPKcEEDaRKT_:
 	# LowerRet: two-register return
 	movq %rax, %rax
 	movq %rbx, %rdx
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2166,15 +2050,15 @@ _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE:
 	.___ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(288 + 0, 16)
-	subq $288, %rsp
+	# upalign(264 + 0, 16)
+	subq $272, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -176(%rbp)
-	movq %r12, -192(%rbp)
-	movq %r13, -216(%rbp)
-	movq %r14, -224(%rbp)
-	movq %r15, -160(%rbp)
+	movq %rbx, -152(%rbp)
+	movq %r12, -168(%rbp)
+	movq %r13, -192(%rbp)
+	movq %r14, -200(%rbp)
+	movq %r15, -136(%rbp)
 	# LowerAlloca(8704:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -128(%rbp)
 	leaq -8(%rbp), %r15
@@ -2217,8 +2101,6 @@ _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE:
 	# LowerGetelementptr(8717:3): type of ^14 is %"class.std::__cxx11::basic_string"*
 	# LowerLoad(8718:3).2: (^8) into ptr ^15
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(8719:3): move argument ptr nonnull dereferenceable(8) align 8 ^15
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -2227,8 +2109,6 @@ _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE:
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(8720:3): struct-type: ptr ^11 -> ^17, indices=0,0
 	movq %r12, %rax
@@ -2263,10 +2143,6 @@ _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE:
 	# LowerGetelementptr(8728:3): type of ^23 is ptr*
 	# LowerLoad(8729:3).2: (^23) into ptr ^24
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -144(%rbp)
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(8730:3): move argument i64 ^22
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -2278,10 +2154,6 @@ _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE:
 	# Multireg move: <%hax %hdx> -> <%hr12 %hr14>
 	movq %rax, %r12
 	movq %rdx, %r14
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
-	# Unclobber %rdx
-	movq -144(%rbp), %rdx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(8731:3): struct-type: ptr ^10 -> ^26, indices=0,0
 	movq -120(%rbp), %rax
@@ -2334,36 +2206,28 @@ _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE:
 	# LowerLoad(8743:3).2: (^5) into ptr ^32
 	movq -104(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(8744:3): move argument ptr nonnull dereferenceable(1) align 1 ^32
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(8745:3): struct-type: ptr ^13 -> ^33, indices=0,1
 	movq -96(%rbp), %rax
 	addq $32, %rax
 	# LowerGetelementptr(8745:3): type of ^33 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(8746:3): move argument ptr nonnull dereferenceable(8) align 8 ^33
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5_ListC1Ev@PLT
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# SetupCalls(8747:3): move argument ptr nonnull dereferenceable(40) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq -96(%rbp), %rdi
 	callq _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv@PLT
-	movq -160(%rbp), %r15
-	movq -224(%rbp), %r14
-	movq -216(%rbp), %r13
-	movq -192(%rbp), %r12
-	movq -176(%rbp), %rbx
+	movq -136(%rbp), %r15
+	movq -200(%rbp), %r14
+	movq -192(%rbp), %r13
+	movq -168(%rbp), %r12
+	movq -152(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2438,13 +2302,13 @@ _ZN9__gnu_cxx5__ops14_Val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZN9__gnu_cxx5__ops14_Val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclI6LsItemNS_17__normal_iteratorIPSE_S2_ISE_SaISE_EEEEEEbRT_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -64(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -56(%rbp)
 	# LowerAlloca(8664:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(8665:3): size = 8, type = ptr*, var = ^5
@@ -2468,16 +2332,12 @@ _ZN9__gnu_cxx5__ops14_Val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11c
 	# LowerGetelementptr(8672:3): type of ^9 is %class.anon*
 	# LowerLoad(8673:3).2: (^6) into ptr ^10
 	movq (%rax), %r12
-	# Clobber %r8
-	movq %r8, -32(%rbp)
 	# SetupCalls(8674:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(8674:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %r8
-	movq -32(%rbp), %r8
 	# SetupCalls(8675:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -2491,9 +2351,9 @@ _ZN9__gnu_cxx5__ops14_Val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11c
 	# SetupCalls(8675:3): move i1 result from %rax
 	movb %al, %bl
 	movb %bl, %al
-	movq -64(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -56(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2505,13 +2365,13 @@ _ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move
 	.___ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move_bIP6LsItemS4_EET0_T_S6_S5___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -72(%rbp)
-	movq %r13, -56(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -40(%rbp)
 	# LowerAlloca(8620:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(8621:3): size = 8, type = ptr*, var = ^5
@@ -2573,10 +2433,6 @@ _ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move
 	# LowerGetelementptr(8646:3): type of ^21 is %struct.LsItem*
 	# LowerStore(8647:3).9: mov %struct.LsItem* ^21, (^6)
 	movq %rcx, (%rbx)
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(8648:3): move argument ptr nonnull dereferenceable(33) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -2586,10 +2442,6 @@ _ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(8648:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	# LowerLoad(8652:3).2: (^7) into i64 ^24
 	movq (%r12), %rax
 	# LowerMath(8653:3): ^24, -1 into i64 ^25
@@ -2600,9 +2452,9 @@ _ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move
 	.___ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move_bIP6LsItemS4_EET0_T_S6_S5___M98:
 	# LowerLoad(8658:3).2: (^6) into ptr ^27
 	movq (%rbx), %rax
-	movq -56(%rbp), %r13
-	movq -72(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2614,11 +2466,11 @@ _ZSt23__copy_move_backward_a2ILb1EP6LsItemS1_ET1_T0_S3_S2_:
 	.___ZSt23__copy_move_backward_a2ILb1EP6LsItemS1_ET1_T0_S3_S2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(40 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(8605:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rax
 	# LowerAlloca(8606:3): size = 8, type = ptr*, var = ^5
@@ -2637,12 +2489,6 @@ _ZSt23__copy_move_backward_a2ILb1EP6LsItemS1_ET1_T0_S3_S2_:
 	movq (%r8), %rax
 	# LowerLoad(8613:3).2: (^6) into ptr ^9
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %r8
-	movq %r8, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(8614:3): move argument ptr ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -2655,14 +2501,8 @@ _ZSt23__copy_move_backward_a2ILb1EP6LsItemS1_ET1_T0_S3_S2_:
 	callq _ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move_bIP6LsItemS4_EET0_T_S6_S5_
 	# SetupCalls(8614:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %r8
-	movq -40(%rbp), %r8
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	movq %rbx, %rax
-	movq -56(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2674,11 +2514,11 @@ _ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iterato
 	.___ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iteratorIS5_T0_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(8595:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^2
 	leaq -8(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
@@ -2687,19 +2527,15 @@ _ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iterato
 	# LowerGetelementptr(8596:3): type of ^3 is ptr*
 	# LowerStore(8597:3).9: mov ptr %rdi, (^3)
 	movq %rdi, (%rbx)
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(8598:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(8598:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# LowerLoad(8599:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2711,11 +2547,11 @@ _ZSt23__copy_move_backward_a1ILb1EP6LsItemS1_ET1_T0_S3_S2_:
 	.___ZSt23__copy_move_backward_a1ILb1EP6LsItemS1_ET1_T0_S3_S2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(40 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(8580:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rax
 	# LowerAlloca(8581:3): size = 8, type = ptr*, var = ^5
@@ -2734,12 +2570,6 @@ _ZSt23__copy_move_backward_a1ILb1EP6LsItemS1_ET1_T0_S3_S2_:
 	movq (%r8), %rax
 	# LowerLoad(8588:3).2: (^6) into ptr ^9
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %r8
-	movq %r8, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(8589:3): move argument ptr ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -2752,14 +2582,8 @@ _ZSt23__copy_move_backward_a1ILb1EP6LsItemS1_ET1_T0_S3_S2_:
 	callq _ZSt23__copy_move_backward_a2ILb1EP6LsItemS1_ET1_T0_S3_S2_
 	# SetupCalls(8589:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %r8
-	movq -40(%rbp), %r8
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	movq %rbx, %rax
-	movq -56(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2771,11 +2595,11 @@ _ZSt12__miter_baseIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEE
 	.___ZSt12__miter_baseIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEET_S8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(8542:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^2
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(8543:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
@@ -2786,8 +2610,6 @@ _ZSt12__miter_baseIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEE
 	# LowerGetelementptr(8544:3): type of ^4 is ptr*
 	# LowerStore(8545:3).9: mov ptr %rdi, (^4)
 	movq %rdi, (%rcx)
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(8546:3): move argument ptr align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -2797,15 +2619,13 @@ _ZSt12__miter_baseIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEE
 	# SetupCalls(8546:3): move argument i64 8
 	movq $8, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8547:3): struct-type: ptr ^2 -> ^5, indices=0,0
 	movq %rbx, %rcx
 	# LowerGetelementptr(8547:3): type of ^5 is ptr*
 	# LowerLoad(8548:3).2: (^5) into ptr ^6
 	movq (%rcx), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2817,15 +2637,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_lower_boundEPSt13_Rb_tree_nodeISI_EPSt18_Rb_tree_node_baseRS7___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(176 + 0, 16)
-	subq $176, %rsp
+	# upalign(160 + 0, 16)
+	subq $160, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -112(%rbp)
-	movq %r13, -120(%rbp)
-	movq %r14, -128(%rbp)
-	movq %r15, -80(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -96(%rbp)
+	movq %r13, -104(%rbp)
+	movq %r14, -112(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(10027:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^5
 	# Fixing source-to-dest leaq -8(%rbp), -48(%rbp)
 	leaq -8(%rbp), %r15
@@ -2873,20 +2693,14 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(10047:3).2: (^7) into ptr ^17
 	movq -56(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -64(%rbp)
 	# SetupCalls(10048:3): move argument ptr ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt13_Rb_tree_nodeISI_E
 	# SetupCalls(10048:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rcx
-	movq -64(%rbp), %rcx
 	# LowerLoad(10049:3).2: (^9) into ptr ^19
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(10050:3): move argument ptr nonnull dereferenceable(1) align 1 ^16
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -2899,8 +2713,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_
 	# SetupCalls(10050:3): move i1 result from %rax
 	movb %al, %r14b
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	cmpb $0, %r14b
 	jne .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_lower_boundEPSt13_Rb_tree_nodeISI_EPSt18_Rb_tree_node_baseRS7___M123
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_lower_boundEPSt13_Rb_tree_nodeISI_EPSt18_Rb_tree_node_baseRS7___M91:
@@ -2913,16 +2725,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(10056:3).2: (^7) into ptr ^23
 	movq -56(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(10057:3): move argument ptr ^23
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE7_S_leftEPSt18_Rb_tree_node_base
 	# SetupCalls(10057:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	# LowerStore(10058:3).9: mov ptr ^24, (^7)
 	movq -56(%rbp), %rax
 	movq %r14, (%rax)
@@ -2931,16 +2739,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(10062:3).2: (^7) into ptr ^26
 	movq -56(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(10063:3): move argument ptr ^26
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_S_rightEPSt18_Rb_tree_node_base
 	# SetupCalls(10063:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	# LowerStore(10064:3).9: mov ptr ^27, (^7)
 	movq -56(%rbp), %rax
 	movq %r14, (%rax)
@@ -2949,8 +2753,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE14_M_lower_boundEPSt13_Rb_tree_nodeISI_EPSt18_Rb_tree_node_baseRS7___M152:
 	# LowerLoad(10071:3).2: (^8) into ptr ^30
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(10072:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -48(%rbp), %rdi
@@ -2958,8 +2760,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEC2EPSt18_Rb_tree_node_base
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(10073:3): struct-type: ptr ^5 -> ^31, indices=0,0
 	movq -48(%rbp), %rax
@@ -2967,11 +2767,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(10074:3).2: (^31) into ptr ^32
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -80(%rbp), %r15
-	movq -128(%rbp), %r14
-	movq -120(%rbp), %r13
-	movq -112(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -112(%rbp), %r14
+	movq -104(%rbp), %r13
+	movq -96(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -2983,15 +2783,15 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	.___ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_ET1_T0_S9_S8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(224 + 0, 16)
-	subq $224, %rsp
+	# upalign(208 + 0, 16)
+	subq $208, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -128(%rbp)
-	movq %r12, -136(%rbp)
-	movq %r13, -120(%rbp)
-	movq %r14, -152(%rbp)
-	movq %r15, -112(%rbp)
+	movq %rbx, -112(%rbp)
+	movq %r12, -120(%rbp)
+	movq %r13, -104(%rbp)
+	movq %r14, -136(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(8502:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -72(%rbp)
 	leaq -8(%rbp), %r15
@@ -3058,16 +2858,12 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8518:3): type of ^15 is ptr*
 	# LowerLoad(8519:3).2: (^15) into ptr ^16
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -96(%rbp)
 	# SetupCalls(8520:3): move argument ptr ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iteratorIS5_T0_EE
 	# SetupCalls(8520:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rcx
-	movq -96(%rbp), %rcx
 	# SetupCalls(8521:3): move argument ptr align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdi
@@ -3083,16 +2879,12 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8522:3): type of ^18 is ptr*
 	# LowerLoad(8523:3).2: (^18) into ptr ^19
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -104(%rbp)
 	# SetupCalls(8524:3): move argument ptr ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iteratorIS5_T0_EE
 	# SetupCalls(8524:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -104(%rbp), %rax
 	# SetupCalls(8525:3): move argument ptr align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq -88(%rbp), %rdi
@@ -3108,16 +2900,12 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8526:3): type of ^21 is ptr*
 	# LowerLoad(8527:3).2: (^21) into ptr ^22
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -96(%rbp)
 	# SetupCalls(8528:3): move argument ptr ^22
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iteratorIS5_T0_EE
 	# SetupCalls(8528:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
-	movq -96(%rbp), %rcx
 	# SetupCalls(8529:3): move argument ptr ^17
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -3136,8 +2924,6 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8530:3): type of ^25 is ptr*
 	# LowerLoad(8531:3).2: (^25) into ptr ^26
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -104(%rbp)
 	# SetupCalls(8532:3): move argument ptr ^26
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -3147,8 +2933,6 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	callq _ZSt12__niter_wrapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES3_ET_S8_T0_
 	# SetupCalls(8532:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -104(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8533:3): struct-type: ptr ^4 -> ^28, indices=0,0
 	movq -72(%rbp), %rax
@@ -3161,11 +2945,11 @@ _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8535:3): type of ^29 is ptr*
 	# LowerLoad(8536:3).2: (^29) into ptr ^30
 	movq (%rbx), %rax
-	movq -112(%rbp), %r15
-	movq -152(%rbp), %r14
-	movq -120(%rbp), %r13
-	movq -136(%rbp), %r12
-	movq -128(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -136(%rbp), %r14
+	movq -104(%rbp), %r13
+	movq -120(%rbp), %r12
+	movq -112(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -3177,17 +2961,15 @@ _ZN9__gnu_cxx5__ops15__val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11
 	.___ZN9__gnu_cxx5__ops15__val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EENS0_14_Val_comp_iterIT_EENS0_15_Iter_comp_iterISD_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(8494:3): size = 1, type = %"struct.__gnu_cxx::__ops::_Val_comp_iter"*, var = ^1
 	leaq -1(%rbp), %rbx
 	# LowerAlloca(8495:3): size = 1, type = %"struct.__gnu_cxx::__ops::_Iter_comp_iter"*, var = ^2
 	leaq -2(%rbp), %rax
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(8496:3): move argument ptr nonnull dereferenceable(1) align 1 ^1
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -3195,9 +2977,7 @@ _ZN9__gnu_cxx5__ops15__val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx5__ops14_Val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EC2EONS0_15_Iter_comp_iterISB_EE
-	# Unclobber %rax
-	movq -16(%rbp), %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -3209,15 +2989,15 @@ _ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vector
 	.___ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops14_Val_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(184 + 0, 16)
-	subq $192, %rsp
+	# upalign(176 + 0, 16)
+	subq $176, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -144(%rbp)
-	movq %r12, -136(%rbp)
-	movq %r13, -128(%rbp)
-	movq %r14, -112(%rbp)
-	movq %r15, -104(%rbp)
+	movq %rbx, -136(%rbp)
+	movq %r12, -128(%rbp)
+	movq %r13, -120(%rbp)
+	movq %r14, -104(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(8457:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^2
 	# Fixing source-to-dest leaq -8(%rbp), -88(%rbp)
 	leaq -8(%rbp), %r15
@@ -3282,8 +3062,6 @@ _ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vector
 	# LowerGetelementptr(8472:3): type of ^11 is ptr*
 	# LowerLoad(8473:3).2: (^11) into ptr ^12
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -96(%rbp)
 	# SetupCalls(8474:3): move argument ptr nonnull dereferenceable(1) align 1 ^3
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -3296,8 +3074,6 @@ _ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vector
 	callq _ZN9__gnu_cxx5__ops14_Val_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclI6LsItemNS_17__normal_iteratorIPSE_S2_ISE_SaISE_EEEEEEbRT_T0_
 	# SetupCalls(8474:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -96(%rbp), %rax
 	cmpb $0, %bl
 	jne .___ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops14_Val_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0___M170
 	jmp .___ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops14_Val_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0___M290
@@ -3359,11 +3135,11 @@ _ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vector
 	# Fixed movzx with identical source and destination widths
 	movq -80(%rbp), %rdi
 	callq _ZN6LsItemD2Ev
-	movq -104(%rbp), %r15
-	movq -112(%rbp), %r14
-	movq -128(%rbp), %r13
-	movq -136(%rbp), %r12
-	movq -144(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -104(%rbp), %r14
+	movq -120(%rbp), %r13
+	movq -128(%rbp), %r12
+	movq -136(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -3375,15 +3151,15 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	.___ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_ET0_T_S9_S8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(224 + 0, 16)
-	subq $224, %rsp
+	# upalign(200 + 0, 16)
+	subq $208, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -152(%rbp)
-	movq %r12, -136(%rbp)
-	movq %r13, -144(%rbp)
-	movq %r14, -160(%rbp)
-	movq %r15, -128(%rbp)
+	movq %rbx, -128(%rbp)
+	movq %r12, -112(%rbp)
+	movq %r13, -120(%rbp)
+	movq %r14, -136(%rbp)
+	movq %r15, -104(%rbp)
 	# LowerAlloca(8413:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -80(%rbp)
 	leaq -8(%rbp), %r15
@@ -3428,8 +3204,6 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerGetelementptr(8426:3): type of ^15 is ptr*
 	# LowerStore(8427:3).9: mov ptr %rdx, (^15)
 	movq %rdx, (%rax)
-	# Clobber %rcx
-	movq %rcx, -104(%rbp)
 	# SetupCalls(8428:3): move argument ptr align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -3439,24 +3213,18 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# SetupCalls(8428:3): move argument i64 8
 	movq $8, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
-	movq -104(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8429:3): struct-type: ptr ^9 -> ^16, indices=0,0
 	movq %r14, %rax
 	# LowerGetelementptr(8429:3): type of ^16 is ptr*
 	# LowerLoad(8430:3).2: (^16) into ptr ^17
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -104(%rbp)
 	# SetupCalls(8431:3): move argument ptr ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt12__miter_baseIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEET_S8_
 	# SetupCalls(8431:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -104(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8432:3): struct-type: ptr ^8 -> ^19, indices=0,0
 	movq %rbx, %rax
@@ -3478,16 +3246,12 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerGetelementptr(8435:3): type of ^20 is ptr*
 	# LowerLoad(8436:3).2: (^20) into ptr ^21
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(8437:3): move argument ptr ^21
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt12__miter_baseIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEET_S8_
 	# SetupCalls(8437:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8438:3): struct-type: ptr ^10 -> ^23, indices=0,0
 	movq -96(%rbp), %rax
@@ -3521,10 +3285,6 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerGetelementptr(8445:3): type of ^28 is ptr*
 	# LowerLoad(8446:3).2: (^28) into ptr ^29
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -104(%rbp)
-	# Clobber %r8
-	movq %r8, -120(%rbp)
 	# SetupCalls(8447:3): move argument ptr ^25
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -3537,10 +3297,6 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZSt22__copy_move_backward_aILb1EN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_ET1_T0_S9_S8_
 	# SetupCalls(8447:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %r8
-	movq -120(%rbp), %r8
-	# Unclobber %rcx
-	movq -104(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8448:3): struct-type: ptr ^4 -> ^31, indices=0,0
 	movq -80(%rbp), %rax
@@ -3554,11 +3310,11 @@ _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerLoad(8451:3).2: (^32) into ptr ^33
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -128(%rbp), %r15
-	movq -160(%rbp), %r14
-	movq -144(%rbp), %r13
-	movq -136(%rbp), %r12
-	movq -152(%rbp), %rbx
+	movq -104(%rbp), %r15
+	movq -136(%rbp), %r14
+	movq -120(%rbp), %r13
+	movq -112(%rbp), %r12
+	movq -128(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -3570,15 +3326,15 @@ _ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	.___ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(112 + 0, 16)
+	# upalign(104 + 0, 16)
 	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -96(%rbp)
-	movq %r13, -80(%rbp)
-	movq %r14, -104(%rbp)
-	movq %r15, -72(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -88(%rbp)
+	movq %r13, -72(%rbp)
+	movq %r14, -96(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(8359:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(8360:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
@@ -3609,8 +3365,6 @@ _ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8369:3): type of ^12 is ptr*
 	# LowerStore(8370:3).9: mov ptr %rsi, (^12)
 	movq %rsi, (%rax)
-	# Clobber %rcx
-	movq %rcx, -64(%rbp)
 	# SetupCalls(8371:3): move argument ptr align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -3620,8 +3374,6 @@ _ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# SetupCalls(8371:3): move argument i64 8
 	movq $8, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
-	movq -64(%rbp), %rcx
 	.___ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M54:
 	# SetupCalls(8375:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
@@ -3661,14 +3413,10 @@ _ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	# LowerGetelementptr(8382:3): type of ^16 is ptr*
 	# LowerLoad(8383:3).2: (^16) into ptr ^17
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -64(%rbp)
 	# SetupCalls(8384:3): move argument ptr ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops14_Val_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_
-	# Unclobber %rcx
-	movq -64(%rbp), %rcx
 	# SetupCalls(8388:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -3677,11 +3425,11 @@ _ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vecto
 	movq %rax, %rax
 	jmp .___ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M54
 	.___ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M201:
-	movq -72(%rbp), %r15
-	movq -104(%rbp), %r14
-	movq -80(%rbp), %r13
-	movq -96(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -96(%rbp), %r14
+	movq -72(%rbp), %r13
+	movq -88(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -3693,15 +3441,15 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	.___ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(408 + 0, 16)
-	subq $416, %rsp
+	# upalign(376 + 0, 16)
+	subq $384, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -320(%rbp)
-	movq %r12, -328(%rbp)
-	movq %r13, -352(%rbp)
-	movq %r14, -336(%rbp)
-	movq %r15, -248(%rbp)
+	movq %rbx, -288(%rbp)
+	movq %r12, -296(%rbp)
+	movq %r13, -320(%rbp)
+	movq %r14, -304(%rbp)
+	movq %r15, -216(%rbp)
 	# LowerAlloca(8270:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -144(%rbp)
 	leaq -8(%rbp), %r15
@@ -3835,10 +3583,6 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# LowerGetelementptr(8310:3): type of ^30 is ptr*
 	# LowerLoad(8311:3).2: (^30) into ptr ^31
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
-	# Clobber %r8
-	movq %r8, -224(%rbp)
 	# SetupCalls(8312:3): move argument ptr nonnull dereferenceable(1) align 1 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -160(%rbp), %rdi
@@ -3851,10 +3595,6 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(8312:3): move i1 result from %rax
 	movb %al, %r13b
-	# Unclobber %r8
-	movq -224(%rbp), %r8
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
 	cmpb $0, %r13b
 	jne .___ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M218
 	jmp .___ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M466
@@ -3922,12 +3662,6 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# LowerGetelementptr(8327:3): type of ^41 is ptr*
 	# LowerLoad(8328:3).2: (^41) into ptr ^42
 	movq (%rax), %r8
-	# Clobber %rdx
-	movq %rdx, -232(%rbp)
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
-	# Clobber %r8
-	movq %r8, -224(%rbp)
 	# SetupCalls(8329:3): move argument ptr ^38
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -3940,12 +3674,6 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	callq _ZSt13move_backwardIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_ET0_T_S9_S8_
 	# SetupCalls(8329:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %r8
-	movq -224(%rbp), %r8
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
-	# Unclobber %rdx
-	movq -232(%rbp), %rdx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(8330:3): struct-type: ptr ^13 -> ^44, indices=0,0
 	movq %r12, %rax
@@ -3998,14 +3726,10 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# LowerGetelementptr(8341:3): type of ^48 is ptr*
 	# LowerLoad(8342:3).2: (^48) into ptr ^49
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -240(%rbp)
 	# SetupCalls(8343:3): move argument ptr ^49
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt25__unguarded_linear_insertIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops14_Val_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_
-	# Unclobber %rax
-	movq -240(%rbp), %rax
 	.___ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M563:
 	# SetupCalls(8350:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
@@ -4015,11 +3739,11 @@ _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	movq %rax, %rax
 	jmp .___ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M102
 	.___ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M588:
-	movq -248(%rbp), %r15
-	movq -336(%rbp), %r14
-	movq -352(%rbp), %r13
-	movq -328(%rbp), %r12
-	movq -320(%rbp), %rbx
+	movq -216(%rbp), %r15
+	movq -304(%rbp), %r14
+	movq -320(%rbp), %r13
+	movq -296(%rbp), %r12
+	movq -288(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -4136,14 +3860,14 @@ _ZSt4swapI6LsItemENSt9enable_ifIXsr6__and_ISt6__not_ISt15__is_tuple_likeIT_EESt2
 	.___ZSt4swapI6LsItemENSt9enable_ifIXsr6__and_ISt6__not_ISt15__is_tuple_likeIT_EESt21is_move_constructibleIS4_ESt18is_move_assignableIS4_EEE5valueEvE4typeERS4_SD___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(96 + 0, 16)
+	# upalign(88 + 0, 16)
 	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -72(%rbp)
-	movq %r14, -80(%rbp)
+	movq %rbx, -88(%rbp)
+	movq %r12, -80(%rbp)
+	movq %r13, -64(%rbp)
+	movq %r14, -72(%rbp)
 	# LowerAlloca(8201:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r13
 	# LowerAlloca(8202:3): size = 8, type = ptr*, var = ^4
@@ -4156,8 +3880,6 @@ _ZSt4swapI6LsItemENSt9enable_ifIXsr6__and_ISt6__not_ISt15__is_tuple_likeIT_EESt2
 	movq %rsi, (%r14)
 	# LowerLoad(8206:3).2: (^3) into ptr ^6
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(8207:3): move argument ptr nonnull dereferenceable(33) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -4165,14 +3887,10 @@ _ZSt4swapI6LsItemENSt9enable_ifIXsr6__and_ISt6__not_ISt15__is_tuple_likeIT_EESt2
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN6LsItemC2EOS_
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# LowerLoad(8208:3).2: (^4) into ptr ^7
 	movq (%r14), %rbx
 	# LowerLoad(8209:3).2: (^3) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(8210:3): move argument ptr nonnull dereferenceable(33) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -4182,12 +3900,8 @@ _ZSt4swapI6LsItemENSt9enable_ifIXsr6__and_ISt6__not_ISt15__is_tuple_likeIT_EESt2
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(8210:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# LowerLoad(8211:3).2: (^4) into ptr ^10
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(8212:3): move argument ptr nonnull dereferenceable(33) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -4197,16 +3911,14 @@ _ZSt4swapI6LsItemENSt9enable_ifIXsr6__and_ISt6__not_ISt15__is_tuple_likeIT_EESt2
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(8212:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# SetupCalls(8213:3): move argument ptr nonnull dereferenceable(33) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
 	callq _ZN6LsItemD2Ev
-	movq -80(%rbp), %r14
-	movq -72(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -72(%rbp), %r14
+	movq -64(%rbp), %r13
+	movq -80(%rbp), %r12
+	movq -88(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -4274,15 +3986,15 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	.___ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(280 + 0, 16)
-	subq $288, %rsp
+	# upalign(256 + 0, 16)
+	subq $256, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -240(%rbp)
-	movq %r12, -248(%rbp)
-	movq %r13, -232(%rbp)
-	movq %r14, -256(%rbp)
-	movq %r15, -176(%rbp)
+	movq %rbx, -216(%rbp)
+	movq %r12, -224(%rbp)
+	movq %r13, -208(%rbp)
+	movq %r14, -232(%rbp)
+	movq %r15, -152(%rbp)
 	# LowerAlloca(8109:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -96(%rbp)
 	leaq -8(%rbp), %r15
@@ -4369,10 +4081,6 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	# LowerGetelementptr(8136:3): type of ^22 is ptr*
 	# LowerLoad(8137:3).2: (^22) into ptr ^23
 	movq (%rcx), %r8
-	# Clobber %r8
-	movq %r8, -152(%rbp)
-	# Clobber %rax
-	movq %rax, -160(%rbp)
 	# SetupCalls(8138:3): move argument ptr nonnull dereferenceable(1) align 1 ^8
 	# Fixed movzx with identical source and destination widths
 	movq -128(%rbp), %rdi
@@ -4385,10 +4093,6 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(8138:3): move i1 result from %rax
 	movb %al, %r15b
-	# Unclobber %rax
-	movq -160(%rbp), %rax
-	# Unclobber %r8
-	movq -152(%rbp), %r8
 	cmpb $0, %r15b
 	jne .___ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_SK_T0___M132
 	jmp .___ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_SK_T0___M156
@@ -4438,10 +4142,6 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	# LowerGetelementptr(8154:3): type of ^32 is ptr*
 	# LowerLoad(8155:3).2: (^32) into ptr ^33
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -168(%rbp)
-	# Clobber %r8
-	movq %r8, -152(%rbp)
 	# SetupCalls(8156:3): move argument ptr nonnull dereferenceable(1) align 1 ^8
 	# Fixed movzx with identical source and destination widths
 	movq -128(%rbp), %rdi
@@ -4454,10 +4154,6 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(8156:3): move i1 result from %rax
 	movb %al, %r15b
-	# Unclobber %r8
-	movq -152(%rbp), %r8
-	# Unclobber %rcx
-	movq -168(%rbp), %rcx
 	cmpb $0, %r15b
 	jne .___ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_SK_T0___M270
 	jmp .___ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_SK_T0___M294
@@ -4498,11 +4194,11 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	# LowerLoad(8170:3).2: (^40) into ptr ^41
 	movq (%rax), %rcx
 	movq %rcx, %rax
-	movq -176(%rbp), %r15
-	movq -256(%rbp), %r14
-	movq -232(%rbp), %r13
-	movq -248(%rbp), %r12
-	movq -240(%rbp), %rbx
+	movq -152(%rbp), %r15
+	movq -232(%rbp), %r14
+	movq -208(%rbp), %r13
+	movq -224(%rbp), %r12
+	movq -216(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -4537,10 +4233,6 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	# LowerGetelementptr(8178:3): type of ^45 is ptr*
 	# LowerLoad(8179:3).2: (^45) into ptr ^46
 	movq (%rdx), %rax
-	# Clobber %rcx
-	movq %rcx, -168(%rbp)
-	# Clobber %rax
-	movq %rax, -160(%rbp)
 	# SetupCalls(8180:3): move argument ptr ^44
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -4548,10 +4240,6 @@ _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rax
-	movq -160(%rbp), %rax
-	# Unclobber %rcx
-	movq -168(%rbp), %rcx
 	# SetupCalls(8181:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -104(%rbp), %rdi
@@ -4567,15 +4255,15 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(768 + 0, 16)
-	subq $768, %rsp
+	# upalign(744 + 0, 16)
+	subq $752, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -480(%rbp)
-	movq %r12, -464(%rbp)
-	movq %r13, -472(%rbp)
-	movq %r14, -560(%rbp)
-	movq %r15, -424(%rbp)
+	movq %rbx, -456(%rbp)
+	movq %r12, -440(%rbp)
+	movq %r13, -448(%rbp)
+	movq %r14, -536(%rbp)
+	movq %r15, -400(%rbp)
 	# LowerAlloca(7947:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^5
 	# Fixing source-to-dest leaq -8(%rbp), -224(%rbp)
 	leaq -8(%rbp), %r15
@@ -4744,10 +4432,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(7986:3): type of ^38 is ptr*
 	# LowerLoad(7987:3).2: (^38) into ptr ^39
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
-	# Clobber %r8
-	movq %r8, -408(%rbp)
 	# SetupCalls(7988:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -256(%rbp), %rdi
@@ -4760,10 +4444,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(7988:3): move i1 result from %rax
 	movb %al, %r12b
-	# Unclobber %r8
-	movq -408(%rbp), %r8
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	cmpb $0, %r12b
 	jne .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M170
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M610
@@ -4798,8 +4478,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(7996:3): type of ^44 is ptr*
 	# LowerLoad(7997:3).2: (^44) into ptr ^45
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(7998:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -256(%rbp), %rdi
@@ -4812,8 +4490,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(7998:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M260
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M346
@@ -4848,10 +4524,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8006:3): type of ^50 is ptr*
 	# LowerLoad(8007:3).2: (^50) into ptr ^51
 	movq (%rbx), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
-	# Clobber %rax
-	movq %rax, -416(%rbp)
 	# SetupCalls(8008:3): move argument ptr ^49
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -4859,10 +4531,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rax
-	movq -416(%rbp), %rax
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M609
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M346:
 	# SetupCalls(8012:3): move argument ptr align 8 ^16
@@ -4895,8 +4563,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8016:3): type of ^55 is ptr*
 	# LowerLoad(8017:3).2: (^55) into ptr ^56
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(8018:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -256(%rbp), %rdi
@@ -4909,8 +4575,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(8018:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M436
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M522
@@ -4945,8 +4609,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8026:3): type of ^61 is ptr*
 	# LowerLoad(8027:3).2: (^61) into ptr ^62
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(8028:3): move argument ptr ^60
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -4954,8 +4616,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M608
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M522:
 	# SetupCalls(8032:3): move argument ptr align 8 ^20
@@ -4988,10 +4648,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8036:3): type of ^66 is ptr*
 	# LowerLoad(8037:3).2: (^66) into ptr ^67
 	movq (%rbx), %rax
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
-	# Clobber %rax
-	movq %rax, -416(%rbp)
 	# SetupCalls(8038:3): move argument ptr ^65
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -4999,10 +4655,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rax
-	movq -416(%rbp), %rax
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M608:
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M609:
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M1050
@@ -5037,8 +4689,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8052:3): type of ^73 is ptr*
 	# LowerLoad(8053:3).2: (^73) into ptr ^74
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(8054:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -256(%rbp), %rdi
@@ -5051,8 +4701,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(8054:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M700
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M786
@@ -5087,8 +4735,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8062:3): type of ^79 is ptr*
 	# LowerLoad(8063:3).2: (^79) into ptr ^80
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(8064:3): move argument ptr ^78
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -5096,8 +4742,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M1049
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M786:
 	# SetupCalls(8068:3): move argument ptr align 8 ^26
@@ -5130,10 +4774,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8072:3): type of ^84 is ptr*
 	# LowerLoad(8073:3).2: (^84) into ptr ^85
 	movq (%rbx), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
-	# Clobber %rax
-	movq %rax, -416(%rbp)
 	# SetupCalls(8074:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -256(%rbp), %rdi
@@ -5146,10 +4786,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(8074:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -416(%rbp), %rax
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M876
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M962
@@ -5184,8 +4820,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8082:3): type of ^90 is ptr*
 	# LowerLoad(8083:3).2: (^90) into ptr ^91
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(8084:3): move argument ptr ^89
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -5193,8 +4827,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	jmp .___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M1048
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M962:
 	# SetupCalls(8088:3): move argument ptr align 8 ^30
@@ -5227,8 +4859,6 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(8092:3): type of ^95 is ptr*
 	# LowerLoad(8093:3).2: (^95) into ptr ^96
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -400(%rbp)
 	# SetupCalls(8094:3): move argument ptr ^94
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -5236,16 +4866,14 @@ _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt9iter_swapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES7_EvT_T0_
-	# Unclobber %rcx
-	movq -400(%rbp), %rcx
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M1048:
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M1049:
 	.___ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0___M1050:
-	movq -424(%rbp), %r15
-	movq -560(%rbp), %r14
-	movq -472(%rbp), %r13
-	movq -464(%rbp), %r12
-	movq -480(%rbp), %rbx
+	movq -400(%rbp), %r15
+	movq -536(%rbp), %r14
+	movq -448(%rbp), %r13
+	movq -440(%rbp), %r12
+	movq -456(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -5293,11 +4921,11 @@ _ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_:
 	.___ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(7920:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(7921:3): size = 8, type = ptr*, var = ^4
@@ -5310,8 +4938,6 @@ _ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_:
 	movq (%rax), %rbx
 	# LowerLoad(7925:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(7926:3): move argument ptr nonnull dereferenceable(32) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -5321,13 +4947,11 @@ _ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_:
 	callq _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareERKS4_@PLT
 	# SetupCalls(7926:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerIcmp(7927:3): i32 ^7 vs. intlike 0
 	cmpl $0, %ebx
 	setl %al
 	andq $1, %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -5339,13 +4963,13 @@ _ZN9__gnu_cxx5__ops14_Iter_comp_valIZ2lsRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZN9__gnu_cxx5__ops14_Iter_comp_valIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESF_EEbT_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -64(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r13, -48(%rbp)
 	# LowerAlloca(7858:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(7859:3): size = 8, type = ptr*, var = ^5
@@ -5367,20 +4991,14 @@ _ZN9__gnu_cxx5__ops14_Iter_comp_valIZ2lsRKSt6vectorISt17basic_string_viewIcSt11c
 	# tt = Pointer, type = %"struct.__gnu_cxx::__ops::_Iter_comp_val"
 	# LowerGetelementptr(7866:3): struct-type: ptr ^8 -> ^9, indices=0,0
 	# LowerGetelementptr(7866:3): type of ^9 is %class.anon*
-	# Clobber %r8
-	movq %r8, -32(%rbp)
 	# SetupCalls(7867:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7867:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %r8
-	movq -32(%rbp), %r8
 	# LowerLoad(7868:3).2: (^6) into ptr ^11
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(7869:3): move argument ptr nonnull dereferenceable(1) align 1 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -5393,12 +5011,10 @@ _ZN9__gnu_cxx5__ops14_Iter_comp_valIZ2lsRKSt6vectorISt17basic_string_viewIcSt11c
 	callq _ZZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEENK3$_0clERK6LsItemSB_
 	# SetupCalls(7869:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -40(%rbp), %rax
 	movb %bl, %al
-	movq -64(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -48(%rbp), %r13
+	movq -40(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -5410,15 +5026,15 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	.___ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops14_Iter_comp_valIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_RT2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(392 + 0, 16)
-	subq $400, %rsp
+	# upalign(376 + 0, 16)
+	subq $384, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -232(%rbp)
-	movq %r12, -208(%rbp)
-	movq %r13, -216(%rbp)
-	movq %r14, -200(%rbp)
-	movq %r15, -160(%rbp)
+	movq %rbx, -216(%rbp)
+	movq %r12, -192(%rbp)
+	movq %r13, -200(%rbp)
+	movq %r14, -184(%rbp)
+	movq %r15, -144(%rbp)
 	# LowerAlloca(7785:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^6
 	# Fixing source-to-dest leaq -8(%rbp), -88(%rbp)
 	leaq -8(%rbp), %r15
@@ -5505,8 +5121,6 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	movq (%rbx), %rax
 	# Clobber %rcx
 	movq %rcx, -136(%rbp)
-	# Clobber %rax
-	movq %rax, -144(%rbp)
 	# SetupCalls(7814:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq -88(%rbp), %rdi
@@ -5516,9 +5130,7 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7814:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -144(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7815:3): struct-type: ptr ^11 -> ^27, indices=0,0
@@ -5546,7 +5158,7 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZN9__gnu_cxx5__ops14_Iter_comp_valIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESF_EEbT_RT0_
 	# SetupCalls(7819:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# MovePhi: ^30 -> ^32
 	movb %bl, -96(%rbp)
@@ -5560,8 +5172,6 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	movq (%rbx), %rax
 	# Clobber %rcx
 	movq %rcx, -136(%rbp)
-	# Clobber %rax
-	movq %rax, -144(%rbp)
 	# SetupCalls(7828:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq -88(%rbp), %rdi
@@ -5571,9 +5181,7 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7828:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -144(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7829:3): struct-type: ptr ^12 -> ^36, indices=0,0
@@ -5589,13 +5197,11 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7831:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# LowerLoad(7832:3).2: (^7) into i64 ^38
 	movq -104(%rbp), %rax
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -152(%rbp)
 	# Clobber %rcx
 	movq %rcx, -136(%rbp)
 	# SetupCalls(7833:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
@@ -5607,10 +5213,8 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7833:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
-	# Unclobber %rdx
-	movq -152(%rbp), %rdx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7834:3): struct-type: ptr ^13 -> ^40, indices=0,0
 	movq %r13, %rax
@@ -5625,7 +5229,7 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7836:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# Clobber %rcx
 	movq %rcx, -136(%rbp)
@@ -5638,7 +5242,7 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(7837:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# LowerLoad(7838:3).2: (^10) into i64 ^43
 	movq -104(%rbp), %rax
@@ -5669,8 +5273,6 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	movq (%rbx), %rax
 	# Clobber %rcx
 	movq %rcx, -136(%rbp)
-	# Clobber %rax
-	movq %rax, -144(%rbp)
 	# SetupCalls(7848:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq -88(%rbp), %rdi
@@ -5680,9 +5282,7 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7848:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -144(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7849:3): struct-type: ptr ^14 -> ^50, indices=0,0
@@ -5698,26 +5298,22 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7851:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -136(%rbp), %rcx
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(7852:3): move argument ptr nonnull dereferenceable(33) align 8 ^51
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
 	# SetupCalls(7852:3): move argument ptr nonnull dereferenceable(33) align 8 %rcx
-	# Semiunclobber live %rcx into %rsi
-	movq -136(%rbp), %rsi
+	# Semiunclobber non-live %rcx into %rsi
+	movq %rcx, %rsi
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(7852:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
-	movq -160(%rbp), %r15
-	movq -200(%rbp), %r14
-	movq -216(%rbp), %r13
-	movq -208(%rbp), %r12
-	movq -232(%rbp), %rbx
+	movq -144(%rbp), %r15
+	movq -184(%rbp), %r14
+	movq -200(%rbp), %r13
+	movq -192(%rbp), %r12
+	movq -216(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -5764,12 +5360,12 @@ _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl:
 	.___ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
 	# LowerAlloca(7604:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	leaq -8(%rbp), %r12
 	# LowerAlloca(7605:3): size = 8, type = ptr*, var = ^4
@@ -5793,13 +5389,9 @@ _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl:
 	movq (%rcx), %rdx
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(7614:3): pointer-type -> ^11
-	# Clobber %rdx
-	movq %rdx, -40(%rbp)
 	movq %rdx, %rax
 	movq $40, %rcx
 	imulq %rcx
-	# Unclobber %rdx
-	movq -40(%rbp), %rdx
 	movq %rax, %rdx
 	addq %rsi, %rdx
 	# LowerStore(7615:3).9: mov %struct.LsItem* ^11, (^6)
@@ -5818,8 +5410,8 @@ _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl:
 	# LowerLoad(7618:3).2: (^12) into ptr ^13
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -5831,15 +5423,15 @@ _ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	.___ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(152 + 0, 16)
-	subq $160, %rsp
+	# upalign(120 + 0, 16)
+	subq $128, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -136(%rbp)
-	movq %r12, -120(%rbp)
-	movq %r13, -128(%rbp)
-	movq %r14, -152(%rbp)
-	movq %r15, -104(%rbp)
+	movq %rbx, -104(%rbp)
+	movq %r12, -88(%rbp)
+	movq %r13, -96(%rbp)
+	movq %r14, -120(%rbp)
+	movq %r15, -72(%rbp)
 	# LowerAlloca(7412:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -56(%rbp)
 	leaq -8(%rbp), %r15
@@ -5941,14 +5533,6 @@ _ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	# LowerGetelementptr(7440:3): type of ^22 is ptr*
 	# LowerLoad(7441:3).2: (^22) into ptr ^23
 	movq (%rdx), %r9
-	# Clobber %rcx
-	movq %rcx, -72(%rbp)
-	# Clobber %r8
-	movq %r8, -80(%rbp)
-	# Clobber %r9
-	movq %r9, -88(%rbp)
-	# Clobber %rax
-	movq %rax, -96(%rbp)
 	# SetupCalls(7442:3): move argument ptr ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -5962,21 +5546,13 @@ _ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rcx
 	callq _ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_RT0_
-	# Unclobber %rax
-	movq -96(%rbp), %rax
-	# Unclobber %r9
-	movq -88(%rbp), %r9
-	# Unclobber %r8
-	movq -80(%rbp), %r8
-	# Unclobber %rcx
-	movq -72(%rbp), %rcx
 	jmp .___ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M27
 	.___ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M203:
-	movq -104(%rbp), %r15
-	movq -152(%rbp), %r14
-	movq -128(%rbp), %r13
-	movq -120(%rbp), %r12
-	movq -136(%rbp), %rbx
+	movq -72(%rbp), %r15
+	movq -120(%rbp), %r14
+	movq -96(%rbp), %r13
+	movq -88(%rbp), %r12
+	movq -104(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -5988,15 +5564,15 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	.___ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(408 + 0, 16)
-	subq $416, %rsp
+	# upalign(376 + 0, 16)
+	subq $384, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -272(%rbp)
-	movq %r12, -264(%rbp)
-	movq %r13, -304(%rbp)
-	movq %r14, -344(%rbp)
-	movq %r15, -232(%rbp)
+	movq %rbx, -240(%rbp)
+	movq %r12, -232(%rbp)
+	movq %r13, -272(%rbp)
+	movq %r14, -312(%rbp)
+	movq %r15, -200(%rbp)
 	# LowerAlloca(7281:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -120(%rbp)
 	leaq -8(%rbp), %r15
@@ -6085,8 +5661,6 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	movq $2, %rcx
 	idivq %rcx
 	movq %rax, %rcx
-	# Clobber %rcx
-	movq %rcx, -200(%rbp)
 	# SetupCalls(7301:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -160(%rbp), %rdi
@@ -6096,8 +5670,6 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7301:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -200(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7302:3): struct-type: ptr ^7 -> ^22, indices=0,0
 	movq %r12, %rax
@@ -6183,12 +5755,6 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	# LowerGetelementptr(7319:3): type of ^33 is ptr*
 	# LowerLoad(7320:3).2: (^33) into ptr ^34
 	movq (%rcx), %r9
-	# Clobber %r8
-	movq %r8, -208(%rbp)
-	# Clobber %r9
-	movq %r9, -216(%rbp)
-	# Clobber %rax
-	movq %rax, -224(%rbp)
 	# SetupCalls(7321:3): move argument ptr ^28
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -6202,12 +5768,6 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	# Fixed movzx with identical source and destination widths
 	movq %r9, %rcx
 	callq _ZSt22__move_median_to_firstIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_SK_T0_
-	# Unclobber %rax
-	movq -224(%rbp), %rax
-	# Unclobber %r9
-	movq -216(%rbp), %r9
-	# Unclobber %r8
-	movq -208(%rbp), %r8
 	# SetupCalls(7322:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -160(%rbp), %rdi
@@ -6267,10 +5827,6 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	# LowerGetelementptr(7332:3): type of ^41 is ptr*
 	# LowerLoad(7333:3).2: (^41) into ptr ^42
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -200(%rbp)
-	# Clobber %r8
-	movq %r8, -208(%rbp)
 	# SetupCalls(7334:3): move argument ptr ^38
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -6283,10 +5839,6 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	callq _ZSt21__unguarded_partitionIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_SK_T0_
 	# SetupCalls(7334:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %r8
-	movq -208(%rbp), %r8
-	# Unclobber %rcx
-	movq -200(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7335:3): struct-type: ptr ^3 -> ^44, indices=0,0
 	movq -120(%rbp), %rax
@@ -6299,11 +5851,11 @@ _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vect
 	# LowerGetelementptr(7337:3): type of ^45 is ptr*
 	# LowerLoad(7338:3).2: (^45) into ptr ^46
 	movq (%rbx), %rax
-	movq -232(%rbp), %r15
-	movq -344(%rbp), %r14
-	movq -304(%rbp), %r13
-	movq -264(%rbp), %r12
-	movq -272(%rbp), %rbx
+	movq -200(%rbp), %r15
+	movq -312(%rbp), %r14
+	movq -272(%rbp), %r13
+	movq -232(%rbp), %r12
+	movq -240(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -6315,15 +5867,15 @@ _ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_E
 	.___ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(240 + 0, 16)
-	subq $240, %rsp
+	# upalign(216 + 0, 16)
+	subq $224, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -184(%rbp)
-	movq %r12, -168(%rbp)
-	movq %r13, -192(%rbp)
-	movq %r14, -200(%rbp)
-	movq %r15, -152(%rbp)
+	movq %rbx, -160(%rbp)
+	movq %r12, -144(%rbp)
+	movq %r13, -168(%rbp)
+	movq %r14, -176(%rbp)
+	movq %r15, -128(%rbp)
 	# LowerAlloca(7242:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -120(%rbp)
 	leaq -8(%rbp), %r15
@@ -6430,10 +5982,6 @@ _ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_E
 	# LowerGetelementptr(7266:3): type of ^21 is ptr*
 	# LowerLoad(7267:3).2: (^21) into ptr ^22
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -128(%rbp)
-	# Clobber %r8
-	movq %r8, -136(%rbp)
 	# SetupCalls(7268:3): move argument ptr ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -6444,10 +5992,6 @@ _ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_E
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rdx
 	callq _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0_
-	# Unclobber %r8
-	movq -136(%rbp), %r8
-	# Unclobber %rcx
-	movq -128(%rbp), %rcx
 	# SetupCalls(7269:3): move argument ptr align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq -104(%rbp), %rdi
@@ -6478,8 +6022,6 @@ _ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_E
 	# LowerGetelementptr(7273:3): type of ^25 is ptr*
 	# LowerLoad(7274:3).2: (^25) into ptr ^26
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -144(%rbp)
 	# SetupCalls(7275:3): move argument ptr ^24
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -6490,13 +6032,11 @@ _ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_E
 	# Fixed movzx with identical source and destination widths
 	movq -88(%rbp), %rdx
 	callq _ZSt11__sort_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0_
-	# Unclobber %rax
-	movq -144(%rbp), %rax
-	movq -152(%rbp), %r15
-	movq -200(%rbp), %r14
-	movq -192(%rbp), %r13
-	movq -168(%rbp), %r12
-	movq -184(%rbp), %rbx
+	movq -128(%rbp), %r15
+	movq -176(%rbp), %r14
+	movq -168(%rbp), %r13
+	movq -144(%rbp), %r12
+	movq -160(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -6508,15 +6048,15 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	.___ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(384 + 0, 16)
-	subq $384, %rsp
+	# upalign(360 + 0, 16)
+	subq $368, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -328(%rbp)
-	movq %r12, -336(%rbp)
-	movq %r13, -344(%rbp)
-	movq %r14, -352(%rbp)
-	movq %r15, -240(%rbp)
+	movq %rbx, -304(%rbp)
+	movq %r12, -312(%rbp)
+	movq %r13, -320(%rbp)
+	movq %r14, -328(%rbp)
+	movq %r15, -216(%rbp)
 	# LowerAlloca(7093:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -176(%rbp)
 	leaq -8(%rbp), %r15
@@ -6667,10 +6207,6 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# LowerGetelementptr(7134:3): type of ^32 is ptr*
 	# LowerLoad(7135:3).2: (^32) into ptr ^33
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
-	# Clobber %r8
-	movq %r8, -224(%rbp)
 	# SetupCalls(7136:3): move argument ptr ^29
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -6681,10 +6217,6 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rdx
 	callq _ZSt14__partial_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0_
-	# Unclobber %r8
-	movq -224(%rbp), %r8
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
 	jmp .___ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1___M492
 	.___ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1___M227:
 	# LowerLoad(7140:3).2: (^7) into i64 ^35
@@ -6734,10 +6266,6 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# LowerGetelementptr(7148:3): type of ^39 is ptr*
 	# LowerLoad(7149:3).2: (^39) into ptr ^40
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -232(%rbp)
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
 	# SetupCalls(7150:3): move argument ptr ^38
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -6747,10 +6275,6 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	callq _ZSt27__unguarded_partition_pivotIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEET_SK_SK_T0_
 	# SetupCalls(7150:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
-	# Unclobber %rdx
-	movq -232(%rbp), %rdx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7151:3): struct-type: ptr ^12 -> ^42, indices=0,0
 	movq -192(%rbp), %rax
@@ -6799,10 +6323,6 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# LowerGetelementptr(7159:3): type of ^46 is ptr*
 	# LowerLoad(7160:3).2: (^46) into ptr ^47
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -232(%rbp)
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
 	# SetupCalls(7161:3): move argument ptr ^45
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -6813,10 +6333,6 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdx
 	callq _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1_
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
-	# Unclobber %rdx
-	movq -232(%rbp), %rdx
 	# SetupCalls(7162:3): move argument ptr align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -168(%rbp), %rdi
@@ -6828,11 +6344,11 @@ _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2
 	callq memcpy@PLT
 	jmp .___ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1___M46
 	.___ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1___M492:
-	movq -240(%rbp), %r15
-	movq -352(%rbp), %r14
-	movq -344(%rbp), %r13
-	movq -336(%rbp), %r12
-	movq -328(%rbp), %rbx
+	movq -216(%rbp), %r15
+	movq -328(%rbp), %r14
+	movq -320(%rbp), %r13
+	movq -312(%rbp), %r12
+	movq -304(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -6883,15 +6399,15 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	.___ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(400 + 0, 16)
-	subq $400, %rsp
+	# upalign(384 + 0, 16)
+	subq $384, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -232(%rbp)
-	movq %r12, -288(%rbp)
-	movq %r13, -296(%rbp)
-	movq %r14, -304(%rbp)
-	movq %r15, -224(%rbp)
+	movq %rbx, -216(%rbp)
+	movq %r12, -272(%rbp)
+	movq %r13, -280(%rbp)
+	movq %r14, -288(%rbp)
+	movq %r15, -208(%rbp)
 	# LowerAlloca(7451:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -152(%rbp)
 	leaq -8(%rbp), %r15
@@ -6993,8 +6509,6 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	# LowerLoad(7484:3).2: (^8) into i64 ^26
 	movq -176(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -208(%rbp)
 	# SetupCalls(7485:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -152(%rbp), %rdi
@@ -7004,8 +6518,6 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7485:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -208(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7486:3): struct-type: ptr ^10 -> ^28, indices=0,0
 	movq -192(%rbp), %rax
@@ -7050,8 +6562,6 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	# LowerLoad(7494:3).2: (^6) into ptr ^32
 	movq -160(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
 	# SetupCalls(7495:3): move argument ptr align 1 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -7061,16 +6571,12 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	# SetupCalls(7495:3): move argument i64 1
 	movq $1, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7496:3): struct-type: ptr ^11 -> ^33, indices=0,0
 	movq -200(%rbp), %rax
 	# LowerGetelementptr(7496:3): type of ^33 is ptr*
 	# LowerLoad(7497:3).2: (^33) into ptr ^34
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -216(%rbp)
 	# SetupCalls(7498:3): move argument ptr ^34
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -7084,8 +6590,6 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rcx
 	callq _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_T2_
-	# Unclobber %rcx
-	movq -216(%rbp), %rcx
 	# SetupCalls(7499:3): move argument ptr nonnull dereferenceable(33) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -7132,11 +6636,11 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	.___ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M376:
 	jmp .___ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M114
 	.___ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M377:
-	movq -224(%rbp), %r15
-	movq -304(%rbp), %r14
-	movq -296(%rbp), %r13
-	movq -288(%rbp), %r12
-	movq -232(%rbp), %rbx
+	movq -208(%rbp), %r15
+	movq -288(%rbp), %r14
+	movq -280(%rbp), %r13
+	movq -272(%rbp), %r12
+	movq -216(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -7176,13 +6680,13 @@ _ZN6LsItemC2EOS_:
 	.___ZN6LsItemC2EOS___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -32(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -24(%rbp)
 	# LowerAlloca(6984:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(6985:3): size = 8, type = ptr*, var = ^4
@@ -7202,8 +6706,6 @@ _ZN6LsItemC2EOS_:
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(6991:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(6991:3): type of ^8 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6992:3): move argument ptr nonnull dereferenceable(32) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -7211,8 +6713,6 @@ _ZN6LsItemC2EOS_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(6993:3): struct-type: ptr ^5 -> ^9, indices=0,1
 	movq %r12, %rbx
@@ -7232,9 +6732,9 @@ _ZN6LsItemC2EOS_:
 	# LowerBasicConversion(6998:3): i1 ^13 -> i8 ^14
 	movb %al, (%rbx)
 	# LowerStore(6999:3).9: mov i8 ^14, (^9)
-	movq -32(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -24(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -7309,15 +6809,15 @@ _ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	.___ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(104 + 0, 16)
-	subq $112, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -80(%rbp)
-	movq %r13, -72(%rbp)
-	movq %r14, -96(%rbp)
-	movq %r15, -104(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -48(%rbp)
+	movq %r14, -72(%rbp)
+	movq %r15, -80(%rbp)
 	# LowerAlloca(6886:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %r13
 	# LowerAlloca(6887:3): size = 8, type = ptr*, var = ^6
@@ -7360,12 +6860,6 @@ _ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	movq (%r13), %rcx
 	# LowerLoad(6908:3).2: (^8) into ptr ^18
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -48(%rbp)
-	# Clobber %r8
-	movq %r8, -56(%rbp)
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(6909:3): move argument ptr ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -7376,12 +6870,6 @@ _ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rdx
 	callq _ZSt19__relocate_object_aI6LsItemS0_SaIS0_EEvPT_PT0_RT1_
-	# Unclobber %rax
-	movq -64(%rbp), %rax
-	# Unclobber %r8
-	movq -56(%rbp), %r8
-	# Unclobber %rcx
-	movq -48(%rbp), %rcx
 	# LowerLoad(6913:3).2: (^5) into ptr ^20
 	movq (%r13), %rax
 	# tt = Pointer, type = %struct.LsItem
@@ -7402,11 +6890,11 @@ _ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	.___ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1___M83:
 	# LowerLoad(6922:3).2: (^9) into ptr ^25
 	movq (%r14), %rax
-	movq -104(%rbp), %r15
-	movq -96(%rbp), %r14
-	movq -72(%rbp), %r13
-	movq -80(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -80(%rbp), %r15
+	movq -72(%rbp), %r14
+	movq -48(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -7502,15 +6990,15 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_insertIJS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(648 + 0, 16)
-	subq $656, %rsp
+	# upalign(632 + 0, 16)
+	subq $640, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -304(%rbp)
-	movq %r12, -288(%rbp)
-	movq %r13, -336(%rbp)
-	movq %r14, -344(%rbp)
-	movq %r15, -248(%rbp)
+	movq %rbx, -288(%rbp)
+	movq %r12, -272(%rbp)
+	movq %r13, -320(%rbp)
+	movq %r14, -328(%rbp)
+	movq %r15, -232(%rbp)
 	# LowerAlloca(5276:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -208(%rbp)
 	leaq -8(%rbp), %r15
@@ -7645,8 +7133,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# LowerLoad(5312:3).2: (^13) into i64 ^32
 	movq -136(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -232(%rbp)
 	# SetupCalls(5313:3): move argument ptr nonnull dereferenceable(24) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq -152(%rbp), %rdi
@@ -7656,8 +7142,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_allocateEm
 	# SetupCalls(5313:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -232(%rbp), %rax
 	# LowerStore(5314:3).9: mov ptr ^33, (^18)
 	movq -144(%rbp), %rax
 	movq %r14, (%rax)
@@ -7717,8 +7201,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# LowerLoad(5333:3).2: (^6) into ptr ^45
 	movq -192(%rbp), %rcx
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -232(%rbp)
 	# SetupCalls(5334:3): move argument ptr align 8 ^44
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -7728,8 +7210,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# SetupCalls(5334:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -232(%rbp), %rax
 	# LowerStore(5335:3).3: mov $imm, (^19)
 	movq -160(%rbp), %rax
 	movq $0, (%rax)
@@ -7849,8 +7329,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	movq $16, %rbx
 	idivq %rbx
 	movq %rax, %rbx
-	# Clobber %rcx
-	movq %rcx, -240(%rbp)
 	# SetupCalls(5362:3): move argument ptr nonnull dereferenceable(24) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq -152(%rbp), %rdi
@@ -7861,8 +7339,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deallocateEPS3_m
-	# Unclobber %rcx
-	movq -240(%rbp), %rcx
 	# LowerLoad(5363:3).2: (^18) into ptr ^69
 	movq -144(%rbp), %rbx
 	movq (%rbx), %rax
@@ -7909,11 +7385,11 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# LowerGetelementptr(5375:3): type of ^79 is ptr*
 	# LowerStore(5376:3).9: mov %"class.std::basic_string_view"* ^77, (^79)
 	movq %rax, (%rbx)
-	movq -248(%rbp), %r15
-	movq -344(%rbp), %r14
-	movq -336(%rbp), %r13
-	movq -288(%rbp), %r12
-	movq -304(%rbp), %rbx
+	movq -232(%rbp), %r15
+	movq -328(%rbp), %r14
+	movq -320(%rbp), %r13
+	movq -272(%rbp), %r12
+	movq -288(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -7925,12 +7401,12 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv:
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(5382:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator.19"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(5383:3): size = 8, type = ptr*, var = ^3
@@ -7947,8 +7423,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv:
 	movq %rbx, %rax
 	addq $8, %rax
 	# LowerGetelementptr(5387:3): type of ^6 is ptr*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5388:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -7956,16 +7430,14 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE3endEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx17__normal_iteratorIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEEC2ERKS5_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator.19"
 	# LowerGetelementptr(5389:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(5389:3): type of ^7 is ptr*
 	# LowerLoad(5390:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8004,12 +7476,12 @@ _ZNKSt10filesystem7__cxx1115directory_entry6statusEv:
 	.___ZNKSt10filesystem7__cxx1115directory_entry6statusEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(3824:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(3825:3): size = 8, type = ptr*, var = ^3
@@ -8021,22 +7493,18 @@ _ZNKSt10filesystem7__cxx1115directory_entry6statusEv:
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::directory_entry"
 	# LowerGetelementptr(3828:3): struct-type: ptr ^4 -> ^5, indices=0,0
 	# LowerGetelementptr(3828:3): type of ^5 is %"class.std::filesystem::__cxx11::path"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3829:3): move argument ptr nonnull dereferenceable(40) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem6statusERKNS_7__cxx114pathE@PLT
 	# SetupCalls(3829:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerStore(3830:3).9: mov i64 ^6, (^2)
 	movq %rbx, (%r12)
 	# LowerLoad(3831:3).2: (^2) into i64 ^7
 	movq (%r12), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8048,14 +7516,14 @@ _ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv:
 	.___ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -48(%rbp)
-	movq %r15, -72(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -40(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(3788:3): size = 1, type = i8*, var = ^2
 	leaq -1(%rbp), %r12
 	# LowerAlloca(3789:3): size = 8, type = ptr*, var = ^3
@@ -8108,16 +7576,12 @@ _ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv:
 	# LowerStore(3807:3).9: mov i8 ^15, (^2)
 	jmp .___ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv__M95
 	.___ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv__M44:
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
 	# SetupCalls(3811:3): move argument ptr nonnull dereferenceable(41) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNKSt10filesystem7__cxx1115directory_entry6statusEv
 	# SetupCalls(3811:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# LowerStore(3812:3).9: mov i64 ^17, (^4)
 	movq %rbx, (%r13)
 	# SetupCalls(3813:3): move argument ptr nonnull dereferenceable(8) align 4 ^4
@@ -8131,10 +7595,10 @@ _ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv:
 	.___ZNKSt10filesystem7__cxx1115directory_entry12_M_file_typeEv__M95:
 	# LowerLoad(3818:3).2: (^2) into i8 ^20
 	movb (%r12), %al
-	movq -72(%rbp), %r15
-	movq -48(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -40(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8205,12 +7669,12 @@ _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcES
 	.___ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEppEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -24(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -16(%rbp)
 	# LowerAlloca(9580:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(9581:3).9: mov ptr %rdi, (^2)
@@ -8223,16 +7687,12 @@ _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcES
 	# LowerGetelementptr(9583:3): type of ^4 is ptr*
 	# LowerLoad(9584:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(9585:3): move argument ptr ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt18_Rb_tree_incrementPSt18_Rb_tree_node_base@PLT
 	# SetupCalls(9585:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(9586:3): struct-type: ptr ^3 -> ^7, indices=0,0
 	movq %r12, %rax
@@ -8240,8 +7700,8 @@ _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcES
 	# LowerStore(9587:3).9: mov ptr ^6, (^7)
 	movq %rbx, (%rax)
 	movq %r12, %rax
-	movq -24(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -16(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8283,11 +7743,11 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_:
 	.___ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(1509:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1510:3): size = 8, type = ptr*, var = ^4
@@ -8306,8 +7766,6 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_:
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::directory_iterator"
 	# LowerGetelementptr(1516:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(1516:3): type of ^8 is %"class.std::__shared_ptr"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1517:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -8315,9 +7773,7 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EEC2ERKS5_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8396,14 +7852,14 @@ _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_:
 	.___ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -32(%rbp)
-	movq %r13, -40(%rbp)
-	movq %r14, -64(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -24(%rbp)
+	movq %r13, -32(%rbp)
+	movq %r14, -56(%rbp)
 	# LowerAlloca(3399:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r12
 	# LowerAlloca(3400:3): size = 8, type = ptr*, var = ^4
@@ -8422,8 +7878,6 @@ _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_:
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::directory_iterator"
 	# LowerGetelementptr(3406:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(3406:3): type of ^8 is %"class.std::__shared_ptr"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3407:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -8433,8 +7887,6 @@ _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_:
 	callq _ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EE12owner_beforeIS2_EEbRKS_IT_LS4_2EE
 	# SetupCalls(3407:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	cmpb $0, %bl
 	jne .___ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3___M46
 	jmp .___ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3___M49
@@ -8453,8 +7905,6 @@ _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_:
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::directory_iterator"
 	# LowerGetelementptr(3414:3): struct-type: ptr ^13 -> ^14, indices=0,0
 	# LowerGetelementptr(3414:3): type of ^14 is %"class.std::__shared_ptr"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3415:3): move argument ptr nonnull dereferenceable(16) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -8464,8 +7914,6 @@ _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_:
 	callq _ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EE12owner_beforeIS2_EEbRKS_IT_LS4_2EE
 	# SetupCalls(3415:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLogic(3417:3): ^15, true into i1 ^16
 	movb %bl, %al
 	xorb $1, %al
@@ -8473,10 +7921,10 @@ _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_:
 	movb %al, %r14b
 	.___ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3___M92:
 	movb %r14b, %al
-	movq -64(%rbp), %r14
-	movq -40(%rbp), %r13
-	movq -32(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -56(%rbp), %r14
+	movq -32(%rbp), %r13
+	movq -24(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8863,12 +8311,12 @@ _ZNSt10filesystem7__cxx114pathaSIPKcEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4t
 	.___ZNSt10filesystem7__cxx114pathaSIPKcEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS6___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -80(%rbp)
-	movq %r12, -72(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
 	# LowerAlloca(2034:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(2035:3): size = 8, type = ptr*, var = ^4
@@ -8883,8 +8331,6 @@ _ZNSt10filesystem7__cxx114pathaSIPKcEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4t
 	movq (%rax), %rbx
 	# LowerLoad(2040:3).2: (^4) into ptr ^7
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(2041:3): move argument ptr nonnull dereferenceable(40) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -8895,8 +8341,6 @@ _ZNSt10filesystem7__cxx114pathaSIPKcEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4t
 	movq $2, %rdx
 	andq $255, %rdx
 	callq _ZNSt10filesystem7__cxx114pathC2IPKcS1_EERKT_NS1_6formatE
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# SetupCalls(2042:3): move argument ptr nonnull dereferenceable(40) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -8911,8 +8355,8 @@ _ZNSt10filesystem7__cxx114pathaSIPKcEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4t
 	movq %r12, %rdi
 	callq _ZNSt10filesystem7__cxx114pathD2Ev
 	movq %rbx, %rax
-	movq -72(%rbp), %r12
-	movq -80(%rbp), %rbx
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -8924,13 +8368,13 @@ _ZN6LsItemaSEOS_:
 	.___ZN6LsItemaSEOS___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -32(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -24(%rbp)
 	# LowerAlloca(7751:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(7752:3): size = 8, type = ptr*, var = ^4
@@ -8950,8 +8394,6 @@ _ZN6LsItemaSEOS_:
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(7758:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(7758:3): type of ^8 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(7759:3): move argument ptr nonnull dereferenceable(32) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -8961,8 +8403,6 @@ _ZN6LsItemaSEOS_:
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEOS4_@PLT
 	# SetupCalls(7759:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(7760:3).2: (^4) into ptr ^10
 	movq (%r13), %rbx
 	# tt = Pointer, type = %struct.LsItem
@@ -8983,9 +8423,9 @@ _ZN6LsItemaSEOS_:
 	movb %al, (%rbx)
 	# LowerStore(7766:3).9: mov i8 ^15, (^14)
 	movq %r12, %rax
-	movq -32(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -24(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -9143,15 +8583,15 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_:
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(152 + 0, 16)
-	subq $160, %rsp
+	# upalign(144 + 0, 16)
+	subq $144, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -80(%rbp)
-	movq %r13, -88(%rbp)
-	movq %r14, -96(%rbp)
-	movq %r15, -64(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -72(%rbp)
+	movq %r13, -80(%rbp)
+	movq %r14, -88(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(3987:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(3988:3): size = 8, type = ptr*, var = ^5
@@ -9185,8 +8625,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_:
 	movq %rax, %r15
 	# LowerLoad(3998:3).2: (^6) into ptr ^12
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(3999:3): move argument ptr nonnull dereferenceable(8) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -9197,8 +8635,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_Alloc_hiderC1EPcRKS3_@PLT
-	# Unclobber %rax
-	movq -56(%rbp), %rax
 	# LowerLoad(4000:3).2: (^5) into ptr ^13
 	movq -48(%rbp), %rbx
 	movq (%rbx), %rax
@@ -9220,16 +8656,12 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_:
 	# LowerLoad(4010:3).2: (^5) into ptr ^18
 	movq -48(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(4011:3): move argument ptr ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt11char_traitsIcE6lengthEPKc
 	# SetupCalls(4011:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -56(%rbp), %rax
 	# tt = Pointer, type = i8
 	# LowerGetelementptr(4012:3): pointer-type -> ^20
 	movq %rbx, %rax
@@ -9241,8 +8673,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_:
 	movq (%rbx), %rax
 	# LowerLoad(4015:3).2: (^7) into ptr ^22
 	movq (%r12), %rbx
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(4016:3): move argument ptr nonnull dereferenceable(32) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -9253,13 +8683,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag
-	# Unclobber %rax
-	movq -56(%rbp), %rax
-	movq -64(%rbp), %r15
-	movq -96(%rbp), %r14
-	movq -88(%rbp), %r13
-	movq -80(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -88(%rbp), %r14
+	movq -80(%rbp), %r13
+	movq -72(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -9338,12 +8766,12 @@ _ZNSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EEC
 	.___ZNSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EEC2ERKS5___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r15, -48(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r15, -32(%rbp)
 	# LowerAlloca(3070:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(3071:3): size = 8, type = ptr*, var = ^4
@@ -9381,10 +8809,6 @@ _ZNSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EEC
 	# LowerGetelementptr(3083:3): struct-type: ptr ^12 -> ^13, indices=0,1
 	addq $8, %rax
 	# LowerGetelementptr(3083:3): type of ^13 is %"class.std::__shared_count"*
-	# Clobber %rdx
-	movq %rdx, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(3084:3): move argument ptr nonnull dereferenceable(8) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rdx, %rdi
@@ -9392,12 +8816,8 @@ _ZNSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EEC
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2ERKS2_
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rdx
-	movq -24(%rbp), %rdx
-	movq -48(%rbp), %r15
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %r15
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -9409,11 +8829,11 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2EOS1_:
 	.___ZNSt10filesystem7__cxx1118directory_iteratorC2EOS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(3053:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(3054:3): size = 8, type = ptr*, var = ^4
@@ -9432,8 +8852,6 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2EOS1_:
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::directory_iterator"
 	# LowerGetelementptr(3060:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(3060:3): type of ^8 is %"class.std::__shared_ptr"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3061:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -9441,9 +8859,7 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2EOS1_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EEC1EOS5_@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -9513,15 +8929,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE17_M_construct_nodeIJRKSI_EEEvPSt13_Rb_tree_nodeISI_EDpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(232 + 0, 16)
-	subq $240, %rsp
+	# upalign(224 + 0, 16)
+	subq $224, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -144(%rbp)
-	movq %r12, -176(%rbp)
-	movq %r13, -160(%rbp)
-	movq %r14, -168(%rbp)
-	movq %r15, -120(%rbp)
+	movq %rbx, -136(%rbp)
+	movq %r12, -168(%rbp)
+	movq %r13, -152(%rbp)
+	movq %r14, -160(%rbp)
+	movq %r15, -112(%rbp)
 	# LowerAlloca(9741:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -96(%rbp)
 	leaq -8(%rbp), %r15
@@ -9558,28 +8974,20 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%rcx), %rax
 	# LowerLoad(9754:3).2: (^11) into ptr ^14
 	movq (%r14), %rcx
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(9755:3): move argument ptr nonnull dereferenceable(48) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE21_M_get_Node_allocatorEv
 	# SetupCalls(9755:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	# LowerLoad(9756:3).2: (^11) into ptr ^16
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(9757:3): move argument ptr nonnull dereferenceable(96) align 8 ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEE9_M_valptrEv
 	# SetupCalls(9757:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	# LowerLoad(9758:3).2: (^12) into ptr ^18
 	movq (%r12), %rcx
 	# LowerStore(9759:3).9: mov ptr ^15, (^7)
@@ -9614,8 +9022,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9770:3).2: (^6) into ptr ^24
 	movq -80(%rbp), %rcx
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(9771:3): move argument ptr nonnull dereferenceable(64) align 8 ^23
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -9623,13 +9029,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2ERKSH_
-	# Unclobber %rax
-	movq -112(%rbp), %rax
-	movq -120(%rbp), %r15
-	movq -168(%rbp), %r14
-	movq -160(%rbp), %r13
-	movq -176(%rbp), %r12
-	movq -144(%rbp), %rbx
+	movq -112(%rbp), %r15
+	movq -160(%rbp), %r14
+	movq -152(%rbp), %r13
+	movq -168(%rbp), %r12
+	movq -136(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -9641,12 +9045,12 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(4367:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r12
 	# LowerAlloca(4368:3): size = 8, type = ptr*, var = ^5
@@ -9677,16 +9081,12 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation__M27:
 	# LowerLoad(4383:3).2: (^4) into ptr ^10
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4384:3): move argument ptr nonnull dereferenceable(16) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt9_Any_data9_M_accessIPKSt9type_infoEERT_v
 	# SetupCalls(4384:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerStore(4385:3).6: load global
 	leaq _ZTIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE(%rip), %rax
 	# LowerStore(4385:3).9: mov ptr ^24, (^11)
@@ -9695,28 +9095,20 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation__M57:
 	# LowerLoad(4389:3).2: (^5) into ptr ^13
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4390:3): move argument ptr nonnull dereferenceable(16) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE14_M_get_pointerERKSt9_Any_data
 	# SetupCalls(4390:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(4391:3).2: (^4) into ptr ^15
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4392:3): move argument ptr nonnull dereferenceable(16) align 8 ^15
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt9_Any_data9_M_accessIPPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEEERT_v
 	# SetupCalls(4392:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerStore(4393:3).9: mov ptr ^14, (^16)
 	movq %rbx, (%r12)
 	jmp .___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation__M185
@@ -9725,16 +9117,12 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	movq (%r12), %rbx
 	# LowerLoad(4398:3).2: (^5) into ptr ^19
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4399:3): move argument ptr nonnull dereferenceable(16) align 8 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE14_M_get_pointerERKSt9_Any_data
 	# SetupCalls(4399:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# SetupCalls(4400:3): move argument ptr nonnull dereferenceable(16) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -9746,18 +9134,14 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation__M161:
 	# LowerLoad(4404:3).2: (^4) into ptr ^22
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4405:3): move argument ptr nonnull dereferenceable(16) align 8 ^22
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_destroyERSt9_Any_dataSt17integral_constantIbLb1EE
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation__M185:
 	movq $0, %rax
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -9769,12 +9153,12 @@ _ZZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEENK3$_0clERK
 	.___ZZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEENK3$_0clERK6LsItemSB___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
 	# LowerAlloca(7875:3): size = 1, type = i1*, var = ^4
 	leaq -1(%rbp), %r12
 	# LowerAlloca(7876:3): size = 8, type = ptr*, var = ^5
@@ -9854,8 +9238,6 @@ _ZZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEENK3$_0clERK
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(7908:3): struct-type: ptr ^28 -> ^29, indices=0,0
 	# LowerGetelementptr(7908:3): type of ^29 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(7909:3): move argument ptr nonnull dereferenceable(32) align 8 ^27
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -9865,15 +9247,13 @@ _ZZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEENK3$_0clERK
 	callq _ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_
 	# SetupCalls(7909:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -40(%rbp), %rax
 	# LowerStore(7910:3).9: mov i1 ^30, (^4)
 	movb %bl, (%r12)
 	.___ZZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEENK3$_0clERK6LsItemSB___M112:
 	# LowerLoad(7914:3).2: (^4) into i1 ^32
 	movb (%r12), %al
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10074,11 +9454,11 @@ pr:
 	.__pr__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(2639:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(2640:3): size = 8, type = ptr*, var = ^4
@@ -10093,10 +9473,6 @@ pr:
 	movq (%rbx), %rax
 	# LowerLoad(2645:3).2: (^4) into ptr ^7
 	movq (%rdx), %rbx
-	# Clobber %rcx
-	movq %rcx, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(2646:3): move argument ptr ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -10112,11 +9488,7 @@ pr:
 	callq fprintf@PLT
 	# SetupCalls(2646:3): move i32 result from %rax
 	movl %eax, %eax
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rcx
-	movq -24(%rbp), %rcx
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10156,13 +9528,13 @@ _ZN9__gnu_cxxneIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EE
 	.___ZN9__gnu_cxxneIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EESB___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(1821:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(1822:3): size = 8, type = ptr*, var = ^4
@@ -10173,39 +9545,31 @@ _ZN9__gnu_cxxneIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EE
 	movq %rsi, (%r13)
 	# LowerLoad(1825:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1826:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(1826:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(1827:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(1828:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1829:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(1829:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(1830:3).2: (^9) into ptr ^10
 	movq (%rbx), %rax
 	# LowerIcmp(1831:3): ptr ^7 vs. operand ptr ^10
 	cmpq %rax, %r12
 	setne %al
 	andq $1, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10217,15 +9581,15 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(336 + 0, 16)
+	# upalign(328 + 0, 16)
 	subq $336, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -224(%rbp)
-	movq %r12, -216(%rbp)
-	movq %r13, -200(%rbp)
-	movq %r14, -184(%rbp)
-	movq %r15, -176(%rbp)
+	movq %rbx, -216(%rbp)
+	movq %r12, -208(%rbp)
+	movq %r13, -192(%rbp)
+	movq %r14, -176(%rbp)
+	movq %r15, -168(%rbp)
 	# LowerAlloca(1924:3): size = 4, type = i32*, var = ^2
 	# Fixing source-to-dest leaq -4(%rbp), -144(%rbp)
 	leaq -4(%rbp), %r15
@@ -10250,16 +9614,12 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq %rdi, (%r14)
 	# LowerLoad(1932:3).2: (^3) into ptr ^9
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -168(%rbp)
 	# SetupCalls(1933:3): move argument ptr nonnull dereferenceable(24) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1933:3): move i64 result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -168(%rbp), %rax
 	movq $2, %rax
 	# LowerIcmp(1934:3): i64 ^56 vs. operand i64 ^10
 	cmpq %r15, %rax
@@ -10278,16 +9638,12 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq %rax, %rbx
 	# LowerLoad(1939:3).2: (^3) into ptr ^14
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -168(%rbp)
 	# SetupCalls(1940:3): move argument ptr nonnull dereferenceable(24) align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1940:3): move i64 result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -168(%rbp), %rax
 	# SetupCalls(1941:3): move argument ptr nonnull dereferenceable(8) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -10317,16 +9673,12 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	callq _ZNSt10filesystem7__cxx114pathC2Ev
 	# LowerLoad(1948:3).2: (^3) into ptr ^19
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -168(%rbp)
 	# SetupCalls(1949:3): move argument ptr nonnull dereferenceable(24) align 8 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1949:3): move i64 result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -168(%rbp), %rax
 	# LowerIcmp(1950:3): i64 ^20 vs. intlike 2
 	cmpq $2, %r15
 	sete %al
@@ -10337,8 +9689,6 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M202:
 	# LowerLoad(1954:3).2: (^3) into ptr ^23
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -168(%rbp)
 	# SetupCalls(1955:3): move argument ptr nonnull dereferenceable(24) align 8 ^23
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -10347,8 +9697,6 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEixEm
 	# SetupCalls(1955:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -168(%rbp), %rax
 	# SetupCalls(1956:3): move argument ptr nonnull dereferenceable(40) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -152(%rbp), %rdi
@@ -10543,11 +9891,11 @@ _Z2cdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq -144(%rbp), %rax
 	movl (%rax), %ebx
 	movl %ebx, %eax
-	movq -176(%rbp), %r15
-	movq -184(%rbp), %r14
-	movq -200(%rbp), %r13
-	movq -216(%rbp), %r12
-	movq -224(%rbp), %rbx
+	movq -168(%rbp), %r15
+	movq -176(%rbp), %r14
+	movq -192(%rbp), %r13
+	movq -208(%rbp), %r12
+	movq -216(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10559,13 +9907,13 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ESt16initialize
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ESt16initializer_listIS3_ERKS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -72(%rbp)
-	movq %r13, -56(%rbp)
+	movq %rbx, -56(%rbp)
+	movq %r12, -64(%rbp)
+	movq %r13, -48(%rbp)
 	# LowerAlloca(998:3): size = 16, type = %"class.std::initializer_list"*, var = ^5
 	leaq -16(%rbp), %r13
 	# LowerAlloca(999:3): size = 8, type = ptr*, var = ^6
@@ -10597,8 +9945,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ESt16initialize
 	movq (%rbx), %r12
 	# LowerLoad(1010:3).2: (^7) into ptr ^13
 	movq (%r8), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(1011:3): move argument ptr nonnull dereferenceable(24) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -10606,8 +9952,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ESt16initialize
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ERKS4_
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	# SetupCalls(1012:3): move argument ptr nonnull dereferenceable(16) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -10630,9 +9974,9 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ESt16initialize
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdx
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE19_M_range_initializeIPKS3_EEvT_S9_St20forward_iterator_tag
-	movq -56(%rbp), %r13
-	movq -72(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -48(%rbp), %r13
+	movq -64(%rbp), %r12
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10644,15 +9988,15 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	.___ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(288 + 0, 16)
-	subq $288, %rsp
+	# upalign(264 + 0, 16)
+	subq $272, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -176(%rbp)
-	movq %r12, -192(%rbp)
-	movq %r13, -216(%rbp)
-	movq %r14, -224(%rbp)
-	movq %r15, -160(%rbp)
+	movq %rbx, -152(%rbp)
+	movq %r12, -168(%rbp)
+	movq %r13, -192(%rbp)
+	movq %r14, -200(%rbp)
+	movq %r15, -136(%rbp)
 	# LowerAlloca(5845:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -128(%rbp)
 	leaq -8(%rbp), %r15
@@ -10695,8 +10039,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerGetelementptr(5858:3): type of ^14 is %"class.std::__cxx11::basic_string"*
 	# LowerLoad(5859:3).2: (^8) into ptr ^15
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(5860:3): move argument ptr nonnull dereferenceable(2) align 1 ^15
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -10705,8 +10047,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(5861:3): struct-type: ptr ^11 -> ^17, indices=0,0
 	movq %r12, %rax
@@ -10741,10 +10081,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerGetelementptr(5869:3): type of ^23 is ptr*
 	# LowerLoad(5870:3).2: (^23) into ptr ^24
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -144(%rbp)
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(5871:3): move argument i64 ^22
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -10756,10 +10092,6 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# Multireg move: <%hax %hdx> -> <%hr12 %hr14>
 	movq %rax, %r12
 	movq %rdx, %r14
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
-	# Unclobber %rdx
-	movq -144(%rbp), %rdx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(5872:3): struct-type: ptr ^10 -> ^26, indices=0,0
 	movq -120(%rbp), %rax
@@ -10812,36 +10144,28 @@ _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE:
 	# LowerLoad(5884:3).2: (^5) into ptr ^32
 	movq -104(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(5885:3): move argument ptr nonnull dereferenceable(1) align 1 ^32
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(5886:3): struct-type: ptr ^13 -> ^33, indices=0,1
 	movq -96(%rbp), %rax
 	addq $32, %rax
 	# LowerGetelementptr(5886:3): type of ^33 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(5887:3): move argument ptr nonnull dereferenceable(8) align 8 ^33
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5_ListC1Ev@PLT
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# SetupCalls(5888:3): move argument ptr nonnull dereferenceable(40) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq -96(%rbp), %rdi
 	callq _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv@PLT
-	movq -160(%rbp), %r15
-	movq -224(%rbp), %r14
-	movq -216(%rbp), %r13
-	movq -192(%rbp), %r12
-	movq -176(%rbp), %rbx
+	movq -136(%rbp), %r15
+	movq -200(%rbp), %r14
+	movq -192(%rbp), %r13
+	movq -168(%rbp), %r12
+	movq -152(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10853,29 +10177,21 @@ _ZNSt10filesystem7__cxx115beginENS0_18directory_iteratorE:
 	.___ZNSt10filesystem7__cxx115beginENS0_18directory_iteratorE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(8 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
 	# LowerAlloca(1501:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerStore(1502:3).9: mov ptr %rdi, (^3)
 	movq %rdi, (%rax)
-	# Clobber %rdi
-	movq %rdi, -16(%rbp)
-	# Clobber %rsi
-	movq %rsi, -24(%rbp)
 	# SetupCalls(1503:3): move argument ptr nonnull dereferenceable(16) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -16(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(1503:3): move argument ptr nonnull dereferenceable(16) align 8 %rsi
-	# Semiunclobber live %rsi into %rsi
-	movq -24(%rbp), %rsi
+	# Semiunclobber non-live %rsi into %rsi
+	movq %rsi, %rsi
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2EOS1_
-	# Unclobber %rsi
-	movq -24(%rbp), %rsi
-	# Unclobber %rdi
-	movq -16(%rbp), %rdi
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10924,12 +10240,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -16(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(4492:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(4493:3).9: mov ptr %rdi, (^2)
@@ -10953,16 +10269,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(4497:3): struct-type: ptr ^3 -> ^5, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(4497:3): type of ^5 is %"struct.std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::function<int (const std::vector<std::basic_string_view<char>> &)>>, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::function<int (const std::vector<std::basic_string_view<char>> &)>>>, std::less<std::__cxx11::basic_string<char>>>::_Rb_tree_impl"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(4498:3): move argument ptr nonnull dereferenceable(48) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE13_Rb_tree_implISM_Lb1EED2Ev
-	# Unclobber %rax
-	movq -16(%rbp), %rax
-	movq -32(%rbp), %r12
-	movq -24(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -10974,15 +10286,15 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	.___ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(312 + 0, 16)
-	subq $320, %rsp
+	# upalign(304 + 0, 16)
+	subq $304, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -216(%rbp)
-	movq %r12, -248(%rbp)
-	movq %r13, -256(%rbp)
-	movq %r14, -264(%rbp)
-	movq %r15, -176(%rbp)
+	movq %rbx, -208(%rbp)
+	movq %r12, -240(%rbp)
+	movq %r13, -248(%rbp)
+	movq %r14, -256(%rbp)
+	movq %r15, -168(%rbp)
 	# LowerAlloca(7182:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -144(%rbp)
 	leaq -8(%rbp), %r15
@@ -11096,8 +10408,6 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(7210:3): type of ^24 is ptr*
 	# LowerLoad(7211:3).2: (^24) into ptr ^25
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -168(%rbp)
 	# SetupCalls(7212:3): move argument ptr ^23
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -11105,8 +10415,6 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_
-	# Unclobber %rcx
-	movq -168(%rbp), %rcx
 	# SetupCalls(7213:3): move argument ptr nonnull dereferenceable(8) align 8 ^3
 	# Fixed movzx with identical source and destination widths
 	movq -144(%rbp), %rdi
@@ -11151,8 +10459,6 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(7220:3): type of ^30 is ptr*
 	# LowerLoad(7221:3).2: (^30) into ptr ^31
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -168(%rbp)
 	# SetupCalls(7222:3): move argument ptr ^29
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -11160,8 +10466,6 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt26__unguarded_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_
-	# Unclobber %rcx
-	movq -168(%rbp), %rcx
 	jmp .___ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M411
 	.___ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M300:
 	# SetupCalls(7226:3): move argument ptr align 8 ^12
@@ -11203,8 +10507,6 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# LowerGetelementptr(7231:3): type of ^35 is ptr*
 	# LowerLoad(7232:3).2: (^35) into ptr ^36
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -168(%rbp)
 	# SetupCalls(7233:3): move argument ptr ^34
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -11212,14 +10514,12 @@ _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt16__insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_
-	# Unclobber %rcx
-	movq -168(%rbp), %rcx
 	.___ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M411:
-	movq -176(%rbp), %r15
-	movq -264(%rbp), %r14
-	movq -256(%rbp), %r13
-	movq -248(%rbp), %r12
-	movq -216(%rbp), %rbx
+	movq -168(%rbp), %r15
+	movq -256(%rbp), %r14
+	movq -248(%rbp), %r13
+	movq -240(%rbp), %r12
+	movq -208(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11288,11 +10588,11 @@ _ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3_:
 	.___ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(1542:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1543:3): size = 8, type = ptr*, var = ^4
@@ -11305,8 +10605,6 @@ _ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3_:
 	movq (%rax), %rbx
 	# LowerLoad(1547:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1548:3): move argument ptr nonnull dereferenceable(16) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -11316,12 +10614,10 @@ _ZNSt10filesystem7__cxx11neERKNS0_18directory_iteratorES3_:
 	callq _ZNSt10filesystem7__cxx11eqERKNS0_18directory_iteratorES3_
 	# SetupCalls(1548:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLogic(1550:3): ^7, true into i1 ^8
 	movb %bl, %al
 	xorb $1, %al
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11333,15 +10629,15 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	.___ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKNS0_4pathE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(240 + 0, 16)
-	subq $240, %rsp
+	# upalign(224 + 0, 16)
+	subq $224, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -160(%rbp)
-	movq %r12, -168(%rbp)
-	movq %r13, -184(%rbp)
-	movq %r14, -208(%rbp)
-	movq %r15, -144(%rbp)
+	movq %rbx, -144(%rbp)
+	movq %r12, -152(%rbp)
+	movq %r13, -168(%rbp)
+	movq %r14, -192(%rbp)
+	movq %r15, -128(%rbp)
 	# LowerAlloca(1445:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r8
 	# LowerAlloca(1446:3): size = 8, type = ptr*, var = ^4
@@ -11385,8 +10681,6 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	# LowerStore(1459:3).9: mov ptr ^13, (^3)
 	# LowerLoad(1460:3).2: (^3) into ptr ^14
 	movq (%r8), %rax
-	# Clobber %rcx
-	movq %rcx, -128(%rbp)
 	# SetupCalls(1461:3): move argument ptr sret align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -11397,8 +10691,6 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	# Fixed movzx with identical source and destination widths
 	movq -120(%rbp), %rdx
 	callq _ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112basic_stringIT_T0_T1_EERKSA_
-	# Unclobber %rcx
-	movq -128(%rbp), %rcx
 	# SetupCalls(1462:3): move argument ptr nonnull dereferenceable(32) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -11455,23 +10747,19 @@ _ZNSt10filesystem7__cxx11lsIcSt11char_traitsIcEEERSt13basic_ostreamIT_T0_ES8_RKN
 	# LowerLoad(1472:3).2: (^4) into ptr ^21
 	movq -112(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -136(%rbp)
 	# SetupCalls(1473:3): move argument ptr nonnull dereferenceable(1) align 1 ^21
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -136(%rbp), %rax
 	# LowerLoad(1474:3).2: (^6) into ptr ^22
 	movq -104(%rbp), %rax
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -144(%rbp), %r15
-	movq -208(%rbp), %r14
-	movq -184(%rbp), %r13
-	movq -168(%rbp), %r12
-	movq -160(%rbp), %rbx
+	movq -128(%rbp), %r15
+	movq -192(%rbp), %r14
+	movq -168(%rbp), %r13
+	movq -152(%rbp), %r12
+	movq -144(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11539,13 +10827,13 @@ _ZN9__gnu_cxxeqIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EE
 	.___ZN9__gnu_cxxeqIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EESB___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(8397:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(8398:3): size = 8, type = ptr*, var = ^4
@@ -11556,39 +10844,31 @@ _ZN9__gnu_cxxeqIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EE
 	movq %rsi, (%r13)
 	# LowerLoad(8401:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(8402:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(8402:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(8403:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(8404:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(8405:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(8405:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(8406:3).2: (^9) into ptr ^10
 	movq (%rbx), %rax
 	# LowerIcmp(8407:3): ptr ^7 vs. operand ptr ^10
 	cmpq %rax, %r12
 	sete %al
 	andq $1, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11600,12 +10880,12 @@ _ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4
 	.___ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS5___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -80(%rbp)
-	movq %r12, -72(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
 	# LowerAlloca(1381:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1382:3): size = 8, type = ptr*, var = ^4
@@ -11620,8 +10900,6 @@ _ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4
 	movq (%rax), %rbx
 	# LowerLoad(1387:3).2: (^4) into ptr ^7
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(1388:3): move argument ptr nonnull dereferenceable(40) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -11632,8 +10910,6 @@ _ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4
 	movq $2, %rdx
 	andq $255, %rdx
 	callq _ZNSt10filesystem7__cxx114pathC2IA2_cS1_EERKT_NS1_6formatE
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# SetupCalls(1389:3): move argument ptr nonnull dereferenceable(40) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -11648,8 +10924,8 @@ _ZNSt10filesystem7__cxx114pathaSIA2_cEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4
 	movq %r12, %rdi
 	callq _ZNSt10filesystem7__cxx114pathD2Ev
 	movq %rbx, %rax
-	movq -72(%rbp), %r12
-	movq -80(%rbp), %rbx
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11661,11 +10937,11 @@ _ZNSt15__new_allocatorI6LsItemE10deallocateEPS0_m:
 	.___ZNSt15__new_allocatorI6LsItemE10deallocateEPS0_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(6457:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(6458:3): size = 8, type = ptr*, var = ^5
@@ -11682,15 +10958,11 @@ _ZNSt15__new_allocatorI6LsItemE10deallocateEPS0_m:
 	movq (%rcx), %rax
 	# LowerLoad(6464:3).2: (^5) into ptr ^8
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(6465:3): move argument ptr ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZdlPv@PLT
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11750,16 +11022,12 @@ _ZNSt10filesystem7__cxx113endENS0_18directory_iteratorE:
 	# SetupCalls(1535:3): move argument i64 16
 	movq $16, %rdx
 	callq memset@PLT
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -16(%rbp), %rdi
-	# Clobber %rdi
-	movq %rdi, -16(%rbp)
 	# SetupCalls(1536:3): move argument ptr nonnull dereferenceable(16) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -16(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2Ev
-	# Unclobber %rdi
-	movq -16(%rbp), %rdi
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11771,13 +11039,13 @@ _ZNSt10filesystem6existsENS_11file_statusE:
 	.___ZNSt10filesystem6existsENS_11file_statusE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -56(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -48(%rbp)
 	# LowerAlloca(2971:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^2
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(2972:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^3
@@ -11795,16 +11063,12 @@ _ZNSt10filesystem6existsENS_11file_statusE:
 	callq memcpy@PLT
 	# LowerLoad(2975:3).2: (^3) into i64 ^4
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(2976:3): move argument i64 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem12status_knownENS_11file_statusE
 	# SetupCalls(2976:3): move i1 result from %rax
 	movb %al, %r12b
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	cmpb $0, %r12b
 	jne .___ZNSt10filesystem6existsENS_11file_statusE__M60
 	.___ZNSt10filesystem6existsENS_11file_statusE__M57:
@@ -11826,9 +11090,9 @@ _ZNSt10filesystem6existsENS_11file_statusE:
 	movb %al, %r13b
 	.___ZNSt10filesystem6existsENS_11file_statusE__M90:
 	movb %r13b, %al
-	movq -56(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -48(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -11840,15 +11104,15 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	.___ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_T2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(704 + 0, 16)
-	subq $704, %rsp
+	# upalign(680 + 0, 16)
+	subq $688, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -408(%rbp)
-	movq %r12, -344(%rbp)
-	movq %r13, -352(%rbp)
-	movq %r14, -360(%rbp)
-	movq %r15, -288(%rbp)
+	movq %rbx, -384(%rbp)
+	movq %r12, -320(%rbp)
+	movq %r13, -328(%rbp)
+	movq %r14, -336(%rbp)
+	movq %r15, -264(%rbp)
 	# LowerAlloca(7624:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^5
 	# Fixing source-to-dest leaq -8(%rbp), -200(%rbp)
 	leaq -8(%rbp), %r15
@@ -11970,8 +11234,6 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	movq (%rbx), %rax
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
-	# Clobber %rax
-	movq %rax, -264(%rbp)
 	# SetupCalls(7663:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -200(%rbp), %rdi
@@ -11981,9 +11243,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7663:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -264(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7664:3): struct-type: ptr ^11 -> ^35, indices=0,0
@@ -11998,8 +11258,6 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	subq $1, %rax
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
-	# Clobber %rax
-	movq %rax, -264(%rbp)
 	# SetupCalls(7668:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -200(%rbp), %rdi
@@ -12009,9 +11267,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7668:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -264(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7669:3): struct-type: ptr ^12 -> ^39, indices=0,0
@@ -12033,8 +11289,6 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	movq (%rax), %r8
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
-	# Clobber %r8
-	movq %r8, -272(%rbp)
 	# SetupCalls(7675:3): move argument ptr nonnull dereferenceable(1) align 1 ^6
 	# Fixed movzx with identical source and destination widths
 	movq -208(%rbp), %rdi
@@ -12047,9 +11301,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(7675:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %r8
-	movq -272(%rbp), %r8
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_T2___M198
@@ -12069,8 +11321,6 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	movq (%rbx), %rax
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
-	# Clobber %rax
-	movq %rax, -264(%rbp)
 	# SetupCalls(7686:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -200(%rbp), %rdi
@@ -12080,9 +11330,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7686:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -264(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7687:3): struct-type: ptr ^13 -> ^51, indices=0,0
@@ -12098,13 +11346,11 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7689:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# LowerLoad(7690:3).2: (^7) into i64 ^53
 	movq -184(%rbp), %rax
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -280(%rbp)
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
 	# SetupCalls(7691:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
@@ -12116,10 +11362,8 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7691:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
-	# Unclobber %rdx
-	movq -280(%rbp), %rdx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7692:3): struct-type: ptr ^14 -> ^55, indices=0,0
 	movq %r14, %rax
@@ -12134,7 +11378,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7694:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
@@ -12147,7 +11391,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(7695:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# LowerLoad(7696:3).2: (^10) into i64 ^58
 	movq -184(%rbp), %rax
@@ -12213,8 +11457,6 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	subq $1, %rax
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
-	# Clobber %rax
-	movq %rax, -264(%rbp)
 	# SetupCalls(7721:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -200(%rbp), %rdi
@@ -12224,9 +11466,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7721:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -264(%rbp), %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7722:3): struct-type: ptr ^15 -> ^76, indices=0,0
@@ -12242,13 +11482,11 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7724:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# LowerLoad(7725:3).2: (^7) into i64 ^78
 	movq -184(%rbp), %rax
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -280(%rbp)
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
 	# SetupCalls(7726:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
@@ -12260,10 +11498,8 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEplEl
 	# SetupCalls(7726:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
-	# Unclobber %rdx
-	movq -280(%rbp), %rdx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7727:3): struct-type: ptr ^16 -> ^80, indices=0,0
 	movq -224(%rbp), %rax
@@ -12278,7 +11514,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7729:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
@@ -12291,7 +11527,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZN6LsItemaSEOS_
 	# SetupCalls(7730:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# LowerLoad(7731:3).2: (^10) into i64 ^83
 	movq -216(%rbp), %rbx
@@ -12312,7 +11548,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# Fixed movzx with identical source and destination widths
 	movq -208(%rbp), %rsi
 	callq _ZN9__gnu_cxx5__ops14_Iter_comp_valIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EC2EONS0_15_Iter_comp_iterISB_EE
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# Clobber %rcx
 	movq %rcx, -256(%rbp)
@@ -12325,7 +11561,7 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# SetupCalls(7738:3): move argument i64 8
 	movq $8, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
+	# Unclobber %rcx, live inside %rcx:3
 	movq -256(%rbp), %rcx
 	# LowerLoad(7739:3).2: (^7) into i64 ^86
 	movq -184(%rbp), %rax
@@ -12333,17 +11569,13 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerLoad(7740:3).2: (^9) into i64 ^87
 	movq -192(%rbp), %rax
 	movq (%rax), %r13
-	# Clobber %rcx
-	movq %rcx, -256(%rbp)
 	# SetupCalls(7741:3): move argument ptr nonnull dereferenceable(33) align 8 ^19
 	# Fixed movzx with identical source and destination widths
 	movq -160(%rbp), %rdi
 	# SetupCalls(7741:3): move argument ptr nonnull dereferenceable(33) align 8 %rcx
-	# Semiunclobber live %rcx into %rsi
-	movq -256(%rbp), %rsi
+	# Semiunclobber non-live %rcx into %rsi
+	movq %rcx, %rsi
 	callq _ZN6LsItemC2EOS_
-	# Unclobber %rcx
-	movq -256(%rbp), %rcx
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7742:3): struct-type: ptr ^18 -> ^88, indices=0,0
 	movq -176(%rbp), %rax
@@ -12370,11 +11602,11 @@ _ZSt13__adjust_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# Fixed movzx with identical source and destination widths
 	movq -160(%rbp), %rdi
 	callq _ZN6LsItemD2Ev
-	movq -288(%rbp), %r15
-	movq -360(%rbp), %r14
-	movq -352(%rbp), %r13
-	movq -344(%rbp), %r12
-	movq -408(%rbp), %rbx
+	movq -264(%rbp), %r15
+	movq -336(%rbp), %r14
+	movq -328(%rbp), %r13
+	movq -320(%rbp), %r12
+	movq -384(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12386,13 +11618,13 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE9_M_createIRSA_EEvRSt9_Any_dataOT_St17integral_constantIbLb1EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -48(%rbp)
-	movq %r15, -64(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(4269:3): size = 1, type = %"struct.std::integral_constant"*, var = ^3
 	leaq -1(%rbp), %rax
 	# LowerAlloca(4270:3): size = 8, type = ptr*, var = ^4
@@ -12405,24 +11637,20 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	movq %rsi, (%r12)
 	# LowerLoad(4274:3).2: (^4) into ptr ^6
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4275:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt9_Any_data9_M_accessEv
 	# SetupCalls(4275:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(4276:3).2: (^5) into ptr ^8
 	# Fixing source-to-dest movq (%r12), (%rbx)
 	movq (%r12), %r15
 	movq %r15, (%rbx)
 	# LowerStore(4277:3).9: mov ptr ^8, (^7)
-	movq -64(%rbp), %r15
-	movq -48(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -40(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12464,11 +11692,11 @@ _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE8allocateEmPKv
 	.___ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE8allocateEmPKv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(4942:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(4943:3): size = 8, type = ptr*, var = ^5
@@ -12519,18 +11747,14 @@ _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE8allocateEmPKv
 	movq (%rbx), %rax
 	# LowerMath(4971:3): ^18, 16 into i64 ^19
 	shlq $4, %rax
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(4972:3): move argument i64 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(4972:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -40(%rbp), %rax
 	movq %rbx, %rax
-	movq -48(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12575,12 +11799,12 @@ _ZNSt10filesystem7__cxx114path5_ListaSEOS2_:
 	.___ZNSt10filesystem7__cxx114path5_ListaSEOS2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(5959:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5960:3): size = 8, type = ptr*, var = ^4
@@ -12600,8 +11824,6 @@ _ZNSt10filesystem7__cxx114path5_ListaSEOS2_:
 	# tt = Pointer, type = %"struct.std::filesystem::__cxx11::path::_List"
 	# LowerGetelementptr(5966:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(5966:3): type of ^8 is %"class.std::unique_ptr"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5967:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -12611,11 +11833,9 @@ _ZNSt10filesystem7__cxx114path5_ListaSEOS2_:
 	callq _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEaSEOS6_
 	# SetupCalls(5967:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movq %r12, %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12627,13 +11847,13 @@ _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE
 	.___ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -32(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -24(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(3847:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerAlloca(3848:3): size = 8, type = ptr*, var = ^3
@@ -12646,16 +11866,12 @@ _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE
 	# LowerGetelementptr(3851:3): struct-type: ptr ^4 -> ^5, indices=0,0
 	movq %r13, %rax
 	# LowerGetelementptr(3851:3): type of ^5 is %"struct.std::__uniq_ptr_data"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3852:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE6_M_ptrEv
 	# SetupCalls(3852:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerStore(3853:3).9: mov ptr ^6, (^3)
 	movq %rbx, (%r12)
 	# LowerLoad(3854:3).2: (^3) into ptr ^7
@@ -12692,9 +11908,9 @@ _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE
 	movq (%r12), %rax
 	# LowerStore(3868:3).3: mov $imm, (^15)
 	movq $0, (%rax)
-	movq -40(%rbp), %r13
-	movq -32(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -24(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12706,15 +11922,15 @@ _ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKc:
 	.___ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKc__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
-	movq %r13, -40(%rbp)
-	movq %r14, -32(%rbp)
-	movq %r15, -64(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r13, -32(%rbp)
+	movq %r14, -24(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(2444:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(2445:3): size = 8, type = ptr*, var = ^4
@@ -12731,16 +11947,12 @@ _ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKc:
 	# LowerGetelementptr(2449:3): type of ^6 is i64*
 	# LowerLoad(2450:3).2: (^4) into ptr ^7
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(2451:3): move argument ptr ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt11char_traitsIcE6lengthEPKc
 	# SetupCalls(2451:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerStore(2452:3).9: mov i64 ^8, (^6)
 	movq %rbx, (%r12)
 	# tt = Pointer, type = %"class.std::basic_string_view"
@@ -12753,11 +11965,11 @@ _ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKc:
 	movq (%r14), %r15
 	movq %r15, (%rax)
 	# LowerStore(2455:3).9: mov ptr ^10, (^9)
-	movq -64(%rbp), %r15
-	movq -32(%rbp), %r14
-	movq -40(%rbp), %r13
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -24(%rbp), %r14
+	movq -32(%rbp), %r13
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12769,12 +11981,12 @@ _ZNSt10filesystem12is_directoryERKNS_7__cxx114pathE:
 	.___ZNSt10filesystem12is_directoryERKNS_7__cxx114pathE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(2049:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerAlloca(2050:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^3
@@ -12793,19 +12005,15 @@ _ZNSt10filesystem12is_directoryERKNS_7__cxx114pathE:
 	movq %rbx, (%r12)
 	# LowerLoad(2055:3).2: (^3) into i64 ^6
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(2056:3): move argument i64 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem12is_directoryENS_11file_statusE
 	# SetupCalls(2056:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movb %bl, %al
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12817,15 +12025,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE22_M_insert_range_uniqueIPKSI_EENSt9enable_ifIXsr17__same_value_typeIT_EE5valueEvE4typeEST_ST___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(168 + 0, 16)
-	subq $176, %rsp
+	# upalign(152 + 0, 16)
+	subq $160, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -128(%rbp)
-	movq %r12, -136(%rbp)
-	movq %r13, -144(%rbp)
-	movq %r14, -152(%rbp)
-	movq %r15, -104(%rbp)
+	movq %rbx, -112(%rbp)
+	movq %r12, -120(%rbp)
+	movq %r13, -128(%rbp)
+	movq %r14, -136(%rbp)
+	movq %r15, -88(%rbp)
 	# LowerAlloca(8802:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(8803:3): size = 8, type = ptr*, var = ^5
@@ -12906,10 +12114,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(8828:3): type of ^20 is ptr*
 	# LowerLoad(8829:3).2: (^20) into ptr ^21
 	movq (%rdx), %rcx
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
-	# Clobber %rax
-	movq %rax, -96(%rbp)
 	# SetupCalls(8830:3): move argument ptr nonnull dereferenceable(48) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -12925,10 +12129,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE17_M_insert_unique_IRKSI_NSO_11_Alloc_nodeEEESt17_Rb_tree_iteratorISI_ESt23_Rb_tree_const_iteratorISI_EOT_RT0_
 	# SetupCalls(8830:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -96(%rbp), %rax
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(8831:3): struct-type: ptr ^10 -> ^23, indices=0,0
 	movq %r13, %rax
@@ -12947,11 +12147,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq %rax, (%rcx)
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE22_M_insert_range_uniqueIPKSI_EENSt9enable_ifIXsr17__same_value_typeIT_EE5valueEvE4typeEST_ST___M46
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE22_M_insert_range_uniqueIPKSI_EENSt9enable_ifIXsr17__same_value_typeIT_EE5valueEvE4typeEST_ST___M161:
-	movq -104(%rbp), %r15
-	movq -152(%rbp), %r14
-	movq -144(%rbp), %r13
-	movq -136(%rbp), %r12
-	movq -128(%rbp), %rbx
+	movq -88(%rbp), %r15
+	movq -136(%rbp), %r14
+	movq -128(%rbp), %r13
+	movq -120(%rbp), %r12
+	movq -112(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -12993,15 +12193,15 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(896 + 0, 16)
-	subq $896, %rsp
+	# upalign(880 + 0, 16)
+	subq $880, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -520(%rbp)
-	movq %r12, -560(%rbp)
-	movq %r13, -488(%rbp)
-	movq %r14, -544(%rbp)
-	movq %r15, -480(%rbp)
+	movq %rbx, -504(%rbp)
+	movq %r12, -544(%rbp)
+	movq %r13, -472(%rbp)
+	movq %r14, -528(%rbp)
+	movq %r15, -464(%rbp)
 	# LowerAlloca(1164:3): size = 4, type = i32*, var = ^2
 	# Fixing source-to-dest leaq -4(%rbp), -328(%rbp)
 	leaq -4(%rbp), %r15
@@ -13088,16 +12288,12 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	callq _ZNSt10filesystem7__cxx114pathC2Ev
 	# LowerLoad(1188:3).2: (^3) into ptr ^24
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1189:3): move argument ptr nonnull dereferenceable(24) align 8 ^24
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1189:3): move i64 result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# LowerIcmp(1190:3): i64 ^25 vs. intlike 1
 	cmpq $1, %r15
 	sete %al
@@ -13118,16 +12314,12 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M124:
 	# LowerLoad(1198:3).2: (^3) into ptr ^30
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1199:3): move argument ptr nonnull dereferenceable(24) align 8 ^30
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1199:3): move i64 result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# LowerIcmp(1200:3): i64 ^31 vs. intlike 2
 	cmpq $2, %r15
 	sete %al
@@ -13138,8 +12330,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M154:
 	# LowerLoad(1204:3).2: (^3) into ptr ^34
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1205:3): move argument ptr nonnull dereferenceable(24) align 8 ^34
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -13148,8 +12338,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEixEm
 	# SetupCalls(1205:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# SetupCalls(1206:3): move argument ptr nonnull dereferenceable(40) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -336(%rbp), %rdi
@@ -13170,16 +12358,12 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq %rax, %rbx
 	# LowerLoad(1211:3).2: (^3) into ptr ^39
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1212:3): move argument ptr nonnull dereferenceable(24) align 8 ^39
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1212:3): move i64 result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# SetupCalls(1213:3): move argument ptr nonnull dereferenceable(8) align 8 ^38
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -13266,8 +12450,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq %r15, (%rbx)
 	# LowerLoad(1238:3).2: (^7) into ptr ^51
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1239:3): move argument ptr nonnull dereferenceable(16) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -13275,8 +12457,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# SetupCalls(1240:3): move argument ptr sret align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -416(%rbp), %rdi
@@ -13290,8 +12470,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorD2Ev
 	# LowerLoad(1242:3).2: (^7) into ptr ^52
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1243:3): move argument ptr nonnull dereferenceable(16) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -13299,8 +12477,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKS1_
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# SetupCalls(1244:3): move argument ptr sret align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq -424(%rbp), %rdi
@@ -13451,8 +12627,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	# LowerGetelementptr(1288:3): type of ^73 is ptr*
 	# LowerLoad(1289:3).2: (^73) into ptr ^74
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -472(%rbp)
 	# SetupCalls(1290:3): move argument ptr ^72
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -13460,8 +12634,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISB_EEE3$_0EvT_SH_T0_
-	# Unclobber %rcx
-	movq -472(%rbp), %rcx
 	# LowerStore(1291:3).9: mov %"class.std::vector.5"* ^6, (^20)
 	movq -384(%rbp), %rax
 	# Fixing source-to-dest movq -352(%rbp), (%rax)
@@ -13485,16 +12657,12 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	# LowerLoad(1296:3).2: (^20) into ptr ^78
 	movq -384(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1297:3): move argument ptr nonnull dereferenceable(24) align 8 ^78
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt6vectorI6LsItemSaIS0_EE3endEv
 	# SetupCalls(1297:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(1298:3): struct-type: ptr ^22 -> ^80, indices=0,0
 	movq -368(%rbp), %rax
@@ -13553,8 +12721,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(1318:3): struct-type: ptr ^91 -> ^92, indices=0,0
 	# LowerGetelementptr(1318:3): type of ^92 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -464(%rbp)
 	# SetupCalls(1319:3): move argument ptr nonnull dereferenceable(8) align 8 ^90
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -13564,8 +12730,6 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	callq _ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE@PLT
 	# SetupCalls(1319:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -464(%rbp), %rax
 	# SetupCalls(1320:3): move argument ptr nonnull dereferenceable(8) align 8 ^93
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -13627,11 +12791,11 @@ _Z2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq -328(%rbp), %rax
 	movl (%rax), %ebx
 	movl %ebx, %eax
-	movq -480(%rbp), %r15
-	movq -544(%rbp), %r14
-	movq -488(%rbp), %r13
-	movq -560(%rbp), %r12
-	movq -520(%rbp), %rbx
+	movq -464(%rbp), %r15
+	movq -528(%rbp), %r14
+	movq -472(%rbp), %r13
+	movq -544(%rbp), %r12
+	movq -504(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -13643,14 +12807,14 @@ _ZSt12__niter_wrapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEE
 	.___ZSt12__niter_wrapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEES3_ET_S8_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(120 + 0, 16)
-	subq $128, %rsp
+	# upalign(112 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -64(%rbp)
-	movq %r13, -48(%rbp)
-	movq %r14, -56(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -40(%rbp)
+	movq %r14, -48(%rbp)
 	# LowerAlloca(8554:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	leaq -8(%rbp), %r13
 	# LowerAlloca(8555:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
@@ -13684,16 +12848,12 @@ _ZSt12__niter_wrapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEE
 	# LowerGetelementptr(8563:3): type of ^9 is ptr*
 	# LowerLoad(8564:3).2: (^9) into ptr ^10
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
 	# SetupCalls(8565:3): move argument ptr ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt12__niter_baseIP6LsItemSt6vectorIS0_SaIS0_EEET_N9__gnu_cxx17__normal_iteratorIS5_T0_EE
 	# SetupCalls(8565:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	# LowerBasicConversion(8566:3): ptr ^8 -> i64 ^12
 	movq %rbx, %rax
 	# LowerBasicConversion(8567:3): ptr ^11 -> i64 ^13
@@ -13729,10 +12889,10 @@ _ZSt12__niter_wrapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEE
 	# LowerGetelementptr(8573:3): type of ^18 is ptr*
 	# LowerLoad(8574:3).2: (^18) into ptr ^19
 	movq (%rbx), %rax
-	movq -56(%rbp), %r14
-	movq -48(%rbp), %r13
-	movq -64(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -48(%rbp), %r14
+	movq -40(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -13744,15 +12904,15 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	.___ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2IRA5_KcRSF_Lb1EEEOT_OT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(136 + 0, 16)
-	subq $144, %rsp
+	# upalign(112 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r14, -112(%rbp)
-	movq %r15, -120(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
+	movq %r13, -80(%rbp)
+	movq %r14, -88(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(2321:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(2322:3): size = 8, type = ptr*, var = ^5
@@ -13795,10 +12955,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerStore(2337:3).9: mov ptr ^15, (^4)
 	# LowerLoad(2338:3).2: (^4) into ptr ^16
 	movq (%r8), %rax
-	# Clobber %rdx
-	movq %rdx, -64(%rbp)
-	# Clobber %rcx
-	movq %rcx, -72(%rbp)
 	# SetupCalls(2339:3): move argument ptr nonnull dereferenceable(32) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -13809,22 +12965,14 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_
-	# Unclobber %rcx
-	movq -72(%rbp), %rcx
-	# Unclobber %rdx
-	movq -64(%rbp), %rdx
 	# LowerStore(2340:3).9: mov %"class.std::allocator.0"* ^10, (^5)
 	movq %r14, (%r12)
 	# LowerLoad(2341:3).2: (^5) into ptr ^17
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2342:3): move argument ptr nonnull dereferenceable(1) align 1 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(2343:3): struct-type: ptr ^11 -> ^18, indices=0,1
 	movq %r15, %rbx
@@ -13832,8 +12980,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerGetelementptr(2343:3): type of ^18 is %"class.std::function"*
 	# LowerLoad(2344:3).2: (^9) into ptr ^19
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2345:3): move argument ptr nonnull dereferenceable(32) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -13841,13 +12987,11 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT_
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	movq -120(%rbp), %r15
-	movq -112(%rbp), %r14
-	movq -104(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -88(%rbp), %r14
+	movq -80(%rbp), %r13
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -13937,13 +13081,13 @@ _ZN9__gnu_cxxneIPKcNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEEbRKNS_1
 	.___ZN9__gnu_cxxneIPKcNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEEbRKNS_17__normal_iteratorIT_T0_EESE___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(6244:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(6245:3): size = 8, type = ptr*, var = ^4
@@ -13954,39 +13098,31 @@ _ZN9__gnu_cxxneIPKcNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEEbRKNS_1
 	movq %rsi, (%r13)
 	# LowerLoad(6248:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6249:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIPKcNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE4baseEv
 	# SetupCalls(6249:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(6250:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(6251:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6252:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIPKcNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE4baseEv
 	# SetupCalls(6252:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(6253:3).2: (^9) into ptr ^10
 	movq (%rbx), %rax
 	# LowerIcmp(6254:3): ptr ^7 vs. operand ptr ^10
 	cmpq %rax, %r12
 	setne %al
 	andq $1, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14220,12 +13356,12 @@ _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE
 	.___ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEaSEOS6___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(5984:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5985:3): size = 8, type = ptr*, var = ^4
@@ -14245,8 +13381,6 @@ _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE
 	# tt = Pointer, type = %"class.std::unique_ptr"
 	# LowerGetelementptr(5991:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(5991:3): type of ^8 is %"struct.std::__uniq_ptr_data"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5992:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -14256,11 +13390,9 @@ _ZNSt10unique_ptrINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE
 	callq _ZNSt15__uniq_ptr_dataINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterELb1ELb1EEaSEOS6_
 	# SetupCalls(5992:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movq %r12, %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14272,13 +13404,13 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	.___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(40 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
-	movq %r13, -64(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
+	movq %r13, -40(%rbp)
 	# LowerAlloca(9832:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(9833:3): size = 8, type = ptr*, var = ^4
@@ -14293,8 +13425,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# LowerGetelementptr(9837:3): struct-type: ptr ^5 -> ^6, indices=0
 	movq %rbx, %rax
 	# LowerGetelementptr(9837:3): type of ^6 is i8*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9838:3): move argument ptr align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -14303,8 +13433,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# SetupCalls(9838:3): move argument i64 24
 	movq $24, %rdx
 	callq memset@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# SetupCalls(9839:3): move argument ptr nonnull dereferenceable(24) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -14318,16 +13446,12 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	movq $0, (%rax)
 	# LowerLoad(9842:3).2: (^4) into ptr ^8
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9843:3): move argument ptr nonnull dereferenceable(32) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEcvbEv
 	# SetupCalls(9843:3): move i1 result from %rax
 	movb %al, %r13b
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	cmpb $0, %r13b
 	jne .___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA___M93
 	jmp .___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA___M174
@@ -14349,12 +13473,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# tt = Pointer, type = %"class.std::_Function_base"
 	# LowerGetelementptr(9852:3): struct-type: ptr ^15 -> ^16, indices=0,0
 	# LowerGetelementptr(9852:3): type of ^16 is %"union.std::_Any_data"*
-	# Clobber %rdx
-	movq %rdx, -32(%rbp)
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9853:3): move argument ptr nonnull dereferenceable(16) align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -14367,12 +13485,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	callq *%rcx
 	# SetupCalls(9853:3): move i1 result from %rax
 	movb %al, %al
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
-	# Unclobber %rdx
-	movq -32(%rbp), %rdx
 	# LowerLoad(9854:3).2: (^4) into ptr ^18
 	movq (%r12), %rax
 	# tt = Pointer, type = %"class.std::function"
@@ -14404,9 +13516,9 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# LowerStore(9863:3).9: mov ptr ^24, (^25)
 	movq %rcx, (%rax)
 	.___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2ERKSA___M174:
-	movq -64(%rbp), %r13
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -40(%rbp), %r13
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14460,15 +13572,15 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	.___ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaIS9_EEEESt4lessIS5_ESaISt4pairIKS5_SF_EEEC2ESt16initializer_listISK_ERKSH_RKSL___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(224 + 0, 16)
-	subq $224, %rsp
+	# upalign(200 + 0, 16)
+	subq $208, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -136(%rbp)
-	movq %r12, -144(%rbp)
-	movq %r13, -168(%rbp)
-	movq %r14, -176(%rbp)
-	movq %r15, -152(%rbp)
+	movq %rbx, -112(%rbp)
+	movq %r12, -120(%rbp)
+	movq %r13, -144(%rbp)
+	movq %r14, -152(%rbp)
+	movq %r15, -128(%rbp)
 	# LowerAlloca(2381:3): size = 8, type = ptr*, var = ^6
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(2382:3): size = 8, type = ptr*, var = ^7
@@ -14536,10 +13648,6 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	movq %rax, (%r9)
 	# LowerLoad(2408:3).2: (^6) into ptr ^24
 	movq (%rbx), %rax
-	# Clobber %rcx
-	movq %rcx, -112(%rbp)
-	# Clobber %r8
-	movq %r8, -120(%rbp)
 	# SetupCalls(2409:3): move argument ptr nonnull dereferenceable(48) align 8 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -14550,24 +13658,16 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdx
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EEC2ERKSM_RKSN_
-	# Unclobber %r8
-	movq -120(%rbp), %r8
-	# Unclobber %rcx
-	movq -112(%rbp), %rcx
 	# LowerStore(2410:3).9: mov %"class.std::allocator.14"* ^15, (^10)
 	movq -104(%rbp), %rax
 	movq %r14, (%rax)
 	# LowerLoad(2411:3).2: (^10) into ptr ^25
 	movq -104(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -128(%rbp)
 	# SetupCalls(2412:3): move argument ptr nonnull dereferenceable(1) align 1 ^25
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEED2Ev
-	# Unclobber %rax
-	movq -128(%rbp), %rax
 	# tt = Pointer, type = %"class.std::map"
 	# LowerGetelementptr(2413:3): struct-type: ptr ^18 -> ^26, indices=0,0
 	movq %r15, %rbx
@@ -14594,11 +13694,11 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdx
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE22_M_insert_range_uniqueIPKSI_EENSt9enable_ifIXsr17__same_value_typeIT_EE5valueEvE4typeEST_ST_
-	movq -152(%rbp), %r15
-	movq -176(%rbp), %r14
-	movq -168(%rbp), %r13
-	movq -144(%rbp), %r12
-	movq -136(%rbp), %rbx
+	movq -128(%rbp), %r15
+	movq -152(%rbp), %r14
+	movq -144(%rbp), %r13
+	movq -120(%rbp), %r12
+	movq -112(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14610,12 +13710,12 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_:
 	.___ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(5942:3): size = 16, type = %"class.std::basic_string_view"*, var = ^2
 	leaq -16(%rbp), %r12
 	# LowerAlloca(5943:3): size = 8, type = ptr*, var = ^3
@@ -14627,8 +13727,6 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_:
 	# tt = Pointer, type = [2 x i8]
 	# LowerGetelementptr(5946:3): struct-type: ptr ^4 -> ^5, indices=0,0
 	# LowerGetelementptr(5946:3): type of ^5 is i8*
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(5947:3): move argument ptr nonnull dereferenceable(16) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -14636,8 +13734,6 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKc
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(5948:3).2: (^2) into {i64, ptr} ^6
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%r12), %rax
@@ -14645,8 +13741,8 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIA2_cEEDaRKT_:
 	# LowerRet: two-register return
 	movq %rax, %rax
 	movq %rbx, %rdx
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14658,12 +13754,12 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv:
 	.___ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(9920:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator.24"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(9921:3): size = 8, type = ptr*, var = ^3
@@ -14679,8 +13775,6 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv:
 	# LowerGetelementptr(9925:3): struct-type: ptr ^5 -> ^6, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(9925:3): type of ^6 is ptr*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9926:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -14688,16 +13782,14 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx17__normal_iteratorIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEEC2ERKS6_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator.24"
 	# LowerGetelementptr(9927:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(9927:3): type of ^7 is ptr*
 	# LowerLoad(9928:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14737,12 +13829,12 @@ _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcES
 	.___ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEmmEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -24(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -16(%rbp)
 	# LowerAlloca(9567:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(9568:3).9: mov ptr %rdi, (^2)
@@ -14755,16 +13847,12 @@ _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcES
 	# LowerGetelementptr(9570:3): type of ^4 is ptr*
 	# LowerLoad(9571:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(9572:3): move argument ptr ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt18_Rb_tree_decrementPSt18_Rb_tree_node_base@PLT
 	# SetupCalls(9572:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(9573:3): struct-type: ptr ^3 -> ^7, indices=0,0
 	movq %r12, %rax
@@ -14772,8 +13860,8 @@ _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcES
 	# LowerStore(9574:3).9: mov ptr ^6, (^7)
 	movq %rbx, (%rax)
 	movq %r12, %rax
-	movq -24(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -16(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14785,11 +13873,11 @@ _ZNKSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcE
 	.___ZNKSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEptEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(2579:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(2580:3).9: mov ptr %rdi, (^2)
@@ -14801,18 +13889,14 @@ _ZNKSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcE
 	# LowerGetelementptr(2582:3): type of ^4 is ptr*
 	# LowerLoad(2583:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(2584:3): move argument ptr nonnull dereferenceable(96) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEE9_M_valptrEv
 	# SetupCalls(2584:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	movq %rbx, %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -14824,15 +13908,15 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	.___ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEbEEERS0_DpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(280 + 0, 16)
-	subq $288, %rsp
+	# upalign(264 + 0, 16)
+	subq $272, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -176(%rbp)
-	movq %r12, -200(%rbp)
-	movq %r13, -208(%rbp)
-	movq %r14, -216(%rbp)
-	movq %r15, -184(%rbp)
+	movq %rbx, -160(%rbp)
+	movq %r12, -184(%rbp)
+	movq %r13, -192(%rbp)
+	movq %r14, -200(%rbp)
+	movq %r15, -168(%rbp)
 	# LowerAlloca(1558:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r9
 	# LowerAlloca(1559:3): size = 8, type = ptr*, var = ^5
@@ -14952,8 +14036,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	movq (%r8), %r12
 	# LowerLoad(1605:3).2: (^6) into ptr ^38
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -160(%rbp)
 	# SetupCalls(1606:3): move argument ptr nonnull dereferenceable(32) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq -144(%rbp), %rdi
@@ -14961,8 +14043,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_@PLT
-	# Unclobber %rax
-	movq -160(%rbp), %rax
 	# LowerLoad(1607:3).2: (^7) into ptr ^39
 	movq -152(%rbp), %rax
 	movq (%rax), %rbx
@@ -14971,8 +14051,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	# LowerTrunc(1609:3): 8 to 1, move
 	# LowerTrunc(1609:3): 8 to 1, apply mask
 	andq $1, %rax
-	# Clobber %rax
-	movq %rax, -160(%rbp)
 	# SetupCalls(1610:3): move argument ptr nonnull dereferenceable(33) align 8 ^37
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -14983,8 +14061,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	movzbq %al, %rdx
 	andq $1, %rdx
 	callq _ZN6LsItemC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb
-	# Unclobber %rax
-	movq -160(%rbp), %rax
 	# SetupCalls(1611:3): move argument ptr nonnull dereferenceable(32) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq -144(%rbp), %rdi
@@ -15029,10 +14105,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	# LowerGetelementptr(1625:3): type of ^51 is ptr*
 	# LowerLoad(1626:3).2: (^51) into ptr ^52
 	movq (%rcx), %rdx
-	# Clobber %rdx
-	movq %rdx, -168(%rbp)
-	# Clobber %rax
-	movq %rax, -160(%rbp)
 	# SetupCalls(1627:3): move argument ptr nonnull dereferenceable(24) align 8 ^17
 	# Fixed movzx with identical source and destination widths
 	movq -136(%rbp), %rdi
@@ -15046,10 +14118,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rcx
 	callq _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEbEEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_
-	# Unclobber %rax
-	movq -160(%rbp), %rax
-	# Unclobber %rdx
-	movq -168(%rbp), %rdx
 	.___ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEbEEERS0_DpOT___M276:
 	# SetupCalls(1631:3): move argument ptr nonnull dereferenceable(24) align 8 ^17
 	# Fixed movzx with identical source and destination widths
@@ -15058,11 +14126,11 @@ _ZNSt6vectorI6LsItemSaIS0_EE12emplace_backIJNSt7__cxx1112basic_stringIcSt11char_
 	# SetupCalls(1631:3): move ptr result from %rax
 	movq %rax, %rbx
 	movq %rbx, %rax
-	movq -184(%rbp), %r15
-	movq -216(%rbp), %r14
-	movq -208(%rbp), %r13
-	movq -200(%rbp), %r12
-	movq -176(%rbp), %rbx
+	movq -168(%rbp), %r15
+	movq -200(%rbp), %r14
+	movq -192(%rbp), %r13
+	movq -184(%rbp), %r12
+	movq -160(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15097,12 +14165,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE13_Rb_tree_implISM_Lb1EEC2ERKSM_OSaISt13_Rb_tree_nodeISI_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -80(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -72(%rbp)
 	# LowerAlloca(8868:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r9
 	# LowerAlloca(8869:3): size = 8, type = ptr*, var = ^5
@@ -15143,8 +14211,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%r9), %rax
 	# LowerLoad(8887:3).2: (^9) into ptr ^16
 	movq (%r10), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(8888:3): move argument ptr nonnull dereferenceable(1) align 1 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -15152,23 +14218,17 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt20_Rb_tree_key_compareISt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEEC2ERKS7_
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# tt = Pointer, type = i8
 	# LowerGetelementptr(8889:3): struct-type: ptr ^11 -> ^17, indices=8
 	movq %r12, %rax
 	addq $8, %rax
 	# LowerGetelementptr(8889:3): type of ^17 is i8*
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(8890:3): move argument ptr nonnull dereferenceable(40) align 8 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15_Rb_tree_headerC2Ev
-	# Unclobber %rax
-	movq -64(%rbp), %rax
-	movq -80(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -72(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15180,12 +14240,12 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	.___ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaIS9_EEEESt4lessIS5_ESaISt4pairIKS5_SF_EEE3endEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(2564:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(2565:3): size = 8, type = ptr*, var = ^3
@@ -15197,16 +14257,12 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	# tt = Pointer, type = %"class.std::map"
 	# LowerGetelementptr(2568:3): struct-type: ptr ^4 -> ^5, indices=0,0
 	# LowerGetelementptr(2568:3): type of ^5 is %"class.std::_Rb_tree"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(2569:3): move argument ptr nonnull dereferenceable(48) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE3endEv
 	# SetupCalls(2569:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(2570:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rax
@@ -15220,8 +14276,8 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	# LowerLoad(2573:3).2: (^8) into ptr ^9
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15233,15 +14289,15 @@ _ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_
 	.___ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7_S6_RT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(104 + 0, 16)
-	subq $112, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -80(%rbp)
-	movq %r13, -72(%rbp)
-	movq %r14, -96(%rbp)
-	movq %r15, -104(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -48(%rbp)
+	movq %r14, -72(%rbp)
+	movq %r15, -80(%rbp)
 	# LowerAlloca(5611:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %r13
 	# LowerAlloca(5612:3): size = 8, type = ptr*, var = ^6
@@ -15284,12 +14340,6 @@ _ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_
 	movq (%r13), %rcx
 	# LowerLoad(5633:3).2: (^8) into ptr ^18
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -48(%rbp)
-	# Clobber %r8
-	movq %r8, -56(%rbp)
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(5634:3): move argument ptr ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -15300,12 +14350,6 @@ _ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rdx
 	callq _ZSt19__relocate_object_aISt17basic_string_viewIcSt11char_traitsIcEES3_SaIS3_EEvPT_PT0_RT1_
-	# Unclobber %rax
-	movq -64(%rbp), %rax
-	# Unclobber %r8
-	movq -56(%rbp), %r8
-	# Unclobber %rcx
-	movq -48(%rbp), %rcx
 	# LowerLoad(5638:3).2: (^5) into ptr ^20
 	movq (%r13), %rax
 	# tt = Pointer, type = %"class.std::basic_string_view"
@@ -15326,11 +14370,11 @@ _ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_
 	.___ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7_S6_RT1___M83:
 	# LowerLoad(5647:3).2: (^9) into ptr ^25
 	movq (%r14), %rax
-	movq -104(%rbp), %r15
-	movq -96(%rbp), %r14
-	movq -72(%rbp), %r13
-	movq -80(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -80(%rbp), %r15
+	movq -72(%rbp), %r14
+	movq -48(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15342,12 +14386,12 @@ _ZNSt10filesystem6existsERKNS_7__cxx114pathE:
 	.___ZNSt10filesystem6existsERKNS_7__cxx114pathE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(1432:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1433:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^3
@@ -15366,19 +14410,15 @@ _ZNSt10filesystem6existsERKNS_7__cxx114pathE:
 	movq %rbx, (%r12)
 	# LowerLoad(1438:3).2: (^3) into i64 ^6
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1439:3): move argument i64 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem6existsENS_11file_statusE
 	# SetupCalls(1439:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movb %bl, %al
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15456,12 +14496,12 @@ _ZNSt6vectorI6LsItemSaIS0_EE5beginEv:
 	.___ZNSt6vectorI6LsItemSaIS0_EE5beginEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(1793:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(1794:3): size = 8, type = ptr*, var = ^3
@@ -15477,8 +14517,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE5beginEv:
 	# LowerGetelementptr(1798:3): struct-type: ptr ^5 -> ^6, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(1798:3): type of ^6 is ptr*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1799:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -15486,16 +14524,14 @@ _ZNSt6vectorI6LsItemSaIS0_EE5beginEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEC2ERKS2_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(1800:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(1800:3): type of ^7 is ptr*
 	# LowerLoad(1801:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15507,15 +14543,15 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm:
 	.___ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(184 + 0, 16)
-	subq $192, %rsp
+	# upalign(168 + 0, 16)
+	subq $176, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -104(%rbp)
-	movq %r12, -112(%rbp)
-	movq %r13, -144(%rbp)
-	movq %r14, -128(%rbp)
-	movq %r15, -96(%rbp)
+	movq %rbx, -88(%rbp)
+	movq %r12, -96(%rbp)
+	movq %r13, -128(%rbp)
+	movq %r14, -112(%rbp)
+	movq %r15, -80(%rbp)
 	# LowerAlloca(1042:3): size = 16, type = %"class.std::basic_string_view"*, var = ^4
 	# Fixing source-to-dest leaq -16(%rbp), -64(%rbp)
 	leaq -16(%rbp), %r15
@@ -15548,8 +14584,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm:
 	movq %rax, %r13
 	# LowerLoad(1053:3).2: (^6) into i64 ^12
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(1054:3): move argument i64 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -15561,8 +14595,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm:
 	callq _ZSt10__sv_checkmmPKc
 	# SetupCalls(1054:3): move i64 result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# LowerStore(1055:3).9: mov i64 ^13, (^6)
 	movq %r13, (%rbx)
 	# tt = Pointer, type = %"class.std::basic_string_view"
@@ -15610,10 +14642,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm:
 	# LowerLoad(1068:3).2: (^8) into i64 ^24
 	movq -72(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(1069:3): move argument ptr nonnull dereferenceable(16) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -64(%rbp), %rdi
@@ -15624,10 +14652,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt17basic_string_viewIcSt11char_traitsIcEEC2EPKcm
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
 	# LowerLoad(1070:3).2: (^4) into {i64, ptr} ^25
 	movq -64(%rbp), %rax
 	# FinishMultireg: mov (%reg), <%pack...>
@@ -15636,11 +14660,11 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE6substrEmm:
 	# LowerRet: two-register return
 	movq %rbx, %rax
 	movq %rcx, %rdx
-	movq -96(%rbp), %r15
-	movq -128(%rbp), %r14
-	movq -144(%rbp), %r13
-	movq -112(%rbp), %r12
-	movq -104(%rbp), %rbx
+	movq -80(%rbp), %r15
+	movq -112(%rbp), %r14
+	movq -128(%rbp), %r13
+	movq -96(%rbp), %r12
+	movq -88(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15652,14 +14676,14 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3_:
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(160 + 0, 16)
-	subq $160, %rsp
+	# upalign(144 + 0, 16)
+	subq $144, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -120(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r14, -112(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -104(%rbp)
+	movq %r13, -88(%rbp)
+	movq %r14, -96(%rbp)
 	# LowerAlloca(1076:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r8
 	# LowerAlloca(1077:3): size = 8, type = ptr*, var = ^4
@@ -15753,8 +14777,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3_:
 	movq (%r9), %rax
 	# LowerLoad(1114:3).2: (^5) into ptr ^31
 	movq (%rdx), %rbx
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(1115:3): move argument ptr align 8 ^30
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -15764,8 +14786,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3_:
 	# SetupCalls(1115:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Vector_base"
 	# LowerGetelementptr(1116:3): struct-type: ptr ^12 -> ^32, indices=0,0
 	movq %r12, %rax
@@ -15805,10 +14825,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3_:
 	# LowerGetelementptr(1128:3): type of ^40 is ptr*
 	# LowerLoad(1129:3).2: (^40) into ptr ^41
 	movq (%rbx), %rcx
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(1130:3): move argument ptr nonnull dereferenceable(24) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -15819,15 +14835,11 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3___M201:
-	movq -112(%rbp), %r14
-	movq -104(%rbp), %r13
-	movq -120(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r14
+	movq -88(%rbp), %r13
+	movq -104(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15839,12 +14851,12 @@ _ZNSt6vectorI6LsItemSaIS0_EE3endEv:
 	.___ZNSt6vectorI6LsItemSaIS0_EE3endEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(1807:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(1808:3): size = 8, type = ptr*, var = ^3
@@ -15861,8 +14873,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE3endEv:
 	movq %rbx, %rax
 	addq $8, %rax
 	# LowerGetelementptr(1812:3): type of ^6 is ptr*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1813:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -15870,16 +14880,14 @@ _ZNSt6vectorI6LsItemSaIS0_EE3endEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEC2ERKS2_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(1814:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(1814:3): type of ^7 is ptr*
 	# LowerLoad(1815:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15891,13 +14899,13 @@ _ZNSt10filesystem7__cxx114pathC2ERKS1_:
 	.___ZNSt10filesystem7__cxx114pathC2ERKS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -32(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -24(%rbp)
 	# LowerAlloca(3494:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(3495:3): size = 8, type = ptr*, var = ^4
@@ -15917,8 +14925,6 @@ _ZNSt10filesystem7__cxx114pathC2ERKS1_:
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(3501:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	# LowerGetelementptr(3501:3): type of ^8 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3502:3): move argument ptr nonnull dereferenceable(32) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -15926,8 +14932,6 @@ _ZNSt10filesystem7__cxx114pathC2ERKS1_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(3503:3): struct-type: ptr ^5 -> ^9, indices=0,1
 	movq %r12, %rax
@@ -15939,8 +14943,6 @@ _ZNSt10filesystem7__cxx114pathC2ERKS1_:
 	# LowerGetelementptr(3505:3): struct-type: ptr ^10 -> ^11, indices=0,1
 	addq $32, %rbx
 	# LowerGetelementptr(3505:3): type of ^11 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3506:3): move argument ptr nonnull dereferenceable(8) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -15948,11 +14950,9 @@ _ZNSt10filesystem7__cxx114pathC2ERKS1_:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZNSt10filesystem7__cxx114path5_ListC1ERKS2_@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -24(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -15964,13 +14964,13 @@ _ZNKSt10filesystem7__cxx114path6stringEv:
 	.___ZNKSt10filesystem7__cxx114path6stringEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(72 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -80(%rbp)
-	movq %r12, -72(%rbp)
-	movq %r15, -88(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r15, -72(%rbp)
 	# LowerAlloca(1719:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r8
 	# LowerAlloca(1720:3): size = 8, type = ptr*, var = ^4
@@ -15998,13 +14998,9 @@ _ZNKSt10filesystem7__cxx114path6stringEv:
 	# LowerStore(1730:3).9: mov ptr ^10, (^3)
 	# LowerLoad(1731:3).2: (^3) into ptr ^11
 	movq (%r8), %rcx
-	# Clobber %rdi
-	movq %rdi, -56(%rbp)
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(1732:3): move argument ptr sret align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -56(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(1732:3): move argument ptr nonnull dereferenceable(40) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
@@ -16012,25 +15008,17 @@ _ZNKSt10filesystem7__cxx114path6stringEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112basic_stringIT_T0_T1_EERKSA_
-	# Unclobber %rax
-	movq -64(%rbp), %rax
-	# Unclobber %rdi
-	movq -56(%rbp), %rdi
 	# LowerStore(1733:3).9: mov %"class.std::allocator.0"* ^8, (^4)
 	movq %rbx, (%r12)
 	# LowerLoad(1734:3).2: (^4) into ptr ^12
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(1735:3): move argument ptr nonnull dereferenceable(1) align 1 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -64(%rbp), %rax
-	movq -88(%rbp), %r15
-	movq -72(%rbp), %r12
-	movq -80(%rbp), %rbx
+	movq -72(%rbp), %r15
+	movq -56(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16042,15 +15030,15 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS2_EvEERKT_RKS3___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(176 + 0, 16)
-	subq $176, %rsp
+	# upalign(152 + 0, 16)
+	subq $160, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -128(%rbp)
-	movq %r12, -112(%rbp)
-	movq %r13, -120(%rbp)
-	movq %r14, -136(%rbp)
-	movq %r15, -144(%rbp)
+	movq %rbx, -104(%rbp)
+	movq %r12, -88(%rbp)
+	movq %r13, -96(%rbp)
+	movq %r14, -112(%rbp)
+	movq %r15, -120(%rbp)
 	# LowerAlloca(2509:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(2510:3): size = 8, type = ptr*, var = ^5
@@ -16075,8 +15063,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	movq %r15, -80(%rbp)
 	# LowerLoad(2519:3).2: (^5) into ptr ^11
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
 	# SetupCalls(2520:3): move argument ptr align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -16086,8 +15072,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# SetupCalls(2520:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(2521:3): struct-type: ptr ^9 -> ^12, indices=0,0
 	movq %r14, %rax
@@ -16101,10 +15085,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# LowerGetelementptr(2523:3): type of ^14 is ptr*
 	# LowerLoad(2524:3).2: (^14) into ptr ^15
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -96(%rbp)
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
 	# SetupCalls(2525:3): move argument i64 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -16116,10 +15096,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
-	# Unclobber %rdx
-	movq -96(%rbp), %rdx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(2526:3): struct-type: ptr ^8 -> ^17, indices=0,0
 	movq %rbx, %rax
@@ -16154,8 +15130,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# LowerGetelementptr(2534:3): type of ^23 is ptr*
 	# LowerLoad(2535:3).2: (^23) into ptr ^24
 	movq (%rax), %rbx
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
 	# SetupCalls(2536:3): move argument ptr nonnull dereferenceable(16) align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -16166,8 +15140,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12__sv_wrapperC1ESt17basic_string_viewIcS2_E@PLT
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
 	# LowerLoad(2537:3).2: (^6) into ptr ^25
 	movq (%r12), %rbx
 	# tt = Pointer, type = {i64, ptr}
@@ -16183,10 +15155,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# LowerGetelementptr(2540:3): type of ^28 is ptr*
 	# LowerLoad(2541:3).2: (^28) into ptr ^29
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
-	# Clobber %r8
-	movq %r8, -104(%rbp)
 	# SetupCalls(2542:3): move argument ptr nonnull dereferenceable(32) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq -80(%rbp), %rdi
@@ -16200,15 +15168,11 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ISt17basic_string_viewIcS
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rcx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2ENS4_12__sv_wrapperERKS3_@PLT
-	# Unclobber %r8
-	movq -104(%rbp), %r8
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
-	movq -144(%rbp), %r15
-	movq -136(%rbp), %r14
-	movq -120(%rbp), %r13
-	movq -112(%rbp), %r12
-	movq -128(%rbp), %rbx
+	movq -120(%rbp), %r15
+	movq -112(%rbp), %r14
+	movq -96(%rbp), %r13
+	movq -88(%rbp), %r12
+	movq -104(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16220,11 +15184,11 @@ _ZNKSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EE7_M_lessERKS2_:
 	.___ZNKSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EE7_M_lessERKS2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(3440:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(3441:3): size = 8, type = ptr*, var = ^4
@@ -16249,12 +15213,6 @@ _ZNKSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EE7_M_lessERKS2_:
 	# LowerGetelementptr(3449:3): type of ^10 is ptr*
 	# LowerLoad(3450:3).2: (^10) into ptr ^11
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %r8
-	movq %r8, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(3451:3): move argument ptr nonnull dereferenceable(1) align 1 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -16267,14 +15225,8 @@ _ZNKSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EE7_M_lessERKS2_:
 	callq _ZNKSt4lessIPSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EEEclES4_S4_
 	# SetupCalls(3451:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %r8
-	movq -40(%rbp), %r8
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	movb %bl, %al
-	movq -56(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16286,15 +15238,15 @@ _ZSt19__relocate_object_aI6LsItemS0_SaIS0_EEvPT_PT0_RT1_:
 	.___ZSt19__relocate_object_aI6LsItemS0_SaIS0_EEvPT_PT0_RT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(232 + 0, 16)
-	subq $240, %rsp
+	# upalign(216 + 0, 16)
+	subq $224, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -160(%rbp)
-	movq %r12, -168(%rbp)
-	movq %r13, -176(%rbp)
-	movq %r14, -184(%rbp)
-	movq %r15, -144(%rbp)
+	movq %rbx, -144(%rbp)
+	movq %r12, -152(%rbp)
+	movq %r13, -160(%rbp)
+	movq %r14, -168(%rbp)
+	movq %r15, -128(%rbp)
 	# LowerAlloca(6936:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -120(%rbp)
 	leaq -8(%rbp), %r15
@@ -16361,8 +15313,6 @@ _ZSt19__relocate_object_aI6LsItemS0_SaIS0_EEvPT_PT0_RT1_:
 	movq (%rcx), %rbx
 	# LowerLoad(6966:3).2: (^8) into ptr ^25
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -128(%rbp)
 	# SetupCalls(6967:3): move argument ptr nonnull dereferenceable(33) align 8 ^24
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -16370,8 +15320,6 @@ _ZSt19__relocate_object_aI6LsItemS0_SaIS0_EEvPT_PT0_RT1_:
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZN6LsItemC2EOS_
-	# Unclobber %rcx
-	movq -128(%rbp), %rcx
 	# LowerLoad(6968:3).2: (^16) into ptr ^26
 	movq (%r15), %rax
 	# LowerLoad(6969:3).2: (^15) into ptr ^27
@@ -16396,19 +15344,15 @@ _ZSt19__relocate_object_aI6LsItemS0_SaIS0_EEvPT_PT0_RT1_:
 	# LowerLoad(6977:3).2: (^5) into ptr ^31
 	movq -112(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -136(%rbp)
 	# SetupCalls(6978:3): move argument ptr nonnull dereferenceable(33) align 8 ^31
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZN6LsItemD2Ev
-	# Unclobber %rax
-	movq -136(%rbp), %rax
-	movq -144(%rbp), %r15
-	movq -184(%rbp), %r14
-	movq -176(%rbp), %r13
-	movq -168(%rbp), %r12
-	movq -160(%rbp), %rbx
+	movq -128(%rbp), %r15
+	movq -168(%rbp), %r14
+	movq -160(%rbp), %r13
+	movq -152(%rbp), %r12
+	movq -144(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16420,12 +15364,12 @@ _ZSt10__sv_checkmmPKc:
 	.___ZSt10__sv_checkmmPKc__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(2894:3): size = 8, type = i64*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(2895:3): size = 8, type = i64*, var = ^5
@@ -16456,10 +15400,6 @@ _ZSt10__sv_checkmmPKc:
 	movq (%r12), %rax
 	# LowerLoad(2908:3).2: (^4) into i64 ^13
 	movq (%r8), %rbx
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(2909:3): move argument ptr @.str.24
 	leaq .str.24(%rip), %rdi
 	# SetupCalls(2909:3): move argument ptr ^11
@@ -16473,15 +15413,11 @@ _ZSt10__sv_checkmmPKc:
 	movq %rbx, %rcx
 	movq $0, %rax
 	callq _ZSt24__throw_out_of_range_fmtPKcz@PLT
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	.___ZSt10__sv_checkmmPKc__M56:
 	# LowerLoad(2913:3).2: (^5) into i64 ^15
 	movq (%r12), %rax
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16493,11 +15429,11 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backEOS3_:
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backEOS3___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(1030:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1031:3): size = 8, type = ptr*, var = ^4
@@ -16510,8 +15446,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backEOS3_:
 	movq (%rax), %rbx
 	# LowerLoad(1035:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1036:3): move argument ptr nonnull dereferenceable(24) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -16521,9 +15455,7 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backEOS3_:
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS3_EEERS3_DpOT_
 	# SetupCalls(1036:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16631,13 +15563,13 @@ _ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4
 	.___ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISB_EEE3$_0EvT_SH_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -80(%rbp)
-	movq %r13, -64(%rbp)
+	movq %rbx, -64(%rbp)
+	movq %r12, -72(%rbp)
+	movq %r13, -56(%rbp)
 	# LowerAlloca(1768:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(1769:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
@@ -16666,8 +15598,6 @@ _ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4
 	# LowerGetelementptr(1778:3): type of ^12 is ptr*
 	# LowerStore(1779:3).9: mov ptr %rsi, (^12)
 	movq %rsi, (%rax)
-	# Clobber %rcx
-	movq %rcx, -56(%rbp)
 	# SetupCalls(1780:3): move argument ptr align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -16677,8 +15607,6 @@ _ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4
 	# SetupCalls(1780:3): move argument i64 8
 	movq $8, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
-	movq -56(%rbp), %rcx
 	# SetupCalls(1781:3): move argument ptr align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -16701,8 +15629,6 @@ _ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4
 	# LowerGetelementptr(1785:3): type of ^15 is ptr*
 	# LowerLoad(1786:3).2: (^15) into ptr ^16
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -56(%rbp)
 	# SetupCalls(1787:3): move argument ptr ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -16710,11 +15636,9 @@ _ZSt4sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEZ2lsRKS4
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_
-	# Unclobber %rcx
-	movq -56(%rbp), %rcx
-	movq -64(%rbp), %r13
-	movq -80(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -56(%rbp), %r13
+	movq -72(%rbp), %r12
+	movq -64(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16726,11 +15650,11 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathE:
 	.___ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(1489:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1490:3): size = 8, type = ptr*, var = ^4
@@ -16743,8 +15667,6 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathE:
 	movq (%rax), %rbx
 	# LowerLoad(1494:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(1495:3): move argument ptr nonnull dereferenceable(16) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -16757,9 +15679,7 @@ _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathE:
 	# SetupCalls(1495:3): move argument ptr null
 	movq $0, %rcx
 	callq _ZNSt10filesystem7__cxx1118directory_iteratorC2ERKNS0_4pathENS_17directory_optionsEPSt10error_code@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16771,11 +15691,11 @@ _ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv:
 	.___ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(3750:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(3751:3).9: mov ptr %rdi, (^2)
@@ -16787,21 +15707,17 @@ _ZNKSt10filesystem7__cxx114path8iterator11_M_is_multiEv:
 	# LowerGetelementptr(3753:3): type of ^4 is ptr*
 	# LowerLoad(3754:3).2: (^4) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(3755:3): move argument ptr nonnull dereferenceable(40) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt10filesystem7__cxx114path7_M_typeEv
 	# SetupCalls(3755:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# LowerIcmp(3756:3): i8 ^6 vs. intlike 0
 	cmpb $0, %bl
 	sete %al
 	andq $1, %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -16843,15 +15759,15 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(384 + 0, 16)
+	# upalign(376 + 0, 16)
 	subq $384, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -216(%rbp)
-	movq %r12, -240(%rbp)
-	movq %r13, -248(%rbp)
-	movq %r14, -256(%rbp)
-	movq %r15, -184(%rbp)
+	movq %rbx, -208(%rbp)
+	movq %r12, -232(%rbp)
+	movq %r13, -240(%rbp)
+	movq %r14, -248(%rbp)
+	movq %r15, -176(%rbp)
 	# LowerAlloca(3197:3): size = 8, type = ptr*, var = ^2
 	# Fixing source-to-dest leaq -8(%rbp), -168(%rbp)
 	leaq -8(%rbp), %r15
@@ -16971,15 +15887,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	# LowerGetelementptr(3239:3): type of ^31 is ptr*
 	# LowerLoad(3240:3).2: (^31) into ptr ^32
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -176(%rbp)
 	# SetupCalls(3241:3): move argument ptr nonnull dereferenceable(16) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq -120(%rbp), %rdi
 	# SetupCalls(3241:3): jump to function operand ^32
 	callq *%rax
-	# Unclobber %rax
-	movq -176(%rbp), %rax
 	# LowerLoad(3242:3).2: (^21) into ptr ^33
 	movq -120(%rbp), %rax
 	movq (%rax), %rbx
@@ -16989,15 +15901,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	# LowerGetelementptr(3243:3): type of ^34 is ptr*
 	# LowerLoad(3244:3).2: (^34) into ptr ^35
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -176(%rbp)
 	# SetupCalls(3245:3): move argument ptr nonnull dereferenceable(16) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq -120(%rbp), %rdi
 	# SetupCalls(3245:3): jump to function operand ^35
 	callq *%rax
-	# Unclobber %rax
-	movq -176(%rbp), %rax
 	jmp .___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M254
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M154:
 	# tt = Pointer, type = %"class.std::_Sp_counted_base"
@@ -17106,11 +16014,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv:
 	movq -120(%rbp), %rdi
 	callq _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE24_M_release_last_use_coldEv
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv__M254:
-	movq -184(%rbp), %r15
-	movq -256(%rbp), %r14
-	movq -248(%rbp), %r13
-	movq -240(%rbp), %r12
-	movq -216(%rbp), %rbx
+	movq -176(%rbp), %r15
+	movq -248(%rbp), %r14
+	movq -240(%rbp), %r13
+	movq -232(%rbp), %r12
+	movq -208(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17122,14 +16030,14 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(176 + 0, 16)
+	# upalign(168 + 0, 16)
 	subq $176, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -104(%rbp)
-	movq %r13, -112(%rbp)
-	movq %r14, -96(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -96(%rbp)
+	movq %r13, -104(%rbp)
+	movq %r14, -88(%rbp)
 	# LowerAlloca(1646:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1647:3): size = 8, type = ptr*, var = ^4
@@ -17152,20 +16060,16 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNKSt10filesystem7__cxx114path5emptyEv
 	# SetupCalls(1653:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	cmpb $0, %bl
 	jne .___ZNKSt10filesystem7__cxx114path8filenameEv__M38
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M60
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M38:
-	# Clobber %rdi
-	movq %rdi, -72(%rbp)
 	# SetupCalls(1657:3): move argument ptr nonnull dereferenceable(40) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -72(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	callq _ZNSt10filesystem7__cxx114pathC2Ev
-	# Unclobber %rdi
-	movq -72(%rbp), %rdi
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M391
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M60:
 	# Clobber %rdi
@@ -17176,7 +16080,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNKSt10filesystem7__cxx114path7_M_typeEv
 	# SetupCalls(1661:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# LowerIcmp(1662:3): i8 ^11 vs. intlike 3
 	cmpb $3, %bl
@@ -17186,17 +16090,13 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	jne .___ZNKSt10filesystem7__cxx114path8filenameEv__M88
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M112
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M88:
-	# Clobber %rdi
-	movq %rdi, -72(%rbp)
 	# SetupCalls(1666:3): move argument ptr nonnull dereferenceable(40) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -72(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(1666:3): move argument ptr nonnull dereferenceable(40) align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rsi
 	callq _ZNSt10filesystem7__cxx114pathC2ERKS1_
-	# Unclobber %rdi
-	movq -72(%rbp), %rdi
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M391
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M112:
 	# Clobber %rdi
@@ -17207,7 +16107,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNKSt10filesystem7__cxx114path7_M_typeEv
 	# SetupCalls(1670:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# LowerIcmp(1671:3): i8 ^15 vs. intlike 0
 	cmpb $0, %bl
@@ -17223,17 +16123,13 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	# LowerGetelementptr(1675:3): type of ^18 is %"class.std::__cxx11::basic_string"*
 	# Clobber %rdi
 	movq %rdi, -72(%rbp)
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(1676:3): move argument ptr nonnull dereferenceable(32) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4backEv@PLT
 	# SetupCalls(1676:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# LowerLoad(1677:3).2: (^19) into i8 ^20
 	movb (%rbx), %cl
@@ -17246,14 +16142,10 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	jne .___ZNKSt10filesystem7__cxx114path8filenameEv__M175
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M197
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M175:
-	# Clobber %rdi
-	movq %rdi, -72(%rbp)
 	# SetupCalls(1683:3): move argument ptr nonnull dereferenceable(40) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -72(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	callq _ZNSt10filesystem7__cxx114pathC2Ev
-	# Unclobber %rdi
-	movq -72(%rbp), %rdi
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M391
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M197:
 	# Clobber %rdi
@@ -17265,7 +16157,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rsi
 	callq _ZNKSt10filesystem7__cxx114path3endEv
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# Clobber %rdi
 	movq %rdi, -72(%rbp)
@@ -17275,7 +16167,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNSt10filesystem7__cxx114path8iteratormmEv
 	# SetupCalls(1688:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# Clobber %rdi
 	movq %rdi, -72(%rbp)
@@ -17288,7 +16180,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	# SetupCalls(1689:3): move argument i64 24
 	movq $24, %rdx
 	callq memcpy@PLT
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# Clobber %rdi
 	movq %rdi, -72(%rbp)
@@ -17298,7 +16190,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNKSt10filesystem7__cxx114path8iteratorptEv
 	# SetupCalls(1690:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# Clobber %rdi
 	movq %rdi, -72(%rbp)
@@ -17308,7 +16200,7 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNKSt10filesystem7__cxx114path7_M_typeEv
 	# SetupCalls(1691:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
 	# LowerIcmp(1692:3): i8 ^27 vs. intlike 3
 	cmpb $3, %bl
@@ -17326,35 +16218,27 @@ _ZNKSt10filesystem7__cxx114path8filenameEv:
 	callq _ZNKSt10filesystem7__cxx114path8iteratordeEv
 	# SetupCalls(1696:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -72(%rbp), %rdi
-	# Clobber %rdi
-	movq %rdi, -72(%rbp)
 	# SetupCalls(1697:3): move argument ptr nonnull dereferenceable(40) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -72(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(1697:3): move argument ptr nonnull dereferenceable(40) align 8 ^30
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZNSt10filesystem7__cxx114pathC2ERKS1_
-	# Unclobber %rdi
-	movq -72(%rbp), %rdi
 	jmp .___ZNKSt10filesystem7__cxx114path8filenameEv__M391
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M366:
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M367:
-	# Clobber %rdi
-	movq %rdi, -72(%rbp)
 	# SetupCalls(1710:3): move argument ptr nonnull dereferenceable(40) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -72(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	callq _ZNSt10filesystem7__cxx114pathC2Ev
-	# Unclobber %rdi
-	movq -72(%rbp), %rdi
 	.___ZNKSt10filesystem7__cxx114path8filenameEv__M391:
-	movq -96(%rbp), %r14
-	movq -112(%rbp), %r13
-	movq -104(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -88(%rbp), %r14
+	movq -104(%rbp), %r13
+	movq -96(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17394,12 +16278,12 @@ _ZNKSt10filesystem7__cxx114path3endEv:
 	.___ZNKSt10filesystem7__cxx114path3endEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(3515:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerStore(3516:3).9: mov ptr %rsi, (^3)
@@ -17414,7 +16298,7 @@ _ZNKSt10filesystem7__cxx114path3endEv:
 	callq _ZNKSt10filesystem7__cxx114path7_M_typeEv
 	# SetupCalls(3518:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -16(%rbp), %rdi
 	# LowerIcmp(3519:3): i8 ^5 vs. intlike 0
 	cmpb $0, %bl
@@ -17431,23 +16315,17 @@ _ZNKSt10filesystem7__cxx114path3endEv:
 	# LowerGetelementptr(3523:3): type of ^8 is %"struct.std::filesystem::__cxx11::path::_List"*
 	# Clobber %rdi
 	movq %rdi, -16(%rbp)
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3524:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt10filesystem7__cxx114path5_List3endEv@PLT
 	# SetupCalls(3524:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -16(%rbp), %rdi
-	# Clobber %rdi
-	movq %rdi, -16(%rbp)
 	# SetupCalls(3525:3): move argument ptr nonnull dereferenceable(17) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -16(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(3525:3): move argument ptr ^4
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rsi
@@ -17455,15 +16333,11 @@ _ZNKSt10filesystem7__cxx114path3endEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_PKNS1_5_CmptE
-	# Unclobber %rdi
-	movq -16(%rbp), %rdi
 	jmp .___ZNKSt10filesystem7__cxx114path3endEv__M115
 	.___ZNKSt10filesystem7__cxx114path3endEv__M88:
-	# Clobber %rdi
-	movq %rdi, -16(%rbp)
 	# SetupCalls(3529:3): move argument ptr nonnull dereferenceable(17) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -16(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(3529:3): move argument ptr ^4
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rsi
@@ -17471,11 +16345,9 @@ _ZNKSt10filesystem7__cxx114path3endEv:
 	movq $1, %rdx
 	andq $1, %rdx
 	callq _ZNSt10filesystem7__cxx114path8iteratorC2EPKS1_b
-	# Unclobber %rdi
-	movq -16(%rbp), %rdi
 	.___ZNKSt10filesystem7__cxx114path3endEv__M115:
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17514,11 +16386,11 @@ _ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EE
 	.___ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EE12owner_beforeIS2_EEbRKS_IT_LS4_2EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(3426:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(3427:3): size = 8, type = ptr*, var = ^4
@@ -17539,8 +16411,6 @@ _ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EE
 	# LowerGetelementptr(3433:3): struct-type: ptr ^7 -> ^8, indices=0,1
 	addq $8, %rax
 	# LowerGetelementptr(3433:3): type of ^8 is %"class.std::__shared_count"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(3434:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -17550,10 +16420,8 @@ _ZNKSt12__shared_ptrINSt10filesystem7__cxx114_DirELN9__gnu_cxx12_Lock_policyE2EE
 	callq _ZNKSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EE7_M_lessERKS2_
 	# SetupCalls(3434:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movb %bl, %al
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17599,12 +16467,12 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_implC2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r15, -48(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r15, -40(%rbp)
 	# LowerAlloca(2664:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(2665:3): size = 8, type = ptr*, var = ^3
@@ -17624,16 +16492,12 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_
 	# LowerStore(2671:3).9: mov ptr ^6, (^2)
 	# LowerLoad(2672:3).2: (^2) into ptr ^7
 	movq (%rbx), %rax
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
 	# SetupCalls(2673:3): move argument ptr nonnull dereferenceable(24) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_Vector_impl_dataC2Ev
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
-	movq -48(%rbp), %r15
-	movq -40(%rbp), %rbx
+	movq -40(%rbp), %r15
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17645,12 +16509,12 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE12_Vector_implC2Ev:
 	.___ZNSt12_Vector_baseI6LsItemSaIS0_EE12_Vector_implC2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r15, -48(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r15, -40(%rbp)
 	# LowerAlloca(3022:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(3023:3): size = 8, type = ptr*, var = ^3
@@ -17670,16 +16534,12 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE12_Vector_implC2Ev:
 	# LowerStore(3029:3).9: mov ptr ^6, (^2)
 	# LowerLoad(3030:3).2: (^2) into ptr ^7
 	movq (%rbx), %rax
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
 	# SetupCalls(3031:3): move argument ptr nonnull dereferenceable(24) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt12_Vector_baseI6LsItemSaIS0_EE17_Vector_impl_dataC2Ev
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
-	movq -48(%rbp), %r15
-	movq -40(%rbp), %rbx
+	movq -40(%rbp), %r15
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17714,12 +16574,12 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_max_sizeERKS
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_max_sizeERKS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(96 + 0, 16)
+	# upalign(88 + 0, 16)
 	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r15, -72(%rbp)
+	movq %rbx, -56(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(4987:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(4988:3): size = 8, type = ptr*, var = ^3
@@ -17757,8 +16617,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_max_sizeERKS
 	# LowerStore(5002:3).3: mov $imm, (^7)
 	movabsq $576460752303423487, %rcx
 	movq %rcx, (%rbx)
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(5003:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -17768,12 +16626,10 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_max_sizeERKS
 	callq _ZSt3minImERKT_S2_S2_
 	# SetupCalls(5003:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -56(%rbp), %rax
 	# LowerLoad(5004:3).2: (^12) into i64 ^13
 	movq (%rbx), %rax
-	movq -72(%rbp), %r15
-	movq -64(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -17906,15 +16762,15 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	.___ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2IRA3_KcRSF_Lb1EEEOT_OT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(136 + 0, 16)
-	subq $144, %rsp
+	# upalign(112 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r14, -112(%rbp)
-	movq %r15, -120(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
+	movq %r13, -80(%rbp)
+	movq %r14, -88(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(2261:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(2262:3): size = 8, type = ptr*, var = ^5
@@ -17957,10 +16813,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerStore(2277:3).9: mov ptr ^15, (^4)
 	# LowerLoad(2278:3).2: (^4) into ptr ^16
 	movq (%r8), %rax
-	# Clobber %rdx
-	movq %rdx, -64(%rbp)
-	# Clobber %rcx
-	movq %rcx, -72(%rbp)
 	# SetupCalls(2279:3): move argument ptr nonnull dereferenceable(32) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -17971,22 +16823,14 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_
-	# Unclobber %rcx
-	movq -72(%rbp), %rcx
-	# Unclobber %rdx
-	movq -64(%rbp), %rdx
 	# LowerStore(2280:3).9: mov %"class.std::allocator.0"* ^10, (^5)
 	movq %r14, (%r12)
 	# LowerLoad(2281:3).2: (^5) into ptr ^17
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2282:3): move argument ptr nonnull dereferenceable(1) align 1 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(2283:3): struct-type: ptr ^11 -> ^18, indices=0,1
 	movq %r15, %rbx
@@ -17994,8 +16838,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerGetelementptr(2283:3): type of ^18 is %"class.std::function"*
 	# LowerLoad(2284:3).2: (^9) into ptr ^19
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2285:3): move argument ptr nonnull dereferenceable(32) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -18003,13 +16845,11 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT_
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	movq -120(%rbp), %r15
-	movq -112(%rbp), %r14
-	movq -104(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -88(%rbp), %r14
+	movq -80(%rbp), %r13
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -18057,11 +16897,11 @@ _ZSt18uninitialized_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S
 	.___ZSt18uninitialized_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_S7___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(5013:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r9
 	# LowerAlloca(5014:3): size = 8, type = ptr*, var = ^5
@@ -18088,12 +16928,6 @@ _ZSt18uninitialized_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S
 	movq (%r8), %rcx
 	# LowerLoad(5025:3).2: (^6) into ptr ^11
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
-	# Clobber %r8
-	movq %r8, -48(%rbp)
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(5026:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -18106,14 +16940,8 @@ _ZSt18uninitialized_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S
 	callq _ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS5_EET0_T_SA_S9_
 	# SetupCalls(5026:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -56(%rbp), %rax
-	# Unclobber %r8
-	movq -48(%rbp), %r8
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	movq %rbx, %rax
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -18217,11 +17045,11 @@ _ZNSt10filesystem7__cxx114pathD2Ev:
 	.___ZNSt10filesystem7__cxx114pathD2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(1754:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(1755:3).9: mov ptr %rdi, (^2)
@@ -18233,27 +17061,19 @@ _ZNSt10filesystem7__cxx114pathD2Ev:
 	movq %rbx, %rax
 	addq $32, %rax
 	# LowerGetelementptr(1757:3): type of ^4 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(1758:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5_ListD2Ev
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(1759:3): struct-type: ptr ^3 -> ^5, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(1759:3): type of ^5 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(1760:3): move argument ptr nonnull dereferenceable(32) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev@PLT
-	# Unclobber %rax
-	movq -16(%rbp), %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -18508,13 +17328,13 @@ _ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112ba
 	.___ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112basic_stringIT_T0_T1_EERKSA___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -64(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -56(%rbp)
 	# LowerAlloca(3762:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(3763:3): size = 8, type = ptr*, var = ^5
@@ -18535,17 +17355,13 @@ _ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112ba
 	# LowerGetelementptr(3769:3): type of ^8 is %"class.std::__cxx11::basic_string"*
 	# Clobber %rdi
 	movq %rdi, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(3770:3): move argument ptr nonnull dereferenceable(32) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv@PLT
 	# SetupCalls(3770:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -32(%rbp), %rdi
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(3771:3): struct-type: ptr ^7 -> ^10, indices=0,0
@@ -18553,27 +17369,19 @@ _ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112ba
 	# LowerGetelementptr(3771:3): type of ^10 is %"class.std::__cxx11::basic_string"*
 	# Clobber %rdi
 	movq %rdi, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(3772:3): move argument ptr nonnull dereferenceable(32) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6lengthEv@PLT
 	# SetupCalls(3772:3): move i64 result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -32(%rbp), %rdi
 	# LowerLoad(3773:3).2: (^6) into ptr ^12
 	movq (%rbx), %rax
-	# Clobber %rdi
-	movq %rdi, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(3774:3): move argument ptr nonnull dereferenceable(32) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -32(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(3774:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rsi
@@ -18584,13 +17392,9 @@ _ZNKSt10filesystem7__cxx114path6stringIcSt11char_traitsIcESaIcEEENSt7__cxx1112ba
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rcx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcmRKS3_@PLT
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rdi
-	movq -32(%rbp), %rdi
-	movq -64(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -56(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -18632,14 +17436,14 @@ _ZSt12__relocate_aIP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	.___ZSt12__relocate_aIP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(104 + 0, 16)
-	subq $112, %rsp
+	# upalign(88 + 0, 16)
+	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -64(%rbp)
-	movq %r14, -80(%rbp)
+	movq %rbx, -56(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r13, -48(%rbp)
+	movq %r14, -64(%rbp)
 	# LowerAlloca(6865:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %rax
 	# LowerAlloca(6866:3): size = 8, type = ptr*, var = ^6
@@ -18658,44 +17462,30 @@ _ZSt12__relocate_aIP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	movq %rcx, (%rbx)
 	# LowerLoad(6873:3).2: (^5) into ptr ^9
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
 	# SetupCalls(6874:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt12__niter_baseIP6LsItemET_S2_
 	# SetupCalls(6874:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	# LowerLoad(6875:3).2: (^6) into ptr ^11
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(6876:3): move argument ptr ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt12__niter_baseIP6LsItemET_S2_
 	# SetupCalls(6876:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	# LowerLoad(6877:3).2: (^7) into ptr ^13
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(6878:3): move argument ptr ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt12__niter_baseIP6LsItemET_S2_
 	# SetupCalls(6878:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	# LowerLoad(6879:3).2: (^8) into ptr ^15
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(6880:3): move argument ptr ^10
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -18711,13 +17501,11 @@ _ZSt12__relocate_aIP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_:
 	callq _ZSt14__relocate_a_1IP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_
 	# SetupCalls(6880:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	movq %rbx, %rax
-	movq -80(%rbp), %r14
-	movq -64(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -64(%rbp), %r14
+	movq -48(%rbp), %r13
+	movq -40(%rbp), %r12
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -18729,15 +17517,15 @@ _Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(168 + 0, 16)
-	subq $176, %rsp
+	# upalign(160 + 0, 16)
+	subq $160, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -136(%rbp)
-	movq %r12, -104(%rbp)
-	movq %r13, -128(%rbp)
-	movq %r14, -112(%rbp)
-	movq %r15, -120(%rbp)
+	movq %rbx, -128(%rbp)
+	movq %r12, -96(%rbp)
+	movq %r13, -120(%rbp)
+	movq %r14, -104(%rbp)
+	movq %r15, -112(%rbp)
 	# LowerAlloca(1886:3): size = 4, type = i32*, var = ^2
 	leaq -4(%rbp), %r12
 	# LowerAlloca(1887:3): size = 8, type = ptr*, var = ^3
@@ -18750,16 +17538,12 @@ _Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq %rdi, (%r14)
 	# LowerLoad(1891:3).2: (^3) into ptr ^6
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -96(%rbp)
 	# SetupCalls(1892:3): move argument ptr nonnull dereferenceable(24) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1892:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -96(%rbp), %rax
 	# LowerIcmp(1893:3): i64 ^7 vs. intlike 1
 	cmpq $1, %rbx
 	setne %al
@@ -18777,16 +17561,12 @@ _Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	movq %rax, %r13
 	# LowerLoad(1898:3).2: (^3) into ptr ^11
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -96(%rbp)
 	# SetupCalls(1899:3): move argument ptr nonnull dereferenceable(24) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE4sizeEv
 	# SetupCalls(1899:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -96(%rbp), %rax
 	# SetupCalls(1900:3): move argument ptr nonnull dereferenceable(8) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -18850,11 +17630,11 @@ _Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE:
 	.___Z3pwdRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE__M284:
 	# LowerLoad(1916:3).2: (^2) into i32 ^19
 	movl (%r12), %eax
-	movq -120(%rbp), %r15
-	movq -112(%rbp), %r14
-	movq -128(%rbp), %r13
-	movq -104(%rbp), %r12
-	movq -136(%rbp), %rbx
+	movq -112(%rbp), %r15
+	movq -104(%rbp), %r14
+	movq -120(%rbp), %r13
+	movq -96(%rbp), %r12
+	movq -128(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -19072,30 +17852,26 @@ _ZNSt10filesystem12is_directoryENS_11file_statusE:
 	.___ZNSt10filesystem12is_directoryENS_11file_statusE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(3978:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(3979:3).9: mov i64 %rdi, (^2)
 	movq %rdi, (%rax)
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(3980:3): move argument ptr nonnull dereferenceable(8) align 4 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt10filesystem11file_status4typeEv
 	# SetupCalls(3980:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# LowerIcmp(3981:3): i8 ^3 vs. intlike 2
 	cmpb $2, %bl
 	sete %al
 	andq $1, %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -19140,12 +17916,12 @@ _ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNS
 	.___ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNSt9enable_ifIX13__is_path_srcIT_EES1_E4typeERKS8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(80 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -80(%rbp)
-	movq %r12, -72(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
 	# LowerAlloca(1411:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(1412:3): size = 8, type = ptr*, var = ^4
@@ -19160,8 +17936,6 @@ _ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNS
 	movq (%rax), %rbx
 	# LowerLoad(1417:3).2: (^4) into ptr ^7
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -64(%rbp)
 	# SetupCalls(1418:3): move argument ptr nonnull dereferenceable(40) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -19172,8 +17946,6 @@ _ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNS
 	movq $2, %rdx
 	andq $255, %rdx
 	callq _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EERKT_NS1_6formatE
-	# Unclobber %rax
-	movq -64(%rbp), %rax
 	# SetupCalls(1419:3): move argument ptr nonnull dereferenceable(40) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -19188,8 +17960,8 @@ _ZNSt10filesystem7__cxx114pathaSISt17basic_string_viewIcSt11char_traitsIcEEEERNS
 	movq %r12, %rdi
 	callq _ZNSt10filesystem7__cxx114pathD2Ev
 	movq %rbx, %rax
-	movq -72(%rbp), %r12
-	movq -80(%rbp), %rbx
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -19201,12 +17973,12 @@ _ZNSt11char_traitsIcE7compareEPKcS2_m:
 	.___ZNSt11char_traitsIcE7compareEPKcS2_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -56(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
 	# LowerAlloca(2858:3): size = 4, type = i32*, var = ^4
 	leaq -4(%rbp), %r12
 	# LowerAlloca(2859:3): size = 8, type = ptr*, var = ^5
@@ -19241,10 +18013,6 @@ _ZNSt11char_traitsIcE7compareEPKcS2_m:
 	movq (%rbx), %rdx
 	# LowerLoad(2876:3).2: (^7) into i64 ^14
 	movq (%rcx), %rbx
-	# Clobber %rdx
-	movq %rdx, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(2877:3): move argument ptr ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -19257,17 +18025,13 @@ _ZNSt11char_traitsIcE7compareEPKcS2_m:
 	callq memcmp@PLT
 	# SetupCalls(2877:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %rdx
-	movq -40(%rbp), %rdx
 	# LowerStore(2878:3).9: mov i32 ^15, (^4)
 	movl %ebx, (%r12)
 	.___ZNSt11char_traitsIcE7compareEPKcS2_m__M60:
 	# LowerLoad(2882:3).2: (^4) into i32 ^17
 	movl (%r12), %eax
-	movq -56(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -19321,15 +18085,15 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(752 + 0, 16)
-	subq $752, %rsp
+	# upalign(728 + 0, 16)
+	subq $736, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -368(%rbp)
-	movq %r12, -360(%rbp)
-	movq %r13, -408(%rbp)
-	movq %r14, -416(%rbp)
-	movq %r15, -344(%rbp)
+	movq %rbx, -344(%rbp)
+	movq %r12, -336(%rbp)
+	movq %r13, -384(%rbp)
+	movq %r14, -392(%rbp)
+	movq %r15, -320(%rbp)
 	# LowerAlloca(797:3): size = 8, type = ptr*, var = ^7
 	# Fixing source-to-dest leaq -8(%rbp), -304(%rbp)
 	leaq -8(%rbp), %r15
@@ -19446,7 +18210,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	callq _ZNKSt17basic_string_viewIcSt11char_traitsIcEE5emptyEv
 	# SetupCalls(826:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	cmpb $0, %bl
 	jne .___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M93
@@ -19462,16 +18226,12 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# SetupCalls(830:3): move argument i64 24
 	movq $24, %rdx
 	callq memset@PLT
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
-	# Clobber %rdi
-	movq %rdi, -312(%rbp)
 	# SetupCalls(831:3): move argument ptr nonnull dereferenceable(24) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -312(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2Ev
-	# Unclobber %rdi
-	movq -312(%rbp), %rdi
 	jmp .___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M699
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M140:
 	# Clobber %rdi
@@ -19485,7 +18245,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# SetupCalls(835:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(836:3): struct-type: ptr ^15 -> ^33, indices=0,0
@@ -19502,8 +18262,6 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	movq (%rax), %rcx
 	# Clobber %rdi
 	movq %rdi, -312(%rbp)
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
 	# SetupCalls(840:3): move argument ptr nonnull dereferenceable(16) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq -208(%rbp), %rdi
@@ -19518,9 +18276,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	callq _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findES2_m
 	# SetupCalls(840:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# LowerStore(841:3).9: mov i64 ^37, (^14)
 	movq -232(%rbp), %rax
@@ -19542,8 +18298,6 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# LowerGetelementptr(847:3): type of ^41 is %"class.std::basic_string_view"*
 	# Clobber %rdi
 	movq %rdi, -312(%rbp)
-	# Clobber %rax
-	movq %rax, -328(%rbp)
 	# SetupCalls(848:3): move argument ptr align 8 ^41
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -19553,9 +18307,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# SetupCalls(848:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -328(%rbp), %rax
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# tt = Pointer, type = %"class.std::initializer_list"
 	# LowerGetelementptr(849:3): struct-type: ptr ^16 -> ^42, indices=0,0
@@ -19599,13 +18351,9 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# LowerGetelementptr(860:3): type of ^49 is i64*
 	# LowerLoad(861:3).2: (^49) into i64 ^50
 	movq (%rax), %rbx
-	# Clobber %rdi
-	movq %rdi, -312(%rbp)
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
 	# SetupCalls(862:3): move argument ptr nonnull dereferenceable(24) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -312(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	# SetupCalls(862:3): move argument ptr ^48
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
@@ -19616,10 +18364,6 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# Fixed movzx with identical source and destination widths
 	movq -296(%rbp), %rcx
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ESt16initializer_listIS3_ERKS4_
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
-	# Unclobber %rdi
-	movq -312(%rbp), %rdi
 	# LowerStore(863:3).9: mov %"class.std::allocator"* ^18, (^8)
 	movq -280(%rbp), %rax
 	# Fixing source-to-dest movq -296(%rbp), (%rax)
@@ -19628,14 +18372,10 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# LowerLoad(864:3).2: (^8) into ptr ^51
 	movq -280(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -328(%rbp)
 	# SetupCalls(865:3): move argument ptr nonnull dereferenceable(1) align 1 ^51
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEED2Ev
-	# Unclobber %rax
-	movq -328(%rbp), %rax
 	jmp .___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M699
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M336:
 	# LowerStore(869:3).3: mov $imm, (^19)
@@ -19647,7 +18387,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# Semiunclobber live %rdi into %rdi
 	movq -312(%rbp), %rdi
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2Ev
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# Clobber %rdi
 	movq %rdi, -312(%rbp)
@@ -19657,7 +18397,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	callq _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4sizeEv
 	# SetupCalls(871:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# LowerStore(872:3).9: mov i64 ^53, (^20)
 	movq -248(%rbp), %rax
@@ -19683,7 +18423,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# Multireg move: <%hax %hdx> -> <%hbx %hr12>
 	movq %rax, %rbx
 	movq %rdx, %r12
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(876:3): struct-type: ptr ^22 -> ^56, indices=0,0
@@ -19715,7 +18455,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# Fixed movzx with identical source and destination widths
 	movq -288(%rbp), %rsi
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backEOS3_
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M460:
 	# LowerLoad(886:3).2: (^14) into i64 ^61
@@ -19747,7 +18487,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# SetupCalls(893:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# LowerLoad(894:3).2: (^21) into i64 ^65
 	movq -256(%rbp), %rax
@@ -19773,12 +18513,6 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	movq (%rbx), %r8
 	# Clobber %rdi
 	movq %rdi, -312(%rbp)
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
-	# Clobber %r8
-	movq %r8, -336(%rbp)
-	# Clobber %rax
-	movq %rax, -328(%rbp)
 	# SetupCalls(901:3): move argument ptr nonnull dereferenceable(16) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq -208(%rbp), %rdi
@@ -19794,13 +18528,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	callq _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findES2_m
 	# SetupCalls(901:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -328(%rbp), %rax
-	# Unclobber %r8
-	movq -336(%rbp), %r8
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# LowerStore(902:3).9: mov i64 ^72, (^14)
 	movq -232(%rbp), %rax
@@ -19831,8 +18559,6 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	subq %rax, %rbx
 	# Clobber %rdi
 	movq %rdi, -312(%rbp)
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
 	# SetupCalls(911:3): move argument ptr nonnull dereferenceable(16) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq -208(%rbp), %rdi
@@ -19847,9 +18573,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# Multireg move: <%hax %hdx> -> <%hr12 %hr13>
 	movq %rax, %r12
 	movq %rdx, %r13
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(912:3): struct-type: ptr ^24 -> ^82, indices=0,0
@@ -19880,7 +18604,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	callq _ZNKSt17basic_string_viewIcSt11char_traitsIcEE5emptyEv
 	# SetupCalls(918:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	cmpb $0, %bl
 	jne .___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M639
@@ -19904,7 +18628,7 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	# Fixed movzx with identical source and destination widths
 	movq -272(%rbp), %rsi
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE9push_backERKS3_
-	# Unclobber %rdi
+	# Unclobber %rdi, live inside %rdi:0
 	movq -312(%rbp), %rdi
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M670:
 	jmp .___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M460
@@ -19918,21 +18642,17 @@ _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b:
 	cmpb $0, %al
 	jne .___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M698
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M676:
-	# Clobber %rdi
-	movq %rdi, -312(%rbp)
 	# SetupCalls(939:3): move argument ptr nonnull dereferenceable(24) align 8 %rdi
-	# Semiunclobber live %rdi into %rdi
-	movq -312(%rbp), %rdi
+	# Semiunclobber non-live %rdi into %rdi
+	movq %rdi, %rdi
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev
-	# Unclobber %rdi
-	movq -312(%rbp), %rdi
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M698:
 	.___Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b__M699:
-	movq -344(%rbp), %r15
-	movq -416(%rbp), %r14
-	movq -408(%rbp), %r13
-	movq -360(%rbp), %r12
-	movq -368(%rbp), %rbx
+	movq -320(%rbp), %r15
+	movq -392(%rbp), %r14
+	movq -384(%rbp), %r13
+	movq -336(%rbp), %r12
+	movq -344(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -20230,15 +18950,15 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev:
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(136 + 0, 16)
-	subq $144, %rsp
+	# upalign(128 + 0, 16)
+	subq $128, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -120(%rbp)
-	movq %r13, -72(%rbp)
-	movq %r14, -80(%rbp)
-	movq %r15, -64(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -112(%rbp)
+	movq %r13, -64(%rbp)
+	movq %r14, -72(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(1139:3): size = 8, type = ptr*, var = ^2
 	# Fixing source-to-dest leaq -8(%rbp), -48(%rbp)
 	leaq -8(%rbp), %r15
@@ -20292,8 +19012,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev:
 	movq (%rbx), %rax
 	# LowerLoad(1156:3).2: (^3) into ptr ^15
 	movq (%r13), %rbx
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(1157:3): move argument ptr ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -20301,17 +19019,15 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZSt8_DestroyIPSt17basic_string_viewIcSt11char_traitsIcEEEvT_S5_
-	# Unclobber %rax
-	movq -56(%rbp), %rax
 	# SetupCalls(1158:3): move argument ptr nonnull dereferenceable(24) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq -40(%rbp), %rdi
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev
-	movq -64(%rbp), %r15
-	movq -80(%rbp), %r14
-	movq -72(%rbp), %r13
-	movq -120(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -72(%rbp), %r14
+	movq -64(%rbp), %r13
+	movq -112(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -20323,13 +19039,13 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	.___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -56(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
+	movq %r13, -40(%rbp)
 	# LowerAlloca(4022:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(4023:3): size = 8, type = ptr*, var = ^4
@@ -20344,8 +19060,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# LowerGetelementptr(4027:3): struct-type: ptr ^5 -> ^6, indices=0
 	movq %rbx, %rax
 	# LowerGetelementptr(4027:3): type of ^6 is i8*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4028:3): move argument ptr align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -20354,8 +19068,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# SetupCalls(4028:3): move argument i64 24
 	movq $24, %rdx
 	callq memset@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# SetupCalls(4029:3): move argument ptr nonnull dereferenceable(24) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -20369,16 +19081,12 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	movq $0, (%rax)
 	# LowerLoad(4032:3).2: (^4) into ptr ^8
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4033:3): move argument ptr ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE21_M_not_empty_functionISA_EEbPT_
 	# SetupCalls(4033:3): move i1 result from %rax
 	movb %al, %r13b
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	cmpb $0, %r13b
 	jne .___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT___M93
 	jmp .___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT___M141
@@ -20389,10 +19097,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# LowerGetelementptr(4037:3): type of ^11 is %"union.std::_Any_data"*
 	# LowerLoad(4038:3).2: (^4) into ptr ^12
 	movq (%r12), %rax
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4039:3): move argument ptr nonnull dereferenceable(16) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -20400,10 +19104,6 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE15_M_init_functorIRSA_EEvRSt9_Any_dataOT_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# tt = Pointer, type = %"class.std::function"
 	# LowerGetelementptr(4040:3): struct-type: ptr ^5 -> ^13, indices=0,1
 	movq %rbx, %rax
@@ -20423,9 +19123,9 @@ _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEE
 	# LowerStore(4043:3).9: mov ptr ^17, (^14)
 	movq %rbx, (%rax)
 	.___ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT___M141:
-	movq -56(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -40(%rbp), %r13
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -20437,30 +19137,26 @@ _ZNSt10filesystem12status_knownENS_11file_statusE:
 	.___ZNSt10filesystem12status_knownENS_11file_statusE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(2993:3): size = 8, type = %"class.std::filesystem::file_status"*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(2994:3).9: mov i64 %rdi, (^2)
 	movq %rdi, (%rax)
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(2995:3): move argument ptr nonnull dereferenceable(8) align 4 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt10filesystem11file_status4typeEv
 	# SetupCalls(2995:3): move i8 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# LowerIcmp(2996:3): i8 ^3 vs. intlike 0
 	cmpb $0, %bl
 	setne %al
 	andq $1, %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -20472,11 +19168,11 @@ _ZSt8_DestroyIPSt17basic_string_viewIcSt11char_traitsIcEEEvT_S5_:
 	.___ZSt8_DestroyIPSt17basic_string_viewIcSt11char_traitsIcEEEvT_S5___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(5132:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5133:3): size = 8, type = ptr*, var = ^4
@@ -20489,8 +19185,6 @@ _ZSt8_DestroyIPSt17basic_string_viewIcSt11char_traitsIcEEEvT_S5_:
 	movq (%rax), %rbx
 	# LowerLoad(5137:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5138:3): move argument ptr ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -20498,9 +19192,7 @@ _ZSt8_DestroyIPSt17basic_string_viewIcSt11char_traitsIcEEEvT_S5_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt12_Destroy_auxILb1EE9__destroyIPSt17basic_string_viewIcSt11char_traitsIcEEEEvT_S7_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -20512,15 +19204,15 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	.___ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2IRA6_KcRSF_Lb1EEEOT_OT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(136 + 0, 16)
-	subq $144, %rsp
+	# upalign(112 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r14, -112(%rbp)
-	movq %r15, -120(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
+	movq %r13, -80(%rbp)
+	movq %r14, -88(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(2351:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(2352:3): size = 8, type = ptr*, var = ^5
@@ -20563,10 +19255,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerStore(2367:3).9: mov ptr ^15, (^4)
 	# LowerLoad(2368:3).2: (^4) into ptr ^16
 	movq (%r8), %rax
-	# Clobber %rdx
-	movq %rdx, -64(%rbp)
-	# Clobber %rcx
-	movq %rcx, -72(%rbp)
 	# SetupCalls(2369:3): move argument ptr nonnull dereferenceable(32) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -20577,22 +19265,14 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_
-	# Unclobber %rcx
-	movq -72(%rbp), %rcx
-	# Unclobber %rdx
-	movq -64(%rbp), %rdx
 	# LowerStore(2370:3).9: mov %"class.std::allocator.0"* ^10, (^5)
 	movq %r14, (%r12)
 	# LowerLoad(2371:3).2: (^5) into ptr ^17
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2372:3): move argument ptr nonnull dereferenceable(1) align 1 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(2373:3): struct-type: ptr ^11 -> ^18, indices=0,1
 	movq %r15, %rbx
@@ -20600,8 +19280,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerGetelementptr(2373:3): type of ^18 is %"class.std::function"*
 	# LowerLoad(2374:3).2: (^9) into ptr ^19
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2375:3): move argument ptr nonnull dereferenceable(32) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -20609,13 +19287,11 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT_
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	movq -120(%rbp), %r15
-	movq -112(%rbp), %r14
-	movq -104(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -88(%rbp), %r14
+	movq -80(%rbp), %r13
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -20666,15 +19342,15 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm:
 	.___ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(392 + 0, 16)
-	subq $400, %rsp
+	# upalign(376 + 0, 16)
+	subq $384, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -136(%rbp)
-	movq %r12, -176(%rbp)
-	movq %r13, -184(%rbp)
-	movq %r14, -168(%rbp)
-	movq %r15, -128(%rbp)
+	movq %rbx, -120(%rbp)
+	movq %r12, -160(%rbp)
+	movq %r13, -168(%rbp)
+	movq %r14, -152(%rbp)
+	movq %r15, -112(%rbp)
 	# LowerAlloca(2693:3): size = 8, type = i64*, var = ^5
 	# Fixing source-to-dest leaq -8(%rbp), -80(%rbp)
 	leaq -8(%rbp), %r15
@@ -20860,8 +19536,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm:
 	# LowerMath(2775:3): ^58, 1 into i64 ^59
 	movq %rdx, %rbx
 	addq $1, %rbx
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(2776:3): move argument ptr ^55
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -20874,8 +19548,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm:
 	callq _ZNSt11char_traitsIcE4findEPKcmRS1_
 	# SetupCalls(2776:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	# LowerStore(2777:3).9: mov ptr ^60, (^11)
 	movq %rbx, (%r14)
 	# LowerLoad(2778:3).2: (^11) into ptr ^61
@@ -20900,10 +19572,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm:
 	# LowerLoad(2789:3).2: (^9) into i64 ^67
 	movq -96(%rbp), %rdx
 	movq (%rdx), %rax
-	# Clobber %rcx
-	movq %rcx, -120(%rbp)
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(2790:3): move argument ptr ^65
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -20916,10 +19584,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm:
 	callq _ZNSt11char_traitsIcE7compareEPKcS2_m
 	# SetupCalls(2790:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -112(%rbp), %rax
-	# Unclobber %rcx
-	movq -120(%rbp), %rcx
 	# LowerIcmp(2791:3): i32 ^68 vs. intlike 0
 	cmpl $0, %ebx
 	sete %al
@@ -20978,11 +19642,11 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm:
 	movq -80(%rbp), %rax
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -128(%rbp), %r15
-	movq -168(%rbp), %r14
-	movq -184(%rbp), %r13
-	movq -176(%rbp), %r12
-	movq -136(%rbp), %rbx
+	movq -112(%rbp), %r15
+	movq -152(%rbp), %r14
+	movq -168(%rbp), %r13
+	movq -160(%rbp), %r12
+	movq -120(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -21040,15 +19704,15 @@ main:
 	.__main__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(1384 + 0, 16)
-	subq $1392, %rsp
+	# upalign(1352 + 0, 16)
+	subq $1360, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -928(%rbp)
-	movq %r12, -888(%rbp)
-	movq %r13, -952(%rbp)
-	movq %r14, -1072(%rbp)
-	movq %r15, -896(%rbp)
+	movq %rbx, -896(%rbp)
+	movq %r12, -856(%rbp)
+	movq %r13, -920(%rbp)
+	movq %r14, -1040(%rbp)
+	movq %r15, -864(%rbp)
 	# LowerAlloca(2083:3): size = 8, type = ptr*, var = ^1
 	leaq -8(%rbp), %r12
 	# LowerAlloca(2084:3): size = 8, type = ptr*, var = ^2
@@ -21207,8 +19871,6 @@ main:
 	movq %r14, %rax
 	addq $64, %rax
 	# LowerGetelementptr(2117:3): type of ^29 is %"struct.std::pair"*
-	# Clobber %rax
-	movq %rax, -856(%rbp)
 	# SetupCalls(2118:3): move argument ptr nonnull dereferenceable(64) align 8 ^29
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -21217,8 +19879,6 @@ main:
 	# SetupCalls(2118:3): move argument ptr nonnull @_Z5clearRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE
 	leaq _Z5clearRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE(%rip), %rdx
 	callq _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2IRA6_KcRSF_Lb1EEEOT_OT0_
-	# Unclobber %rax
-	movq -856(%rbp), %rax
 	# tt = Pointer, type = %"class.std::initializer_list.13"
 	# LowerGetelementptr(2119:3): struct-type: ptr ^9 -> ^30, indices=0,0
 	movq %r13, %rax
@@ -21261,8 +19921,6 @@ main:
 	# LowerGetelementptr(2130:3): type of ^37 is i64*
 	# LowerLoad(2131:3).2: (^37) into i64 ^38
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -864(%rbp)
 	# SetupCalls(2132:3): move argument ptr nonnull dereferenceable(48) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq -696(%rbp), %rdi
@@ -21279,8 +19937,6 @@ main:
 	# Fixed movzx with identical source and destination widths
 	movq -840(%rbp), %r8
 	callq _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaIS9_EEEESt4lessIS5_ESaISt4pairIKS5_SF_EEEC2ESt16initializer_listISK_ERKSH_RKSL_
-	# Unclobber %rcx
-	movq -864(%rbp), %rcx
 	# LowerStore(2133:3).9: mov %"class.std::allocator.14"* ^12, (^5)
 	movq -832(%rbp), %rax
 	# Fixing source-to-dest movq -840(%rbp), (%rax)
@@ -21289,14 +19945,10 @@ main:
 	# LowerLoad(2134:3).2: (^5) into ptr ^39
 	movq -832(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -856(%rbp)
 	# SetupCalls(2135:3): move argument ptr nonnull dereferenceable(1) align 1 ^39
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEED2Ev
-	# Unclobber %rax
-	movq -856(%rbp), %rax
 	# tt = Pointer, type = [6 x %"struct.std::pair"]
 	# LowerGetelementptr(2136:3): struct-type: ptr ^10 -> ^40, indices=0,0
 	movq -824(%rbp), %rbx
@@ -21360,16 +20012,12 @@ main:
 	# tt = Pointer, type = i8
 	# LowerGetelementptr(2157:3): pointer-type -> ^53
 	addq %rbx, %rcx
-	# Clobber %rcx
-	movq %rcx, -864(%rbp)
 	# SetupCalls(2158:3): move argument ptr nonnull dereferenceable(264) align 8 ^53
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv@PLT
 	# SetupCalls(2158:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -864(%rbp), %rcx
 	cmpb $0, %bl
 	jne .__main__M476
 	jmp .__main__M1118
@@ -21435,14 +20083,6 @@ main:
 	# LowerGetelementptr(2176:3): type of ^67 is ptr*
 	# LowerLoad(2177:3).2: (^67) into ptr ^68
 	movq (%rbx), %r9
-	# Clobber %rcx
-	movq %rcx, -864(%rbp)
-	# Clobber %r8
-	movq %r8, -872(%rbp)
-	# Clobber %r9
-	movq %r9, -880(%rbp)
-	# Clobber %rax
-	movq %rax, -856(%rbp)
 	# SetupCalls(2178:3): move argument ptr sret align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq -736(%rbp), %rdi
@@ -21462,14 +20102,6 @@ main:
 	movq $1, %r9
 	andq $1, %r9
 	callq _Z5splitSt17basic_string_viewIcSt11char_traitsIcEES2_b
-	# Unclobber %rax
-	movq -856(%rbp), %rax
-	# Unclobber %r9
-	movq -880(%rbp), %r9
-	# Unclobber %r8
-	movq -872(%rbp), %r8
-	# Unclobber %rcx
-	movq -864(%rbp), %rcx
 	# SetupCalls(2179:3): move argument ptr nonnull dereferenceable(24) align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq -736(%rbp), %rdi
@@ -21586,8 +20218,6 @@ main:
 	movq %rbx, %rax
 	addq $32, %rax
 	# LowerGetelementptr(2209:3): type of ^83 is %"class.std::function"*
-	# Clobber %rax
-	movq %rax, -856(%rbp)
 	# SetupCalls(2210:3): move argument ptr nonnull dereferenceable(32) align 8 ^83
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -21597,8 +20227,6 @@ main:
 	callq _ZNKSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEclES8_
 	# SetupCalls(2210:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -856(%rbp), %rax
 	# LowerIcmp(2211:3): i32 ^84 vs. intlike 0
 	cmpl $0, %ebx
 	sete %al
@@ -21637,8 +20265,6 @@ main:
 	# LowerGetelementptr(2221:3): type of ^91 is ptr*
 	# LowerLoad(2222:3).2: (^91) into ptr ^92
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -856(%rbp)
 	# SetupCalls(2223:3): move argument ptr nonnull dereferenceable(8) align 8 @_ZSt4cerr
 	leaq _ZSt4cerr(%rip), %rdi
 	# SetupCalls(2223:3): move argument i64 ^90
@@ -21650,8 +20276,6 @@ main:
 	callq _ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St17basic_string_viewIS3_S4_E
 	# SetupCalls(2223:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -856(%rbp), %rax
 	# SetupCalls(2224:3): move argument ptr nonnull dereferenceable(8) align 8 ^93
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -21683,8 +20307,6 @@ main:
 	jne .__main__RC0
 	movb $49, %al
 	.__main__RC0:
-	# Clobber %rax
-	movq %rax, -856(%rbp)
 	# SetupCalls(2233:3): move argument ptr nonnull dereferenceable(8) align 8 ^96
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -21694,8 +20316,6 @@ main:
 	callq _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c@PLT
 	# SetupCalls(2233:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -856(%rbp), %rax
 	# SetupCalls(2234:3): move argument ptr nonnull dereferenceable(8) align 8 ^101
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -21737,11 +20357,11 @@ main:
 	movq -688(%rbp), %rax
 	movl (%rax), %ebx
 	movl %ebx, %eax
-	movq -896(%rbp), %r15
-	movq -1072(%rbp), %r14
-	movq -952(%rbp), %r13
-	movq -888(%rbp), %r12
-	movq -928(%rbp), %rbx
+	movq -864(%rbp), %r15
+	movq -1040(%rbp), %r14
+	movq -920(%rbp), %r13
+	movq -856(%rbp), %r12
+	movq -896(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -21754,15 +20374,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(688 + 0, 16)
-	subq $688, %rsp
+	# upalign(672 + 0, 16)
+	subq $672, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -200(%rbp)
-	movq %r12, -224(%rbp)
-	movq %r13, -256(%rbp)
-	movq %r14, -272(%rbp)
-	movq %r15, -192(%rbp)
+	movq %rbx, -184(%rbp)
+	movq %r12, -208(%rbp)
+	movq %r13, -240(%rbp)
+	movq %r14, -256(%rbp)
+	movq %r15, -176(%rbp)
 	# LowerAlloca(9042:3): size = 16, type = %"struct.std::pair.21"*, var = ^4
 	# Fixing source-to-dest leaq -16(%rbp), -112(%rbp)
 	leaq -16(%rbp), %r15
@@ -21816,16 +20436,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixing source-to-dest movq (%rbx), -120(%rbp)
 	movq (%rbx), %r15
 	movq %r15, -120(%rbp)
-	# Clobber %rcx
-	movq %rcx, -176(%rbp)
 	# SetupCalls(9059:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNKSt23_Rb_tree_const_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEE13_M_const_castEv
 	# SetupCalls(9059:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
-	movq -176(%rbp), %rcx
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(9060:3): struct-type: ptr ^8 -> ^19, indices=0,0
 	movq -136(%rbp), %rax
@@ -21881,21 +20497,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq %rax, %rbx
 	# LowerLoad(9077:3).2: (^30) into ptr ^31
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9078:3): move argument ptr ^31
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9078:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	# LowerLoad(9079:3).2: (^7) into ptr ^33
 	movq -128(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -176(%rbp)
 	# SetupCalls(9080:3): move argument ptr nonnull dereferenceable(1) align 1 ^29
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -21908,8 +20518,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_
 	# SetupCalls(9080:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -176(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M214
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M265
@@ -21987,16 +20595,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9104:3): type of ^48 is ptr*
 	# LowerLoad(9105:3).2: (^48) into ptr ^49
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9106:3): move argument ptr ^49
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9106:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	# SetupCalls(9107:3): move argument ptr nonnull dereferenceable(1) align 1 ^46
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -22087,21 +20691,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9129:3): type of ^65 is ptr*
 	# LowerLoad(9130:3).2: (^65) into ptr ^66
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9131:3): move argument ptr ^66
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9131:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	# LowerLoad(9132:3).2: (^7) into ptr ^68
 	movq -128(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -176(%rbp)
 	# SetupCalls(9133:3): move argument ptr nonnull dereferenceable(1) align 1 ^63
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -22114,8 +20712,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_
 	# SetupCalls(9133:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -176(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M604
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M704
@@ -22147,8 +20743,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9145:3): struct-type: ptr ^10 -> ^76, indices=0,0
 	movq -168(%rbp), %rax
 	# LowerGetelementptr(9145:3): type of ^76 is ptr*
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9146:3): move argument ptr nonnull dereferenceable(16) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -112(%rbp), %rdi
@@ -22159,8 +20753,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt4pairIPSt18_Rb_tree_node_baseS1_EC2IS1_S1_Lb1EEERKS1_S5_
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1203
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M670:
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
@@ -22171,8 +20763,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9151:3): struct-type: ptr ^8 -> ^79, indices=0,0
 	movq -136(%rbp), %rbx
 	# LowerGetelementptr(9151:3): type of ^79 is ptr*
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9152:3): move argument ptr nonnull dereferenceable(16) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -112(%rbp), %rdi
@@ -22183,8 +20773,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt4pairIPSt18_Rb_tree_node_baseS1_EC2IRS1_S4_Lb1EEEOT_OT0_
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1203
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M704:
 	# LowerLoad(9156:3).2: (^7) into ptr ^81
@@ -22237,21 +20825,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9169:3): type of ^90 is ptr*
 	# LowerLoad(9170:3).2: (^90) into ptr ^91
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -176(%rbp)
 	# SetupCalls(9171:3): move argument ptr ^91
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9171:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rcx
-	movq -176(%rbp), %rcx
 	# LowerLoad(9172:3).2: (^7) into ptr ^93
 	movq -128(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9173:3): move argument ptr nonnull dereferenceable(1) align 1 ^89
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -22264,8 +20846,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt4lessINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEclERKS5_S8_
 	# SetupCalls(9173:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	cmpb $0, %bl
 	jne .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M820
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1171
@@ -22343,16 +20923,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9196:3): type of ^108 is ptr*
 	# LowerLoad(9197:3).2: (^108) into ptr ^109
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -176(%rbp)
 	# SetupCalls(9198:3): move argument ptr ^109
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9198:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rcx
-	movq -176(%rbp), %rcx
 	# SetupCalls(9199:3): move argument ptr nonnull dereferenceable(1) align 1 ^105
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -22396,8 +20972,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9211:3): struct-type: ptr ^8 -> ^118, indices=0,0
 	movq -136(%rbp), %rax
 	# LowerGetelementptr(9211:3): type of ^118 is ptr*
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9212:3): move argument ptr nonnull dereferenceable(16) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -112(%rbp), %rdi
@@ -22408,8 +20982,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt4pairIPSt18_Rb_tree_node_baseS1_EC2IS1_S1_Lb1EEERKS1_S5_
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1203
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1088:
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
@@ -22420,8 +20992,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9217:3): struct-type: ptr ^12 -> ^121, indices=0,0
 	movq -152(%rbp), %rbx
 	# LowerGetelementptr(9217:3): type of ^121 is ptr*
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9218:3): move argument ptr nonnull dereferenceable(16) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -112(%rbp), %rdi
@@ -22432,8 +21002,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt4pairIPSt18_Rb_tree_node_baseS1_EC2IRS1_S4_Lb1EEEOT_OT0_
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1203
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1122:
 	# LowerLoad(9222:3).2: (^7) into ptr ^123
@@ -22479,8 +21047,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9233:3): type of ^130 is ptr*
 	# LowerStore(9234:3).3: mov $imm, (^15)
 	movq $0, (%r14)
-	# Clobber %rax
-	movq %rax, -184(%rbp)
 	# SetupCalls(9235:3): move argument ptr nonnull dereferenceable(16) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq -112(%rbp), %rdi
@@ -22491,8 +21057,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdx
 	callq _ZNSt4pairIPSt18_Rb_tree_node_baseS1_EC2IS1_S1_Lb1EEERKS1_S5_
-	# Unclobber %rax
-	movq -184(%rbp), %rax
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISI_ERS7___M1203:
 	# LowerLoad(9239:3).2: (^4) into {ptr, ptr} ^132
 	movq -112(%rbp), %rax
@@ -22502,11 +21066,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerRet: two-register return
 	movq %rbx, %rax
 	movq %rcx, %rdx
-	movq -192(%rbp), %r15
-	movq -272(%rbp), %r14
-	movq -256(%rbp), %r13
-	movq -224(%rbp), %r12
-	movq -200(%rbp), %rbx
+	movq -176(%rbp), %r15
+	movq -256(%rbp), %r14
+	movq -240(%rbp), %r13
+	movq -208(%rbp), %r12
+	movq -184(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -22581,14 +21145,14 @@ _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11
 	.___ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -56(%rbp)
-	movq %r14, -64(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -48(%rbp)
+	movq %r14, -56(%rbp)
 	# LowerAlloca(7551:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(7552:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^5
@@ -22614,16 +21178,12 @@ _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11
 	# tt = Pointer, type = %"struct.__gnu_cxx::__ops::_Iter_comp_iter"
 	# LowerGetelementptr(7560:3): struct-type: ptr ^9 -> ^10, indices=0,0
 	# LowerGetelementptr(7560:3): type of ^10 is %class.anon*
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
 	# SetupCalls(7561:3): move argument ptr nonnull dereferenceable(8) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEEdeEv
 	# SetupCalls(7561:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# SetupCalls(7562:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -22643,10 +21203,10 @@ _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11
 	# SetupCalls(7563:3): move i1 result from %rax
 	movb %al, %bl
 	movb %bl, %al
-	movq -64(%rbp), %r14
-	movq -56(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -56(%rbp), %r14
+	movq -48(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -22685,11 +21245,11 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIcSt11char_traitsIcEEESt17b
 	.___ZNSt10filesystem7__cxx118__detail17__effective_rangeIcSt11char_traitsIcEEESt17basic_string_viewIT_S3_IS6_EERKS5_IS6_T0_E__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(6121:3): size = 16, type = %"class.std::basic_string_view"*, var = ^2
 	leaq -16(%rbp), %rbx
 	# LowerAlloca(6122:3): size = 8, type = ptr*, var = ^3
@@ -22698,8 +21258,6 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIcSt11char_traitsIcEEESt17b
 	movq %rdi, (%rax)
 	# LowerLoad(6124:3).2: (^3) into ptr ^4
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
 	# SetupCalls(6125:3): move argument ptr align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -22709,8 +21267,6 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIcSt11char_traitsIcEEESt17b
 	# SetupCalls(6125:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# LowerLoad(6126:3).2: (^2) into {i64, ptr} ^5
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%rbx), %rax
@@ -22718,7 +21274,7 @@ _ZNSt10filesystem7__cxx118__detail17__effective_rangeIcSt11char_traitsIcEEESt17b
 	# LowerRet: two-register return
 	movq %rax, %rax
 	movq %rcx, %rdx
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -22730,15 +21286,15 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE19_M_release_last_useEv:
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE19_M_release_last_useEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(312 + 0, 16)
-	subq $320, %rsp
+	# upalign(304 + 0, 16)
+	subq $304, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -176(%rbp)
-	movq %r12, -136(%rbp)
-	movq %r13, -144(%rbp)
-	movq %r14, -200(%rbp)
-	movq %r15, -152(%rbp)
+	movq %rbx, -168(%rbp)
+	movq %r12, -128(%rbp)
+	movq %r13, -136(%rbp)
+	movq %r14, -192(%rbp)
+	movq %r15, -144(%rbp)
 	# LowerAlloca(3312:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(3313:3): size = 4, type = i32*, var = ^3
@@ -22788,15 +21344,11 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE19_M_release_last_useEv:
 	# LowerGetelementptr(3326:3): type of ^15 is ptr*
 	# LowerLoad(3327:3).2: (^15) into ptr ^16
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -128(%rbp)
 	# SetupCalls(3328:3): move argument ptr nonnull dereferenceable(16) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq -80(%rbp), %rdi
 	# SetupCalls(3328:3): jump to function operand ^16
 	callq *%rax
-	# Unclobber %rax
-	movq -128(%rbp), %rax
 	# tt = Pointer, type = %"class.std::_Sp_counted_base"
 	# LowerGetelementptr(3329:3): struct-type: ptr ^13 -> ^17, indices=0,2
 	movq -80(%rbp), %rax
@@ -22905,21 +21457,17 @@ _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE19_M_release_last_useEv:
 	# LowerGetelementptr(3375:3): type of ^43 is ptr*
 	# LowerLoad(3376:3).2: (^43) into ptr ^44
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -128(%rbp)
 	# SetupCalls(3377:3): move argument ptr nonnull dereferenceable(16) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq -80(%rbp), %rdi
 	# SetupCalls(3377:3): jump to function operand ^44
 	callq *%rax
-	# Unclobber %rax
-	movq -128(%rbp), %rax
 	.___ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE19_M_release_last_useEv__M168:
-	movq -152(%rbp), %r15
-	movq -200(%rbp), %r14
-	movq -144(%rbp), %r13
-	movq -136(%rbp), %r12
-	movq -176(%rbp), %rbx
+	movq -144(%rbp), %r15
+	movq -192(%rbp), %r14
+	movq -136(%rbp), %r13
+	movq -128(%rbp), %r12
+	movq -168(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -22988,15 +21536,15 @@ _ZSt19__relocate_object_aISt17basic_string_viewIcSt11char_traitsIcEES3_SaIS3_EEv
 	.___ZSt19__relocate_object_aISt17basic_string_viewIcSt11char_traitsIcEES3_SaIS3_EEvPT_PT0_RT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(216 + 0, 16)
-	subq $224, %rsp
+	# upalign(200 + 0, 16)
+	subq $208, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -160(%rbp)
-	movq %r12, -168(%rbp)
-	movq %r13, -176(%rbp)
-	movq %r14, -184(%rbp)
-	movq %r15, -144(%rbp)
+	movq %rbx, -144(%rbp)
+	movq %r12, -152(%rbp)
+	movq %r13, -160(%rbp)
+	movq %r14, -168(%rbp)
+	movq %r15, -128(%rbp)
 	# LowerAlloca(5661:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -120(%rbp)
 	leaq -8(%rbp), %r15
@@ -23063,10 +21611,6 @@ _ZSt19__relocate_object_aISt17basic_string_viewIcSt11char_traitsIcEES3_SaIS3_EEv
 	movq (%r9), %rax
 	# LowerLoad(5691:3).2: (^10) into ptr ^25
 	movq (%r10), %rcx
-	# Clobber %rcx
-	movq %rcx, -128(%rbp)
-	# Clobber %rax
-	movq %rax, -136(%rbp)
 	# SetupCalls(5692:3): move argument ptr align 8 ^24
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -23076,10 +21620,6 @@ _ZSt19__relocate_object_aISt17basic_string_viewIcSt11char_traitsIcEES3_SaIS3_EEv
 	# SetupCalls(5692:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -136(%rbp), %rax
-	# Unclobber %rcx
-	movq -128(%rbp), %rcx
 	# LowerLoad(5693:3).2: (^16) into ptr ^26
 	movq (%r15), %rax
 	# LowerLoad(5694:3).2: (^15) into ptr ^27
@@ -23104,11 +21644,11 @@ _ZSt19__relocate_object_aISt17basic_string_viewIcSt11char_traitsIcEES3_SaIS3_EEv
 	# LowerLoad(5702:3).2: (^5) into ptr ^31
 	movq -112(%rbp), %rbx
 	movq (%rbx), %rax
-	movq -144(%rbp), %r15
-	movq -184(%rbp), %r14
-	movq -176(%rbp), %r13
-	movq -168(%rbp), %r12
-	movq -160(%rbp), %rbx
+	movq -128(%rbp), %r15
+	movq -168(%rbp), %r14
+	movq -160(%rbp), %r13
+	movq -152(%rbp), %r12
+	movq -144(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -23120,11 +21660,11 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	.___ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(2422:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(2423:3).9: mov ptr %rdi, (^2)
@@ -23136,27 +21676,19 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	movq %rbx, %rax
 	addq $32, %rax
 	# LowerGetelementptr(2425:3): type of ^4 is %"class.std::function"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(2426:3): move argument ptr nonnull dereferenceable(32) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEED2Ev
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(2427:3): struct-type: ptr ^3 -> ^5, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(2427:3): type of ^5 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(2428:3): move argument ptr nonnull dereferenceable(32) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev@PLT
-	# Unclobber %rax
-	movq -16(%rbp), %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -23168,15 +21700,15 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(208 + 0, 16)
-	subq $208, %rsp
+	# upalign(192 + 0, 16)
+	subq $192, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -128(%rbp)
-	movq %r12, -136(%rbp)
-	movq %r13, -144(%rbp)
-	movq %r14, -152(%rbp)
-	movq %r15, -160(%rbp)
+	movq %rbx, -112(%rbp)
+	movq %r12, -120(%rbp)
+	movq %r13, -128(%rbp)
+	movq %r14, -136(%rbp)
+	movq %r15, -144(%rbp)
 	# LowerAlloca(4068:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r9
 	# LowerAlloca(4069:3): size = 8, type = ptr*, var = ^5
@@ -23272,8 +21804,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7_M_dataEPc@PLT
 	# LowerLoad(4106:3).2: (^14) into i64 ^30
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(4107:3): move argument ptr nonnull dereferenceable(32) align 8 ^16
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdi
@@ -23281,24 +21811,18 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE11_M_capacityEm@PLT
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	jmp .___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag__M175
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag__M147:
 	# LowerStore(4111:3).9: mov ptr ^16, (^7)
 	movq %r15, (%rcx)
 	# LowerLoad(4112:3).2: (^7) into ptr ^32
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(4113:3): move argument ptr nonnull dereferenceable(32) align 8 ^32
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv@PLT
 	# SetupCalls(4113:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	.___ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag__M175:
 	# SetupCalls(4117:3): move argument ptr nonnull dereferenceable(8) align 8 ^15
 	# Fixed movzx with identical source and destination widths
@@ -23317,10 +21841,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	movq (%r12), %rax
 	# LowerLoad(4120:3).2: (^13) into ptr ^37
 	movq (%r13), %rcx
-	# Clobber %rcx
-	movq %rcx, -120(%rbp)
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(4121:3): move argument ptr ^35
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -23331,10 +21851,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_S_copy_charsEPcPKcS7_@PLT
-	# Unclobber %rax
-	movq -112(%rbp), %rax
-	# Unclobber %rcx
-	movq -120(%rbp), %rcx
 	# tt = Pointer, type = %struct._Guard
 	# LowerGetelementptr(4122:3): struct-type: ptr ^15 -> ^38, indices=0,0
 	movq -104(%rbp), %rax
@@ -23343,8 +21859,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	movq $0, (%rax)
 	# LowerLoad(4124:3).2: (^14) into i64 ^39
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -112(%rbp)
 	# SetupCalls(4125:3): move argument ptr nonnull dereferenceable(32) align 8 ^16
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdi
@@ -23352,17 +21866,15 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_set_lengthEm@PLT
-	# Unclobber %rax
-	movq -112(%rbp), %rax
 	# SetupCalls(4126:3): move argument ptr nonnull dereferenceable(8) align 8 ^15
 	# Fixed movzx with identical source and destination widths
 	movq -104(%rbp), %rdi
 	callq _ZZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tagEN6_GuardD2Ev
-	movq -160(%rbp), %r15
-	movq -152(%rbp), %r14
-	movq -144(%rbp), %r13
-	movq -136(%rbp), %r12
-	movq -128(%rbp), %rbx
+	movq -144(%rbp), %r15
+	movq -136(%rbp), %r14
+	movq -128(%rbp), %r13
+	movq -120(%rbp), %r12
+	movq -112(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -23374,13 +21886,13 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	.___ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEaSEOS6___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
-	movq %r13, -32(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -24(%rbp)
 	# LowerAlloca(6010:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(6011:3): size = 8, type = ptr*, var = ^4
@@ -23393,16 +21905,12 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	movq (%rax), %r12
 	# LowerLoad(6015:3).2: (^4) into ptr ^6
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6016:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE7releaseEv
 	# SetupCalls(6016:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# SetupCalls(6017:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -23412,16 +21920,12 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	callq _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE5resetEPS4_
 	# LowerLoad(6018:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6019:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE10_M_deleterEv
 	# SetupCalls(6019:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# SetupCalls(6020:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -23429,9 +21933,9 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	# SetupCalls(6020:3): move ptr result from %rax
 	movq %rax, %rax
 	movq %r12, %rax
-	movq -32(%rbp), %r13
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -24(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -23443,12 +21947,12 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm:
 	.___ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -72(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -64(%rbp)
 	# LowerAlloca(6711:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rdx
 	# LowerAlloca(6712:3): size = 8, type = i64*, var = ^4
@@ -23487,8 +21991,6 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm:
 	movq (%rdx), %rax
 	# LowerLoad(6728:3).2: (^4) into i64 ^14
 	movq (%r8), %rbx
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(6729:3): move argument ptr nonnull dereferenceable(1) align 1 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -23500,8 +22002,6 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm:
 	callq _ZNSt15__new_allocatorI6LsItemE8allocateEmPKv
 	# SetupCalls(6729:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -40(%rbp), %rax
 	# MovePhi: ^15 -> ^18
 	movq %rbx, %r12
 	jmp .___ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm__M68
@@ -23510,8 +22010,8 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm:
 	movq $0, %r12
 	.___ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm__M68:
 	movq %r12, %rax
-	movq -72(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -64(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -23571,12 +22071,12 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	.___ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEPS9_E9_M_invokeERKSt9_Any_dataS8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(4217:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(4218:3): size = 8, type = ptr*, var = ^4
@@ -23587,20 +22087,14 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	movq %rsi, (%r12)
 	# LowerLoad(4221:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4222:3): move argument ptr nonnull dereferenceable(16) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE14_M_get_pointerERKSt9_Any_data
 	# SetupCalls(4222:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(4223:3).2: (^4) into ptr ^7
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4224:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -23610,11 +22104,9 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	callq _ZSt10__invoke_rIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEJS8_EENSt9enable_ifIX16is_invocable_r_vIT_T0_DpT1_EESD_E4typeEOSE_DpOSF_
 	# SetupCalls(4224:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movl %ebx, %eax
-	movq -40(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -23662,15 +22154,15 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_insertIJRKS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(648 + 0, 16)
-	subq $656, %rsp
+	# upalign(632 + 0, 16)
+	subq $640, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -304(%rbp)
-	movq %r12, -288(%rbp)
-	movq %r13, -336(%rbp)
-	movq %r14, -344(%rbp)
-	movq %r15, -248(%rbp)
+	movq %rbx, -288(%rbp)
+	movq %r12, -272(%rbp)
+	movq %r13, -320(%rbp)
+	movq %r14, -328(%rbp)
+	movq %r15, -232(%rbp)
 	# LowerAlloca(5739:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -208(%rbp)
 	leaq -8(%rbp), %r15
@@ -23805,8 +22297,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# LowerLoad(5775:3).2: (^13) into i64 ^32
 	movq -136(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -232(%rbp)
 	# SetupCalls(5776:3): move argument ptr nonnull dereferenceable(24) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq -152(%rbp), %rdi
@@ -23816,8 +22306,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_allocateEm
 	# SetupCalls(5776:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -232(%rbp), %rax
 	# LowerStore(5777:3).9: mov ptr ^33, (^18)
 	movq -144(%rbp), %rax
 	movq %r14, (%rax)
@@ -23877,8 +22365,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# LowerLoad(5796:3).2: (^6) into ptr ^45
 	movq -192(%rbp), %rcx
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -232(%rbp)
 	# SetupCalls(5797:3): move argument ptr align 8 ^44
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -23888,8 +22374,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# SetupCalls(5797:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -232(%rbp), %rax
 	# LowerStore(5798:3).3: mov $imm, (^19)
 	movq -160(%rbp), %rax
 	movq $0, (%rax)
@@ -24009,8 +22493,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	movq $16, %rbx
 	idivq %rbx
 	movq %rax, %rbx
-	# Clobber %rcx
-	movq %rcx, -240(%rbp)
 	# SetupCalls(5825:3): move argument ptr nonnull dereferenceable(24) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq -152(%rbp), %rdi
@@ -24021,8 +22503,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deallocateEPS3_m
-	# Unclobber %rcx
-	movq -240(%rbp), %rcx
 	# LowerLoad(5826:3).2: (^18) into ptr ^69
 	movq -144(%rbp), %rbx
 	movq (%rbx), %rax
@@ -24069,11 +22549,11 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_inse
 	# LowerGetelementptr(5838:3): type of ^79 is ptr*
 	# LowerStore(5839:3).9: mov %"class.std::basic_string_view"* ^77, (^79)
 	movq %rax, (%rbx)
-	movq -248(%rbp), %r15
-	movq -344(%rbp), %r14
-	movq -336(%rbp), %r13
-	movq -288(%rbp), %r12
-	movq -304(%rbp), %rbx
+	movq -232(%rbp), %r15
+	movq -328(%rbp), %r14
+	movq -320(%rbp), %r13
+	movq -272(%rbp), %r12
+	movq -288(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24151,11 +22631,11 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE15_M_init_functorIRSA_EEvRSt9_Any_dataOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(4204:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(4205:3): size = 8, type = ptr*, var = ^4
@@ -24170,8 +22650,6 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	movq (%rbx), %rax
 	# LowerLoad(4210:3).2: (^4) into ptr ^7
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4211:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -24179,9 +22657,7 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE9_M_createIRSA_EEvRSt9_Any_dataOT_St17integral_constantIbLb1EE
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24193,12 +22669,12 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	.___ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEPS9_E10_M_managerERSt9_Any_dataRKSC_St18_Manager_operation__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(96 + 0, 16)
-	subq $96, %rsp
+	# upalign(72 + 0, 16)
+	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -56(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(4230:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r12
 	# LowerAlloca(4231:3): size = 8, type = ptr*, var = ^5
@@ -24223,16 +22699,12 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	.___ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEPS9_E10_M_managerERSt9_Any_dataRKSC_St18_Manager_operation__M21:
 	# LowerLoad(4243:3).2: (^4) into ptr ^9
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4244:3): move argument ptr nonnull dereferenceable(16) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt9_Any_data9_M_accessIPKSt9type_infoEERT_v
 	# SetupCalls(4244:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerStore(4245:3).6: load global
 	leaq _ZTIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEE(%rip), %rax
 	# LowerStore(4245:3).9: mov ptr ^22, (^10)
@@ -24241,28 +22713,20 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	.___ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEPS9_E10_M_managerERSt9_Any_dataRKSC_St18_Manager_operation__M51:
 	# LowerLoad(4249:3).2: (^5) into ptr ^12
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4250:3): move argument ptr nonnull dereferenceable(16) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE14_M_get_pointerERKSt9_Any_data
 	# SetupCalls(4250:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(4251:3).2: (^4) into ptr ^14
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4252:3): move argument ptr nonnull dereferenceable(16) align 8 ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt9_Any_data9_M_accessIPPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEEERT_v
 	# SetupCalls(4252:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerStore(4253:3).9: mov ptr ^13, (^15)
 	movq %rbx, (%r12)
 	jmp .___ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEPS9_E10_M_managerERSt9_Any_dataRKSC_St18_Manager_operation__M138
@@ -24273,10 +22737,6 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	movq (%rcx), %r8
 	# LowerLoad(4259:3).2: (^6) into i32 ^19
 	movl (%rax), %ebx
-	# Clobber %rdx
-	movq %rdx, -40(%rbp)
-	# Clobber %r8
-	movq %r8, -48(%rbp)
 	# SetupCalls(4260:3): move argument ptr nonnull dereferenceable(16) align 8 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rdx, %rdi
@@ -24289,14 +22749,10 @@ _ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcE
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE10_M_managerERSt9_Any_dataRKSD_St18_Manager_operation
 	# SetupCalls(4260:3): move i1 result from %rax
 	movb %al, %al
-	# Unclobber %r8
-	movq -48(%rbp), %r8
-	# Unclobber %rdx
-	movq -40(%rbp), %rdx
 	.___ZNSt17_Function_handlerIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEPS9_E10_M_managerERSt9_Any_dataRKSC_St18_Manager_operation__M138:
 	movq $0, %rax
-	movq -56(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24308,15 +22764,15 @@ _ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEN
 	.___ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(272 + 0, 16)
+	# upalign(264 + 0, 16)
 	subq $272, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -200(%rbp)
-	movq %r12, -184(%rbp)
-	movq %r13, -192(%rbp)
-	movq %r14, -176(%rbp)
-	movq %r15, -208(%rbp)
+	movq %rbx, -192(%rbp)
+	movq %r12, -176(%rbp)
+	movq %r13, -184(%rbp)
+	movq %r14, -168(%rbp)
+	movq %r15, -200(%rbp)
 	# LowerAlloca(7569:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^5
 	leaq -8(%rbp), %r14
 	# LowerAlloca(7570:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^6
@@ -24422,8 +22878,6 @@ _ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEN
 	callq _ZN6LsItemC2EOS_
 	# LowerLoad(7592:3).2: (^8) into ptr ^21
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -168(%rbp)
 	# SetupCalls(7593:3): move argument ptr align 1 ^12
 	# Fixed movzx with identical source and destination widths
 	movq -160(%rbp), %rdi
@@ -24433,8 +22887,6 @@ _ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEN
 	# SetupCalls(7593:3): move argument i64 1
 	movq $1, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -168(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator"
 	# LowerGetelementptr(7594:3): struct-type: ptr ^10 -> ^22, indices=0,0
 	movq -152(%rbp), %rax
@@ -24461,11 +22913,11 @@ _ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEEN
 	# Fixed movzx with identical source and destination widths
 	movq -136(%rbp), %rdi
 	callq _ZN6LsItemD2Ev
-	movq -208(%rbp), %r15
-	movq -176(%rbp), %r14
-	movq -192(%rbp), %r13
-	movq -184(%rbp), %r12
-	movq -200(%rbp), %rbx
+	movq -200(%rbp), %r15
+	movq -168(%rbp), %r14
+	movq -184(%rbp), %r13
+	movq -176(%rbp), %r12
+	movq -192(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24504,12 +22956,12 @@ _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_
 	.___ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_S5___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -56(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
 	# LowerAlloca(6219:3): size = 16, type = %"struct.std::__detail::_Quoted_string"*, var = ^4
 	leaq -16(%rbp), %r12
 	# LowerAlloca(6220:3): size = 8, type = ptr*, var = ^5
@@ -24530,10 +22982,6 @@ _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_
 	movb (%rbx), %r8b
 	# LowerLoad(6228:3).2: (^7) into i8 ^10
 	movb (%rcx), %bl
-	# Clobber %r8
-	movq %r8, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(6229:3): move argument ptr nonnull dereferenceable(10) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -24547,10 +22995,6 @@ _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_
 	movzbq %bl, %rcx
 	movsbq %cl, %rcx
 	callq _ZNSt8__detail14_Quoted_stringIRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEcEC2ES8_cc
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %r8
-	movq -40(%rbp), %r8
 	# LowerLoad(6230:3).2: (^4) into {ptr, i64} ^11
 	# FinishMultireg: mov (%reg), <%pack...>
 	movq (%r12), %rax
@@ -24558,8 +23002,8 @@ _ZSt6quotedIcSt11char_traitsIcESaIcEEDaRKNSt7__cxx1112basic_stringIT_T0_T1_EES5_
 	# LowerRet: two-register return
 	movq %rax, %rax
 	movq %rbx, %rdx
-	movq -56(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24624,11 +23068,11 @@ _ZSt10__invoke_rIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS
 	.___ZSt10__invoke_rIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEJS8_EENSt9enable_ifIX16is_invocable_r_vIT_T0_DpT1_EESD_E4typeEOSE_DpOSF___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(4292:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(4293:3): size = 8, type = ptr*, var = ^4
@@ -24643,8 +23087,6 @@ _ZSt10__invoke_rIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS
 	movq (%rbx), %rax
 	# LowerLoad(4298:3).2: (^4) into ptr ^7
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4299:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -24654,10 +23096,8 @@ _ZSt10__invoke_rIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS
 	callq _ZSt13__invoke_implIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEJS8_EET_St14__invoke_otherOT0_DpOT1_
 	# SetupCalls(4299:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	movl %ebx, %eax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24669,15 +23109,15 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEm
 	.___ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(208 + 0, 16)
+	# upalign(200 + 0, 16)
 	subq $208, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -104(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -80(%rbp)
-	movq %r14, -120(%rbp)
-	movq %r15, -96(%rbp)
+	movq %rbx, -96(%rbp)
+	movq %r12, -80(%rbp)
+	movq %r13, -72(%rbp)
+	movq %r14, -112(%rbp)
+	movq %r15, -88(%rbp)
 	# LowerAlloca(5413:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(5414:3): size = 8, type = i64*, var = ^5
@@ -24727,14 +23167,10 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEm
 	.___ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc__M74:
 	# LowerLoad(5430:3).2: (^6) into ptr ^16
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(5431:3): move argument ptr ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	.___ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc__M98:
 	# SetupCalls(5435:3): move argument ptr nonnull dereferenceable(24) align 8 ^9
 	# Fixed movzx with identical source and destination widths
@@ -24818,11 +23254,11 @@ _ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEm
 	# MovePhi: ^33 -> ^35
 	.___ZNKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_M_check_lenEmPKc__M269:
 	movq -48(%rbp), %rax
-	movq -96(%rbp), %r15
-	movq -120(%rbp), %r14
-	movq -80(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -104(%rbp), %rbx
+	movq -88(%rbp), %r15
+	movq -112(%rbp), %r14
+	movq -72(%rbp), %r13
+	movq -80(%rbp), %r12
+	movq -96(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -24887,15 +23323,15 @@ _ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc:
 	.___ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(208 + 0, 16)
+	# upalign(200 + 0, 16)
 	subq $208, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -104(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -80(%rbp)
-	movq %r14, -120(%rbp)
-	movq %r15, -96(%rbp)
+	movq %rbx, -96(%rbp)
+	movq %r12, -80(%rbp)
+	movq %r13, -72(%rbp)
+	movq %r14, -112(%rbp)
+	movq %r15, -88(%rbp)
 	# LowerAlloca(6637:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(6638:3): size = 8, type = i64*, var = ^5
@@ -24945,14 +23381,10 @@ _ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc:
 	.___ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc__M74:
 	# LowerLoad(6654:3).2: (^6) into ptr ^16
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(6655:3): move argument ptr ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt20__throw_length_errorPKc@PLT
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	.___ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc__M98:
 	# SetupCalls(6659:3): move argument ptr nonnull dereferenceable(24) align 8 ^9
 	# Fixed movzx with identical source and destination widths
@@ -25036,11 +23468,11 @@ _ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc:
 	# MovePhi: ^33 -> ^35
 	.___ZNKSt6vectorI6LsItemSaIS0_EE12_M_check_lenEmPKc__M269:
 	movq -48(%rbp), %rax
-	movq -96(%rbp), %r15
-	movq -120(%rbp), %r14
-	movq -80(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -104(%rbp), %rbx
+	movq -88(%rbp), %r15
+	movq -112(%rbp), %r14
+	movq -72(%rbp), %r13
+	movq -80(%rbp), %r12
+	movq -96(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25089,11 +23521,11 @@ _ZSt13__invoke_implIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEES
 	.___ZSt13__invoke_implIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEJS8_EET_St14__invoke_otherOT0_DpOT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(4317:3): size = 1, type = %"struct.std::__invoke_other"*, var = ^3
 	leaq -1(%rbp), %rax
 	# LowerAlloca(4318:3): size = 8, type = ptr*, var = ^4
@@ -25110,8 +23542,6 @@ _ZSt13__invoke_implIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEES
 	movq (%rax), %rbx
 	# LowerLoad(4324:3).2: (^5) into ptr ^8
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4325:3): move argument ptr nonnull dereferenceable(24) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -25119,10 +23549,8 @@ _ZSt13__invoke_implIiRPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEES
 	callq *%rbx
 	# SetupCalls(4325:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	movl %ebx, %eax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25164,11 +23592,11 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE15_M_init_functorIRKSB_EEvRSt9_Any_dataOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(4414:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(4415:3): size = 8, type = ptr*, var = ^4
@@ -25183,8 +23611,6 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	movq (%rbx), %rax
 	# LowerLoad(4420:3).2: (^4) into ptr ^7
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4421:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -25192,9 +23618,7 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE9_M_createIRKSB_EEvRSt9_Any_dataOT_St17integral_constantIbLb1EE
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25260,11 +23684,11 @@ _ZNSt10filesystem7__cxx114pathC2Ev:
 	.___ZNSt10filesystem7__cxx114pathC2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(1351:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(1352:3).9: mov ptr %rdi, (^2)
@@ -25275,28 +23699,20 @@ _ZNSt10filesystem7__cxx114pathC2Ev:
 	# LowerGetelementptr(1354:3): struct-type: ptr ^3 -> ^4, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(1354:3): type of ^4 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(1355:3): move argument ptr nonnull dereferenceable(32) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1Ev@PLT
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(1356:3): struct-type: ptr ^3 -> ^5, indices=0,1
 	movq %rbx, %rax
 	addq $32, %rax
 	# LowerGetelementptr(1356:3): type of ^5 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(1357:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5_ListC1Ev@PLT
-	# Unclobber %rax
-	movq -16(%rbp), %rax
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25308,11 +23724,11 @@ _ZSt22__uninitialized_copy_aIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_S3_
 	.___ZSt22__uninitialized_copy_aIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_S3_ET0_T_S8_S7_RSaIT1_E__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(4925:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %r9
 	# LowerAlloca(4926:3): size = 8, type = ptr*, var = ^6
@@ -25335,10 +23751,6 @@ _ZSt22__uninitialized_copy_aIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_S3_
 	movq (%rbx), %rcx
 	# LowerLoad(4935:3).2: (^7) into ptr ^11
 	movq (%r8), %rbx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(4936:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -25351,12 +23763,8 @@ _ZSt22__uninitialized_copy_aIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_S3_
 	callq _ZSt18uninitialized_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_S7_
 	# SetupCalls(4936:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	movq %rbx, %rax
-	movq -56(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25368,13 +23776,13 @@ _ZN9__gnu_cxxeqIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_E
 	.___ZN9__gnu_cxxeqIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEEEbRKNS_17__normal_iteratorIT_T0_EESF___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(9904:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(9905:3): size = 8, type = ptr*, var = ^4
@@ -25385,39 +23793,31 @@ _ZN9__gnu_cxxeqIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_E
 	movq %rsi, (%r13)
 	# LowerLoad(9908:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9909:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEE4baseEv
 	# SetupCalls(9909:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(9910:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(9911:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9912:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIPKSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEE4baseEv
 	# SetupCalls(9912:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(9913:3).2: (^9) into ptr ^10
 	movq (%rbx), %rax
 	# LowerIcmp(9914:3): ptr ^7 vs. operand ptr ^10
 	cmpq %rax, %r12
 	sete %al
 	andq $1, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25459,11 +23859,11 @@ _ZNSt14_Function_baseD2Ev:
 	.___ZNSt14_Function_baseD2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(4470:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(4471:3).9: mov ptr %rdi, (^2)
@@ -25500,12 +23900,6 @@ _ZNSt14_Function_baseD2Ev:
 	# LowerGetelementptr(4482:3): struct-type: ptr ^3 -> ^11, indices=0,0
 	movq %rbx, %rdx
 	# LowerGetelementptr(4482:3): type of ^11 is %"union.std::_Any_data"*
-	# Clobber %rdx
-	movq %rdx, -16(%rbp)
-	# Clobber %rcx
-	movq %rcx, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4483:3): move argument ptr nonnull dereferenceable(16) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -25518,14 +23912,8 @@ _ZNSt14_Function_baseD2Ev:
 	callq *%rcx
 	# SetupCalls(4483:3): move i1 result from %rax
 	movb %al, %al
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rcx
-	movq -24(%rbp), %rcx
-	# Unclobber %rdx
-	movq -16(%rbp), %rdx
 	.___ZNSt14_Function_baseD2Ev__M62:
-	movq -40(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25537,11 +23925,11 @@ _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt1
 	.___ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS5_ESaISC_EEEEEEE8allocateEmPKv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(9777:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(9778:3): size = 8, type = ptr*, var = ^5
@@ -25596,18 +23984,14 @@ _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt1
 	movq $96, %rbx
 	imulq %rbx
 	movq %rax, %rcx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
 	# SetupCalls(9807:3): move argument i64 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(9807:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	movq %rbx, %rax
-	movq -48(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25619,14 +24003,14 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS3_EEERS3_DpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(168 + 0, 16)
-	subq $176, %rsp
+	# upalign(152 + 0, 16)
+	subq $160, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -120(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r14, -112(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -104(%rbp)
+	movq %r13, -88(%rbp)
+	movq %r14, -96(%rbp)
 	# LowerAlloca(5212:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r8
 	# LowerAlloca(5213:3): size = 8, type = ptr*, var = ^4
@@ -25720,8 +24104,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS
 	movq (%r9), %rax
 	# LowerLoad(5250:3).2: (^5) into ptr ^31
 	movq (%rdx), %rbx
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(5251:3): move argument ptr align 8 ^30
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -25731,8 +24113,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS
 	# SetupCalls(5251:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Vector_base"
 	# LowerGetelementptr(5252:3): struct-type: ptr ^12 -> ^32, indices=0,0
 	movq %r12, %rax
@@ -25772,10 +24152,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS
 	# LowerGetelementptr(5264:3): type of ^40 is ptr*
 	# LowerLoad(5265:3).2: (^40) into ptr ^41
 	movq (%rbx), %rcx
-	# Clobber %rcx
-	movq %rcx, -88(%rbp)
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(5266:3): move argument ptr nonnull dereferenceable(24) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -25786,10 +24162,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_M_realloc_insertIJS3_EEEvN9__gnu_cxx17__normal_iteratorIPS3_S5_EEDpOT_
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	# Unclobber %rcx
-	movq -88(%rbp), %rcx
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS3_EEERS3_DpOT___M201:
 	# SetupCalls(5270:3): move argument ptr nonnull dereferenceable(24) align 8 ^12
 	# Fixed movzx with identical source and destination widths
@@ -25798,10 +24170,10 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12emplace_backIJS
 	# SetupCalls(5270:3): move ptr result from %rax
 	movq %rax, %rbx
 	movq %rbx, %rax
-	movq -112(%rbp), %r14
-	movq -104(%rbp), %r13
-	movq -120(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r14
+	movq -88(%rbp), %r13
+	movq -104(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25878,15 +24250,15 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	.___ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE5resetEPS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(96 + 0, 16)
+	# upalign(88 + 0, 16)
 	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -64(%rbp)
-	movq %r13, -48(%rbp)
-	movq %r14, -40(%rbp)
-	movq %r15, -72(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -40(%rbp)
+	movq %r14, -32(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(6026:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(6027:3): size = 8, type = ptr*, var = ^4
@@ -25938,8 +24310,6 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	movq %rax, %rbx
 	# LowerLoad(6044:3).2: (^5) into ptr ^15
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(6045:3): move argument ptr nonnull dereferenceable(1) align 1 ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -25947,14 +24317,12 @@ _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNKSt10filesystem7__cxx114path5_List13_Impl_deleterclEPNS2_5_ImplE@PLT
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	.___ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEE5resetEPS4___M122:
-	movq -72(%rbp), %r15
-	movq -40(%rbp), %r14
-	movq -48(%rbp), %r13
-	movq -64(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -32(%rbp), %r14
+	movq -40(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -25966,15 +24334,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_M_eraseEPSt13_Rb_tree_nodeISI_E__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -64(%rbp)
-	movq %r13, -48(%rbp)
-	movq %r14, -40(%rbp)
-	movq %r15, -80(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -56(%rbp)
+	movq %r13, -40(%rbp)
+	movq %r14, -32(%rbp)
+	movq %r15, -72(%rbp)
 	# LowerAlloca(4504:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(4505:3): size = 8, type = ptr*, var = ^4
@@ -26000,16 +24368,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_M_eraseEPSt13_Rb_tree_nodeISI_E__M20:
 	# LowerLoad(4518:3).2: (^4) into ptr ^11
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4519:3): move argument ptr ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_S_rightEPSt18_Rb_tree_node_base
 	# SetupCalls(4519:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# SetupCalls(4520:3): move argument ptr nonnull dereferenceable(48) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26019,22 +24383,16 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_M_eraseEPSt13_Rb_tree_nodeISI_E
 	# LowerLoad(4521:3).2: (^4) into ptr ^13
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4522:3): move argument ptr ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE7_S_leftEPSt18_Rb_tree_node_base
 	# SetupCalls(4522:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerStore(4523:3).9: mov ptr ^14, (^5)
 	movq %r12, (%r13)
 	# LowerLoad(4524:3).2: (^4) into ptr ^15
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4525:3): move argument ptr nonnull dereferenceable(48) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26042,8 +24400,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE12_M_drop_nodeEPSt13_Rb_tree_nodeISI_E
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(4526:3).2: (^5) into ptr ^16
 	# Fixing source-to-dest movq (%r13), (%r14)
 	movq (%r13), %r15
@@ -26051,11 +24407,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerStore(4527:3).9: mov ptr ^16, (^4)
 	jmp .___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_M_eraseEPSt13_Rb_tree_nodeISI_E__M13
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE8_M_eraseEPSt13_Rb_tree_nodeISI_E__M125:
-	movq -80(%rbp), %r15
-	movq -40(%rbp), %r14
-	movq -48(%rbp), %r13
-	movq -64(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -72(%rbp), %r15
+	movq -32(%rbp), %r14
+	movq -40(%rbp), %r13
+	movq -56(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26067,15 +24423,15 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	.___ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(304 + 0, 16)
-	subq $304, %rsp
+	# upalign(288 + 0, 16)
+	subq $288, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -208(%rbp)
-	movq %r12, -248(%rbp)
-	movq %r13, -216(%rbp)
-	movq %r14, -256(%rbp)
-	movq %r15, -176(%rbp)
+	movq %rbx, -192(%rbp)
+	movq %r12, -232(%rbp)
+	movq %r13, -200(%rbp)
+	movq %r14, -240(%rbp)
+	movq %r15, -160(%rbp)
 	# LowerAlloca(7344:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -104(%rbp)
 	leaq -8(%rbp), %r15
@@ -26162,8 +24518,6 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerGetelementptr(7366:3): type of ^21 is ptr*
 	# LowerLoad(7367:3).2: (^21) into ptr ^22
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -160(%rbp)
 	# SetupCalls(7368:3): move argument ptr ^20
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26174,8 +24528,6 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# Fixed movzx with identical source and destination widths
 	movq -128(%rbp), %rdx
 	callq _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0_
-	# Unclobber %rcx
-	movq -160(%rbp), %rcx
 	# SetupCalls(7369:3): move argument ptr align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq -136(%rbp), %rdi
@@ -26229,8 +24581,6 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerGetelementptr(7381:3): type of ^28 is ptr*
 	# LowerLoad(7382:3).2: (^28) into ptr ^29
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -160(%rbp)
 	# SetupCalls(7383:3): move argument ptr nonnull dereferenceable(1) align 1 ^7
 	# Fixed movzx with identical source and destination widths
 	movq -128(%rbp), %rdi
@@ -26243,8 +24593,6 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	callq _ZN9__gnu_cxx5__ops15_Iter_comp_iterIZ2lsRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS6_EEE3$_0EclINS_17__normal_iteratorIP6LsItemS2_ISF_SaISF_EEEESJ_EEbT_T0_
 	# SetupCalls(7383:3): move i1 result from %rax
 	movb %al, %bl
-	# Unclobber %rcx
-	movq -160(%rbp), %rcx
 	cmpb $0, %bl
 	jne .___ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M272
 	jmp .___ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M393
@@ -26294,10 +24642,6 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# LowerGetelementptr(7394:3): type of ^36 is ptr*
 	# LowerLoad(7395:3).2: (^36) into ptr ^37
 	movq (%rax), %r8
-	# Clobber %rcx
-	movq %rcx, -160(%rbp)
-	# Clobber %r8
-	movq %r8, -168(%rbp)
 	# SetupCalls(7396:3): move argument ptr ^33
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26311,10 +24655,6 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	# Fixed movzx with identical source and destination widths
 	movq -128(%rbp), %rcx
 	callq _ZSt10__pop_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_RT0_
-	# Unclobber %r8
-	movq -168(%rbp), %r8
-	# Unclobber %rcx
-	movq -160(%rbp), %rcx
 	.___ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M393:
 	# SetupCalls(7403:3): move argument ptr nonnull dereferenceable(8) align 8 ^10
 	# Fixed movzx with identical source and destination widths
@@ -26324,11 +24664,11 @@ _ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EE
 	movq %rax, %rax
 	jmp .___ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M156
 	.___ZSt13__heap_selectIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_SK_T0___M418:
-	movq -176(%rbp), %r15
-	movq -256(%rbp), %r14
-	movq -216(%rbp), %r13
-	movq -248(%rbp), %r12
-	movq -208(%rbp), %rbx
+	movq -160(%rbp), %r15
+	movq -240(%rbp), %r14
+	movq -200(%rbp), %r13
+	movq -232(%rbp), %r12
+	movq -192(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26400,12 +24740,12 @@ _ZNSt11char_traitsIcE4findEPKcmRS1_:
 	.___ZNSt11char_traitsIcE4findEPKcmRS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -64(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
 	# LowerAlloca(2826:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r12
 	# LowerAlloca(2827:3): size = 8, type = ptr*, var = ^5
@@ -26443,12 +24783,6 @@ _ZNSt11char_traitsIcE4findEPKcmRS1_:
 	movsbl %cl, %edx
 	# LowerLoad(2846:3).2: (^6) into i64 ^16
 	movq (%rbx), %rcx
-	# Clobber %rdx
-	movq %rdx, -40(%rbp)
-	# Clobber %rcx
-	movq %rcx, -48(%rbp)
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(2847:3): move argument ptr ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -26461,19 +24795,13 @@ _ZNSt11char_traitsIcE4findEPKcmRS1_:
 	callq memchr@PLT
 	# SetupCalls(2847:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -56(%rbp), %rax
-	# Unclobber %rcx
-	movq -48(%rbp), %rcx
-	# Unclobber %rdx
-	movq -40(%rbp), %rdx
 	# LowerStore(2848:3).9: mov ptr ^17, (^4)
 	movq %rbx, (%r12)
 	.___ZNSt11char_traitsIcE4findEPKcmRS1___M63:
 	# LowerLoad(2852:3).2: (^4) into ptr ^19
 	movq (%r12), %rax
-	movq -64(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26485,12 +24813,12 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv:
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(5487:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator.19"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(5488:3): size = 8, type = ptr*, var = ^3
@@ -26506,8 +24834,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv:
 	# LowerGetelementptr(5492:3): struct-type: ptr ^5 -> ^6, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(5492:3): type of ^6 is ptr*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5493:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -26515,16 +24841,14 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE5beginEv:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZN9__gnu_cxx17__normal_iteratorIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEEC2ERKS5_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator.19"
 	# LowerGetelementptr(5494:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(5494:3): type of ^7 is ptr*
 	# LowerLoad(5495:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26536,15 +24860,15 @@ _ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5_
 	.___ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(256 + 0, 16)
-	subq $256, %rsp
+	# upalign(240 + 0, 16)
+	subq $240, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -184(%rbp)
-	movq %r12, -168(%rbp)
-	movq %r13, -176(%rbp)
-	movq %r14, -216(%rbp)
-	movq %r15, -144(%rbp)
+	movq %rbx, -168(%rbp)
+	movq %r12, -152(%rbp)
+	movq %r13, -160(%rbp)
+	movq %r14, -200(%rbp)
+	movq %r15, -128(%rbp)
 	# LowerAlloca(7040:3): size = 8, type = %"class.__gnu_cxx::__normal_iterator"*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -120(%rbp)
 	leaq -8(%rbp), %r15
@@ -26657,8 +24981,6 @@ _ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5_
 	# LowerGetelementptr(7065:3): type of ^21 is ptr*
 	# LowerLoad(7066:3).2: (^21) into ptr ^22
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -128(%rbp)
 	# SetupCalls(7067:3): move argument ptr ^20
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26669,8 +24991,6 @@ _ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5_
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdx
 	callq _ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElNS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_T1_
-	# Unclobber %rcx
-	movq -128(%rbp), %rcx
 	# SetupCalls(7068:3): move argument ptr align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -88(%rbp), %rdi
@@ -26710,8 +25030,6 @@ _ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5_
 	# LowerGetelementptr(7073:3): type of ^25 is ptr*
 	# LowerLoad(7074:3).2: (^25) into ptr ^26
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -136(%rbp)
 	# SetupCalls(7075:3): move argument ptr ^24
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26719,14 +25037,12 @@ _ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5_
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0_
-	# Unclobber %rax
-	movq -136(%rbp), %rax
 	.___ZSt6__sortIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_T0___M330:
-	movq -144(%rbp), %r15
-	movq -216(%rbp), %r14
-	movq -176(%rbp), %r13
-	movq -168(%rbp), %r12
-	movq -184(%rbp), %rbx
+	movq -128(%rbp), %r15
+	movq -200(%rbp), %r14
+	movq -160(%rbp), %r13
+	movq -152(%rbp), %r12
+	movq -168(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26767,12 +25083,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE12_M_drop_nodeEPSt13_Rb_tree_nodeISI_E__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(4577:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(4578:3): size = 8, type = ptr*, var = ^4
@@ -26785,8 +25101,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%rax), %rbx
 	# LowerLoad(4582:3).2: (^4) into ptr ^6
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4583:3): move argument ptr nonnull dereferenceable(48) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26794,12 +25108,8 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE15_M_destroy_nodeEPSt13_Rb_tree_nodeISI_E
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(4584:3).2: (^4) into ptr ^7
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4585:3): move argument ptr nonnull dereferenceable(48) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26807,10 +25117,8 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE11_M_put_nodeEPSt13_Rb_tree_nodeISI_E
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26822,12 +25130,12 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	.___ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaIS9_EEEESt4lessIS5_ESaISt4pairIKS5_SF_EEE4findERSJ___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
 	# LowerAlloca(2478:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^3
 	leaq -8(%rbp), %r12
 	# LowerAlloca(2479:3): size = 8, type = ptr*, var = ^4
@@ -26845,8 +25153,6 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	# LowerGetelementptr(2484:3): type of ^7 is %"class.std::_Rb_tree"*
 	# LowerLoad(2485:3).2: (^5) into ptr ^8
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(2486:3): move argument ptr nonnull dereferenceable(48) align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -26856,8 +25162,6 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE4findERS7_
 	# SetupCalls(2486:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(2487:3): struct-type: ptr ^3 -> ^10, indices=0,0
 	movq %r12, %rax
@@ -26870,8 +25174,8 @@ _ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt
 	# LowerGetelementptr(2489:3): type of ^11 is ptr*
 	# LowerLoad(2490:3).2: (^11) into ptr ^12
 	movq (%rbx), %rax
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -26883,11 +25187,11 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_relocateEPS3
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_relocateEPS3_S6_S6_RS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(5501:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %r9
 	# LowerAlloca(5502:3): size = 8, type = ptr*, var = ^6
@@ -26912,12 +25216,6 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_relocateEPS3
 	movq (%r8), %r9
 	# LowerLoad(5512:3).2: (^8) into ptr ^12
 	movq (%rax), %rbx
-	# Clobber %rdx
-	movq %rdx, -40(%rbp)
-	# Clobber %rcx
-	movq %rcx, -48(%rbp)
-	# Clobber %r9
-	movq %r9, -56(%rbp)
 	# SetupCalls(5513:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -26933,14 +25231,8 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_S_relocateEPS3
 	callq _ZSt12__relocate_aIPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7_S6_RT1_
 	# SetupCalls(5513:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %r9
-	movq -56(%rbp), %r9
-	# Unclobber %rcx
-	movq -48(%rbp), %rcx
-	# Unclobber %rdx
-	movq -40(%rbp), %rdx
 	movq %rbx, %rax
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27102,11 +25394,11 @@ _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt1
 	.___ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS5_ESaISC_EEEEEEE10deallocateEPSK_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(4677:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(4678:3): size = 8, type = ptr*, var = ^5
@@ -27123,15 +25415,11 @@ _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt1
 	movq (%rcx), %rax
 	# LowerLoad(4684:3).2: (^5) into ptr ^8
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4685:3): move argument ptr ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZdlPv@PLT
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27234,14 +25522,14 @@ _ZSt12__relocate_aIPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7
 	.___ZSt12__relocate_aIPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7_S6_RT1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(104 + 0, 16)
-	subq $112, %rsp
+	# upalign(88 + 0, 16)
+	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -64(%rbp)
-	movq %r14, -80(%rbp)
+	movq %rbx, -56(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r13, -48(%rbp)
+	movq %r14, -64(%rbp)
 	# LowerAlloca(5590:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5591:3): size = 8, type = ptr*, var = ^6
@@ -27260,44 +25548,30 @@ _ZSt12__relocate_aIPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7
 	movq %rcx, (%rbx)
 	# LowerLoad(5598:3).2: (^5) into ptr ^9
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
 	# SetupCalls(5599:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _ZSt12__niter_baseIPSt17basic_string_viewIcSt11char_traitsIcEEET_S5_
 	# SetupCalls(5599:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	# LowerLoad(5600:3).2: (^6) into ptr ^11
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(5601:3): move argument ptr ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt12__niter_baseIPSt17basic_string_viewIcSt11char_traitsIcEEET_S5_
 	# SetupCalls(5601:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	# LowerLoad(5602:3).2: (^7) into ptr ^13
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(5603:3): move argument ptr ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt12__niter_baseIPSt17basic_string_viewIcSt11char_traitsIcEEET_S5_
 	# SetupCalls(5603:3): move ptr result from %rax
 	movq %rax, %r13
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	# LowerLoad(5604:3).2: (^8) into ptr ^15
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(5605:3): move argument ptr ^10
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdi
@@ -27313,13 +25587,11 @@ _ZSt12__relocate_aIPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7
 	callq _ZSt14__relocate_a_1IPSt17basic_string_viewIcSt11char_traitsIcEES4_SaIS3_EET0_T_S7_S6_RT1_
 	# SetupCalls(5605:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	movq %rbx, %rax
-	movq -80(%rbp), %r14
-	movq -64(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -64(%rbp), %r14
+	movq -48(%rbp), %r13
+	movq -40(%rbp), %r12
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27331,15 +25603,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE15_M_destroy_nodeEPSt13_Rb_tree_nodeISI_E__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(152 + 0, 16)
-	subq $160, %rsp
+	# upalign(144 + 0, 16)
+	subq $144, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -104(%rbp)
-	movq %r12, -128(%rbp)
-	movq %r13, -96(%rbp)
-	movq %r14, -88(%rbp)
-	movq %r15, -80(%rbp)
+	movq %rbx, -96(%rbp)
+	movq %r12, -120(%rbp)
+	movq %r13, -88(%rbp)
+	movq %r14, -80(%rbp)
+	movq %r15, -72(%rbp)
 	# LowerAlloca(4591:3): size = 8, type = ptr*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -64(%rbp)
 	leaq -8(%rbp), %r15
@@ -27363,29 +25635,21 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq %rsi, (%rax)
 	# LowerLoad(4599:3).2: (^7) into ptr ^9
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(4600:3): move argument ptr nonnull dereferenceable(48) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE21_M_get_Node_allocatorEv
 	# SetupCalls(4600:3): move ptr result from %rax
 	movq %rax, %r15
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	# LowerLoad(4601:3).2: (^8) into ptr ^11
 	movq -56(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(4602:3): move argument ptr nonnull dereferenceable(96) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEE9_M_valptrEv
 	# SetupCalls(4602:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	# LowerStore(4603:3).9: mov ptr ^10, (^5)
 	movq %r15, (%r13)
 	# LowerStore(4604:3).9: mov ptr ^12, (^6)
@@ -27404,22 +25668,18 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%rax), %rbx
 	# LowerLoad(4610:3).2: (^4) into ptr ^16
 	movq (%r14), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(4611:3): move argument ptr nonnull dereferenceable(64) align 8 ^16
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEED2Ev
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	# LowerLoad(4612:3).2: (^8) into ptr ^17
 	movq -56(%rbp), %rax
 	movq (%rax), %rbx
-	movq -80(%rbp), %r15
-	movq -88(%rbp), %r14
-	movq -96(%rbp), %r13
-	movq -128(%rbp), %r12
-	movq -104(%rbp), %rbx
+	movq -72(%rbp), %r15
+	movq -80(%rbp), %r14
+	movq -88(%rbp), %r13
+	movq -120(%rbp), %r12
+	movq -96(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27431,11 +25691,11 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ERKS4_:
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ERKS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(4731:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(4732:3): size = 8, type = ptr*, var = ^4
@@ -27451,8 +25711,6 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ERKS4_:
 	# LowerGetelementptr(4736:3): type of ^6 is %"struct.std::_Vector_base<std::basic_string_view<char>, std::allocator<std::basic_string_view<char>>>::_Vector_impl"*
 	# LowerLoad(4737:3).2: (^4) into ptr ^7
 	movq (%rcx), %rbx
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(4738:3): move argument ptr nonnull dereferenceable(24) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -27460,9 +25718,7 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EEC2ERKS4_:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_implC2ERKS4_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27502,11 +25758,11 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_implC2ERKS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
+	movq %rbx, -56(%rbp)
 	# LowerAlloca(4825:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r8
 	# LowerAlloca(4826:3): size = 8, type = ptr*, var = ^4
@@ -27541,15 +25797,11 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_
 	movq %rax, (%r9)
 	# LowerLoad(4841:3).2: (^3) into ptr ^13
 	movq (%r8), %rax
-	# Clobber %rsi
-	movq %rsi, -56(%rbp)
 	# SetupCalls(4842:3): move argument ptr nonnull dereferenceable(24) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rsi, %rdi
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_Vector_impl_dataC2Ev
-	# Unclobber %rsi
-	movq -56(%rbp), %rsi
-	movq -64(%rbp), %rbx
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27561,12 +25813,12 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_alloc
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_allocateEm__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -72(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -64(%rbp)
 	# LowerAlloca(4848:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rdx
 	# LowerAlloca(4849:3): size = 8, type = i64*, var = ^4
@@ -27605,8 +25857,6 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_alloc
 	movq (%rdx), %rax
 	# LowerLoad(4865:3).2: (^4) into i64 ^14
 	movq (%r8), %rbx
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(4866:3): move argument ptr nonnull dereferenceable(1) align 1 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -27618,8 +25868,6 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_alloc
 	callq _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE8allocateEmPKv
 	# SetupCalls(4866:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -40(%rbp), %rax
 	# MovePhi: ^15 -> ^18
 	movq %rbx, %r12
 	jmp .___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_allocateEm__M68
@@ -27628,8 +25876,8 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_alloc
 	movq $0, %r12
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE11_M_allocateEm__M68:
 	movq %r12, %rax
-	movq -72(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -64(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27641,15 +25889,15 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_l
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_lenEmRKS4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(120 + 0, 16)
-	subq $128, %rsp
+	# upalign(112 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -80(%rbp)
-	movq %r13, -96(%rbp)
-	movq %r14, -104(%rbp)
-	movq %r15, -112(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -72(%rbp)
+	movq %r13, -88(%rbp)
+	movq %r14, -96(%rbp)
+	movq %r15, -104(%rbp)
 	# LowerAlloca(4879:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r8
 	# LowerAlloca(4880:3): size = 8, type = ptr*, var = ^4
@@ -27702,14 +25950,10 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_l
 	movq %r13, (%r12)
 	# LowerLoad(4901:3).2: (^7) into ptr ^18
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(4902:3): move argument ptr nonnull dereferenceable(1) align 1 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEED2Ev
-	# Unclobber %rax
-	movq -72(%rbp), %rax
 	cmpb $0, %r14b
 	jne .___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_lenEmRKS4___M92
 	jmp .___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_lenEmRKS4___M114
@@ -27720,11 +25964,11 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_l
 	.___ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE17_S_check_init_lenEmRKS4___M114:
 	# LowerLoad(4910:3).2: (^8) into i64 ^21
 	movq (%rbx), %rax
-	movq -112(%rbp), %r15
-	movq -104(%rbp), %r14
-	movq -96(%rbp), %r13
-	movq -80(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -104(%rbp), %r15
+	movq -96(%rbp), %r14
+	movq -88(%rbp), %r13
+	movq -72(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27736,11 +25980,11 @@ _ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPKSt17basic_string_viewIcSt11ch
 	.___ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS5_EET0_T_SA_S9___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(40 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(5032:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5033:3): size = 8, type = ptr*, var = ^5
@@ -27759,12 +26003,6 @@ _ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPKSt17basic_string_viewIcSt11ch
 	movq (%r8), %rax
 	# LowerLoad(5040:3).2: (^6) into ptr ^9
 	movq (%rbx), %r8
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %r8
-	movq %r8, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(5041:3): move argument ptr ^7
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -27777,14 +26015,8 @@ _ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPKSt17basic_string_viewIcSt11ch
 	callq _ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_S7_
 	# SetupCalls(5041:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %r8
-	movq -40(%rbp), %r8
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	movq %rbx, %rax
-	movq -56(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27796,14 +26028,14 @@ _ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_
 	.___ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_S7___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -72(%rbp)
-	movq %r12, -64(%rbp)
-	movq %r13, -56(%rbp)
-	movq %r15, -80(%rbp)
+	movq %rbx, -56(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -40(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(5047:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r13
 	# LowerAlloca(5048:3): size = 8, type = ptr*, var = ^5
@@ -27840,10 +26072,6 @@ _ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_
 	movq (%rbx), %rax
 	# LowerLoad(5066:3).2: (^4) into ptr ^15
 	movq (%r13), %rcx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(5067:3): move argument ptr ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -27851,10 +26079,6 @@ _ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rsi
 	callq _ZSt10_ConstructISt17basic_string_viewIcSt11char_traitsIcEEJRKS3_EEvPT_DpOT0_
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	# LowerLoad(5071:3).2: (^4) into ptr ^17
 	movq (%r13), %rax
 	# tt = Pointer, type = %"class.std::basic_string_view"
@@ -27875,10 +26099,10 @@ _ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_
 	.___ZSt16__do_uninit_copyIPKSt17basic_string_viewIcSt11char_traitsIcEEPS3_ET0_T_S8_S7___M75:
 	# LowerLoad(5080:3).2: (^7) into ptr ^22
 	movq (%rbx), %rax
-	movq -80(%rbp), %r15
-	movq -56(%rbp), %r13
-	movq -64(%rbp), %r12
-	movq -72(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -40(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -27926,15 +26150,15 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	.___ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEbEEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(808 + 0, 16)
-	subq $816, %rsp
+	# upalign(784 + 0, 16)
+	subq $784, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -464(%rbp)
-	movq %r12, -424(%rbp)
-	movq %r13, -432(%rbp)
-	movq %r14, -472(%rbp)
-	movq %r15, -344(%rbp)
+	movq %rbx, -440(%rbp)
+	movq %r12, -400(%rbp)
+	movq %r13, -408(%rbp)
+	movq %r14, -448(%rbp)
+	movq %r15, -320(%rbp)
 	# LowerAlloca(6479:3): size = 8, type = ptr*, var = ^5
 	# Fixing source-to-dest leaq -8(%rbp), -280(%rbp)
 	leaq -8(%rbp), %r15
@@ -28087,8 +26311,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	# LowerLoad(6520:3).2: (^18) into i64 ^37
 	movq -192(%rbp), %rax
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
 	# SetupCalls(6521:3): move argument ptr nonnull dereferenceable(24) align 8 ^26
 	# Fixed movzx with identical source and destination widths
 	movq -200(%rbp), %rdi
@@ -28098,8 +26320,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	callq _ZNSt12_Vector_baseI6LsItemSaIS0_EE11_M_allocateEm
 	# SetupCalls(6521:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
 	# LowerStore(6522:3).9: mov ptr ^38, (^23)
 	movq -208(%rbp), %rax
 	movq %r14, (%rax)
@@ -28121,13 +26341,9 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	movq (%rbx), %rdx
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(6528:3): pointer-type -> ^43
-	# Clobber %rdx
-	movq %rdx, -328(%rbp)
 	movq %rdx, %rax
 	movq $40, %rbx
 	imulq %rbx
-	# Unclobber %rdx
-	movq -328(%rbp), %rdx
 	movq %rax, %rdx
 	addq %rsi, %rdx
 	# LowerLoad(6529:3).2: (^16) into ptr ^44
@@ -28179,8 +26395,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	# LowerLoad(6545:3).2: (^7) into ptr ^52
 	movq -272(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -336(%rbp)
 	# SetupCalls(6546:3): move argument ptr nonnull dereferenceable(32) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -248(%rbp), %rdi
@@ -28188,8 +26402,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_@PLT
-	# Unclobber %rax
-	movq -336(%rbp), %rax
 	# LowerLoad(6547:3).2: (^8) into ptr ^53
 	movq -256(%rbp), %rcx
 	movq (%rcx), %rax
@@ -28198,8 +26410,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	# LowerTrunc(6549:3): 8 to 1, move
 	# LowerTrunc(6549:3): 8 to 1, apply mask
 	andq $1, %rcx
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
 	# SetupCalls(6550:3): move argument ptr nonnull dereferenceable(33) align 8 ^51
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -28210,8 +26420,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	movzbq %cl, %rdx
 	andq $1, %rdx
 	callq _ZN6LsItemC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
 	# SetupCalls(6551:3): move argument ptr nonnull dereferenceable(32) align 8 ^9
 	# Fixed movzx with identical source and destination widths
 	movq -248(%rbp), %rdi
@@ -28335,8 +26543,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	movq $40, %rbx
 	idivq %rbx
 	movq %rax, %rbx
-	# Clobber %rcx
-	movq %rcx, -320(%rbp)
 	# SetupCalls(6579:3): move argument ptr nonnull dereferenceable(24) align 8 ^26
 	# Fixed movzx with identical source and destination widths
 	movq -200(%rbp), %rdi
@@ -28347,8 +26553,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m
-	# Unclobber %rcx
-	movq -320(%rbp), %rcx
 	# LowerLoad(6580:3).2: (^23) into ptr ^79
 	movq -208(%rbp), %rbx
 	movq (%rbx), %rax
@@ -28398,11 +26602,11 @@ _ZNSt6vectorI6LsItemSaIS0_EE17_M_realloc_insertIJNSt7__cxx1112basic_stringIcSt11
 	# LowerGetelementptr(6592:3): type of ^89 is ptr*
 	# LowerStore(6593:3).9: mov %struct.LsItem* ^87, (^89)
 	movq %rcx, (%rbx)
-	movq -344(%rbp), %r15
-	movq -472(%rbp), %r14
-	movq -432(%rbp), %r13
-	movq -424(%rbp), %r12
-	movq -464(%rbp), %rbx
+	movq -320(%rbp), %r15
+	movq -448(%rbp), %r14
+	movq -408(%rbp), %r13
+	movq -400(%rbp), %r12
+	movq -440(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -28414,12 +26618,12 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev:
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(24 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -16(%rbp)
 	# LowerAlloca(5108:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(5109:3).9: mov ptr %rdi, (^2)
@@ -28468,8 +26672,6 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev:
 	movq $16, %rcx
 	idivq %rcx
 	movq %rax, %rcx
-	# Clobber %rcx
-	movq %rcx, -16(%rbp)
 	# SetupCalls(5124:3): move argument ptr nonnull dereferenceable(24) align 8 ^3
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -28480,22 +26682,16 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EED2Ev:
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdx
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deallocateEPS3_m
-	# Unclobber %rcx
-	movq -16(%rbp), %rcx
 	# tt = Pointer, type = %"struct.std::_Vector_base"
 	# LowerGetelementptr(5125:3): struct-type: ptr ^3 -> ^17, indices=0,0
 	movq %r12, %rax
 	# LowerGetelementptr(5125:3): type of ^17 is %"struct.std::_Vector_base<std::basic_string_view<char>, std::allocator<std::basic_string_view<char>>>::_Vector_impl"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5126:3): move argument ptr nonnull dereferenceable(24) align 8 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE12_Vector_implD2Ev
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -16(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -28574,15 +26770,15 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(648 + 0, 16)
-	subq $656, %rsp
+	# upalign(632 + 0, 16)
+	subq $640, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -552(%rbp)
-	movq %r12, -536(%rbp)
-	movq %r13, -544(%rbp)
-	movq %r14, -584(%rbp)
-	movq %r15, -512(%rbp)
+	movq %rbx, -536(%rbp)
+	movq %r12, -520(%rbp)
+	movq %r13, -528(%rbp)
+	movq %r14, -568(%rbp)
+	movq %r15, -496(%rbp)
 	# LowerAlloca(6132:3): size = 8, type = ptr*, var = ^3
 	# Fixing source-to-dest leaq -8(%rbp), -480(%rbp)
 	leaq -8(%rbp), %r15
@@ -28628,8 +26824,6 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# LowerGetelementptr(6144:3): type of ^12 is i8*
 	# LowerLoad(6145:3).2: (^12) into i8 ^13
 	movb (%rax), %cl
-	# Clobber %rcx
-	movq %rcx, -496(%rbp)
 	# SetupCalls(6146:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -464(%rbp), %rdi
@@ -28639,8 +26833,6 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c@PLT
 	# SetupCalls(6146:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rcx
-	movq -496(%rbp), %rcx
 	# LowerLoad(6147:3).2: (^4) into ptr ^15
 	movq -488(%rbp), %rcx
 	movq (%rcx), %rax
@@ -28656,16 +26848,12 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# LowerStore(6150:3).9: mov ptr ^17, (^6)
 	# LowerLoad(6151:3).2: (^6) into ptr ^18
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -504(%rbp)
 	# SetupCalls(6152:3): move argument ptr nonnull dereferenceable(32) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5beginEv@PLT
 	# SetupCalls(6152:3): move ptr result from %rax
 	movq %rax, %r14
-	# Unclobber %rax
-	movq -504(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator.20"
 	# LowerGetelementptr(6153:3): struct-type: ptr ^7 -> ^20, indices=0,0
 	movq %r13, %rax
@@ -28674,16 +26862,12 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq %r14, (%rax)
 	# LowerLoad(6155:3).2: (^6) into ptr ^21
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -504(%rbp)
 	# SetupCalls(6156:3): move argument ptr nonnull dereferenceable(32) align 8 ^21
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE3endEv@PLT
 	# SetupCalls(6156:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -504(%rbp), %rax
 	# tt = Pointer, type = %"class.__gnu_cxx::__normal_iterator.20"
 	# LowerGetelementptr(6157:3): struct-type: ptr ^8 -> ^23, indices=0,0
 	movq %rbx, %rax
@@ -28765,8 +26949,6 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	# LowerGetelementptr(6190:3): type of ^46 is i8*
 	# LowerLoad(6191:3).2: (^46) into i8 ^47
 	movb (%rax), %cl
-	# Clobber %rcx
-	movq %rcx, -496(%rbp)
 	# SetupCalls(6192:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -464(%rbp), %rdi
@@ -28776,13 +26958,9 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c@PLT
 	# SetupCalls(6192:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rcx
-	movq -496(%rbp), %rcx
 	.___ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE__M275:
 	# LowerLoad(6196:3).2: (^9) into i8 ^50
 	movb (%r15), %al
-	# Clobber %rax
-	movq %rax, -504(%rbp)
 	# SetupCalls(6197:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq -464(%rbp), %rdi
@@ -28792,8 +26970,6 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	callq _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c@PLT
 	# SetupCalls(6197:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -504(%rbp), %rax
 	# SetupCalls(6201:3): move argument ptr nonnull dereferenceable(8) align 8 ^7
 	# Fixed movzx with identical source and destination widths
 	movq %r13, %rdi
@@ -28848,11 +27024,11 @@ _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt
 	movq -464(%rbp), %rdi
 	callq _ZNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEED1Ev@PLT
 	movq %rbx, %rax
-	movq -512(%rbp), %r15
-	movq -584(%rbp), %r14
-	movq -544(%rbp), %r13
-	movq -536(%rbp), %r12
-	movq -552(%rbp), %rbx
+	movq -496(%rbp), %r15
+	movq -568(%rbp), %r14
+	movq -528(%rbp), %r13
+	movq -520(%rbp), %r12
+	movq -536(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -28916,11 +27092,11 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deall
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deallocateEPS3_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -80(%rbp)
+	movq %rbx, -56(%rbp)
 	# LowerAlloca(5153:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r9
 	# LowerAlloca(5154:3): size = 8, type = ptr*, var = ^5
@@ -28971,12 +27147,6 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deall
 	movq (%r8), %rdx
 	# LowerLoad(5176:3).2: (^6) into i64 ^19
 	movq (%rbx), %rax
-	# Clobber %rdx
-	movq %rdx, -56(%rbp)
-	# Clobber %rcx
-	movq %rcx, -64(%rbp)
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(5177:3): move argument ptr nonnull dereferenceable(1) align 1 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -28987,14 +27157,8 @@ _ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deall
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE10deallocateEPS3_m
-	# Unclobber %rax
-	movq -72(%rbp), %rax
-	# Unclobber %rcx
-	movq -64(%rbp), %rcx
-	# Unclobber %rdx
-	movq -56(%rbp), %rdx
 	.___ZNSt12_Vector_baseISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE13_M_deallocateEPS3_m__M73:
-	movq -80(%rbp), %rbx
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29006,11 +27170,11 @@ _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE10deallocateEP
 	.___ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE10deallocateEPS3_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(32 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
+	movq %rbx, -32(%rbp)
 	# LowerAlloca(5198:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(5199:3): size = 8, type = ptr*, var = ^5
@@ -29027,15 +27191,11 @@ _ZNSt15__new_allocatorISt17basic_string_viewIcSt11char_traitsIcEEE10deallocateEP
 	movq (%rcx), %rax
 	# LowerLoad(5205:3).2: (^5) into ptr ^8
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(5206:3): move argument ptr ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZdlPv@PLT
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	movq -40(%rbp), %rbx
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29047,13 +27207,13 @@ _ZN9__gnu_cxxmiIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EE
 	.___ZN9__gnu_cxxmiIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEEENS_17__normal_iteratorIT_T0_E15difference_typeERKSC_SF___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(5468:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(5469:3): size = 8, type = ptr*, var = ^4
@@ -29064,30 +27224,22 @@ _ZN9__gnu_cxxmiIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EE
 	movq %rsi, (%r13)
 	# LowerLoad(5472:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5473:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEE4baseEv
 	# SetupCalls(5473:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(5474:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(5475:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5476:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EEE4baseEv
 	# SetupCalls(5476:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(5477:3).2: (^9) into ptr ^10
 	movq (%rbx), %rcx
 	# LowerBasicConversion(5478:3): ptr ^7 -> i64 ^11
@@ -29105,9 +27257,9 @@ _ZN9__gnu_cxxmiIPSt17basic_string_viewIcSt11char_traitsIcEESt6vectorIS4_SaIS4_EE
 	idivq %rbx
 	movq %rax, %rcx
 	movq %rcx, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29149,12 +27301,12 @@ _ZNKSt23_Rb_tree_const_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_tra
 	.___ZNKSt23_Rb_tree_const_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEE13_M_const_castEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(9336:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^2
 	leaq -8(%rbp), %r12
 	# LowerAlloca(9337:3): size = 8, type = ptr*, var = ^3
@@ -29168,8 +27320,6 @@ _ZNKSt23_Rb_tree_const_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_tra
 	# LowerGetelementptr(9340:3): type of ^5 is ptr*
 	# LowerLoad(9341:3).2: (^5) into ptr ^6
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(9342:3): move argument ptr nonnull dereferenceable(8) align 8 ^2
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -29177,16 +27327,14 @@ _ZNKSt23_Rb_tree_const_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_tra
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt17_Rb_tree_iteratorISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEC2EPSt18_Rb_tree_node_base
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::_Rb_tree_iterator"
 	# LowerGetelementptr(9343:3): struct-type: ptr ^2 -> ^7, indices=0,0
 	movq %r12, %rbx
 	# LowerGetelementptr(9343:3): type of ^7 is ptr*
 	# LowerLoad(9344:3).2: (^7) into ptr ^8
 	movq (%rbx), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29382,13 +27530,13 @@ _ZNSt10filesystem7__cxx114pathaSEOS1_:
 	.___ZNSt10filesystem7__cxx114pathaSEOS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
-	subq $64, %rsp
+	# upalign(48 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -48(%rbp)
+	movq %rbx, -48(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(5894:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r13
 	# LowerAlloca(5895:3): size = 8, type = ptr*, var = ^4
@@ -29424,10 +27572,6 @@ _ZNSt10filesystem7__cxx114pathaSEOS1_:
 	# LowerGetelementptr(5911:3): struct-type: ptr ^6 -> ^13, indices=0,0
 	movq %rbx, %rcx
 	# LowerGetelementptr(5911:3): type of ^13 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(5912:3): move argument ptr nonnull dereferenceable(32) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -29437,10 +27581,6 @@ _ZNSt10filesystem7__cxx114pathaSEOS1_:
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEOS4_@PLT
 	# SetupCalls(5912:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# LowerLoad(5913:3).2: (^5) into ptr ^15
 	movq (%r12), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
@@ -29452,10 +27592,6 @@ _ZNSt10filesystem7__cxx114pathaSEOS1_:
 	movq %rbx, %rcx
 	addq $32, %rcx
 	# LowerGetelementptr(5915:3): type of ^17 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rcx
-	movq %rcx, -32(%rbp)
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(5916:3): move argument ptr nonnull dereferenceable(8) align 8 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -29465,28 +27601,20 @@ _ZNSt10filesystem7__cxx114pathaSEOS1_:
 	callq _ZNSt10filesystem7__cxx114path5_ListaSEOS2_
 	# SetupCalls(5916:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -40(%rbp), %rax
-	# Unclobber %rcx
-	movq -32(%rbp), %rcx
 	# LowerLoad(5917:3).2: (^5) into ptr ^19
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -40(%rbp)
 	# SetupCalls(5918:3): move argument ptr nonnull dereferenceable(40) align 8 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5clearEv
-	# Unclobber %rax
-	movq -40(%rbp), %rax
 	# LowerStore(5919:3).9: mov ptr ^6, (^3)
 	movq %rbx, (%r13)
 	.___ZNSt10filesystem7__cxx114pathaSEOS1___M120:
 	# LowerLoad(5923:3).2: (^3) into ptr ^21
 	movq (%r13), %rax
-	movq -48(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -64(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -40(%rbp), %r12
+	movq -48(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29498,11 +27626,11 @@ _ZNSt10filesystem7__cxx114path5clearEv:
 	.___ZNSt10filesystem7__cxx114path5clearEv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(24 + 0, 16)
-	subq $32, %rsp
+	# upalign(16 + 0, 16)
+	subq $16, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -24(%rbp)
+	movq %rbx, -16(%rbp)
 	# LowerAlloca(5973:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(5974:3).9: mov ptr %rdi, (^2)
@@ -29513,19 +27641,15 @@ _ZNSt10filesystem7__cxx114path5clearEv:
 	# LowerGetelementptr(5976:3): struct-type: ptr ^3 -> ^4, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(5976:3): type of ^4 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rax
-	movq %rax, -16(%rbp)
 	# SetupCalls(5977:3): move argument ptr nonnull dereferenceable(32) align 8 ^4
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5clearEv@PLT
-	# Unclobber %rax
-	movq -16(%rbp), %rax
 	# SetupCalls(5978:3): move argument ptr nonnull dereferenceable(40) align 8 ^3
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
 	callq _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv@PLT
-	movq -24(%rbp), %rbx
+	movq -16(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29537,13 +27661,13 @@ _ZN9__gnu_cxxltIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EE
 	.___ZN9__gnu_cxxltIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EESB___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(7535:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(7536:3): size = 8, type = ptr*, var = ^4
@@ -29554,39 +27678,31 @@ _ZN9__gnu_cxxltIP6LsItemSt6vectorIS1_SaIS1_EEEEbRKNS_17__normal_iteratorIT_T0_EE
 	movq %rsi, (%r13)
 	# LowerLoad(7539:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(7540:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(7540:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(7541:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(7542:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(7543:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(7543:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(7544:3).2: (^9) into ptr ^10
 	movq (%rbx), %rax
 	# LowerIcmp(7545:3): ptr ^7 vs. operand ptr ^10
 	cmpq %rax, %r12
 	setb %al
 	andq $1, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29598,13 +27714,13 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	.___ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS5_EEEE9_M_createIRKSB_EEvRSt9_Any_dataOT_St17integral_constantIbLb1EE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -48(%rbp)
-	movq %r15, -64(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -40(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(4437:3): size = 1, type = %"struct.std::integral_constant"*, var = ^3
 	leaq -1(%rbp), %rax
 	# LowerAlloca(4438:3): size = 8, type = ptr*, var = ^4
@@ -29617,16 +27733,12 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	movq %rsi, (%r12)
 	# LowerLoad(4442:3).2: (^4) into ptr ^6
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(4443:3): move argument ptr nonnull dereferenceable(16) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt9_Any_data9_M_accessEv
 	# SetupCalls(4443:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
 	# LowerLoad(4444:3).2: (^5) into ptr ^8
 	movq (%r12), %rax
 	# LowerLoad(4445:3).2: (^8) into ptr ^9
@@ -29634,9 +27746,9 @@ _ZNSt14_Function_base13_Base_managerIPFiRKSt6vectorISt17basic_string_viewIcSt11c
 	movq (%rax), %r15
 	movq %r15, (%rbx)
 	# LowerStore(4446:3).9: mov ptr ^9, (^7)
-	movq -64(%rbp), %r15
-	movq -48(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -40(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29705,11 +27817,11 @@ _ZNSt15__uniq_ptr_dataINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	.___ZNSt15__uniq_ptr_dataINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterELb1ELb1EEaSEOS6___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(5998:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5999:3): size = 8, type = ptr*, var = ^4
@@ -29722,8 +27834,6 @@ _ZNSt15__uniq_ptr_dataINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	movq (%rax), %rbx
 	# LowerLoad(6003:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6004:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -29733,10 +27843,8 @@ _ZNSt15__uniq_ptr_dataINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_dele
 	callq _ZNSt15__uniq_ptr_implINSt10filesystem7__cxx114path5_List5_ImplENS3_13_Impl_deleterEEaSEOS6_
 	# SetupCalls(6004:3): move ptr result from %rax
 	movq %rax, %rax
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	movq %rbx, %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -29780,15 +27888,15 @@ _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EE
 	.___ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EERKT_NS1_6formatE__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(288 + 0, 16)
-	subq $288, %rsp
+	# upalign(264 + 0, 16)
+	subq $272, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -176(%rbp)
-	movq %r12, -192(%rbp)
-	movq %r13, -216(%rbp)
-	movq %r14, -224(%rbp)
-	movq %r15, -160(%rbp)
+	movq %rbx, -152(%rbp)
+	movq %r12, -168(%rbp)
+	movq %r13, -192(%rbp)
+	movq %r14, -200(%rbp)
+	movq %r15, -136(%rbp)
 	# LowerAlloca(6072:3): size = 8, type = ptr*, var = ^4
 	# Fixing source-to-dest leaq -8(%rbp), -128(%rbp)
 	leaq -8(%rbp), %r15
@@ -29831,8 +27939,6 @@ _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EE
 	# LowerGetelementptr(6085:3): type of ^14 is %"class.std::__cxx11::basic_string"*
 	# LowerLoad(6086:3).2: (^8) into ptr ^15
 	movq (%rax), %rcx
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(6087:3): move argument ptr nonnull dereferenceable(16) align 8 ^15
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -29841,8 +27947,6 @@ _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EE
 	# Multireg move: <%hax %hdx> -> <%hr14 %hr15>
 	movq %rax, %r14
 	movq %rdx, %r15
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(6088:3): struct-type: ptr ^11 -> ^17, indices=0,0
 	movq %r12, %rax
@@ -29877,10 +27981,6 @@ _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EE
 	# LowerGetelementptr(6096:3): type of ^23 is ptr*
 	# LowerLoad(6097:3).2: (^23) into ptr ^24
 	movq (%rax), %rdx
-	# Clobber %rdx
-	movq %rdx, -144(%rbp)
-	# Clobber %rcx
-	movq %rcx, -136(%rbp)
 	# SetupCalls(6098:3): move argument i64 ^22
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -29892,10 +27992,6 @@ _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EE
 	# Multireg move: <%hax %hdx> -> <%hr12 %hr14>
 	movq %rax, %r12
 	movq %rdx, %r14
-	# Unclobber %rcx
-	movq -136(%rbp), %rcx
-	# Unclobber %rdx
-	movq -144(%rbp), %rdx
 	# tt = Pointer, type = {i64, ptr}
 	# LowerGetelementptr(6099:3): struct-type: ptr ^10 -> ^26, indices=0,0
 	movq -120(%rbp), %rax
@@ -29948,36 +28044,28 @@ _ZNSt10filesystem7__cxx114pathC2ISt17basic_string_viewIcSt11char_traitsIcEES1_EE
 	# LowerLoad(6111:3).2: (^5) into ptr ^32
 	movq -104(%rbp), %rbx
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(6112:3): move argument ptr nonnull dereferenceable(1) align 1 ^32
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# tt = Pointer, type = %"class.std::filesystem::__cxx11::path"
 	# LowerGetelementptr(6113:3): struct-type: ptr ^13 -> ^33, indices=0,1
 	movq -96(%rbp), %rax
 	addq $32, %rax
 	# LowerGetelementptr(6113:3): type of ^33 is %"struct.std::filesystem::__cxx11::path::_List"*
-	# Clobber %rax
-	movq %rax, -152(%rbp)
 	# SetupCalls(6114:3): move argument ptr nonnull dereferenceable(8) align 8 ^33
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt10filesystem7__cxx114path5_ListC1Ev@PLT
-	# Unclobber %rax
-	movq -152(%rbp), %rax
 	# SetupCalls(6115:3): move argument ptr nonnull dereferenceable(40) align 8 ^13
 	# Fixed movzx with identical source and destination widths
 	movq -96(%rbp), %rdi
 	callq _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv@PLT
-	movq -160(%rbp), %r15
-	movq -224(%rbp), %r14
-	movq -216(%rbp), %r13
-	movq -192(%rbp), %r12
-	movq -176(%rbp), %rbx
+	movq -136(%rbp), %r15
+	movq -200(%rbp), %r14
+	movq -192(%rbp), %r13
+	movq -168(%rbp), %r12
+	movq -152(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30044,15 +28132,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE10_M_insert_IRKSI_NSO_11_Alloc_nodeEEESt17_Rb_tree_iteratorISI_EPSt18_Rb_tree_node_baseSW_OT_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(320 + 0, 16)
-	subq $320, %rsp
+	# upalign(296 + 0, 16)
+	subq $304, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -152(%rbp)
-	movq %r12, -192(%rbp)
-	movq %r13, -168(%rbp)
-	movq %r14, -176(%rbp)
-	movq %r15, -144(%rbp)
+	movq %rbx, -128(%rbp)
+	movq %r12, -168(%rbp)
+	movq %r13, -144(%rbp)
+	movq %r14, -152(%rbp)
+	movq %r15, -120(%rbp)
 	# LowerAlloca(9257:3): size = 8, type = %"struct.std::_Rb_tree_iterator"*, var = ^6
 	# Fixing source-to-dest leaq -8(%rbp), -72(%rbp)
 	leaq -8(%rbp), %r15
@@ -30138,8 +28226,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9284:3): type of ^24 is %"struct.std::less"*
 	# LowerLoad(9285:3).2: (^10) into ptr ^25
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -120(%rbp)
 	# SetupCalls(9286:3): move argument ptr nonnull dereferenceable(1) align 1 ^13
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -30149,21 +28235,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt10_Select1stISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS4_ESaISB_EEEEEEclERKSI_
 	# SetupCalls(9286:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -120(%rbp), %rax
 	# LowerLoad(9287:3).2: (^9) into ptr ^27
 	movq -96(%rbp), %rcx
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -120(%rbp)
 	# SetupCalls(9288:3): move argument ptr ^27
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE6_S_keyEPKSt18_Rb_tree_node_base
 	# SetupCalls(9288:3): move ptr result from %rax
 	movq %rax, %r12
-	# Unclobber %rax
-	movq -120(%rbp), %rax
 	# SetupCalls(9289:3): move argument ptr nonnull dereferenceable(1) align 1 ^24
 	# Fixed movzx with identical source and destination widths
 	movq %r15, %rdi
@@ -30189,8 +28269,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%r14), %rax
 	# LowerLoad(9297:3).2: (^10) into ptr ^34
 	movq (%r13), %rbx
-	# Clobber %rax
-	movq %rax, -120(%rbp)
 	# SetupCalls(9298:3): move argument ptr nonnull dereferenceable(8) align 8 ^33
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -30200,8 +28278,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	callq _ZNKSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE11_Alloc_nodeclIRKSI_EEPSt13_Rb_tree_nodeISI_EOT_
 	# SetupCalls(9298:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -120(%rbp), %rax
 	# LowerStore(9299:3).9: mov ptr ^35, (^14)
 	movq -80(%rbp), %rax
 	movq %rbx, (%rax)
@@ -30229,12 +28305,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerGetelementptr(9306:3): struct-type: ptr ^41 -> ^42, indices=0,0
 	movq %rdx, %r8
 	# LowerGetelementptr(9306:3): type of ^42 is %"struct.std::_Rb_tree_node_base"*
-	# Clobber %rcx
-	movq %rcx, -128(%rbp)
-	# Clobber %r8
-	movq %r8, -136(%rbp)
-	# Clobber %rax
-	movq %rax, -120(%rbp)
 	# SetupCalls(9307:3): move argument i1 zeroext ^37
 	movzbq %bl, %rdi
 	andq $1, %rdi
@@ -30248,12 +28318,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %r8, %rcx
 	callq _ZSt29_Rb_tree_insert_and_rebalancebPSt18_Rb_tree_node_baseS0_RS_@PLT
-	# Unclobber %rax
-	movq -120(%rbp), %rax
-	# Unclobber %r8
-	movq -136(%rbp), %r8
-	# Unclobber %rcx
-	movq -128(%rbp), %rcx
 	# tt = Pointer, type = %"class.std::_Rb_tree"
 	# LowerGetelementptr(9308:3): struct-type: ptr ^15 -> ^43, indices=0,0
 	movq -88(%rbp), %rax
@@ -30290,11 +28354,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# LowerLoad(9317:3).2: (^49) into ptr ^50
 	movq (%rax), %rbx
 	movq %rbx, %rax
-	movq -144(%rbp), %r15
-	movq -176(%rbp), %r14
-	movq -168(%rbp), %r13
-	movq -192(%rbp), %r12
-	movq -152(%rbp), %rbx
+	movq -120(%rbp), %r15
+	movq -152(%rbp), %r14
+	movq -144(%rbp), %r13
+	movq -168(%rbp), %r12
+	movq -128(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30372,12 +28436,12 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EED2Ev:
 	.___ZNSt12_Vector_baseI6LsItemSaIS0_EED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(40 + 0, 16)
-	subq $48, %rsp
+	# upalign(24 + 0, 16)
+	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -40(%rbp)
-	movq %r12, -32(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -16(%rbp)
 	# LowerAlloca(6328:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rax
 	# LowerStore(6329:3).9: mov ptr %rdi, (^2)
@@ -30426,8 +28490,6 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EED2Ev:
 	movq $40, %rcx
 	idivq %rcx
 	movq %rax, %rcx
-	# Clobber %rcx
-	movq %rcx, -16(%rbp)
 	# SetupCalls(6344:3): move argument ptr nonnull dereferenceable(24) align 8 ^3
 	# Fixed movzx with identical source and destination widths
 	movq %r12, %rdi
@@ -30438,22 +28500,16 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EED2Ev:
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdx
 	callq _ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m
-	# Unclobber %rcx
-	movq -16(%rbp), %rcx
 	# tt = Pointer, type = %"struct.std::_Vector_base.6"
 	# LowerGetelementptr(6345:3): struct-type: ptr ^3 -> ^17, indices=0,0
 	movq %r12, %rax
 	# LowerGetelementptr(6345:3): type of ^17 is %"struct.std::_Vector_base<LsItem, std::allocator<LsItem>>::_Vector_impl"*
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6346:3): move argument ptr nonnull dereferenceable(24) align 8 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt12_Vector_baseI6LsItemSaIS0_EE12_Vector_implD2Ev
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %r12
-	movq -40(%rbp), %rbx
+	movq -16(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30465,11 +28521,11 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findES2_m:
 	.___ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findES2_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(88 + 0, 16)
-	subq $96, %rsp
+	# upalign(64 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(974:3): size = 16, type = %"class.std::basic_string_view"*, var = ^5
 	leaq -16(%rbp), %r9
 	# LowerAlloca(975:3): size = 8, type = ptr*, var = ^6
@@ -30510,12 +28566,6 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findES2_m:
 	# LowerGetelementptr(987:3): type of ^14 is i64*
 	# LowerLoad(988:3).2: (^14) into i64 ^15
 	movq (%rdx), %r8
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
-	# Clobber %r8
-	movq %r8, -48(%rbp)
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(989:3): move argument ptr nonnull dereferenceable(16) align 8 ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -30531,14 +28581,8 @@ _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findES2_m:
 	callq _ZNKSt17basic_string_viewIcSt11char_traitsIcEE4findEPKcmm
 	# SetupCalls(989:3): move i64 result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -56(%rbp), %rax
-	# Unclobber %r8
-	movq -48(%rbp), %r8
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	movq %rbx, %rax
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30550,11 +28594,11 @@ _ZSt8_DestroyIP6LsItemEvT_S2_:
 	.___ZSt8_DestroyIP6LsItemEvT_S2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(6352:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(6353:3): size = 8, type = ptr*, var = ^4
@@ -30567,8 +28611,6 @@ _ZSt8_DestroyIP6LsItemEvT_S2_:
 	movq (%rax), %rbx
 	# LowerLoad(6357:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6358:3): move argument ptr ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -30576,9 +28618,7 @@ _ZSt8_DestroyIP6LsItemEvT_S2_:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30590,13 +28630,13 @@ _ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4_:
 	.___ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(48 + 0, 16)
+	# upalign(40 + 0, 16)
 	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -32(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -24(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(6364:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r12
 	# LowerAlloca(6365:3): size = 8, type = ptr*, var = ^4
@@ -30620,14 +28660,10 @@ _ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4_:
 	.___ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4___M18:
 	# LowerLoad(6377:3).2: (^3) into ptr ^10
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6378:3): move argument ptr ^10
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZSt8_DestroyI6LsItemEvPT_
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(6382:3).2: (^3) into ptr ^12
 	movq (%r12), %rax
 	# tt = Pointer, type = %struct.LsItem
@@ -30638,9 +28674,9 @@ _ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4_:
 	movq %rax, (%r12)
 	jmp .___ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4___M9
 	.___ZNSt12_Destroy_auxILb0EE9__destroyIP6LsItemEEvT_S4___M52:
-	movq -40(%rbp), %r13
-	movq -32(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -24(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30652,11 +28688,11 @@ _ZSt10_ConstructISt17basic_string_viewIcSt11char_traitsIcEEJRKS3_EEvPT_DpOT0_:
 	.___ZSt10_ConstructISt17basic_string_viewIcSt11char_traitsIcEEJRKS3_EEvPT_DpOT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(32 + 0, 16)
+	# upalign(24 + 0, 16)
 	subq $32, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
+	movq %rbx, -24(%rbp)
 	# LowerAlloca(5086:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(5087:3): size = 8, type = ptr*, var = ^4
@@ -30669,8 +28705,6 @@ _ZSt10_ConstructISt17basic_string_viewIcSt11char_traitsIcEEJRKS3_EEvPT_DpOT0_:
 	movq (%rax), %rbx
 	# LowerLoad(5091:3).2: (^4) into ptr ^6
 	movq (%rcx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(5092:3): move argument ptr align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -30680,9 +28714,7 @@ _ZSt10_ConstructISt17basic_string_viewIcSt11char_traitsIcEEJRKS3_EEvPT_DpOT0_:
 	# SetupCalls(5092:3): move argument i64 16
 	movq $16, %rdx
 	callq memcpy@PLT
-	# Unclobber %rax
-	movq -24(%rbp), %rax
-	movq -32(%rbp), %rbx
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30724,13 +28756,13 @@ _ZNKSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EE
 	.___ZNKSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEclES8___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(72 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -56(%rbp)
-	movq %r12, -48(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -40(%rbp)
+	movq %r12, -32(%rbp)
+	movq %r13, -24(%rbp)
 	# LowerAlloca(2590:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rax
 	# LowerAlloca(2591:3): size = 8, type = ptr*, var = ^4
@@ -30766,10 +28798,6 @@ _ZNKSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EE
 	# LowerGetelementptr(2605:3): type of ^11 is %"union.std::_Any_data"*
 	# LowerLoad(2606:3).2: (^4) into ptr ^12
 	movq (%r13), %rax
-	# Clobber %rcx
-	movq %rcx, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(2607:3): move argument ptr nonnull dereferenceable(16) align 8 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -30780,14 +28808,10 @@ _ZNKSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EE
 	callq *%rbx
 	# SetupCalls(2607:3): move i32 result from %rax
 	movl %eax, %ebx
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rcx
-	movq -24(%rbp), %rcx
 	movl %ebx, %eax
-	movq -40(%rbp), %r13
-	movq -48(%rbp), %r12
-	movq -56(%rbp), %rbx
+	movq -24(%rbp), %r13
+	movq -32(%rbp), %r12
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30842,11 +28866,11 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m:
 	.___ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -80(%rbp)
+	movq %rbx, -56(%rbp)
 	# LowerAlloca(6412:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r9
 	# LowerAlloca(6413:3): size = 8, type = ptr*, var = ^5
@@ -30897,12 +28921,6 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m:
 	movq (%r8), %rdx
 	# LowerLoad(6435:3).2: (^6) into i64 ^19
 	movq (%rbx), %rax
-	# Clobber %rdx
-	movq %rdx, -56(%rbp)
-	# Clobber %rcx
-	movq %rcx, -64(%rbp)
-	# Clobber %rax
-	movq %rax, -72(%rbp)
 	# SetupCalls(6436:3): move argument ptr nonnull dereferenceable(1) align 1 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -30913,14 +28931,8 @@ _ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m:
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdx
 	callq _ZNSt15__new_allocatorI6LsItemE10deallocateEPS0_m
-	# Unclobber %rax
-	movq -72(%rbp), %rax
-	# Unclobber %rcx
-	movq -64(%rbp), %rcx
-	# Unclobber %rdx
-	movq -56(%rbp), %rdx
 	.___ZNSt12_Vector_baseI6LsItemSaIS0_EE13_M_deallocateEPS0_m__M73:
-	movq -80(%rbp), %rbx
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -30932,15 +28944,15 @@ _ZNSt6vectorI6LsItemSaIS0_EED2Ev:
 	.___ZNSt6vectorI6LsItemSaIS0_EED2Ev__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(136 + 0, 16)
-	subq $144, %rsp
+	# upalign(128 + 0, 16)
+	subq $128, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -120(%rbp)
-	movq %r13, -72(%rbp)
-	movq %r14, -80(%rbp)
-	movq %r15, -64(%rbp)
+	movq %rbx, -80(%rbp)
+	movq %r12, -112(%rbp)
+	movq %r13, -64(%rbp)
+	movq %r14, -72(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(1861:3): size = 8, type = ptr*, var = ^2
 	# Fixing source-to-dest leaq -8(%rbp), -48(%rbp)
 	leaq -8(%rbp), %r15
@@ -30994,8 +29006,6 @@ _ZNSt6vectorI6LsItemSaIS0_EED2Ev:
 	movq (%rbx), %rax
 	# LowerLoad(1878:3).2: (^3) into ptr ^15
 	movq (%r13), %rbx
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(1879:3): move argument ptr ^14
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -31003,17 +29013,15 @@ _ZNSt6vectorI6LsItemSaIS0_EED2Ev:
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rsi
 	callq _ZSt8_DestroyIP6LsItemEvT_S2_
-	# Unclobber %rax
-	movq -56(%rbp), %rax
 	# SetupCalls(1880:3): move argument ptr nonnull dereferenceable(24) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq -40(%rbp), %rdi
 	callq _ZNSt12_Vector_baseI6LsItemSaIS0_EED2Ev
-	movq -64(%rbp), %r15
-	movq -80(%rbp), %r14
-	movq -72(%rbp), %r13
-	movq -120(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -72(%rbp), %r14
+	movq -64(%rbp), %r13
+	movq -112(%rbp), %r12
+	movq -80(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31025,12 +29033,12 @@ _ZN6LsItemC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb:
 	.___ZN6LsItemC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(56 + 0, 16)
-	subq $64, %rsp
+	# upalign(40 + 0, 16)
+	subq $48, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
-	movq %r12, -40(%rbp)
+	movq %rbx, -32(%rbp)
+	movq %r12, -24(%rbp)
 	# LowerAlloca(6619:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %rax
 	# LowerAlloca(6620:3): size = 1, type = i8*, var = ^5
@@ -31046,21 +29054,13 @@ _ZN6LsItemC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb:
 	# LowerGetelementptr(6625:3): struct-type: ptr ^7 -> ^8, indices=0,0
 	movq %rbx, %rax
 	# LowerGetelementptr(6625:3): type of ^8 is %"class.std::__cxx11::basic_string"*
-	# Clobber %rsi
-	movq %rsi, -24(%rbp)
-	# Clobber %rax
-	movq %rax, -32(%rbp)
 	# SetupCalls(6626:3): move argument ptr nonnull dereferenceable(32) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	# SetupCalls(6626:3): move argument ptr nonnull dereferenceable(32) align 8 %rsi
-	# Semiunclobber live %rsi into %rsi
-	movq -24(%rbp), %rsi
+	# Semiunclobber non-live %rsi into %rsi
+	movq %rsi, %rsi
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_@PLT
-	# Unclobber %rax
-	movq -32(%rbp), %rax
-	# Unclobber %rsi
-	movq -24(%rbp), %rsi
 	# tt = Pointer, type = %struct.LsItem
 	# LowerGetelementptr(6627:3): struct-type: ptr ^7 -> ^9, indices=0,1
 	movq %rbx, %rax
@@ -31074,8 +29074,8 @@ _ZN6LsItemC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb:
 	# LowerBasicConversion(6630:3): i1 ^11 -> i8 ^12
 	movb %bl, (%rax)
 	# LowerStore(6631:3).9: mov i8 ^12, (^9)
-	movq -40(%rbp), %r12
-	movq -48(%rbp), %rbx
+	movq -24(%rbp), %r12
+	movq -32(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31087,15 +29087,15 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	.___ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE11_M_put_nodeEPSt13_Rb_tree_nodeISI_E__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(112 + 0, 16)
-	subq $112, %rsp
+	# upalign(96 + 0, 16)
+	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -88(%rbp)
-	movq %r12, -96(%rbp)
-	movq %r13, -80(%rbp)
-	movq %r14, -64(%rbp)
-	movq %r15, -72(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -80(%rbp)
+	movq %r13, -64(%rbp)
+	movq %r14, -48(%rbp)
+	movq %r15, -56(%rbp)
 	# LowerAlloca(4618:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %r14
 	# LowerAlloca(4619:3): size = 8, type = ptr*, var = ^4
@@ -31112,16 +29112,12 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq %rsi, (%r12)
 	# LowerLoad(4625:3).2: (^6) into ptr ^8
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(4626:3): move argument ptr nonnull dereferenceable(48) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISB_EEEEESt10_Select1stISI_ESt4lessIS5_ESaISI_EE21_M_get_Node_allocatorEv
 	# SetupCalls(4626:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -48(%rbp), %rax
 	# LowerLoad(4627:3).2: (^7) into ptr ^10
 	movq (%r12), %rax
 	# LowerStore(4628:3).9: mov ptr ^9, (^3)
@@ -31136,10 +29132,6 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	movq (%r15), %rax
 	# LowerLoad(4633:3).2: (^5) into i64 ^13
 	movq (%r13), %rbx
-	# Clobber %rcx
-	movq %rcx, -56(%rbp)
-	# Clobber %rax
-	movq %rax, -48(%rbp)
 	# SetupCalls(4634:3): move argument ptr nonnull dereferenceable(1) align 1 ^11
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -31150,15 +29142,11 @@ _ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_S
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdx
 	callq _ZNSt15__new_allocatorISt13_Rb_tree_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS5_ESaISC_EEEEEEE10deallocateEPSK_m
-	# Unclobber %rax
-	movq -48(%rbp), %rax
-	# Unclobber %rcx
-	movq -56(%rbp), %rcx
-	movq -72(%rbp), %r15
-	movq -64(%rbp), %r14
-	movq -80(%rbp), %r13
-	movq -96(%rbp), %r12
-	movq -88(%rbp), %rbx
+	movq -56(%rbp), %r15
+	movq -48(%rbp), %r14
+	movq -64(%rbp), %r13
+	movq -80(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31193,13 +29181,13 @@ _ZN9__gnu_cxxmiIP6LsItemSt6vectorIS1_SaIS1_EEEENS_17__normal_iteratorIT_T0_E15di
 	.___ZN9__gnu_cxxmiIP6LsItemSt6vectorIS1_SaIS1_EEEENS_17__normal_iteratorIT_T0_E15difference_typeERKS9_SC___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
+	# upalign(72 + 0, 16)
 	subq $80, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -32(%rbp)
-	movq %r12, -56(%rbp)
-	movq %r13, -40(%rbp)
+	movq %rbx, -24(%rbp)
+	movq %r12, -48(%rbp)
+	movq %r13, -32(%rbp)
 	# LowerAlloca(6692:3): size = 8, type = ptr*, var = ^3
 	leaq -8(%rbp), %rbx
 	# LowerAlloca(6693:3): size = 8, type = ptr*, var = ^4
@@ -31210,30 +29198,22 @@ _ZN9__gnu_cxxmiIP6LsItemSt6vectorIS1_SaIS1_EEEENS_17__normal_iteratorIT_T0_E15di
 	movq %rsi, (%r13)
 	# LowerLoad(6696:3).2: (^3) into ptr ^5
 	movq (%rbx), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6697:3): move argument ptr nonnull dereferenceable(8) align 8 ^5
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(6697:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(6698:3).2: (^6) into ptr ^7
 	movq (%rbx), %r12
 	# LowerLoad(6699:3).2: (^4) into ptr ^8
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -24(%rbp)
 	# SetupCalls(6700:3): move argument ptr nonnull dereferenceable(8) align 8 ^8
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNK9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS1_SaIS1_EEE4baseEv
 	# SetupCalls(6700:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -24(%rbp), %rax
 	# LowerLoad(6701:3).2: (^9) into ptr ^10
 	movq (%rbx), %rcx
 	# LowerBasicConversion(6702:3): ptr ^7 -> i64 ^11
@@ -31251,9 +29231,9 @@ _ZN9__gnu_cxxmiIP6LsItemSt6vectorIS1_SaIS1_EEEENS_17__normal_iteratorIT_T0_E15di
 	idivq %rbx
 	movq %rax, %rcx
 	movq %rcx, %rax
-	movq -40(%rbp), %r13
-	movq -56(%rbp), %r12
-	movq -32(%rbp), %rbx
+	movq -32(%rbp), %r13
+	movq -48(%rbp), %r12
+	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31265,12 +29245,12 @@ _ZNSt6vectorI6LsItemSaIS0_EE11_S_max_sizeERKS1_:
 	.___ZNSt6vectorI6LsItemSaIS0_EE11_S_max_sizeERKS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(96 + 0, 16)
+	# upalign(88 + 0, 16)
 	subq $96, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
-	movq %r15, -72(%rbp)
+	movq %rbx, -56(%rbp)
+	movq %r15, -64(%rbp)
 	# LowerAlloca(6797:3): size = 8, type = ptr*, var = ^2
 	leaq -8(%rbp), %rcx
 	# LowerAlloca(6798:3): size = 8, type = ptr*, var = ^3
@@ -31308,8 +29288,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE11_S_max_sizeERKS1_:
 	# LowerStore(6812:3).3: mov $imm, (^7)
 	movabsq $230584300921369395, %rcx
 	movq %rcx, (%rbx)
-	# Clobber %rax
-	movq %rax, -56(%rbp)
 	# SetupCalls(6813:3): move argument ptr nonnull dereferenceable(8) align 8 ^6
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
@@ -31319,12 +29297,10 @@ _ZNSt6vectorI6LsItemSaIS0_EE11_S_max_sizeERKS1_:
 	callq _ZSt3minImERKT_S2_S2_
 	# SetupCalls(6813:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rax
-	movq -56(%rbp), %rax
 	# LowerLoad(6814:3).2: (^12) into i64 ^13
 	movq (%rbx), %rax
-	movq -72(%rbp), %r15
-	movq -64(%rbp), %rbx
+	movq -64(%rbp), %r15
+	movq -56(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31336,15 +29312,15 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	.___ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRKSt6vectorISt17basic_string_viewIcS3_ESaISA_EEEEEC2IRA4_KcRSF_Lb1EEEOT_OT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(136 + 0, 16)
-	subq $144, %rsp
+	# upalign(112 + 0, 16)
+	subq $112, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -96(%rbp)
-	movq %r12, -88(%rbp)
-	movq %r13, -104(%rbp)
-	movq %r14, -112(%rbp)
-	movq %r15, -120(%rbp)
+	movq %rbx, -72(%rbp)
+	movq %r12, -64(%rbp)
+	movq %r13, -80(%rbp)
+	movq %r14, -88(%rbp)
+	movq %r15, -96(%rbp)
 	# LowerAlloca(2291:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(2292:3): size = 8, type = ptr*, var = ^5
@@ -31387,10 +29363,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerStore(2307:3).9: mov ptr ^15, (^4)
 	# LowerLoad(2308:3).2: (^4) into ptr ^16
 	movq (%r8), %rax
-	# Clobber %rdx
-	movq %rdx, -64(%rbp)
-	# Clobber %rcx
-	movq %rcx, -72(%rbp)
 	# SetupCalls(2309:3): move argument ptr nonnull dereferenceable(32) align 8 ^12
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -31401,22 +29373,14 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %r14, %rdx
 	callq _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_
-	# Unclobber %rcx
-	movq -72(%rbp), %rcx
-	# Unclobber %rdx
-	movq -64(%rbp), %rdx
 	# LowerStore(2310:3).9: mov %"class.std::allocator.0"* ^10, (^5)
 	movq %r14, (%r12)
 	# LowerLoad(2311:3).2: (^5) into ptr ^17
 	movq (%r12), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2312:3): move argument ptr nonnull dereferenceable(1) align 1 ^17
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rdi
 	callq _ZNSt15__new_allocatorIcED2Ev
-	# Unclobber %rax
-	movq -80(%rbp), %rax
 	# tt = Pointer, type = %"struct.std::pair"
 	# LowerGetelementptr(2313:3): struct-type: ptr ^11 -> ^18, indices=0,1
 	movq %r15, %rbx
@@ -31424,8 +29388,6 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# LowerGetelementptr(2313:3): type of ^18 is %"class.std::function"*
 	# LowerLoad(2314:3).2: (^9) into ptr ^19
 	movq (%r13), %rax
-	# Clobber %rax
-	movq %rax, -80(%rbp)
 	# SetupCalls(2315:3): move argument ptr nonnull dereferenceable(32) align 8 ^18
 	# Fixed movzx with identical source and destination widths
 	movq %rbx, %rdi
@@ -31433,13 +29395,11 @@ _ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFiRK
 	# Fixed movzx with identical source and destination widths
 	movq %rax, %rsi
 	callq _ZNSt8functionIFiRKSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS4_EEEEC2IRS9_vEEOT_
-	# Unclobber %rax
-	movq -80(%rbp), %rax
-	movq -120(%rbp), %r15
-	movq -112(%rbp), %r14
-	movq -104(%rbp), %r13
-	movq -88(%rbp), %r12
-	movq -96(%rbp), %rbx
+	movq -96(%rbp), %r15
+	movq -88(%rbp), %r14
+	movq -80(%rbp), %r13
+	movq -64(%rbp), %r12
+	movq -72(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31451,11 +29411,11 @@ _ZNSt6vectorI6LsItemSaIS0_EE11_S_relocateEPS0_S3_S3_RS1_:
 	.___ZNSt6vectorI6LsItemSaIS0_EE11_S_relocateEPS0_S3_S3_RS1___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(80 + 0, 16)
-	subq $80, %rsp
+	# upalign(56 + 0, 16)
+	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -64(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(6742:3): size = 8, type = ptr*, var = ^5
 	leaq -8(%rbp), %r9
 	# LowerAlloca(6743:3): size = 8, type = ptr*, var = ^6
@@ -31480,12 +29440,6 @@ _ZNSt6vectorI6LsItemSaIS0_EE11_S_relocateEPS0_S3_S3_RS1_:
 	movq (%r8), %r9
 	# LowerLoad(6753:3).2: (^8) into ptr ^12
 	movq (%rax), %rbx
-	# Clobber %rdx
-	movq %rdx, -40(%rbp)
-	# Clobber %rcx
-	movq %rcx, -48(%rbp)
-	# Clobber %r9
-	movq %r9, -56(%rbp)
 	# SetupCalls(6754:3): move argument ptr ^9
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
@@ -31501,14 +29455,8 @@ _ZNSt6vectorI6LsItemSaIS0_EE11_S_relocateEPS0_S3_S3_RS1_:
 	callq _ZSt12__relocate_aIP6LsItemS1_SaIS0_EET0_T_S4_S3_RT1_
 	# SetupCalls(6754:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %r9
-	movq -56(%rbp), %r9
-	# Unclobber %rcx
-	movq -48(%rbp), %rcx
-	# Unclobber %rdx
-	movq -40(%rbp), %rdx
 	movq %rbx, %rax
-	movq -64(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq
@@ -31520,11 +29468,11 @@ _ZNSt15__new_allocatorI6LsItemE8allocateEmPKv:
 	.___ZNSt15__new_allocatorI6LsItemE8allocateEmPKv__M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(64 + 0, 16)
+	# upalign(56 + 0, 16)
 	subq $64, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
-	movq %rbx, -48(%rbp)
+	movq %rbx, -40(%rbp)
 	# LowerAlloca(6829:3): size = 8, type = ptr*, var = ^4
 	leaq -8(%rbp), %r8
 	# LowerAlloca(6830:3): size = 8, type = ptr*, var = ^5
@@ -31579,18 +29527,14 @@ _ZNSt15__new_allocatorI6LsItemE8allocateEmPKv:
 	movq $40, %rbx
 	imulq %rbx
 	movq %rax, %rcx
-	# Clobber %rcx
-	movq %rcx, -40(%rbp)
 	# SetupCalls(6859:3): move argument i64 ^19
 	# Fixed movzx with identical source and destination widths
 	movq %rcx, %rdi
 	callq _Znwm@PLT
 	# SetupCalls(6859:3): move ptr result from %rax
 	movq %rax, %rbx
-	# Unclobber %rcx
-	movq -40(%rbp), %rcx
 	movq %rbx, %rax
-	movq -48(%rbp), %rbx
+	movq -40(%rbp), %rbx
 	movq %rbp, %rsp
 	popq %rbp
 	retq

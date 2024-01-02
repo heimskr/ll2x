@@ -3289,8 +3289,6 @@ _ZL10crc32_byteh:
 	# Multiply end
 	# temp ^16 -> operand ^12
 	movq %rbx, %rdx
-	# Result ^12 += skip 0
-	addq $0, %rdx
 	# Result ^12 += base pointer ^15
 	addq %rax, %rdx
 	# LowerLoad(6238:3).2: (^12) into i32 ^13
@@ -3901,7 +3899,7 @@ _ZL12crc32_gentabv:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .___ZL12crc32_gentabv__M20
-	jmp .___ZL12crc32_gentabv__M102
+	jmp .___ZL12crc32_gentabv__M100
 	.___ZL12crc32_gentabv__M20:
 	# LowerLoad(1664:3).2: (^3) into i32 ^9
 	# Fixing source-to-dest movl (%rdx), (%rbx)
@@ -3974,8 +3972,6 @@ _ZL12crc32_gentabv:
 	# Multiply end
 	# temp ^38 -> operand ^32
 	movq %r9, %rax
-	# Result ^32 += skip 0
-	addq $0, %rax
 	# Result ^32 += base pointer ^37
 	addq %r8, %rax
 	# LowerStore(1707:3).9: mov i32 ^29, (^32)
@@ -3987,7 +3983,7 @@ _ZL12crc32_gentabv:
 	# LowerStore(1713:3).9: mov i32 ^35, (^3)
 	movl %eax, (%rdx)
 	jmp .___ZL12crc32_gentabv__M13
-	.___ZL12crc32_gentabv__M102:
+	.___ZL12crc32_gentabv__M100:
 	movq -32(%rbp), %r15
 	movq -24(%rbp), %rbx
 	movq %rbp, %rsp
@@ -4879,7 +4875,7 @@ _ZL7func_39i2U0j:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .___ZL7func_39i2U0j__M153
-	jmp .___ZL7func_39i2U0j__M217
+	jmp .___ZL7func_39i2U0j__M213
 	.___ZL7func_39i2U0j__M153:
 	# LowerStore(3821:3).3: mov $imm, (^19)
 	movl $0, (%r15)
@@ -4892,7 +4888,7 @@ _ZL7func_39i2U0j:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .___ZL7func_39i2U0j__M163
-	jmp .___ZL7func_39i2U0j__M208
+	jmp .___ZL7func_39i2U0j__M204
 	.___ZL7func_39i2U0j__M163:
 	# LowerLoad(3830:3).2: (^18) into i32 ^34
 	movl (%r13), %eax
@@ -4906,8 +4902,6 @@ _ZL7func_39i2U0j:
 	# Multiply end
 	# temp ^134 -> operand ^36
 	movq %rdx, %rax
-	# Result ^36 += skip 0
-	addq $0, %rax
 	# Result ^36 += base pointer ^13
 	addq %r12, %rax
 	# LowerLoad(3833:3).2: (^19) into i32 ^37
@@ -4922,8 +4916,6 @@ _ZL7func_39i2U0j:
 	# Multiply end
 	# temp ^135 -> operand ^39
 	movq %rsi, %rcx
-	# Result ^39 += skip 0
-	addq $0, %rcx
 	# Result ^39 += base pointer ^36
 	addq %rax, %rcx
 	# LowerStore(3836:3).6: load global
@@ -4937,7 +4929,7 @@ _ZL7func_39i2U0j:
 	# LowerStore(3842:3).9: mov i32 ^42, (^19)
 	movl %eax, (%r15)
 	jmp .___ZL7func_39i2U0j__M156
-	.___ZL7func_39i2U0j__M208:
+	.___ZL7func_39i2U0j__M204:
 	# LowerLoad(3849:3).2: (^18) into i32 ^45
 	movl (%r13), %eax
 	# LowerMath(3850:3): ^45, 1 into i32 ^46
@@ -4945,7 +4937,7 @@ _ZL7func_39i2U0j:
 	# LowerStore(3851:3).9: mov i32 ^46, (^18)
 	movl %eax, (%r13)
 	jmp .___ZL7func_39i2U0j__M146
-	.___ZL7func_39i2U0j__M217:
+	.___ZL7func_39i2U0j__M213:
 	# LowerLoad(3855:3).2: (^9) into ptr ^48
 	movq (%rbx), %rax
 	# Clobber %rax
@@ -5025,16 +5017,16 @@ _ZL7func_39i2U0j:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_39i2U0j__M329
-	jmp .___ZL7func_39i2U0j__M332
-	.___ZL7func_39i2U0j__M329:
+	jne .___ZL7func_39i2U0j__M325
+	jmp .___ZL7func_39i2U0j__M328
+	.___ZL7func_39i2U0j__M325:
 	# MovePhi: intlike -> ^68 (in new block 138 whose parent is 127)
 	movb $1, -736(%rbp)
-	jmp .___ZL7func_39i2U0j__M335
-	.___ZL7func_39i2U0j__M332:
+	jmp .___ZL7func_39i2U0j__M331
+	.___ZL7func_39i2U0j__M328:
 	# MovePhi: intlike -> ^68
 	movb $1, -736(%rbp)
-	.___ZL7func_39i2U0j__M335:
+	.___ZL7func_39i2U0j__M331:
 	# LowerBasicConversion(3880:3): i1 ^68 -> i32 ^69
 	movl -736(%rbp), %eax
 	# Truncate value to 8 bits
@@ -6099,7 +6091,7 @@ main:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .__main__M926
-	jmp .__main__M1017
+	jmp .__main__M1015
 	.__main__M926:
 	# LowerLoad(501:3).2: (^6) into i32 ^123
 	movl (%r12), %eax
@@ -6112,8 +6104,6 @@ main:
 	# Multiply temp ^847 by 1 start
 	# Multiply end
 	# temp ^847 -> operand ^125
-	# Result ^125 += skip 0
-	addq $0, %rax
 	# Result ^125 += base pointer ^846
 	addq %rcx, %rax
 	# LowerLoad(504:3).2: (^125) into i8 ^126
@@ -6143,9 +6133,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M979
-	jmp .__main__M1008
-	.__main__M979:
+	jne .__main__M977
+	jmp .__main__M1006
+	.__main__M977:
 	# LowerLoad(513:3).2: (^6) into i32 ^132
 	movl (%r12), %eax
 	# Clobber %rax
@@ -6161,7 +6151,7 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M1008:
+	.__main__M1006:
 	# LowerLoad(521:3).2: (^6) into i32 ^136
 	movl (%r12), %eax
 	# LowerMath(522:3): ^136, 1 into i32 ^137
@@ -6169,7 +6159,7 @@ main:
 	# LowerStore(523:3).9: mov i32 ^137, (^6)
 	movl %eax, (%r12)
 	jmp .__main__M919
-	.__main__M1017:
+	.__main__M1015:
 	# LowerLoad(527:3).4: _ZL5g_245 into ^139
 	movq _ZL5g_245(%rip), %rbx
 	# LowerLoad(528:3).2: (^9) into i32 ^140
@@ -6320,7 +6310,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(553:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M1262:
+	.__main__M1260:
 	# LowerLoad(557:3).2: (^6) into i32 ^158
 	movl (%r12), %eax
 	# LowerIcmp(558:3): i32 ^158 vs. intlike 6
@@ -6328,9 +6318,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1269
-	jmp .__main__M1382
-	.__main__M1269:
+	jne .__main__M1267
+	jmp .__main__M1376
+	.__main__M1267:
 	# LowerLoad(562:3).2: (^9) into i32 ^161
 	movq -48(%rbp), %rbx
 	movl (%rbx), %eax
@@ -6339,9 +6329,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1276
-	jmp .__main__M1326
-	.__main__M1276:
+	jne .__main__M1274
+	jmp .__main__M1322
+	.__main__M1274:
 	# LowerLoad(567:3).2: (^6) into i32 ^164
 	movl (%r12), %eax
 	# LowerLoad(568:3).2: (^6) into i32 ^165
@@ -6357,8 +6347,6 @@ main:
 	# Multiply end
 	# temp ^849 -> operand ^167
 	movq %rsi, %rbx
-	# Result ^167 += skip 0
-	addq $0, %rbx
 	# Result ^167 += base pointer ^848
 	addq %rdx, %rbx
 	# LowerLoad(571:3).2: (^167) into i32 ^168
@@ -6383,7 +6371,7 @@ main:
 	movq -80(%rbp), %rax
 	# Unclobber %rcx
 	movq -56(%rbp), %rcx
-	.__main__M1326:
+	.__main__M1322:
 	# LowerLoad(576:3).2: (^6) into i32 ^171
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -6397,8 +6385,6 @@ main:
 	# Multiply end
 	# temp ^851 -> operand ^173
 	movq %rdx, %rax
-	# Result ^173 += skip 0
-	addq $0, %rax
 	# Result ^173 += base pointer ^850
 	addq %rcx, %rax
 	# LowerLoad(579:3).2: (^173) into i32 ^174
@@ -6426,8 +6412,8 @@ main:
 	addl $1, %eax
 	# LowerStore(588:3).9: mov i32 ^179, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M1262
-	.__main__M1382:
+	jmp .__main__M1260
+	.__main__M1376:
 	# LowerLoad(592:3).2: (^9) into i32 ^181
 	movq -48(%rbp), %rbx
 	movl (%rbx), %eax
@@ -6445,7 +6431,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(594:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M1412:
+	.__main__M1406:
 	# LowerLoad(598:3).2: (^6) into i32 ^183
 	movl (%r12), %eax
 	# LowerIcmp(599:3): i32 ^183 vs. intlike 10
@@ -6453,9 +6439,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1419
-	jmp .__main__M1512
-	.__main__M1419:
+	jne .__main__M1413
+	jmp .__main__M1504
+	.__main__M1413:
 	# LowerLoad(603:3).2: (^6) into i32 ^186
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -6469,8 +6455,6 @@ main:
 	# Multiply end
 	# temp ^853 -> operand ^188
 	movq %rdx, %rax
-	# Result ^188 += skip 0
-	addq $0, %rax
 	# Result ^188 += base pointer ^852
 	addq %rcx, %rax
 	# LowerLoad(606:3).2: (^188) into i32 ^189
@@ -6500,9 +6484,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1474
-	jmp .__main__M1503
-	.__main__M1474:
+	jne .__main__M1466
+	jmp .__main__M1495
+	.__main__M1466:
 	# LowerLoad(615:3).2: (^6) into i32 ^195
 	movl (%r12), %eax
 	# Clobber %rax
@@ -6518,15 +6502,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M1503:
+	.__main__M1495:
 	# LowerLoad(623:3).2: (^6) into i32 ^199
 	movl (%r12), %eax
 	# LowerMath(624:3): ^199, 1 into i32 ^200
 	addl $1, %eax
 	# LowerStore(625:3).9: mov i32 ^200, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M1412
-	.__main__M1512:
+	jmp .__main__M1406
+	.__main__M1504:
 	# LowerLoad(629:3).4: _ZL5g_453 into ^202
 	movw _ZL5g_453(%rip), %ax
 	# LowerBasicConversion(630:3): i16 ^202 -> i64 ^203
@@ -6800,7 +6784,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(682:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M1947:
+	.__main__M1939:
 	# LowerLoad(686:3).2: (^6) into i32 ^242
 	movl (%r12), %eax
 	# LowerIcmp(687:3): i32 ^242 vs. intlike 10
@@ -6808,12 +6792,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1954
-	jmp .__main__M2125
-	.__main__M1954:
+	jne .__main__M1946
+	jmp .__main__M2111
+	.__main__M1946:
 	# LowerStore(691:3).3: mov $imm, (^7)
 	movl $0, (%r15)
-	.__main__M1957:
+	.__main__M1949:
 	# LowerLoad(695:3).2: (^7) into i32 ^246
 	movl (%r15), %eax
 	# LowerIcmp(696:3): i32 ^246 vs. intlike 8
@@ -6821,12 +6805,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1964
-	jmp .__main__M2116
-	.__main__M1964:
+	jne .__main__M1956
+	jmp .__main__M2102
+	.__main__M1956:
 	# LowerStore(700:3).3: mov $imm, (^8)
 	movl $0, (%r13)
-	.__main__M1967:
+	.__main__M1959:
 	# LowerLoad(704:3).2: (^8) into i32 ^250
 	movl (%r13), %eax
 	# LowerIcmp(705:3): i32 ^250 vs. intlike 2
@@ -6834,9 +6818,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M1974
-	jmp .__main__M2107
-	.__main__M1974:
+	jne .__main__M1966
+	jmp .__main__M2093
+	.__main__M1966:
 	# LowerLoad(709:3).2: (^6) into i32 ^253
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -6850,8 +6834,6 @@ main:
 	# Multiply end
 	# temp ^855 -> operand ^255
 	movq %rcx, %rbx
-	# Result ^255 += skip 0
-	addq $0, %rbx
 	# Result ^255 += base pointer ^854
 	addq %rax, %rbx
 	# LowerLoad(712:3).2: (^7) into i32 ^256
@@ -6866,8 +6848,6 @@ main:
 	# Multiply end
 	# temp ^856 -> operand ^258
 	movq %rdx, %rax
-	# Result ^258 += skip 0
-	addq $0, %rax
 	# Result ^258 += base pointer ^255
 	addq %rbx, %rax
 	# LowerLoad(715:3).2: (^8) into i32 ^259
@@ -6882,8 +6862,6 @@ main:
 	# Multiply end
 	# temp ^857 -> operand ^261
 	movq %rdx, %rbx
-	# Result ^261 += skip 0
-	addq $0, %rbx
 	# Result ^261 += base pointer ^258
 	addq %rax, %rbx
 	# LowerLoad(718:3).2: (^261) into i32 ^262
@@ -6913,9 +6891,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2061
-	jmp .__main__M2098
-	.__main__M2061:
+	jne .__main__M2047
+	jmp .__main__M2084
+	.__main__M2047:
 	# LowerLoad(727:3).2: (^6) into i32 ^268
 	movl (%r12), %eax
 	# LowerLoad(728:3).2: (^7) into i32 ^269
@@ -6945,31 +6923,31 @@ main:
 	movq -80(%rbp), %rax
 	# Unclobber %r8
 	movq -64(%rbp), %r8
-	.__main__M2098:
+	.__main__M2084:
 	# LowerLoad(737:3).2: (^8) into i32 ^274
 	movl (%r13), %eax
 	# LowerMath(738:3): ^274, 1 into i32 ^275
 	addl $1, %eax
 	# LowerStore(739:3).9: mov i32 ^275, (^8)
 	movl %eax, (%r13)
-	jmp .__main__M1967
-	.__main__M2107:
+	jmp .__main__M1959
+	.__main__M2093:
 	# LowerLoad(746:3).2: (^7) into i32 ^278
 	movl (%r15), %eax
 	# LowerMath(747:3): ^278, 1 into i32 ^279
 	addl $1, %eax
 	# LowerStore(748:3).9: mov i32 ^279, (^7)
 	movl %eax, (%r15)
-	jmp .__main__M1957
-	.__main__M2116:
+	jmp .__main__M1949
+	.__main__M2102:
 	# LowerLoad(755:3).2: (^6) into i32 ^282
 	movl (%r12), %eax
 	# LowerMath(756:3): ^282, 1 into i32 ^283
 	addl $1, %eax
 	# LowerStore(757:3).9: mov i32 ^283, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M1947
-	.__main__M2125:
+	jmp .__main__M1939
+	.__main__M2111:
 	# LowerLoad(761:3).2: (^9) into i32 ^285
 	movq -48(%rbp), %rbx
 	movl (%rbx), %eax
@@ -7002,7 +6980,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(765:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M2182:
+	.__main__M2168:
 	# LowerLoad(769:3).2: (^6) into i32 ^288
 	movl (%r12), %eax
 	# LowerIcmp(770:3): i32 ^288 vs. intlike 8
@@ -7010,9 +6988,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2189
-	jmp .__main__M2281
-	.__main__M2189:
+	jne .__main__M2175
+	jmp .__main__M2265
+	.__main__M2175:
 	# LowerLoad(774:3).2: (^6) into i32 ^291
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -7026,8 +7004,6 @@ main:
 	# Multiply end
 	# temp ^859 -> operand ^293
 	movq %rdx, %rax
-	# Result ^293 += skip 0
-	addq $0, %rax
 	# Result ^293 += base pointer ^858
 	addq %rcx, %rax
 	# LowerLoad(777:3).2: (^293) into i16 ^294
@@ -7057,9 +7033,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2243
-	jmp .__main__M2272
-	.__main__M2243:
+	jne .__main__M2227
+	jmp .__main__M2256
+	.__main__M2227:
 	# LowerLoad(786:3).2: (^6) into i32 ^300
 	movl (%r12), %eax
 	# Clobber %rax
@@ -7075,15 +7051,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M2272:
+	.__main__M2256:
 	# LowerLoad(794:3).2: (^6) into i32 ^304
 	movl (%r12), %eax
 	# LowerMath(795:3): ^304, 1 into i32 ^305
 	addl $1, %eax
 	# LowerStore(796:3).9: mov i32 ^305, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M2182
-	.__main__M2281:
+	jmp .__main__M2168
+	.__main__M2265:
 	# LowerLoad(800:3).4: _ZL6g_1877 into ^307
 	movl _ZL6g_1877(%rip), %eax
 	# LowerBasicConversion(801:3): i32 ^307 -> i64 ^308
@@ -7219,7 +7195,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(828:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M2502:
+	.__main__M2486:
 	# LowerLoad(832:3).2: (^6) into i32 ^329
 	movl (%r12), %eax
 	# LowerIcmp(833:3): i32 ^329 vs. intlike 10
@@ -7227,9 +7203,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2509
-	jmp .__main__M2602
-	.__main__M2509:
+	jne .__main__M2493
+	jmp .__main__M2584
+	.__main__M2493:
 	# LowerLoad(837:3).2: (^6) into i32 ^332
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -7243,8 +7219,6 @@ main:
 	# Multiply end
 	# temp ^861 -> operand ^334
 	movq %rdx, %rax
-	# Result ^334 += skip 0
-	addq $0, %rax
 	# Result ^334 += base pointer ^860
 	addq %rcx, %rax
 	# LowerLoad(840:3).2: (^334) into i32 ^335
@@ -7274,9 +7248,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2564
-	jmp .__main__M2593
-	.__main__M2564:
+	jne .__main__M2546
+	jmp .__main__M2575
+	.__main__M2546:
 	# LowerLoad(849:3).2: (^6) into i32 ^341
 	movl (%r12), %eax
 	# Clobber %rax
@@ -7292,15 +7266,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M2593:
+	.__main__M2575:
 	# LowerLoad(857:3).2: (^6) into i32 ^345
 	movl (%r12), %eax
 	# LowerMath(858:3): ^345, 1 into i32 ^346
 	addl $1, %eax
 	# LowerStore(859:3).9: mov i32 ^346, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M2502
-	.__main__M2602:
+	jmp .__main__M2486
+	.__main__M2584:
 	# LowerLoad(863:3).4: _ZL6g_1890 into ^348
 	movl _ZL6g_1890(%rip), %ebx
 	# LowerBasicConversion(864:3): i32 ^348 -> i64 ^349
@@ -7341,7 +7315,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(871:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M2667:
+	.__main__M2649:
 	# LowerLoad(875:3).2: (^6) into i32 ^355
 	movl (%r12), %eax
 	# LowerIcmp(876:3): i32 ^355 vs. intlike 5
@@ -7349,9 +7323,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2674
-	jmp .__main__M2767
-	.__main__M2674:
+	jne .__main__M2656
+	jmp .__main__M2747
+	.__main__M2656:
 	# LowerLoad(880:3).2: (^6) into i32 ^358
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -7365,8 +7339,6 @@ main:
 	# Multiply end
 	# temp ^863 -> operand ^360
 	movq %rdx, %rax
-	# Result ^360 += skip 0
-	addq $0, %rax
 	# Result ^360 += base pointer ^862
 	addq %rcx, %rax
 	# LowerLoad(883:3).2: (^360) into i32 ^361
@@ -7396,9 +7368,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2729
-	jmp .__main__M2758
-	.__main__M2729:
+	jne .__main__M2709
+	jmp .__main__M2738
+	.__main__M2709:
 	# LowerLoad(892:3).2: (^6) into i32 ^367
 	movl (%r12), %eax
 	# Clobber %rax
@@ -7414,18 +7386,18 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M2758:
+	.__main__M2738:
 	# LowerLoad(900:3).2: (^6) into i32 ^371
 	movl (%r12), %eax
 	# LowerMath(901:3): ^371, 1 into i32 ^372
 	addl $1, %eax
 	# LowerStore(902:3).9: mov i32 ^372, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M2667
-	.__main__M2767:
+	jmp .__main__M2649
+	.__main__M2747:
 	# LowerStore(906:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M2770:
+	.__main__M2750:
 	# LowerLoad(910:3).2: (^6) into i32 ^375
 	movl (%r12), %eax
 	# LowerIcmp(911:3): i32 ^375 vs. intlike 7
@@ -7433,9 +7405,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2777
-	jmp .__main__M2870
-	.__main__M2777:
+	jne .__main__M2757
+	jmp .__main__M2848
+	.__main__M2757:
 	# LowerLoad(915:3).2: (^6) into i32 ^378
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -7449,8 +7421,6 @@ main:
 	# Multiply end
 	# temp ^865 -> operand ^380
 	movq %rdx, %rax
-	# Result ^380 += skip 0
-	addq $0, %rax
 	# Result ^380 += base pointer ^864
 	addq %rcx, %rax
 	# LowerLoad(918:3).2: (^380) into i32 ^381
@@ -7480,9 +7450,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2832
-	jmp .__main__M2861
-	.__main__M2832:
+	jne .__main__M2810
+	jmp .__main__M2839
+	.__main__M2810:
 	# LowerLoad(927:3).2: (^6) into i32 ^387
 	movl (%r12), %eax
 	# Clobber %rax
@@ -7498,18 +7468,18 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M2861:
+	.__main__M2839:
 	# LowerLoad(935:3).2: (^6) into i32 ^391
 	movl (%r12), %eax
 	# LowerMath(936:3): ^391, 1 into i32 ^392
 	addl $1, %eax
 	# LowerStore(937:3).9: mov i32 ^392, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M2770
-	.__main__M2870:
+	jmp .__main__M2750
+	.__main__M2848:
 	# LowerStore(941:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M2873:
+	.__main__M2851:
 	# LowerLoad(945:3).2: (^6) into i32 ^395
 	movl (%r12), %eax
 	# LowerIcmp(946:3): i32 ^395 vs. intlike 8
@@ -7517,9 +7487,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2880
-	jmp .__main__M2973
-	.__main__M2880:
+	jne .__main__M2858
+	jmp .__main__M2949
+	.__main__M2858:
 	# LowerLoad(950:3).2: (^6) into i32 ^398
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -7533,8 +7503,6 @@ main:
 	# Multiply end
 	# temp ^867 -> operand ^400
 	movq %rdx, %rax
-	# Result ^400 += skip 0
-	addq $0, %rax
 	# Result ^400 += base pointer ^866
 	addq %rcx, %rax
 	# LowerLoad(953:3).2: (^400) into i32 ^401
@@ -7564,9 +7532,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M2935
-	jmp .__main__M2964
-	.__main__M2935:
+	jne .__main__M2911
+	jmp .__main__M2940
+	.__main__M2911:
 	# LowerLoad(962:3).2: (^6) into i32 ^407
 	movl (%r12), %eax
 	# Clobber %rax
@@ -7582,15 +7550,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M2964:
+	.__main__M2940:
 	# LowerLoad(970:3).2: (^6) into i32 ^411
 	movl (%r12), %eax
 	# LowerMath(971:3): ^411, 1 into i32 ^412
 	addl $1, %eax
 	# LowerStore(972:3).9: mov i32 ^412, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M2873
-	.__main__M2973:
+	jmp .__main__M2851
+	.__main__M2949:
 	# LowerLoad(976:3).4: _ZL6g_1895 into ^414
 	movl _ZL6g_1895(%rip), %eax
 	# LowerBasicConversion(977:3): i32 ^414 -> i64 ^415
@@ -7688,7 +7656,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(996:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M3132:
+	.__main__M3108:
 	# LowerLoad(1000:3).2: (^6) into i32 ^430
 	movl (%r12), %eax
 	# LowerIcmp(1001:3): i32 ^430 vs. intlike 3
@@ -7696,9 +7664,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3139
-	jmp .__main__M3232
-	.__main__M3139:
+	jne .__main__M3115
+	jmp .__main__M3206
+	.__main__M3115:
 	# LowerLoad(1005:3).2: (^6) into i32 ^433
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -7712,8 +7680,6 @@ main:
 	# Multiply end
 	# temp ^869 -> operand ^435
 	movq %rdx, %rax
-	# Result ^435 += skip 0
-	addq $0, %rax
 	# Result ^435 += base pointer ^868
 	addq %rcx, %rax
 	# LowerLoad(1008:3).2: (^435) into i32 ^436
@@ -7743,9 +7709,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3194
-	jmp .__main__M3223
-	.__main__M3194:
+	jne .__main__M3168
+	jmp .__main__M3197
+	.__main__M3168:
 	# LowerLoad(1017:3).2: (^6) into i32 ^442
 	movl (%r12), %eax
 	# Clobber %rax
@@ -7761,15 +7727,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M3223:
+	.__main__M3197:
 	# LowerLoad(1025:3).2: (^6) into i32 ^446
 	movl (%r12), %eax
 	# LowerMath(1026:3): ^446, 1 into i32 ^447
 	addl $1, %eax
 	# LowerStore(1027:3).9: mov i32 ^447, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M3132
-	.__main__M3232:
+	jmp .__main__M3108
+	.__main__M3206:
 	# LowerLoad(1031:3).4: _ZL6g_1901 into ^449
 	movl _ZL6g_1901(%rip), %ebx
 	# LowerBasicConversion(1032:3): i32 ^449 -> i64 ^450
@@ -8058,7 +8024,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(1091:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M3703:
+	.__main__M3677:
 	# LowerLoad(1095:3).2: (^6) into i32 ^495
 	movl (%r12), %eax
 	# LowerIcmp(1096:3): i32 ^495 vs. intlike 1
@@ -8066,9 +8032,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3710
-	jmp .__main__M3803
-	.__main__M3710:
+	jne .__main__M3684
+	jmp .__main__M3775
+	.__main__M3684:
 	# LowerLoad(1100:3).2: (^6) into i32 ^498
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -8082,8 +8048,6 @@ main:
 	# Multiply end
 	# temp ^871 -> operand ^500
 	movq %rdx, %rax
-	# Result ^500 += skip 0
-	addq $0, %rax
 	# Result ^500 += base pointer ^870
 	addq %rcx, %rax
 	# LowerLoad(1103:3).2: (^500) into i32 ^501
@@ -8113,9 +8077,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3765
-	jmp .__main__M3794
-	.__main__M3765:
+	jne .__main__M3737
+	jmp .__main__M3766
+	.__main__M3737:
 	# LowerLoad(1112:3).2: (^6) into i32 ^507
 	movl (%r12), %eax
 	# Clobber %rax
@@ -8131,15 +8095,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M3794:
+	.__main__M3766:
 	# LowerLoad(1120:3).2: (^6) into i32 ^511
 	movl (%r12), %eax
 	# LowerMath(1121:3): ^511, 1 into i32 ^512
 	addl $1, %eax
 	# LowerStore(1122:3).9: mov i32 ^512, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M3703
-	.__main__M3803:
+	jmp .__main__M3677
+	.__main__M3775:
 	# LowerLoad(1126:3).4: _ZL6g_1917 into ^514
 	movl _ZL6g_1917(%rip), %eax
 	# LowerBasicConversion(1127:3): i32 ^514 -> i64 ^515
@@ -8237,7 +8201,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(1146:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M3962:
+	.__main__M3934:
 	# LowerLoad(1150:3).2: (^6) into i32 ^530
 	movl (%r12), %eax
 	# LowerIcmp(1151:3): i32 ^530 vs. intlike 4
@@ -8245,12 +8209,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3969
-	jmp .__main__M4152
-	.__main__M3969:
+	jne .__main__M3941
+	jmp .__main__M4116
+	.__main__M3941:
 	# LowerStore(1155:3).3: mov $imm, (^7)
 	movl $0, (%r15)
-	.__main__M3972:
+	.__main__M3944:
 	# LowerLoad(1159:3).2: (^7) into i32 ^534
 	movl (%r15), %eax
 	# LowerIcmp(1160:3): i32 ^534 vs. intlike 9
@@ -8258,9 +8222,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3979
-	jmp .__main__M4143
-	.__main__M3979:
+	jne .__main__M3951
+	jmp .__main__M4107
+	.__main__M3951:
 	# LowerLoad(1164:3).2: (^9) into i32 ^537
 	movq -48(%rbp), %rbx
 	movl (%rbx), %eax
@@ -8269,9 +8233,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M3986
-	jmp .__main__M4063
-	.__main__M3986:
+	jne .__main__M3958
+	jmp .__main__M4031
+	.__main__M3958:
 	# LowerLoad(1169:3).2: (^6) into i32 ^540
 	movl (%r12), %ebx
 	# LowerLoad(1170:3).2: (^7) into i32 ^541
@@ -8292,8 +8256,6 @@ main:
 	# Multiply end
 	# temp ^873 -> operand ^544
 	movq %rdi, %rax
-	# Result ^544 += skip 0
-	addq $0, %rax
 	# Result ^544 += base pointer ^872
 	addq %rsi, %rax
 	# LowerLoad(1174:3).2: (^7) into i32 ^545
@@ -8308,8 +8270,6 @@ main:
 	# Multiply end
 	# temp ^875 -> operand ^547
 	movq %rdi, %rdx
-	# Result ^547 += skip 0
-	addq $0, %rdx
 	# Result ^547 += base pointer ^544
 	addq %rax, %rdx
 	# LowerLoad(1177:3).2: (^547) into i32 ^548
@@ -8337,7 +8297,7 @@ main:
 	movq -80(%rbp), %rax
 	# Unclobber %rcx
 	movq -56(%rbp), %rcx
-	.__main__M4063:
+	.__main__M4031:
 	# LowerLoad(1182:3).2: (^6) into i32 ^551
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -8358,8 +8318,6 @@ main:
 	# Multiply end
 	# temp ^877 -> operand ^553
 	movq %rdx, %rax
-	# Result ^553 += skip 0
-	addq $0, %rax
 	# Result ^553 += base pointer ^876
 	addq %rcx, %rax
 	# LowerLoad(1185:3).2: (^7) into i32 ^554
@@ -8374,8 +8332,6 @@ main:
 	# Multiply end
 	# temp ^879 -> operand ^556
 	movq %rdx, %rbx
-	# Result ^556 += skip 0
-	addq $0, %rbx
 	# Result ^556 += base pointer ^553
 	addq %rax, %rbx
 	# LowerLoad(1188:3).2: (^556) into i32 ^557
@@ -8403,16 +8359,16 @@ main:
 	addl $1, %eax
 	# LowerStore(1197:3).9: mov i32 ^562, (^7)
 	movl %eax, (%r15)
-	jmp .__main__M3972
-	.__main__M4143:
+	jmp .__main__M3944
+	.__main__M4107:
 	# LowerLoad(1204:3).2: (^6) into i32 ^565
 	movl (%r12), %eax
 	# LowerMath(1205:3): ^565, 1 into i32 ^566
 	addl $1, %eax
 	# LowerStore(1206:3).9: mov i32 ^566, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M3962
-	.__main__M4152:
+	jmp .__main__M3934
+	.__main__M4116:
 	# LowerLoad(1210:3).4: _ZL6g_1923 into ^568
 	movl _ZL6g_1923(%rip), %eax
 	# LowerBasicConversion(1211:3): i32 ^568 -> i64 ^569
@@ -8606,7 +8562,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(1250:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M4467:
+	.__main__M4431:
 	# LowerLoad(1254:3).2: (^6) into i32 ^599
 	movl (%r12), %eax
 	# LowerIcmp(1255:3): i32 ^599 vs. intlike 8
@@ -8614,9 +8570,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M4474
-	jmp .__main__M4567
-	.__main__M4474:
+	jne .__main__M4438
+	jmp .__main__M4529
+	.__main__M4438:
 	# LowerLoad(1259:3).2: (^6) into i32 ^602
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -8630,8 +8586,6 @@ main:
 	# Multiply end
 	# temp ^881 -> operand ^604
 	movq %rdx, %rax
-	# Result ^604 += skip 0
-	addq $0, %rax
 	# Result ^604 += base pointer ^880
 	addq %rcx, %rax
 	# LowerLoad(1262:3).2: (^604) into i32 ^605
@@ -8661,9 +8615,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M4529
-	jmp .__main__M4558
-	.__main__M4529:
+	jne .__main__M4491
+	jmp .__main__M4520
+	.__main__M4491:
 	# LowerLoad(1271:3).2: (^6) into i32 ^611
 	movl (%r12), %eax
 	# Clobber %rax
@@ -8679,15 +8633,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M4558:
+	.__main__M4520:
 	# LowerLoad(1279:3).2: (^6) into i32 ^615
 	movl (%r12), %eax
 	# LowerMath(1280:3): ^615, 1 into i32 ^616
 	addl $1, %eax
 	# LowerStore(1281:3).9: mov i32 ^616, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M4467
-	.__main__M4567:
+	jmp .__main__M4431
+	.__main__M4529:
 	# LowerLoad(1285:3).4: _ZL6g_1934 into ^618
 	movl _ZL6g_1934(%rip), %eax
 	# LowerBasicConversion(1286:3): i32 ^618 -> i64 ^619
@@ -8842,7 +8796,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(1317:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M4819:
+	.__main__M4781:
 	# LowerLoad(1321:3).2: (^6) into i32 ^643
 	movl (%r12), %eax
 	# LowerIcmp(1322:3): i32 ^643 vs. intlike 4
@@ -8850,12 +8804,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M4826
-	jmp .__main__M4997
-	.__main__M4826:
+	jne .__main__M4788
+	jmp .__main__M4953
+	.__main__M4788:
 	# LowerStore(1326:3).3: mov $imm, (^7)
 	movl $0, (%r15)
-	.__main__M4829:
+	.__main__M4791:
 	# LowerLoad(1330:3).2: (^7) into i32 ^647
 	movl (%r15), %eax
 	# LowerIcmp(1331:3): i32 ^647 vs. intlike 8
@@ -8863,12 +8817,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M4836
-	jmp .__main__M4988
-	.__main__M4836:
+	jne .__main__M4798
+	jmp .__main__M4944
+	.__main__M4798:
 	# LowerStore(1335:3).3: mov $imm, (^8)
 	movl $0, (%r13)
-	.__main__M4839:
+	.__main__M4801:
 	# LowerLoad(1339:3).2: (^8) into i32 ^651
 	movl (%r13), %eax
 	# LowerIcmp(1340:3): i32 ^651 vs. intlike 4
@@ -8876,9 +8830,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M4846
-	jmp .__main__M4979
-	.__main__M4846:
+	jne .__main__M4808
+	jmp .__main__M4935
+	.__main__M4808:
 	# LowerLoad(1344:3).2: (^6) into i32 ^654
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -8892,8 +8846,6 @@ main:
 	# Multiply end
 	# temp ^883 -> operand ^656
 	movq %rdx, %rax
-	# Result ^656 += skip 0
-	addq $0, %rax
 	# Result ^656 += base pointer ^882
 	addq %rcx, %rax
 	# LowerLoad(1347:3).2: (^7) into i32 ^657
@@ -8908,8 +8860,6 @@ main:
 	# Multiply end
 	# temp ^884 -> operand ^659
 	movq %rdx, %rbx
-	# Result ^659 += skip 0
-	addq $0, %rbx
 	# Result ^659 += base pointer ^656
 	addq %rax, %rbx
 	# LowerLoad(1350:3).2: (^8) into i32 ^660
@@ -8924,8 +8874,6 @@ main:
 	# Multiply end
 	# temp ^885 -> operand ^662
 	movq %rdx, %rax
-	# Result ^662 += skip 0
-	addq $0, %rax
 	# Result ^662 += base pointer ^659
 	addq %rbx, %rax
 	# LowerLoad(1353:3).2: (^662) into i32 ^663
@@ -8955,9 +8903,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M4933
-	jmp .__main__M4970
-	.__main__M4933:
+	jne .__main__M4889
+	jmp .__main__M4926
+	.__main__M4889:
 	# LowerLoad(1362:3).2: (^6) into i32 ^669
 	movl (%r12), %eax
 	# LowerLoad(1363:3).2: (^7) into i32 ^670
@@ -8987,31 +8935,31 @@ main:
 	movq -80(%rbp), %rax
 	# Unclobber %r8
 	movq -64(%rbp), %r8
-	.__main__M4970:
+	.__main__M4926:
 	# LowerLoad(1372:3).2: (^8) into i32 ^675
 	movl (%r13), %eax
 	# LowerMath(1373:3): ^675, 1 into i32 ^676
 	addl $1, %eax
 	# LowerStore(1374:3).9: mov i32 ^676, (^8)
 	movl %eax, (%r13)
-	jmp .__main__M4839
-	.__main__M4979:
+	jmp .__main__M4801
+	.__main__M4935:
 	# LowerLoad(1381:3).2: (^7) into i32 ^679
 	movl (%r15), %eax
 	# LowerMath(1382:3): ^679, 1 into i32 ^680
 	addl $1, %eax
 	# LowerStore(1383:3).9: mov i32 ^680, (^7)
 	movl %eax, (%r15)
-	jmp .__main__M4829
-	.__main__M4988:
+	jmp .__main__M4791
+	.__main__M4944:
 	# LowerLoad(1390:3).2: (^6) into i32 ^683
 	movl (%r12), %eax
 	# LowerMath(1391:3): ^683, 1 into i32 ^684
 	addl $1, %eax
 	# LowerStore(1392:3).9: mov i32 ^684, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M4819
-	.__main__M4997:
+	jmp .__main__M4781
+	.__main__M4953:
 	# LowerLoad(1396:3).4: _ZL6g_1943 into ^686
 	movl _ZL6g_1943(%rip), %eax
 	# LowerBasicConversion(1397:3): i32 ^686 -> i64 ^687
@@ -9033,7 +8981,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(1400:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M5031:
+	.__main__M4987:
 	# LowerLoad(1404:3).2: (^6) into i32 ^690
 	movl (%r12), %eax
 	# LowerIcmp(1405:3): i32 ^690 vs. intlike 10
@@ -9041,9 +8989,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5038
-	jmp .__main__M5131
-	.__main__M5038:
+	jne .__main__M4994
+	jmp .__main__M5085
+	.__main__M4994:
 	# LowerLoad(1409:3).2: (^6) into i32 ^693
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -9057,8 +9005,6 @@ main:
 	# Multiply end
 	# temp ^887 -> operand ^695
 	movq %rdx, %rax
-	# Result ^695 += skip 0
-	addq $0, %rax
 	# Result ^695 += base pointer ^886
 	addq %rcx, %rax
 	# LowerLoad(1412:3).2: (^695) into i32 ^696
@@ -9088,9 +9034,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5093
-	jmp .__main__M5122
-	.__main__M5093:
+	jne .__main__M5047
+	jmp .__main__M5076
+	.__main__M5047:
 	# LowerLoad(1421:3).2: (^6) into i32 ^702
 	movl (%r12), %eax
 	# Clobber %rax
@@ -9106,18 +9052,18 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M5122:
+	.__main__M5076:
 	# LowerLoad(1429:3).2: (^6) into i32 ^706
 	movl (%r12), %eax
 	# LowerMath(1430:3): ^706, 1 into i32 ^707
 	addl $1, %eax
 	# LowerStore(1431:3).9: mov i32 ^707, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M5031
-	.__main__M5131:
+	jmp .__main__M4987
+	.__main__M5085:
 	# LowerStore(1435:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M5134:
+	.__main__M5088:
 	# LowerLoad(1439:3).2: (^6) into i32 ^710
 	movl (%r12), %eax
 	# LowerIcmp(1440:3): i32 ^710 vs. intlike 7
@@ -9125,9 +9071,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5141
-	jmp .__main__M5234
-	.__main__M5141:
+	jne .__main__M5095
+	jmp .__main__M5186
+	.__main__M5095:
 	# LowerLoad(1444:3).2: (^6) into i32 ^713
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -9141,8 +9087,6 @@ main:
 	# Multiply end
 	# temp ^889 -> operand ^715
 	movq %rdx, %rax
-	# Result ^715 += skip 0
-	addq $0, %rax
 	# Result ^715 += base pointer ^888
 	addq %rcx, %rax
 	# LowerLoad(1447:3).2: (^715) into i32 ^716
@@ -9172,9 +9116,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5196
-	jmp .__main__M5225
-	.__main__M5196:
+	jne .__main__M5148
+	jmp .__main__M5177
+	.__main__M5148:
 	# LowerLoad(1456:3).2: (^6) into i32 ^722
 	movl (%r12), %eax
 	# Clobber %rax
@@ -9190,15 +9134,15 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M5225:
+	.__main__M5177:
 	# LowerLoad(1464:3).2: (^6) into i32 ^726
 	movl (%r12), %eax
 	# LowerMath(1465:3): ^726, 1 into i32 ^727
 	addl $1, %eax
 	# LowerStore(1466:3).9: mov i32 ^727, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M5134
-	.__main__M5234:
+	jmp .__main__M5088
+	.__main__M5186:
 	# LowerLoad(1470:3).4: _ZL6g_1946 into ^729
 	movl _ZL6g_1946(%rip), %eax
 	# LowerBasicConversion(1471:3): i32 ^729 -> i64 ^730
@@ -9327,7 +9271,7 @@ main:
 	movq -80(%rbp), %rax
 	# LowerStore(1494:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M5446:
+	.__main__M5398:
 	# LowerLoad(1498:3).2: (^6) into i32 ^747
 	movl (%r12), %eax
 	# LowerIcmp(1499:3): i32 ^747 vs. intlike 1
@@ -9335,12 +9279,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5453
-	jmp .__main__M5592
-	.__main__M5453:
+	jne .__main__M5405
+	jmp .__main__M5540
+	.__main__M5405:
 	# LowerStore(1503:3).3: mov $imm, (^7)
 	movl $0, (%r15)
-	.__main__M5456:
+	.__main__M5408:
 	# LowerLoad(1507:3).2: (^7) into i32 ^751
 	movl (%r15), %eax
 	# LowerIcmp(1508:3): i32 ^751 vs. intlike 5
@@ -9348,9 +9292,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5463
-	jmp .__main__M5583
-	.__main__M5463:
+	jne .__main__M5415
+	jmp .__main__M5531
+	.__main__M5415:
 	# LowerLoad(1512:3).2: (^6) into i32 ^754
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -9371,8 +9315,6 @@ main:
 	# Multiply end
 	# temp ^891 -> operand ^756
 	movq %rdx, %rax
-	# Result ^756 += skip 0
-	addq $0, %rax
 	# Result ^756 += base pointer ^890
 	addq %rcx, %rax
 	# LowerLoad(1515:3).2: (^7) into i32 ^757
@@ -9387,8 +9329,6 @@ main:
 	# Multiply end
 	# temp ^893 -> operand ^759
 	movq %rdx, %rbx
-	# Result ^759 += skip 0
-	addq $0, %rbx
 	# Result ^759 += base pointer ^756
 	addq %rax, %rbx
 	# LowerLoad(1518:3).2: (^759) into i32 ^760
@@ -9422,9 +9362,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5541
-	jmp .__main__M5574
-	.__main__M5541:
+	jne .__main__M5489
+	jmp .__main__M5522
+	.__main__M5489:
 	# LowerLoad(1527:3).2: (^6) into i32 ^766
 	movl (%r12), %eax
 	# LowerLoad(1528:3).2: (^7) into i32 ^767
@@ -9445,23 +9385,23 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M5574:
+	.__main__M5522:
 	# LowerLoad(1536:3).2: (^7) into i32 ^771
 	movl (%r15), %eax
 	# LowerMath(1537:3): ^771, 1 into i32 ^772
 	addl $1, %eax
 	# LowerStore(1538:3).9: mov i32 ^772, (^7)
 	movl %eax, (%r15)
-	jmp .__main__M5456
-	.__main__M5583:
+	jmp .__main__M5408
+	.__main__M5531:
 	# LowerLoad(1545:3).2: (^6) into i32 ^775
 	movl (%r12), %eax
 	# LowerMath(1546:3): ^775, 1 into i32 ^776
 	addl $1, %eax
 	# LowerStore(1547:3).9: mov i32 ^776, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M5446
-	.__main__M5592:
+	jmp .__main__M5398
+	.__main__M5540:
 	# LowerLoad(1551:3).4: _ZL6g_2354 into ^778
 	movl _ZL6g_2354(%rip), %eax
 	movslq %eax, %rbx
@@ -9502,7 +9442,7 @@ main:
 	movq -56(%rbp), %rcx
 	# LowerStore(1559:3).3: mov $imm, (^6)
 	movl $0, (%r12)
-	.__main__M5656:
+	.__main__M5604:
 	# LowerLoad(1563:3).2: (^6) into i32 ^785
 	movl (%r12), %eax
 	# LowerIcmp(1564:3): i32 ^785 vs. intlike 4
@@ -9510,12 +9450,12 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5663
-	jmp .__main__M5804
-	.__main__M5663:
+	jne .__main__M5611
+	jmp .__main__M5748
+	.__main__M5611:
 	# LowerStore(1568:3).3: mov $imm, (^7)
 	movl $0, (%r15)
-	.__main__M5666:
+	.__main__M5614:
 	# LowerLoad(1572:3).2: (^7) into i32 ^789
 	movl (%r15), %eax
 	# LowerIcmp(1573:3): i32 ^789 vs. intlike 6
@@ -9523,9 +9463,9 @@ main:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5673
-	jmp .__main__M5795
-	.__main__M5673:
+	jne .__main__M5621
+	jmp .__main__M5739
+	.__main__M5621:
 	# LowerLoad(1577:3).2: (^6) into i32 ^792
 	movl (%r12), %eax
 	movslq %eax, %rbx
@@ -9546,8 +9486,6 @@ main:
 	# Multiply end
 	# temp ^895 -> operand ^794
 	movq %rdx, %rax
-	# Result ^794 += skip 0
-	addq $0, %rax
 	# Result ^794 += base pointer ^894
 	addq %rcx, %rax
 	# LowerLoad(1580:3).2: (^7) into i32 ^795
@@ -9562,8 +9500,6 @@ main:
 	# Multiply end
 	# temp ^897 -> operand ^797
 	movq %rdx, %rbx
-	# Result ^797 += skip 0
-	addq $0, %rbx
 	# Result ^797 += base pointer ^794
 	addq %rax, %rbx
 	# LowerLoad(1583:3).2: (^797) into i16 ^798
@@ -9595,9 +9531,9 @@ main:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .__main__M5753
-	jmp .__main__M5786
-	.__main__M5753:
+	jne .__main__M5697
+	jmp .__main__M5730
+	.__main__M5697:
 	# LowerLoad(1592:3).2: (^6) into i32 ^804
 	movl (%r12), %ebx
 	# LowerLoad(1593:3).2: (^7) into i32 ^805
@@ -9618,23 +9554,23 @@ main:
 	movl %eax, %eax
 	# Unclobber %rax
 	movq -80(%rbp), %rax
-	.__main__M5786:
+	.__main__M5730:
 	# LowerLoad(1601:3).2: (^7) into i32 ^809
 	movl (%r15), %eax
 	# LowerMath(1602:3): ^809, 1 into i32 ^810
 	addl $1, %eax
 	# LowerStore(1603:3).9: mov i32 ^810, (^7)
 	movl %eax, (%r15)
-	jmp .__main__M5666
-	.__main__M5795:
+	jmp .__main__M5614
+	.__main__M5739:
 	# LowerLoad(1610:3).2: (^6) into i32 ^813
 	movl (%r12), %eax
 	# LowerMath(1611:3): ^813, 1 into i32 ^814
 	addl $1, %eax
 	# LowerStore(1612:3).9: mov i32 ^814, (^6)
 	movl %eax, (%r12)
-	jmp .__main__M5656
-	.__main__M5804:
+	jmp .__main__M5604
+	.__main__M5748:
 	# LowerLoad(1616:3).4: _ZL6g_2519 into ^816
 	movw _ZL6g_2519(%rip), %ax
 	movswq %ax, %rbx
@@ -11341,9 +11277,9 @@ _ZL6func_1v:
 	# LowerAlloca(1744:3): size = 4, type = i32*, var = ^21
 	leaq -2140(%rbp), %r13
 	# LowerAlloca(1745:3): size = 4, type = i32*, var = ^22
-	# Fixing source-to-dest leaq -2144(%rbp), -5672(%rbp)
+	# Fixing source-to-dest leaq -2144(%rbp), -5680(%rbp)
 	leaq -2144(%rbp), %r15
-	movq %r15, -5672(%rbp)
+	movq %r15, -5680(%rbp)
 	# LowerAlloca(1746:3): size = 4, type = i32*, var = ^23
 	leaq -2148(%rbp), %r14
 	# LowerAlloca(1747:3): size = 8, type = ptr*, var = ^24
@@ -11379,10 +11315,10 @@ _ZL6func_1v:
 	movq %r15, -6272(%rbp)
 	popq %r15
 	# LowerAlloca(1753:3): size = 4, type = i32*, var = ^30
-	# Fixing source-to-dest leaq -2296(%rbp), -6288(%rbp)
+	# Fixing source-to-dest leaq -2296(%rbp), -6296(%rbp)
 	pushq %r15
 	leaq -2296(%rbp), %r15
-	movq %r15, -6288(%rbp)
+	movq %r15, -6296(%rbp)
 	popq %r15
 	# LowerAlloca(1754:3): size = 4, type = i32*, var = ^31
 	leaq -2300(%rbp), %rax
@@ -11517,10 +11453,10 @@ _ZL6func_1v:
 	movq %r15, -5808(%rbp)
 	popq %r15
 	# LowerAlloca(1780:3): size = 8, type = ptr*, var = ^57
-	# Fixing source-to-dest leaq -2880(%rbp), -5680(%rbp)
+	# Fixing source-to-dest leaq -2880(%rbp), -5672(%rbp)
 	pushq %r15
 	leaq -2880(%rbp), %r15
-	movq %r15, -5680(%rbp)
+	movq %r15, -5672(%rbp)
 	popq %r15
 	# LowerAlloca(1781:3): size = 8, type = ptr*, var = ^58
 	# Fixing source-to-dest leaq -2888(%rbp), -5776(%rbp)
@@ -11671,10 +11607,10 @@ _ZL6func_1v:
 	movq %r15, -5448(%rbp)
 	popq %r15
 	# LowerAlloca(1809:3): size = 8, type = i64*, var = ^86
-	# Fixing source-to-dest leaq -3600(%rbp), -5664(%rbp)
+	# Fixing source-to-dest leaq -3600(%rbp), -5656(%rbp)
 	pushq %r15
 	leaq -3600(%rbp), %r15
-	movq %r15, -5664(%rbp)
+	movq %r15, -5656(%rbp)
 	popq %r15
 	# LowerAlloca(1810:3): size = 8, type = [1 x ptr]*, var = ^87
 	# Fixing source-to-dest leaq -3608(%rbp), -5600(%rbp)
@@ -11789,10 +11725,10 @@ _ZL6func_1v:
 	movq %r15, -6128(%rbp)
 	popq %r15
 	# LowerAlloca(1832:3): size = 224, type = [7 x [8 x i32]]*, var = ^109
-	# Fixing source-to-dest leaq -4560(%rbp), -5656(%rbp)
+	# Fixing source-to-dest leaq -4560(%rbp), -5664(%rbp)
 	pushq %r15
 	leaq -4560(%rbp), %r15
-	movq %r15, -5656(%rbp)
+	movq %r15, -5664(%rbp)
 	popq %r15
 	# LowerAlloca(1833:3): size = 8, type = ptr*, var = ^110
 	# Fixing source-to-dest leaq -4568(%rbp), -5640(%rbp)
@@ -12031,7 +11967,7 @@ _ZL6func_1v:
 	# LowerStore(1902:3).3: mov $imm, (^21)
 	movl $0, (%r13)
 	# LowerStore(1904:3).3: mov $imm, (^22)
-	movq -5672(%rbp), %rax
+	movq -5680(%rbp), %rax
 	movl $-8, (%rax)
 	# LowerStore(1906:3).3: mov $imm, (^23)
 	movl $-1, (%r14)
@@ -12057,14 +11993,14 @@ _ZL6func_1v:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .___ZL6func_1v__M399
-	jmp .___ZL6func_1v__M469
+	jmp .___ZL6func_1v__M465
 	.___ZL6func_1v__M399:
 	# LowerStore(1927:3).3: mov $imm, (^30)
-	movq -6288(%rbp), %rax
+	movq -6296(%rbp), %rax
 	movl $0, (%rax)
 	.___ZL6func_1v__M402:
 	# LowerLoad(1931:3).2: (^30) into i32 ^145
-	movq -6288(%rbp), %rbx
+	movq -6296(%rbp), %rbx
 	movl (%rbx), %eax
 	# LowerIcmp(1932:3): i32 ^145 vs. intlike 10
 	cmpl $10, %eax
@@ -12072,7 +12008,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .___ZL6func_1v__M409
-	jmp .___ZL6func_1v__M460
+	jmp .___ZL6func_1v__M456
 	.___ZL6func_1v__M409:
 	# LowerLoad(1936:3).2: (^29) into i32 ^148
 	movq -6272(%rbp), %rbx
@@ -12094,12 +12030,10 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1166 -> operand ^150
 	movq %rdx, %rcx
-	# Result ^150 += skip 0
-	addq $0, %rcx
 	# Result ^150 += base pointer ^25
 	addq -6280(%rbp), %rcx
 	# LowerLoad(1939:3).2: (^30) into i32 ^151
-	movq -6288(%rbp), %rax
+	movq -6296(%rbp), %rax
 	movl (%rax), %ebx
 	movslq %ebx, %rax
 	# tt = Pointer, type = [10 x i64]
@@ -12111,23 +12045,21 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1168 -> operand ^153
 	movq %rbx, %rax
-	# Result ^153 += skip 0
-	addq $0, %rax
 	# Result ^153 += base pointer ^150
 	addq %rcx, %rax
 	# LowerStore(1942:3).3: mov $imm, (^153)
 	movabsq $3399871360421987074, %rbx
 	movq %rbx, (%rax)
 	# LowerLoad(1946:3).2: (^30) into i32 ^155
-	movq -6288(%rbp), %rbx
+	movq -6296(%rbp), %rbx
 	movl (%rbx), %eax
 	# LowerMath(1947:3): ^155, 1 into i32 ^156
 	addl $1, %eax
 	# LowerStore(1948:3).9: mov i32 ^156, (^30)
-	movq -6288(%rbp), %rbx
+	movq -6296(%rbp), %rbx
 	movl %eax, (%rbx)
 	jmp .___ZL6func_1v__M402
-	.___ZL6func_1v__M460:
+	.___ZL6func_1v__M456:
 	# LowerLoad(1955:3).2: (^29) into i32 ^159
 	movq -6272(%rbp), %rbx
 	movl (%rbx), %eax
@@ -12137,11 +12069,11 @@ _ZL6func_1v:
 	movq -6272(%rbp), %rbx
 	movl %eax, (%rbx)
 	jmp .___ZL6func_1v__M392
-	.___ZL6func_1v__M469:
+	.___ZL6func_1v__M465:
 	# LowerStore(1961:3).3: mov $imm, (^29)
 	movq -6272(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL6func_1v__M472:
+	.___ZL6func_1v__M468:
 	# LowerLoad(1965:3).2: (^29) into i32 ^163
 	movq -6272(%rbp), %rbx
 	movl (%rbx), %eax
@@ -12150,9 +12082,9 @@ _ZL6func_1v:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M479
-	jmp .___ZL6func_1v__M506
-	.___ZL6func_1v__M479:
+	jne .___ZL6func_1v__M475
+	jmp .___ZL6func_1v__M500
+	.___ZL6func_1v__M475:
 	# LowerLoad(1970:3).2: (^29) into i32 ^166
 	movq -6272(%rbp), %rbx
 	movl (%rbx), %eax
@@ -12166,8 +12098,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1169 -> operand ^168
 	movq %rcx, %rax
-	# Result ^168 += skip 0
-	addq $0, %rax
 	# Result ^168 += base pointer ^28
 	addq -5728(%rbp), %rax
 	# LowerStore(1973:3).3: mov $imm, (^168)
@@ -12180,12 +12110,12 @@ _ZL6func_1v:
 	# LowerStore(1979:3).9: mov i32 ^171, (^29)
 	movq -6272(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M472
-	.___ZL6func_1v__M506:
+	jmp .___ZL6func_1v__M468
+	.___ZL6func_1v__M500:
 	# LowerStore(1983:3).2a: mov $imm, %temp
 	movl $0, _ZL3g_2(%rip)
 	# LowerStore(1983:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M511:
+	.___ZL6func_1v__M505:
 	# LowerLoad(1987:3).4: _ZL3g_2 into ^174
 	movl _ZL3g_2(%rip), %eax
 	# LowerIcmp(1988:3): i32 ^174 vs. intlike 7
@@ -12193,9 +12123,9 @@ _ZL6func_1v:
 	sete %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M518
-	jmp .___ZL6func_1v__M688
-	.___ZL6func_1v__M518:
+	jne .___ZL6func_1v__M512
+	jmp .___ZL6func_1v__M682
+	.___ZL6func_1v__M512:
 	# LowerStore(1993:3).3: mov $imm, (^32)
 	movq -6144(%rbp), %rax
 	movw $-3, (%rax)
@@ -12257,7 +12187,7 @@ _ZL6func_1v:
 	# LowerStore(2014:3).2a: mov $imm, %temp
 	movl $12, _ZL3g_5(%rip)
 	# LowerStore(2014:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M583:
+	.___ZL6func_1v__M577:
 	# LowerLoad(2018:3).4: _ZL3g_5 into ^178
 	movl _ZL3g_5(%rip), %eax
 	# LowerIcmp(2019:3): i32 ^178 vs. intlike -3
@@ -12265,9 +12195,9 @@ _ZL6func_1v:
 	setge %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M590
-	jmp .___ZL6func_1v__M658
-	.___ZL6func_1v__M590:
+	jne .___ZL6func_1v__M584
+	jmp .___ZL6func_1v__M652
+	.___ZL6func_1v__M584:
 	# LowerStore(2024:3).3: mov $imm, (^44)
 	movq -6224(%rbp), %rax
 	movw $30679, (%rax)
@@ -12303,8 +12233,8 @@ _ZL6func_1v:
 	leaq _ZL3g_5(%rip), %rbx
 	# LowerStore(2041:3).8b: movq ^185, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M583
-	.___ZL6func_1v__M658:
+	jmp .___ZL6func_1v__M577
+	.___ZL6func_1v__M652:
 	# LowerLoad(2045:3).4: _ZL5g_139 into ^187
 	movq _ZL5g_139(%rip), %rax
 	# LowerLoad(2046:3).2: (^187) into ptr ^188
@@ -12316,11 +12246,11 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M669
-	jmp .___ZL6func_1v__M670
-	.___ZL6func_1v__M669:
-	jmp .___ZL6func_1v__M688
-	.___ZL6func_1v__M670:
+	jne .___ZL6func_1v__M663
+	jmp .___ZL6func_1v__M664
+	.___ZL6func_1v__M663:
+	jmp .___ZL6func_1v__M682
+	.___ZL6func_1v__M664:
 	# LowerLoad(2055:3).2: (^6) into i32 ^193
 	movq -5576(%rbp), %rbx
 	movl (%rbx), %eax
@@ -12337,8 +12267,8 @@ _ZL6func_1v:
 	leaq _ZL3g_2(%rip), %rbx
 	# LowerStore(2063:3).8b: movq ^197, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M511
-	.___ZL6func_1v__M688:
+	jmp .___ZL6func_1v__M505
+	.___ZL6func_1v__M682:
 	# LowerLoad(2067:3).2: (^5) into i32 ^199
 	movq -5472(%rbp), %rbx
 	movl (%rbx), %eax
@@ -12351,13 +12281,13 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M698
-	jmp .___ZL6func_1v__M701
-	.___ZL6func_1v__M698:
+	jne .___ZL6func_1v__M692
+	jmp .___ZL6func_1v__M695
+	.___ZL6func_1v__M692:
 	# MovePhi: intlike -> ^234 (in new block 1246 whose parent is 198)
 	movb $1, -6104(%rbp)
-	jmp .___ZL6func_1v__M957
-	.___ZL6func_1v__M701:
+	jmp .___ZL6func_1v__M951
+	.___ZL6func_1v__M695:
 	# LowerLoad(2074:3).2: (^6) into i32 ^204
 	movq -5576(%rbp), %rax
 	movl (%rax), %r13d
@@ -12516,7 +12446,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^232 -> ^234
 	movb %al, -6104(%rbp)
-	.___ZL6func_1v__M957:
+	.___ZL6func_1v__M951:
 	# LowerBasicConversion(2107:3): i1 ^234 -> i64 ^235
 	movq -6104(%rbp), %rax
 	# Truncate value to 8 bits
@@ -12553,7 +12483,7 @@ _ZL6func_1v:
 	# LowerLogic(2116:3): ^240, ^241 into i32 ^242
 	movl %eax, %ecx
 	orl %ebx, %ecx
-	.___ZL6func_1v__M1006:
+	.___ZL6func_1v__M1000:
 	# LowerStore(2120:3).3: mov $imm, (^51)
 	movq -6032(%rbp), %rax
 	movw $14316, (%rax)
@@ -12581,7 +12511,7 @@ _ZL6func_1v:
 	# LowerStore(2132:3).6: load global
 	leaq _ZL5g_338(%rip), %rbx
 	# LowerStore(2132:3).9: mov ptr ^1194, (^57)
-	movq -5680(%rbp), %rax
+	movq -5672(%rbp), %rax
 	movq %rbx, (%rax)
 	# LowerStore(2134:3).6: load global
 	leaq _ZL6g_1487(%rip), %rbx
@@ -13122,13 +13052,13 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M1724
-	jmp .___ZL6func_1v__M1727
-	.___ZL6func_1v__M1724:
+	jne .___ZL6func_1v__M1718
+	jmp .___ZL6func_1v__M1721
+	.___ZL6func_1v__M1718:
 	# MovePhi: intlike -> ^354 (in new block 1247 whose parent is 1129)
 	movb $1, %cl
-	jmp .___ZL6func_1v__M1736
-	.___ZL6func_1v__M1727:
+	jmp .___ZL6func_1v__M1730
+	.___ZL6func_1v__M1721:
 	# LowerLoad(2279:3).2: (^54) into i16 ^351
 	movq -5896(%rbp), %rcx
 	movw (%rcx), %ax
@@ -13138,7 +13068,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^352 -> ^354
 	movb %al, %cl
-	.___ZL6func_1v__M1736:
+	.___ZL6func_1v__M1730:
 	# LowerLoad(2285:3).2: (^6) into i32 ^355
 	movq -5576(%rbp), %rax
 	movl (%rax), %ecx
@@ -13241,7 +13171,7 @@ _ZL6func_1v:
 	# LowerStore(2306:3).2a: mov $imm, %temp
 	movw $0, _ZL5g_106(%rip)
 	# LowerStore(2306:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M1874:
+	.___ZL6func_1v__M1868:
 	# LowerLoad(2310:3).4: _ZL5g_106 into ^373
 	movw _ZL5g_106(%rip), %ax
 	# LowerBasicConversion(2311:3): i16 ^373 -> i32 ^374
@@ -13252,9 +13182,9 @@ _ZL6func_1v:
 	setg %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M1885
-	jmp .___ZL6func_1v__M1902
-	.___ZL6func_1v__M1885:
+	jne .___ZL6func_1v__M1879
+	jmp .___ZL6func_1v__M1896
+	.___ZL6func_1v__M1879:
 	# LowerLoad(2316:3).2: (^53) into ptr ^377
 	movq -5376(%rbp), %rax
 	movq (%rax), %rbx
@@ -13270,8 +13200,8 @@ _ZL6func_1v:
 	leaq _ZL5g_106(%rip), %rbx
 	# LowerStore(2323:3).8b: movq ^380, (%temp)
 	movw %ax, (%rbx)
-	jmp .___ZL6func_1v__M1874
-	.___ZL6func_1v__M1902:
+	jmp .___ZL6func_1v__M1868
+	.___ZL6func_1v__M1896:
 	# LowerLoad(2327:3).2: (^3) into i32 ^382
 	movq -5784(%rbp), %rbx
 	movl (%rbx), %eax
@@ -13304,13 +13234,13 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M1945
-	jmp .___ZL6func_1v__M1948
-	.___ZL6func_1v__M1945:
+	jne .___ZL6func_1v__M1939
+	jmp .___ZL6func_1v__M1942
+	.___ZL6func_1v__M1939:
 	# MovePhi: intlike -> ^415 (in new block 1248 whose parent is 381)
 	movb $1, %al
-	jmp .___ZL6func_1v__M2048
-	.___ZL6func_1v__M1948:
+	jmp .___ZL6func_1v__M2042
+	.___ZL6func_1v__M1942:
 	leaq _ZL6g_1922(%rip), %rax
 	# tt = Pointer, type = [4 x [9 x i32]]
 	leaq _ZL6g_1922(%rip), %rax
@@ -13378,7 +13308,7 @@ _ZL6func_1v:
 	# LowerLogic(2354:3): ^405, 238 into i64 ^406
 	orq $238, %rcx
 	# LowerLoad(2354:3).2: (^57) into ptr ^407
-	movq -5680(%rbp), %rdx
+	movq -5672(%rbp), %rdx
 	movq (%rdx), %rax
 	# LowerStore(2355:3).9: mov i64 ^406, (^407)
 	movq %rcx, (%rax)
@@ -13403,7 +13333,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: intlike -> ^415
 	movb $1, %al
-	.___ZL6func_1v__M2048:
+	.___ZL6func_1v__M2042:
 	# LowerLoad(2367:3).2: (^53) into ptr ^416
 	movq -5376(%rbp), %rax
 	movq (%rax), %rcx
@@ -13521,15 +13451,15 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2198
-	.___ZL6func_1v__M2195:
+	jne .___ZL6func_1v__M2192
+	.___ZL6func_1v__M2189:
 	# MovePhi: intlike -> ^443 (in new block 1249 whose parent is 1132)
 	movb $0, -5632(%rbp)
-	jmp .___ZL6func_1v__M2201
-	.___ZL6func_1v__M2198:
+	jmp .___ZL6func_1v__M2195
+	.___ZL6func_1v__M2192:
 	# MovePhi: intlike -> ^443
 	movb $1, -5632(%rbp)
-	.___ZL6func_1v__M2201:
+	.___ZL6func_1v__M2195:
 	# LowerLogic(2403:3): ^443, true into i1 ^444
 	movb -5632(%rbp), %cl
 	xorb $1, %cl
@@ -13561,7 +13491,7 @@ _ZL6func_1v:
 	# SetupCalls(2409:3): move i64 result from %rax
 	movq %rax, %rax
 	# LowerLoad(2410:3).2: (^57) into ptr ^452
-	movq -5680(%rbp), %rbx
+	movq -5672(%rbp), %rbx
 	movq (%rbx), %rax
 	# LowerIcmp(2411:3): i64* ^9 vs. operand ptr ^452
 	cmpq %rax, -5592(%rbp)
@@ -13599,9 +13529,9 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2306
-	jmp .___ZL6func_1v__M3417
-	.___ZL6func_1v__M2306:
+	jne .___ZL6func_1v__M2300
+	jmp .___ZL6func_1v__M3405
+	.___ZL6func_1v__M2300:
 	# SetupCalls(2425:3): move argument ptr align 16 ^74
 	# Fixed movzx with identical source and destination widths
 	movq -5400(%rbp), %rdi
@@ -13616,7 +13546,7 @@ _ZL6func_1v:
 	# LowerStore(2430:3).3: mov $imm, (^77)
 	movq -5624(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL6func_1v__M2336:
+	.___ZL6func_1v__M2330:
 	# LowerLoad(2434:3).2: (^77) into i32 ^465
 	movq -5624(%rbp), %rbx
 	movl (%rbx), %eax
@@ -13625,9 +13555,9 @@ _ZL6func_1v:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2343
-	jmp .___ZL6func_1v__M2372
-	.___ZL6func_1v__M2343:
+	jne .___ZL6func_1v__M2337
+	jmp .___ZL6func_1v__M2364
+	.___ZL6func_1v__M2337:
 	# LowerLoad(2439:3).2: (^77) into i32 ^468
 	movq -5624(%rbp), %rbx
 	movl (%rbx), %eax
@@ -13641,8 +13571,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1170 -> operand ^470
 	movq %rcx, %rax
-	# Result ^470 += skip 0
-	addq $0, %rax
 	# Result ^470 += base pointer ^75
 	addq -5616(%rbp), %rax
 	# LowerStore(2442:3).6: load global
@@ -13657,8 +13585,8 @@ _ZL6func_1v:
 	# LowerStore(2448:3).9: mov i32 ^473, (^77)
 	movq -5624(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M2336
-	.___ZL6func_1v__M2372:
+	jmp .___ZL6func_1v__M2330
+	.___ZL6func_1v__M2364:
 	# LowerLoad(2452:3).4: _ZL5g_337 into ^475
 	movq _ZL5g_337(%rip), %rax
 	# LowerLoad(2453:3).2: (^62) into ptr ^476
@@ -13706,8 +13634,8 @@ _ZL6func_1v:
 	# Unclobber %rax
 	movq -6344(%rbp), %rax
 	# LowerIcmp(2463:3): ptr* ^53 vs. operand ptr* ^53
-	cmpq -5376(%rbp), -5376(%rbp)
-	setne %al
+	# Fixing always false comparison
+	movq $0, %rax
 	andq $1, %rax
 	# LowerBasicConversion(2464:3): ptr ^485 -> i64 ^486
 	movq %rax, %rbx
@@ -13798,12 +13726,12 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2562
-	.___ZL6func_1v__M2559:
+	jne .___ZL6func_1v__M2554
+	.___ZL6func_1v__M2551:
 	# MovePhi: intlike -> ^519 (in new block 1250 whose parent is 1136)
 	movb $0, -5496(%rbp)
-	jmp .___ZL6func_1v__M2576
-	.___ZL6func_1v__M2562:
+	jmp .___ZL6func_1v__M2568
+	.___ZL6func_1v__M2554:
 	# tt = Pointer, type = [4 x i32]
 	# LowerGetelementptr(2496:3): struct-type: ptr ^74 -> ^515, indices=0,2
 	movq -5400(%rbp), %rax
@@ -13817,7 +13745,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^517 -> ^519
 	movb %al, -5496(%rbp)
-	.___ZL6func_1v__M2576:
+	.___ZL6func_1v__M2568:
 	# LowerBasicConversion(2503:3): i1 ^519 -> i64 ^520
 	movq -5496(%rbp), %rax
 	# Truncate value to 8 bits
@@ -13868,16 +13796,16 @@ _ZL6func_1v:
 	sete %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2655
-	jmp .___ZL6func_1v__M2658
-	.___ZL6func_1v__M2655:
+	jne .___ZL6func_1v__M2647
+	jmp .___ZL6func_1v__M2650
+	.___ZL6func_1v__M2647:
 	# MovePhi: intlike -> ^532 (in new block 1251 whose parent is 518)
 	movb $1, -5488(%rbp)
-	jmp .___ZL6func_1v__M2661
-	.___ZL6func_1v__M2658:
+	jmp .___ZL6func_1v__M2653
+	.___ZL6func_1v__M2650:
 	# MovePhi: intlike -> ^532
 	movb $1, -5488(%rbp)
-	.___ZL6func_1v__M2661:
+	.___ZL6func_1v__M2653:
 	# LowerBasicConversion(2521:3): i1 ^532 -> i16 ^533
 	movw -5488(%rbp), %ax
 	# Truncate value to 8 bits
@@ -13912,7 +13840,7 @@ _ZL6func_1v:
 	# LowerStore(2530:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1904(%rip)
 	# LowerStore(2530:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M2712:
+	.___ZL6func_1v__M2704:
 	# LowerLoad(2534:3).4: _ZL6g_1904 into ^542
 	movl _ZL6g_1904(%rip), %eax
 	# LowerIcmp(2535:3): i32 ^542 vs. intlike 7
@@ -13920,13 +13848,13 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2719
-	jmp .___ZL6func_1v__M3416
-	.___ZL6func_1v__M2719:
+	jne .___ZL6func_1v__M2711
+	jmp .___ZL6func_1v__M3404
+	.___ZL6func_1v__M2711:
 	# LowerStore(2539:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1921(%rip)
 	# LowerStore(2539:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M2724:
+	.___ZL6func_1v__M2716:
 	# LowerLoad(2543:3).4: _ZL6g_1921 into ^546
 	movl _ZL6g_1921(%rip), %eax
 	# LowerIcmp(2544:3): i32 ^546 vs. intlike 7
@@ -13934,9 +13862,9 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2731
-	jmp .___ZL6func_1v__M3405
-	.___ZL6func_1v__M2731:
+	jne .___ZL6func_1v__M2723
+	jmp .___ZL6func_1v__M3393
+	.___ZL6func_1v__M2723:
 	# SetupCalls(2549:3): move argument ptr align 16 ^78
 	# Fixed movzx with identical source and destination widths
 	movq -5416(%rbp), %rdi
@@ -13948,7 +13876,7 @@ _ZL6func_1v:
 	# LowerStore(2552:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1898(%rip)
 	# LowerStore(2552:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M2761:
+	.___ZL6func_1v__M2753:
 	# LowerLoad(2556:3).4: _ZL6g_1898 into ^550
 	movl _ZL6g_1898(%rip), %eax
 	# LowerIcmp(2557:3): i32 ^550 vs. intlike 7
@@ -13956,9 +13884,9 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2768
-	jmp .___ZL6func_1v__M3394
-	.___ZL6func_1v__M2768:
+	jne .___ZL6func_1v__M2760
+	jmp .___ZL6func_1v__M3382
+	.___ZL6func_1v__M2760:
 	# LowerStore(2562:3).3: mov $imm, (^81)
 	movq -5424(%rbp), %rax
 	movl $-290470832, (%rax)
@@ -13968,20 +13896,18 @@ _ZL6func_1v:
 	addl $1, %eax
 	# LowerBasicConversion(2566:3): i32 ^554 -> i64 ^555
 	movq %rax, %rbx
-	leaq _ZL6g_1944(%rip), %rcx
+	leaq _ZL6g_1944(%rip), %rdx
 	# tt = Pointer, type = [10 x i32]
 	# LowerGetelementptr(2567:3): array/pointer-type, dynamic index -> ^556
 	# index ^555 -> temp ^1172
-	movq %rbx, %rdx
+	movq %rbx, %rcx
 	# Multiply temp ^1172 by 4 start
-	shlq $2, %rdx
+	shlq $2, %rcx
 	# Multiply end
 	# temp ^1172 -> operand ^556
-	movq %rdx, %rax
-	# Result ^556 += skip 0
-	addq $0, %rax
+	movq %rcx, %rax
 	# Result ^556 += base pointer ^1171
-	addq %rcx, %rax
+	addq %rdx, %rax
 	# LowerLoad(2568:3).2: (^556) into i32 ^557
 	movl (%rax), %ebx
 	# LowerIcmp(2569:3): i32 ^557 vs. intlike 0
@@ -13989,11 +13915,11 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M2798
-	jmp .___ZL6func_1v__M2799
-	.___ZL6func_1v__M2798:
-	jmp .___ZL6func_1v__M3394
-	.___ZL6func_1v__M2799:
+	jne .___ZL6func_1v__M2788
+	jmp .___ZL6func_1v__M2789
+	.___ZL6func_1v__M2788:
+	jmp .___ZL6func_1v__M3382
+	.___ZL6func_1v__M2789:
 	# tt = Pointer, type = [4 x i32]
 	# LowerGetelementptr(2576:3): struct-type: ptr ^74 -> ^561, indices=0,2
 	movq -5400(%rbp), %rax
@@ -14071,8 +13997,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1174 -> operand ^582
 	movq %rdx, %rax
-	# Result ^582 += skip 0
-	addq $0, %rax
 	# Result ^582 += base pointer ^1173
 	addq %rsi, %rax
 	# LowerStore(2599:3).9: mov i32 ^578, (^582)
@@ -14392,12 +14316,12 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3354
-	.___ZL6func_1v__M3351:
+	jne .___ZL6func_1v__M3342
+	.___ZL6func_1v__M3339:
 	# MovePhi: intlike -> ^665 (in new block 1252 whose parent is 1143)
 	movb $0, -5384(%rbp)
-	jmp .___ZL6func_1v__M3363
-	.___ZL6func_1v__M3354:
+	jmp .___ZL6func_1v__M3351
+	.___ZL6func_1v__M3342:
 	# LowerLoad(2681:3).4: _ZL6g_1948 into ^662
 	movl _ZL6g_1948(%rip), %eax
 	# LowerIcmp(2682:3): i32 ^662 vs. intlike 0
@@ -14406,7 +14330,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^663 -> ^665
 	movb %al, -5384(%rbp)
-	.___ZL6func_1v__M3363:
+	.___ZL6func_1v__M3351:
 	# LowerBasicConversion(2687:3): i1 ^665 -> i32 ^666
 	movl -5384(%rbp), %eax
 	# Truncate value to 8 bits
@@ -14435,8 +14359,8 @@ _ZL6func_1v:
 	leaq _ZL6g_1898(%rip), %rbx
 	# LowerStore(2699:3).8b: movq ^674, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M2761
-	.___ZL6func_1v__M3394:
+	jmp .___ZL6func_1v__M2753
+	.___ZL6func_1v__M3382:
 	# LowerLoad(2706:3).4: _ZL6g_1921 into ^677
 	movl _ZL6g_1921(%rip), %eax
 	# LowerMath(2707:3): ^677, 1 into i32 ^678
@@ -14445,8 +14369,8 @@ _ZL6func_1v:
 	leaq _ZL6g_1921(%rip), %rbx
 	# LowerStore(2708:3).8b: movq ^678, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M2724
-	.___ZL6func_1v__M3405:
+	jmp .___ZL6func_1v__M2716
+	.___ZL6func_1v__M3393:
 	# LowerLoad(2715:3).4: _ZL6g_1904 into ^681
 	movl _ZL6g_1904(%rip), %eax
 	# LowerMath(2716:3): ^681, 1 into i32 ^682
@@ -14455,10 +14379,10 @@ _ZL6func_1v:
 	leaq _ZL6g_1904(%rip), %rbx
 	# LowerStore(2717:3).8b: movq ^682, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M2712
-	.___ZL6func_1v__M3416:
-	jmp .___ZL6func_1v__M4354
-	.___ZL6func_1v__M3417:
+	jmp .___ZL6func_1v__M2704
+	.___ZL6func_1v__M3404:
+	jmp .___ZL6func_1v__M4338
+	.___ZL6func_1v__M3405:
 	# LowerStore(2725:3).3: mov $imm, (^83)
 	movq -5464(%rbp), %rax
 	movl $-1902289856, (%rax)
@@ -14475,7 +14399,7 @@ _ZL6func_1v:
 	movl $757060412, (%rax)
 	# LowerStore(2731:3).3: mov $imm, (^86)
 	movabsq $-6161547311127722695, %rbx
-	movq -5664(%rbp), %rax
+	movq -5656(%rbp), %rax
 	movq %rbx, (%rax)
 	# SetupCalls(2734:3): move argument ptr align 16 ^88
 	# Fixed movzx with identical source and destination widths
@@ -14488,7 +14412,7 @@ _ZL6func_1v:
 	# LowerStore(2737:3).3: mov $imm, (^89)
 	movq -5608(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL6func_1v__M3477:
+	.___ZL6func_1v__M3465:
 	# LowerLoad(2741:3).2: (^89) into i32 ^686
 	movq -5608(%rbp), %rbx
 	movl (%rbx), %eax
@@ -14497,9 +14421,9 @@ _ZL6func_1v:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3484
-	jmp .___ZL6func_1v__M3513
-	.___ZL6func_1v__M3484:
+	jne .___ZL6func_1v__M3472
+	jmp .___ZL6func_1v__M3499
+	.___ZL6func_1v__M3472:
 	# LowerLoad(2746:3).2: (^89) into i32 ^689
 	movq -5608(%rbp), %rbx
 	movl (%rbx), %eax
@@ -14513,8 +14437,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1175 -> operand ^691
 	movq %rcx, %rax
-	# Result ^691 += skip 0
-	addq $0, %rax
 	# Result ^691 += base pointer ^87
 	addq -5600(%rbp), %rax
 	# LowerStore(2749:3).6: load global
@@ -14529,12 +14451,12 @@ _ZL6func_1v:
 	# LowerStore(2755:3).9: mov i32 ^694, (^89)
 	movq -5608(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M3477
-	.___ZL6func_1v__M3513:
+	jmp .___ZL6func_1v__M3465
+	.___ZL6func_1v__M3499:
 	# LowerStore(2759:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1934(%rip)
 	# LowerStore(2759:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M3518:
+	.___ZL6func_1v__M3504:
 	# LowerLoad(2763:3).4: _ZL6g_1934 into ^697
 	movl _ZL6g_1934(%rip), %eax
 	# LowerIcmp(2764:3): i32 ^697 vs. intlike 6
@@ -14542,9 +14464,9 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3525
-	jmp .___ZL6func_1v__M3887
-	.___ZL6func_1v__M3525:
+	jne .___ZL6func_1v__M3511
+	jmp .___ZL6func_1v__M3871
+	.___ZL6func_1v__M3511:
 	# LowerStore(2769:3).3: mov $imm, (^91)
 	movq -5504(%rbp), %rax
 	movw $-1834, (%rax)
@@ -14583,9 +14505,9 @@ _ZL6func_1v:
 	setle %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3595
-	jmp .___ZL6func_1v__M3621
-	.___ZL6func_1v__M3595:
+	jne .___ZL6func_1v__M3581
+	jmp .___ZL6func_1v__M3607
+	.___ZL6func_1v__M3581:
 	# SetupCalls(2791:3): move argument ptr align 2 ^1
 	# Fixed movzx with identical source and destination widths
 	movq -5344(%rbp), %rdi
@@ -14594,12 +14516,12 @@ _ZL6func_1v:
 	# SetupCalls(2791:3): move argument i64 2
 	movq $2, %rdx
 	callq memcpy@PLT
-	jmp .___ZL6func_1v__M5887
-	.___ZL6func_1v__M3621:
+	jmp .___ZL6func_1v__M5863
+	.___ZL6func_1v__M3607:
 	# LowerStore(2801:3).2a: mov $imm, %temp
 	movl $1, _ZL5g_744(%rip)
 	# LowerStore(2801:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M3626:
+	.___ZL6func_1v__M3612:
 	# LowerLoad(2805:3).4: _ZL5g_744 into ^709
 	movl _ZL5g_744(%rip), %eax
 	# LowerIcmp(2806:3): i32 ^709 vs. intlike 6
@@ -14607,9 +14529,9 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3633
-	jmp .___ZL6func_1v__M3876
-	.___ZL6func_1v__M3633:
+	jne .___ZL6func_1v__M3619
+	jmp .___ZL6func_1v__M3860
+	.___ZL6func_1v__M3619:
 	# SetupCalls(2811:3): move argument ptr align 16 ^98
 	# Fixed movzx with identical source and destination widths
 	movq -5552(%rbp), %rdi
@@ -14624,7 +14546,7 @@ _ZL6func_1v:
 	# LowerStore(2816:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1928(%rip)
 	# LowerStore(2816:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M3665:
+	.___ZL6func_1v__M3651:
 	# LowerLoad(2820:3).4: _ZL6g_1928 into ^713
 	movl _ZL6g_1928(%rip), %eax
 	# LowerIcmp(2821:3): i32 ^713 vs. intlike 6
@@ -14632,9 +14554,9 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3672
-	jmp .___ZL6func_1v__M3819
-	.___ZL6func_1v__M3672:
+	jne .___ZL6func_1v__M3658
+	jmp .___ZL6func_1v__M3803
+	.___ZL6func_1v__M3658:
 	# LowerStore(2826:3).6: load global
 	leaq _ZL6g_2423(%rip), %rbx
 	# LowerStore(2826:3).9: mov ptr ^1216, (^102)
@@ -14666,8 +14588,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1177 -> operand ^722
 	movq %rcx, %rax
-	# Result ^722 += skip 0
-	addq $0, %rax
 	# Result ^722 += base pointer ^1176
 	addq %rbx, %rax
 	# LowerLoad(2836:3).2: (^722) into i32 ^723
@@ -14748,8 +14668,8 @@ _ZL6func_1v:
 	leaq _ZL6g_1928(%rip), %rbx
 	# LowerStore(2862:3).8b: movq ^742, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M3665
-	.___ZL6func_1v__M3819:
+	jmp .___ZL6func_1v__M3651
+	.___ZL6func_1v__M3803:
 	# LowerStore(2866:3).2a: mov $imm, %temp
 	movl $-1, _ZL6g_1939(%rip)
 	# LowerStore(2866:3).2b: mov %temp, (global)
@@ -14760,9 +14680,9 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3831
-	jmp .___ZL6func_1v__M3865
-	.___ZL6func_1v__M3831:
+	jne .___ZL6func_1v__M3815
+	jmp .___ZL6func_1v__M3849
+	.___ZL6func_1v__M3815:
 	# SetupCalls(2876:3): move argument ptr align 2 ^1
 	# Fixed movzx with identical source and destination widths
 	movq -5344(%rbp), %rdi
@@ -14779,13 +14699,13 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3863
-	jmp .___ZL6func_1v__M3864
-	.___ZL6func_1v__M3863:
-	jmp .___ZL6func_1v__M3865
-	.___ZL6func_1v__M3864:
-	jmp .___ZL6func_1v__M5887
-	.___ZL6func_1v__M3865:
+	jne .___ZL6func_1v__M3847
+	jmp .___ZL6func_1v__M3848
+	.___ZL6func_1v__M3847:
+	jmp .___ZL6func_1v__M3849
+	.___ZL6func_1v__M3848:
+	jmp .___ZL6func_1v__M5863
+	.___ZL6func_1v__M3849:
 	# LowerLoad(2897:3).4: _ZL5g_744 into ^757
 	movl _ZL5g_744(%rip), %eax
 	# LowerMath(2898:3): ^757, 1 into i32 ^758
@@ -14794,8 +14714,8 @@ _ZL6func_1v:
 	leaq _ZL5g_744(%rip), %rbx
 	# LowerStore(2899:3).8b: movq ^758, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M3626
-	.___ZL6func_1v__M3876:
+	jmp .___ZL6func_1v__M3612
+	.___ZL6func_1v__M3860:
 	# LowerLoad(2906:3).4: _ZL6g_1934 into ^761
 	movl _ZL6g_1934(%rip), %eax
 	# LowerMath(2907:3): ^761, 1 into i32 ^762
@@ -14804,8 +14724,8 @@ _ZL6func_1v:
 	leaq _ZL6g_1934(%rip), %rbx
 	# LowerStore(2908:3).8b: movq ^762, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M3518
-	.___ZL6func_1v__M3887:
+	jmp .___ZL6func_1v__M3504
+	.___ZL6func_1v__M3871:
 	# LowerLoad(2912:3).2: (^85) into i32 ^764
 	movq -5448(%rbp), %rax
 	movl (%rax), %ebx
@@ -14814,12 +14734,12 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3897
-	.___ZL6func_1v__M3894:
+	jne .___ZL6func_1v__M3881
+	.___ZL6func_1v__M3878:
 	# MovePhi: intlike -> ^836 (in new block 1254 whose parent is 763)
 	movb $0, -5432(%rbp)
-	jmp .___ZL6func_1v__M4343
-	.___ZL6func_1v__M3897:
+	jmp .___ZL6func_1v__M4327
+	.___ZL6func_1v__M3881:
 	# LowerLoad(2917:3).2: (^53) into ptr ^767
 	movq -5376(%rbp), %rax
 	movq (%rax), %rbx
@@ -14888,16 +14808,16 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M3991
-	jmp .___ZL6func_1v__M3994
-	.___ZL6func_1v__M3991:
+	jne .___ZL6func_1v__M3975
+	jmp .___ZL6func_1v__M3978
+	.___ZL6func_1v__M3975:
 	# MovePhi: intlike -> ^789 (in new block 1253 whose parent is 1145)
 	movb $1, %al
-	jmp .___ZL6func_1v__M3997
-	.___ZL6func_1v__M3994:
+	jmp .___ZL6func_1v__M3981
+	.___ZL6func_1v__M3978:
 	# MovePhi: intlike -> ^789
 	movb $1, %al
-	.___ZL6func_1v__M3997:
+	.___ZL6func_1v__M3981:
 	# LowerLoad(2944:3).2: (^17) into i16 ^790
 	movq -5480(%rbp), %rax
 	movw (%rax), %cx
@@ -15125,7 +15045,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^834 -> ^836
 	movb %al, -5432(%rbp)
-	.___ZL6func_1v__M4343:
+	.___ZL6func_1v__M4327:
 	# LowerBasicConversion(2994:3): i1 ^836 -> i32 ^837
 	movl -5432(%rbp), %eax
 	# Truncate value to 8 bits
@@ -15136,9 +15056,9 @@ _ZL6func_1v:
 	movq (%rbx), %rcx
 	# LowerStore(2997:3).9: mov i32 ^837, (^839)
 	movl %eax, (%rcx)
-	.___ZL6func_1v__M4354:
-	jmp .___ZL6func_1v__M5859
-	.___ZL6func_1v__M4355:
+	.___ZL6func_1v__M4338:
+	jmp .___ZL6func_1v__M5835
+	.___ZL6func_1v__M4339:
 	# LowerStore(3005:3).6: load global
 	leaq _ZL6g_2504(%rip), %rbx
 	# LowerStore(3005:3).9: mov ptr ^1221, (^104)
@@ -15160,7 +15080,7 @@ _ZL6func_1v:
 	movl $-199073996, (%rax)
 	# SetupCalls(3015:3): move argument ptr align 16 ^109
 	# Fixed movzx with identical source and destination widths
-	movq -5656(%rbp), %rdi
+	movq -5664(%rbp), %rdi
 	# SetupCalls(3015:3): move argument ptr align 16 @__const._ZL6func_1v.l_2541
 	leaq __const._ZL6func_1v.l_2541(%rip), %rsi
 	# SetupCalls(3015:3): move argument i64 224
@@ -15296,13 +15216,13 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M4575
-	jmp .___ZL6func_1v__M4578
-	.___ZL6func_1v__M4575:
+	jne .___ZL6func_1v__M4559
+	jmp .___ZL6func_1v__M4562
+	.___ZL6func_1v__M4559:
 	# MovePhi: intlike -> ^872 (in new block 1255 whose parent is 1150)
 	movb $1, -5960(%rbp)
-	jmp .___ZL6func_1v__M4589
-	.___ZL6func_1v__M4578:
+	jmp .___ZL6func_1v__M4573
+	.___ZL6func_1v__M4562:
 	# LowerLoad(3052:3).4: _ZL5g_337 into ^868
 	movq _ZL5g_337(%rip), %rax
 	# LowerLoad(3053:3).2: (^868) into i64 ^869
@@ -15313,7 +15233,7 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^870 -> ^872
 	movb %al, -5960(%rbp)
-	.___ZL6func_1v__M4589:
+	.___ZL6func_1v__M4573:
 	# LowerBasicConversion(3059:3): i1 ^872 -> i16 ^873
 	movw -5960(%rbp), %ax
 	# Truncate value to 8 bits
@@ -15445,9 +15365,9 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M4796
-	jmp .___ZL6func_1v__M5792
-	.___ZL6func_1v__M4796:
+	jne .___ZL6func_1v__M4780
+	jmp .___ZL6func_1v__M5768
+	.___ZL6func_1v__M4780:
 	# LowerStore(3086:3).3: mov $imm, (^114)
 	movq -5928(%rbp), %rax
 	movb $1, (%rax)
@@ -15730,7 +15650,7 @@ _ZL6func_1v:
 	# LowerStore(3163:3).3: mov $imm, (^128)
 	movq -5912(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL6func_1v__M5127:
+	.___ZL6func_1v__M5111:
 	# LowerLoad(3167:3).2: (^128) into i32 ^926
 	movq -5912(%rbp), %rbx
 	movl (%rbx), %eax
@@ -15739,9 +15659,9 @@ _ZL6func_1v:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5134
-	jmp .___ZL6func_1v__M5161
-	.___ZL6func_1v__M5134:
+	jne .___ZL6func_1v__M5118
+	jmp .___ZL6func_1v__M5143
+	.___ZL6func_1v__M5118:
 	# LowerLoad(3172:3).2: (^128) into i32 ^929
 	movq -5912(%rbp), %rbx
 	movl (%rbx), %eax
@@ -15755,8 +15675,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1178 -> operand ^931
 	movq %rcx, %rax
-	# Result ^931 += skip 0
-	addq $0, %rax
 	# Result ^931 += base pointer ^122
 	addq -5904(%rbp), %rax
 	# LowerStore(3175:3).3: mov $imm, (^931)
@@ -15769,12 +15687,12 @@ _ZL6func_1v:
 	# LowerStore(3181:3).9: mov i32 ^934, (^128)
 	movq -5912(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M5127
-	.___ZL6func_1v__M5161:
+	jmp .___ZL6func_1v__M5111
+	.___ZL6func_1v__M5143:
 	# LowerStore(3185:3).3: mov $imm, (^4)
 	movq -5440(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL6func_1v__M5164:
+	.___ZL6func_1v__M5146:
 	# LowerLoad(3189:3).2: (^4) into i32 ^937
 	movq -5440(%rbp), %rax
 	movl (%rax), %ebx
@@ -15783,9 +15701,9 @@ _ZL6func_1v:
 	setle %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5171
-	jmp .___ZL6func_1v__M5254
-	.___ZL6func_1v__M5171:
+	jne .___ZL6func_1v__M5153
+	jmp .___ZL6func_1v__M5234
+	.___ZL6func_1v__M5153:
 	# LowerStore(3195:3).3: mov $imm, (^130)
 	movq -5824(%rbp), %rax
 	movl $-6, (%rax)
@@ -15815,7 +15733,7 @@ _ZL6func_1v:
 	# LowerStore(3211:3).3: mov $imm, (^138)
 	movq -5888(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL6func_1v__M5211:
+	.___ZL6func_1v__M5193:
 	# LowerLoad(3215:3).2: (^138) into i32 ^941
 	movq -5888(%rbp), %rbx
 	movl (%rbx), %eax
@@ -15824,9 +15742,9 @@ _ZL6func_1v:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5218
-	jmp .___ZL6func_1v__M5245
-	.___ZL6func_1v__M5218:
+	jne .___ZL6func_1v__M5200
+	jmp .___ZL6func_1v__M5225
+	.___ZL6func_1v__M5200:
 	# LowerLoad(3220:3).2: (^138) into i32 ^944
 	movq -5888(%rbp), %rbx
 	movl (%rbx), %eax
@@ -15840,8 +15758,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1179 -> operand ^946
 	movq %rcx, %rax
-	# Result ^946 += skip 0
-	addq $0, %rax
 	# Result ^946 += base pointer ^136
 	addq -5872(%rbp), %rax
 	# LowerStore(3223:3).3: mov $imm, (^946)
@@ -15854,8 +15770,8 @@ _ZL6func_1v:
 	# LowerStore(3229:3).9: mov i32 ^949, (^138)
 	movq -5888(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M5211
-	.___ZL6func_1v__M5245:
+	jmp .___ZL6func_1v__M5193
+	.___ZL6func_1v__M5225:
 	# LowerLoad(3236:3).2: (^4) into i32 ^952
 	movq -5440(%rbp), %rax
 	movl (%rax), %ebx
@@ -15864,12 +15780,12 @@ _ZL6func_1v:
 	# LowerStore(3238:3).9: mov i32 ^953, (^4)
 	movq -5440(%rbp), %rax
 	movl %ebx, (%rax)
-	jmp .___ZL6func_1v__M5164
-	.___ZL6func_1v__M5254:
+	jmp .___ZL6func_1v__M5146
+	.___ZL6func_1v__M5234:
 	# LowerStore(3242:3).2a: mov $imm, %temp
 	movw $0, _ZL5g_837(%rip)
 	# LowerStore(3242:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M5259:
+	.___ZL6func_1v__M5239:
 	# LowerLoad(3246:3).4: _ZL5g_837 into ^956
 	movw _ZL5g_837(%rip), %ax
 	movswl %ax, %ebx
@@ -15878,13 +15794,13 @@ _ZL6func_1v:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5267
-	jmp .___ZL6func_1v__M5349
-	.___ZL6func_1v__M5267:
+	jne .___ZL6func_1v__M5247
+	jmp .___ZL6func_1v__M5325
+	.___ZL6func_1v__M5247:
 	# LowerStore(3252:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1939(%rip)
 	# LowerStore(3252:3).2b: mov %temp, (global)
-	.___ZL6func_1v__M5272:
+	.___ZL6func_1v__M5252:
 	# LowerLoad(3256:3).4: _ZL6g_1939 into ^961
 	movl _ZL6g_1939(%rip), %eax
 	# LowerIcmp(3257:3): i32 ^961 vs. intlike 5
@@ -15892,9 +15808,9 @@ _ZL6func_1v:
 	setb %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5279
-	jmp .___ZL6func_1v__M5333
-	.___ZL6func_1v__M5279:
+	jne .___ZL6func_1v__M5259
+	jmp .___ZL6func_1v__M5309
+	.___ZL6func_1v__M5259:
 	# LowerLoad(3261:3).4: _ZL5g_837 into ^964
 	movw _ZL5g_837(%rip), %ax
 	movswq %ax, %rbx
@@ -15915,8 +15831,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1181 -> operand ^966
 	movq %rdx, %rax
-	# Result ^966 += skip 0
-	addq $0, %rax
 	# Result ^966 += base pointer ^1180
 	addq %rcx, %rax
 	# LowerLoad(3264:3).4: _ZL6g_1939 into ^967
@@ -15931,8 +15845,6 @@ _ZL6func_1v:
 	# Multiply end
 	# temp ^1183 -> operand ^969
 	movq %rcx, %rbx
-	# Result ^969 += skip 0
-	addq $0, %rbx
 	# Result ^969 += base pointer ^966
 	addq %rax, %rbx
 	# LowerStore(3267:3).3: mov $imm, (^969)
@@ -15945,8 +15857,8 @@ _ZL6func_1v:
 	leaq _ZL6g_1939(%rip), %rbx
 	# LowerStore(3273:3).8b: movq ^972, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL6func_1v__M5272
-	.___ZL6func_1v__M5333:
+	jmp .___ZL6func_1v__M5252
+	.___ZL6func_1v__M5309:
 	# LowerLoad(3280:3).4: _ZL5g_837 into ^975
 	movw _ZL5g_837(%rip), %ax
 	movswl %ax, %ebx
@@ -15961,8 +15873,8 @@ _ZL6func_1v:
 	leaq _ZL5g_837(%rip), %rax
 	# LowerStore(3284:3).8b: movq ^978, (%temp)
 	movw %bx, (%rax)
-	jmp .___ZL6func_1v__M5259
-	.___ZL6func_1v__M5349:
+	jmp .___ZL6func_1v__M5239
+	.___ZL6func_1v__M5325:
 	# LowerLoad(3288:3).4: _ZL6g_2504 into ^980
 	movq _ZL6g_2504(%rip), %rax
 	# LowerLoad(3289:3).2: (^980) into ptr ^981
@@ -15974,12 +15886,12 @@ _ZL6func_1v:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5363
-	.___ZL6func_1v__M5360:
+	jne .___ZL6func_1v__M5339
+	.___ZL6func_1v__M5336:
 	# MovePhi: intlike -> ^988 (in new block 1256 whose parent is 979)
 	movb $0, -5712(%rbp)
-	jmp .___ZL6func_1v__M5372
-	.___ZL6func_1v__M5363:
+	jmp .___ZL6func_1v__M5348
+	.___ZL6func_1v__M5339:
 	# LowerLoad(3295:3).4: _ZL6g_1946 into ^985
 	movl _ZL6g_1946(%rip), %eax
 	# LowerIcmp(3296:3): i32 ^985 vs. intlike 0
@@ -15988,16 +15900,16 @@ _ZL6func_1v:
 	andq $1, %rax
 	# MovePhi: ^986 -> ^988
 	movb %al, -5712(%rbp)
-	.___ZL6func_1v__M5372:
+	.___ZL6func_1v__M5348:
 	# LowerBasicConversion(3301:3): i1 ^988 -> i64 ^989
-	# Fixing source-to-dest movq -5712(%rbp), -6296(%rbp)
+	# Fixing source-to-dest movq -5712(%rbp), -6288(%rbp)
 	movq -5712(%rbp), %r15
-	movq %r15, -6296(%rbp)
+	movq %r15, -6288(%rbp)
 	# Truncate value to 8 bits
-	andl $255, -6296(%rbp)
+	andl $255, -6288(%rbp)
 	# tt = Pointer, type = [7 x [8 x i32]]
 	# LowerGetelementptr(3302:3): struct-type: ptr ^109 -> ^990, indices=0,4
-	movq -5656(%rbp), %rax
+	movq -5664(%rbp), %rax
 	addq $128, %rax
 	# LowerGetelementptr(3302:3): type of ^990 is [8 x i32]*
 	# tt = Pointer, type = [8 x i32]
@@ -16131,7 +16043,7 @@ _ZL6func_1v:
 	movq -6352(%rbp), %rcx
 	movswl %r14w, %ecx
 	# LowerStore(3335:3).9: mov i32 ^1019, (^22)
-	movq -5672(%rbp), %rax
+	movq -5680(%rbp), %rax
 	movl %ecx, (%rax)
 	# LowerIcmp(3336:3): i32 ^997 vs. operand i32 ^1019
 	cmpl %ecx, %r13d
@@ -16222,7 +16134,7 @@ _ZL6func_1v:
 	movl %eax, %ebx
 	# tt = Pointer, type = [7 x [8 x i32]]
 	# LowerGetelementptr(3356:3): struct-type: ptr ^109 -> ^1040, indices=0,5
-	movq -5656(%rbp), %rax
+	movq -5664(%rbp), %rax
 	addq $160, %rax
 	# LowerGetelementptr(3356:3): type of ^1040 is [8 x i32]*
 	# tt = Pointer, type = [8 x i32]
@@ -16290,7 +16202,7 @@ _ZL6func_1v:
 	andl $65535, %eax
 	# tt = Pointer, type = [7 x [8 x i32]]
 	# LowerGetelementptr(3372:3): struct-type: ptr ^109 -> ^1055, indices=0,5
-	movq -5656(%rbp), %rbx
+	movq -5664(%rbp), %rbx
 	addq $160, %rbx
 	# LowerGetelementptr(3372:3): type of ^1055 is [8 x i32]*
 	# tt = Pointer, type = [8 x i32]
@@ -16317,7 +16229,7 @@ _ZL6func_1v:
 	# SetupCalls(3379:3): move i64 result from %rax
 	movq %rax, %rbx
 	# LowerIcmp(3380:3): i64 ^989 vs. operand i64 ^1061
-	cmpq %rbx, -6296(%rbp)
+	cmpq %rbx, -6288(%rbp)
 	seta %al
 	andq $1, %rax
 	# LowerBasicConversion(3381:3): i64 ^1062 -> i32 ^1063
@@ -16326,8 +16238,8 @@ _ZL6func_1v:
 	movq _ZL5g_140(%rip), %rax
 	# LowerStore(3383:3).9: mov i32 ^1063, (^1064)
 	movl %ebx, (%rax)
-	jmp .___ZL6func_1v__M5858
-	.___ZL6func_1v__M5792:
+	jmp .___ZL6func_1v__M5834
+	.___ZL6func_1v__M5768:
 	# LowerStore(3387:3).2a: mov $imm, %temp
 	movl $0, _ZL6g_1904(%rip)
 	# LowerStore(3387:3).2b: mov %temp, (global)
@@ -16338,9 +16250,9 @@ _ZL6func_1v:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL6func_1v__M5804
-	jmp .___ZL6func_1v__M5832
-	.___ZL6func_1v__M5804:
+	jne .___ZL6func_1v__M5780
+	jmp .___ZL6func_1v__M5808
+	.___ZL6func_1v__M5780:
 	# LowerLoad(3396:3).4: _ZL5g_452 into ^1070
 	movq _ZL5g_452(%rip), %rax
 	# Clobber %rax
@@ -16356,8 +16268,8 @@ _ZL6func_1v:
 	callq memcpy@PLT
 	# Unclobber %rax
 	movq -6344(%rbp), %rax
-	jmp .___ZL6func_1v__M5887
-	.___ZL6func_1v__M5832:
+	jmp .___ZL6func_1v__M5863
+	.___ZL6func_1v__M5808:
 	# SetupCalls(3407:3): move argument ptr align 2 ^1
 	# Fixed movzx with identical source and destination widths
 	movq -5344(%rbp), %rdi
@@ -16367,9 +16279,9 @@ _ZL6func_1v:
 	# SetupCalls(3407:3): move argument i64 2
 	movq $2, %rdx
 	callq memcpy@PLT
-	jmp .___ZL6func_1v__M5887
-	.___ZL6func_1v__M5858:
-	.___ZL6func_1v__M5859:
+	jmp .___ZL6func_1v__M5863
+	.___ZL6func_1v__M5834:
+	.___ZL6func_1v__M5835:
 	# LowerLoad(3414:3).2: (^13) into ptr ^1077
 	movq -5352(%rbp), %rax
 	movq (%rax), %rbx
@@ -16382,7 +16294,7 @@ _ZL6func_1v:
 	# SetupCalls(3415:3): move argument i64 2
 	movq $2, %rdx
 	callq memcpy@PLT
-	.___ZL6func_1v__M5887:
+	.___ZL6func_1v__M5863:
 	# tt = Pointer, type = %union.U4
 	# LowerGetelementptr(3419:3): struct-type: ptr ^1 -> ^1079, indices=0,0
 	movq -5344(%rbp), %rax
@@ -18449,7 +18361,7 @@ _ZL7func_57majs2U2:
 	andq $1, %rax
 	cmpb $0, %al
 	jne .___ZL7func_57majs2U2__M757
-	jmp .___ZL7func_57majs2U2__M784
+	jmp .___ZL7func_57majs2U2__M782
 	.___ZL7func_57majs2U2__M757:
 	# LowerLoad(5469:3).2: (^31) into i32 ^152
 	movq -3400(%rbp), %rbx
@@ -18464,8 +18376,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^458 -> operand ^154
 	movq %rcx, %rax
-	# Result ^154 += skip 0
-	addq $0, %rax
 	# Result ^154 += base pointer ^12
 	addq -3256(%rbp), %rax
 	# LowerStore(5472:3).3: mov $imm, (^154)
@@ -18479,11 +18389,11 @@ _ZL7func_57majs2U2:
 	movq -3400(%rbp), %rbx
 	movl %eax, (%rbx)
 	jmp .___ZL7func_57majs2U2__M750
-	.___ZL7func_57majs2U2__M784:
+	.___ZL7func_57majs2U2__M782:
 	# LowerStore(5482:3).3: mov $imm, (^31)
 	movq -3400(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL7func_57majs2U2__M787:
+	.___ZL7func_57majs2U2__M785:
 	# LowerLoad(5486:3).2: (^31) into i32 ^160
 	movq -3400(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18492,9 +18402,9 @@ _ZL7func_57majs2U2:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M794
-	jmp .___ZL7func_57majs2U2__M821
-	.___ZL7func_57majs2U2__M794:
+	jne .___ZL7func_57majs2U2__M792
+	jmp .___ZL7func_57majs2U2__M817
+	.___ZL7func_57majs2U2__M792:
 	# LowerLoad(5491:3).2: (^31) into i32 ^163
 	movq -3400(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18508,8 +18418,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^459 -> operand ^165
 	movq %rcx, %rax
-	# Result ^165 += skip 0
-	addq $0, %rax
 	# Result ^165 += base pointer ^18
 	addq -3424(%rbp), %rax
 	# LowerStore(5494:3).3: mov $imm, (^165)
@@ -18522,12 +18430,12 @@ _ZL7func_57majs2U2:
 	# LowerStore(5500:3).9: mov i32 ^168, (^31)
 	movq -3400(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL7func_57majs2U2__M787
-	.___ZL7func_57majs2U2__M821:
+	jmp .___ZL7func_57majs2U2__M785
+	.___ZL7func_57majs2U2__M817:
 	# LowerStore(5504:3).3: mov $imm, (^31)
 	movq -3400(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL7func_57majs2U2__M824:
+	.___ZL7func_57majs2U2__M820:
 	# LowerLoad(5508:3).2: (^31) into i32 ^171
 	movq -3400(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18536,9 +18444,9 @@ _ZL7func_57majs2U2:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M831
-	jmp .___ZL7func_57majs2U2__M858
-	.___ZL7func_57majs2U2__M831:
+	jne .___ZL7func_57majs2U2__M827
+	jmp .___ZL7func_57majs2U2__M852
+	.___ZL7func_57majs2U2__M827:
 	# LowerLoad(5513:3).2: (^31) into i32 ^174
 	movq -3400(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18552,8 +18460,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^460 -> operand ^176
 	movq %rcx, %rax
-	# Result ^176 += skip 0
-	addq $0, %rax
 	# Result ^176 += base pointer ^24
 	addq -3416(%rbp), %rax
 	# LowerStore(5516:3).9: mov ptr* ^23, (^176)
@@ -18568,12 +18474,12 @@ _ZL7func_57majs2U2:
 	# LowerStore(5522:3).9: mov i32 ^179, (^31)
 	movq -3400(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL7func_57majs2U2__M824
-	.___ZL7func_57majs2U2__M858:
+	jmp .___ZL7func_57majs2U2__M820
+	.___ZL7func_57majs2U2__M852:
 	# LowerStore(5526:3).3: mov $imm, (^31)
 	movq -3400(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL7func_57majs2U2__M861:
+	.___ZL7func_57majs2U2__M855:
 	# LowerLoad(5530:3).2: (^31) into i32 ^182
 	movq -3400(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18582,9 +18488,9 @@ _ZL7func_57majs2U2:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M868
-	jmp .___ZL7func_57majs2U2__M895
-	.___ZL7func_57majs2U2__M868:
+	jne .___ZL7func_57majs2U2__M862
+	jmp .___ZL7func_57majs2U2__M887
+	.___ZL7func_57majs2U2__M862:
 	# LowerLoad(5535:3).2: (^31) into i32 ^185
 	movq -3400(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18598,8 +18504,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^461 -> operand ^187
 	movq %rcx, %rax
-	# Result ^187 += skip 0
-	addq $0, %rax
 	# Result ^187 += base pointer ^27
 	addq -3032(%rbp), %rax
 	# LowerStore(5538:3).3: mov $imm, (^187)
@@ -18612,12 +18516,12 @@ _ZL7func_57majs2U2:
 	# LowerStore(5544:3).9: mov i32 ^190, (^31)
 	movq -3400(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL7func_57majs2U2__M861
-	.___ZL7func_57majs2U2__M895:
+	jmp .___ZL7func_57majs2U2__M855
+	.___ZL7func_57majs2U2__M887:
 	# LowerStore(5548:3).3: mov $imm, (^7)
 	movq -3216(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL7func_57majs2U2__M898:
+	.___ZL7func_57majs2U2__M890:
 	# LowerLoad(5552:3).2: (^7) into i32 ^193
 	movq -3216(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18626,9 +18530,9 @@ _ZL7func_57majs2U2:
 	setle %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M905
-	jmp .___ZL7func_57majs2U2__M1500
-	.___ZL7func_57majs2U2__M905:
+	jne .___ZL7func_57majs2U2__M897
+	jmp .___ZL7func_57majs2U2__M1488
+	.___ZL7func_57majs2U2__M897:
 	# LowerStore(5558:3).3: mov $imm, (^34)
 	movq -3280(%rbp), %rax
 	movl $-1, (%rax)
@@ -18718,7 +18622,7 @@ _ZL7func_57majs2U2:
 	# LowerStore(5589:3).2a: mov $imm, %temp
 	movl $0, _ZL4g_66(%rip)
 	# LowerStore(5589:3).2b: mov %temp, (global)
-	.___ZL7func_57majs2U2__M985:
+	.___ZL7func_57majs2U2__M977:
 	# LowerLoad(5593:3).4: _ZL4g_66 into ^202
 	movl _ZL4g_66(%rip), %eax
 	# LowerIcmp(5594:3): i32 ^202 vs. intlike 1
@@ -18726,9 +18630,9 @@ _ZL7func_57majs2U2:
 	setbe %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M992
-	jmp .___ZL7func_57majs2U2__M1460
-	.___ZL7func_57majs2U2__M992:
+	jne .___ZL7func_57majs2U2__M984
+	jmp .___ZL7func_57majs2U2__M1448
+	.___ZL7func_57majs2U2__M984:
 	# SetupCalls(5599:3): move argument ptr align 2 ^47
 	# Fixed movzx with identical source and destination widths
 	movq -3360(%rbp), %rdi
@@ -18753,7 +18657,7 @@ _ZL7func_57majs2U2:
 	# LowerStore(5606:3).3: mov $imm, (^51)
 	movq -3392(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL7func_57majs2U2__M1047:
+	.___ZL7func_57majs2U2__M1039:
 	# LowerLoad(5610:3).2: (^51) into i32 ^206
 	movq -3392(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18762,9 +18666,9 @@ _ZL7func_57majs2U2:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M1054
-	jmp .___ZL7func_57majs2U2__M1083
-	.___ZL7func_57majs2U2__M1054:
+	jne .___ZL7func_57majs2U2__M1046
+	jmp .___ZL7func_57majs2U2__M1073
+	.___ZL7func_57majs2U2__M1046:
 	# LowerLoad(5615:3).2: (^51) into i32 ^209
 	movq -3392(%rbp), %rbx
 	movl (%rbx), %eax
@@ -18778,8 +18682,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^462 -> operand ^211
 	movq %rcx, %rax
-	# Result ^211 += skip 0
-	addq $0, %rax
 	# Result ^211 += base pointer ^49
 	addq -3376(%rbp), %rax
 	# LowerStore(5618:3).6: load global
@@ -18794,8 +18696,8 @@ _ZL7func_57majs2U2:
 	# LowerStore(5624:3).9: mov i32 ^214, (^51)
 	movq -3392(%rbp), %rbx
 	movl %eax, (%rbx)
-	jmp .___ZL7func_57majs2U2__M1047
-	.___ZL7func_57majs2U2__M1083:
+	jmp .___ZL7func_57majs2U2__M1039
+	.___ZL7func_57majs2U2__M1073:
 	# LowerLoad(5628:3).4: _ZL4g_66 into ^216
 	# Fixing source-to-dest movl _ZL4g_66(%rip), -3488(%rbp)
 	movl _ZL4g_66(%rip), %r15d
@@ -18827,8 +18729,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^463 -> operand ^224
 	movq %rdx, %rbx
-	# Result ^224 += skip 0
-	addq $0, %rbx
 	# Result ^224 += base pointer ^12
 	addq -3256(%rbp), %rbx
 	# LowerStore(5637:3).9: mov i16 ^221, (^224)
@@ -18842,12 +18742,12 @@ _ZL7func_57majs2U2:
 	setne %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M1126
-	.___ZL7func_57majs2U2__M1123:
+	jne .___ZL7func_57majs2U2__M1114
+	.___ZL7func_57majs2U2__M1111:
 	# MovePhi: intlike -> ^263 (in new block 502 whose parent is 215)
 	movb $0, -3208(%rbp)
-	jmp .___ZL7func_57majs2U2__M1327
-	.___ZL7func_57majs2U2__M1126:
+	jmp .___ZL7func_57majs2U2__M1315
+	.___ZL7func_57majs2U2__M1114:
 	# tt = Pointer, type = [5 x [4 x [4 x i64]]]
 	# LowerGetelementptr(5644:3): struct-type: ptr ^35 -> ^229, indices=0,0
 	movq -3288(%rbp), %rax
@@ -19011,7 +18911,7 @@ _ZL7func_57majs2U2:
 	andq $1, %rax
 	# MovePhi: ^261 -> ^263
 	movb %al, -3208(%rbp)
-	.___ZL7func_57majs2U2__M1327:
+	.___ZL7func_57majs2U2__M1315:
 	# LowerBasicConversion(5683:3): i1 ^263 -> i32 ^264
 	movl -3208(%rbp), %eax
 	# Truncate value to 8 bits
@@ -19132,8 +19032,8 @@ _ZL7func_57majs2U2:
 	leaq _ZL4g_66(%rip), %rbx
 	# LowerStore(5723:3).8b: movq ^300, (%temp)
 	movl %eax, (%rbx)
-	jmp .___ZL7func_57majs2U2__M985
-	.___ZL7func_57majs2U2__M1460:
+	jmp .___ZL7func_57majs2U2__M977
+	.___ZL7func_57majs2U2__M1448:
 	# LowerLoad(5727:3).2: (^43) into i8 ^302
 	movq -3352(%rbp), %rbx
 	movb (%rbx), %al
@@ -19175,12 +19075,12 @@ _ZL7func_57majs2U2:
 	# LowerStore(5744:3).9: mov i32 ^313, (^7)
 	movq -3216(%rbp), %rax
 	movl %ebx, (%rax)
-	jmp .___ZL7func_57majs2U2__M898
-	.___ZL7func_57majs2U2__M1500:
+	jmp .___ZL7func_57majs2U2__M890
+	.___ZL7func_57majs2U2__M1488:
 	# LowerStore(5748:3).2a: mov $imm, %temp
 	movw $0, _ZL5g_120(%rip)
 	# LowerStore(5748:3).2b: mov %temp, (global)
-	.___ZL7func_57majs2U2__M1505:
+	.___ZL7func_57majs2U2__M1493:
 	# LowerLoad(5752:3).4: _ZL5g_120 into ^316
 	movw _ZL5g_120(%rip), %ax
 	movswl %ax, %ebx
@@ -19189,9 +19089,9 @@ _ZL7func_57majs2U2:
 	setg %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M1513
-	jmp .___ZL7func_57majs2U2__M2254
-	.___ZL7func_57majs2U2__M1513:
+	jne .___ZL7func_57majs2U2__M1501
+	jmp .___ZL7func_57majs2U2__M2240
+	.___ZL7func_57majs2U2__M1501:
 	# LowerStore(5759:3).6: load global
 	leaq _ZL5g_124(%rip), %rbx
 	# LowerStore(5759:3).9: mov ptr ^477, (^52)
@@ -19881,7 +19781,7 @@ _ZL7func_57majs2U2:
 	# LowerStore(5943:3).3: mov $imm, (^71)
 	movq -3200(%rbp), %rax
 	movl $0, (%rax)
-	.___ZL7func_57majs2U2__M2194:
+	.___ZL7func_57majs2U2__M2182:
 	# LowerLoad(5947:3).2: (^71) into i32 ^414
 	movq -3200(%rbp), %rax
 	movl (%rax), %ebx
@@ -19890,9 +19790,9 @@ _ZL7func_57majs2U2:
 	setl %al
 	andq $1, %rax
 	cmpb $0, %al
-	jne .___ZL7func_57majs2U2__M2201
-	jmp .___ZL7func_57majs2U2__M2243
-	.___ZL7func_57majs2U2__M2201:
+	jne .___ZL7func_57majs2U2__M2189
+	jmp .___ZL7func_57majs2U2__M2229
+	.___ZL7func_57majs2U2__M2189:
 	# tt = Pointer, type = [8 x [9 x [3 x i32]]]
 	# LowerGetelementptr(5952:3): struct-type: ptr ^15 -> ^417, indices=0,7
 	movq -3008(%rbp), %rax
@@ -19921,8 +19821,6 @@ _ZL7func_57majs2U2:
 	# Multiply end
 	# temp ^464 -> operand ^422
 	movq %rbx, %rax
-	# Result ^422 += skip 0
-	addq $0, %rax
 	# Result ^422 += base pointer ^54
 	addq -3064(%rbp), %rax
 	# LowerStore(5958:3).9: mov [3 x i32]* ^419, (^422)
@@ -19935,8 +19833,8 @@ _ZL7func_57majs2U2:
 	# LowerStore(5964:3).9: mov i32 ^425, (^71)
 	movq -3200(%rbp), %rax
 	movl %ebx, (%rax)
-	jmp .___ZL7func_57majs2U2__M2194
-	.___ZL7func_57majs2U2__M2243:
+	jmp .___ZL7func_57majs2U2__M2182
+	.___ZL7func_57majs2U2__M2229:
 	# LowerLoad(5971:3).4: _ZL5g_120 into ^428
 	movw _ZL5g_120(%rip), %ax
 	# LowerMath(5972:3): ^428, 1 into i16 ^429
@@ -19945,8 +19843,8 @@ _ZL7func_57majs2U2:
 	leaq _ZL5g_120(%rip), %rbx
 	# LowerStore(5973:3).8b: movq ^429, (%temp)
 	movw %ax, (%rbx)
-	jmp .___ZL7func_57majs2U2__M1505
-	.___ZL7func_57majs2U2__M2254:
+	jmp .___ZL7func_57majs2U2__M1493
+	.___ZL7func_57majs2U2__M2240:
 	# LowerLoad(5977:3).4: _ZL5g_139 into ^431
 	movq _ZL5g_139(%rip), %rax
 	# LowerLoad(5978:3).2: (^431) into ptr ^432
