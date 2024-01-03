@@ -8,10 +8,6 @@
 
 namespace LL2X::Passes {
 	namespace {
-		bool isSimple(const OperandPtr &operand) {
-			return operand->isRegister() || operand->isConstant();
-		}
-
 		const std::unordered_set<x86_64::Condition> equalLike{
 			x86_64::Condition::IfEqual,
 			x86_64::Condition::IfGreaterOrEqualSigned, x86_64::Condition::IfGreaterOrEqualUnsigned,

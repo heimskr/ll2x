@@ -2403,9 +2403,8 @@ _ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move
 	movq %rcx, %rax
 	movq $40, %rcx
 	idivq %rcx
-	movq %rax, %rcx
+	movq %rax, (%r12)
 	# LowerStore(8633:3).9: mov i64 ^13, (^7)
-	movq %rcx, (%r12)
 	.___ZNSt20__copy_move_backwardILb1ELb0ESt26random_access_iterator_tagE13__copy_move_bIP6LsItemS4_EET0_T_S6_S5___M39:
 	# LowerLoad(8637:3).2: (^7) into i64 ^15
 	movq (%r12), %rax
@@ -5026,8 +5025,8 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	.___ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops14_Iter_comp_valIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_RT2___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(376 + 0, 16)
-	subq $384, %rsp
+	# upalign(392 + 0, 16)
+	subq $400, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
 	movq %rbx, -216(%rbp)
@@ -5091,10 +5090,9 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	movq %rsi, %rax
 	movq $2, %rbx
 	idivq %rbx
-	movq %rax, %rsi
+	movq -128(%rbp), %rbx
+	movq %rax, (%rbx)
 	# LowerStore(7802:3).9: mov i64 ^18, (^10)
-	movq -128(%rbp), %rax
-	movq %rsi, (%rax)
 	.___ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops14_Iter_comp_valIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_RT2___M49:
 	# LowerLoad(7806:3).2: (^7) into i64 ^20
 	movq -104(%rbp), %rax
@@ -5262,10 +5260,9 @@ _ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	movq %rbx, %rax
 	movq $2, %rbx
 	idivq %rbx
-	movq %rax, %rbx
+	movq -128(%rbp), %rbx
+	movq %rax, (%rbx)
 	# LowerStore(7843:3).9: mov i64 ^46, (^10)
-	movq -128(%rbp), %rax
-	movq %rbx, (%rax)
 	jmp .___ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops14_Iter_comp_valIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_RT2___M49
 	.___ZSt11__push_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEElS2_NS0_5__ops14_Iter_comp_valIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_T0_SL_T1_RT2___M293:
 	# LowerLoad(7847:3).2: (^7) into i64 ^48
@@ -6399,8 +6396,8 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	.___ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M0:
 	pushq %rbp
 	movq %rsp, %rbp
-	# upalign(384 + 0, 16)
-	subq $384, %rsp
+	# upalign(392 + 0, 16)
+	subq $400, %rsp
 	# Align stack pointer to 16-byte boundary
 	andq $-16, %rsp
 	movq %rbx, -216(%rbp)
@@ -6501,10 +6498,9 @@ _ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEE
 	movq %rbx, %rax
 	movq $2, %rbx
 	idivq %rbx
-	movq %rax, %rbx
+	movq -176(%rbp), %rbx
+	movq %rax, (%rbx)
 	# LowerStore(7480:3).9: mov i64 ^24, (^8)
-	movq -176(%rbp), %rax
-	movq %rbx, (%rax)
 	.___ZSt11__make_heapIN9__gnu_cxx17__normal_iteratorIP6LsItemSt6vectorIS2_SaIS2_EEEENS0_5__ops15_Iter_comp_iterIZ2lsRKS4_ISt17basic_string_viewIcSt11char_traitsIcEESaISD_EEE3$_0EEEvT_SK_RT0___M114:
 	# LowerLoad(7484:3).2: (^8) into i64 ^26
 	movq -176(%rbp), %rbx
@@ -18770,9 +18766,8 @@ _ZNSt6vectorISt17basic_string_viewIcSt11char_traitsIcEESaIS3_EE19_M_range_initia
 	movq %rbx, %rax
 	movq $16, %rbx
 	idivq %rbx
-	movq %rax, %rbx
+	movq %rax, (%r13)
 	# LowerStore(4773:3).9: mov i64 ^24, (^13)
-	movq %rbx, (%r13)
 	# LowerLoad(4774:3).2: (^13) into i64 ^25
 	movq (%r13), %r15
 	# SetupCalls(4775:3): move argument ptr nonnull dereferenceable(24) align 8 ^14

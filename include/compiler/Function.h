@@ -536,7 +536,6 @@ namespace LL2X {
 						shl->setDebug(debug, false);
 					shl->extract(false);
 				} else {
-					// TODO: make sure I really understand what's going on with clobbering.
 					auto rax_clobber = clobber(anchor, x86_64::rax);
 					auto rdx_clobber = clobber(anchor, x86_64::rdx);
 					auto rax = OpX(operand->bitWidth, makePrecoloredVariable(x86_64::rax, anchor->parent.lock()));
@@ -554,8 +553,8 @@ namespace LL2X {
 					insertBefore(anchor, mov_mulvar, reindex);
 					insertBefore(anchor, mul, reindex);
 					unclobber(anchor, rdx_clobber);
-					insertBefore(anchor, mov_out, reindex);
 					unclobber(anchor, rax_clobber);
+					insertBefore(anchor, mov_out, reindex);
 					if (debug != -1) {
 						mov_in->setDebug(debug, false);
 						mul->setDebug(debug, false);
@@ -608,6 +607,8 @@ namespace LL2X {
 				insertBefore(anchor, mov_in, false);
 				insertBefore(anchor, mov_divvar, false);
 				insertBefore(anchor, div, false);
+				unclobber(anchor, rdx_clobber);
+				unclobber(anchor, rax_clobber);
 				insertBefore(anchor, mov_out, reindex);
 				if (debug != -1) {
 					mov_in->setDebug(debug, false);
@@ -618,10 +619,6 @@ namespace LL2X {
 				mov_divvar->extract(false);
 				div->extract(false);
 				mov_out->extract(false);
-				// TODO: Probably need to adjust these too.
-				// If anything is ever subtly messed up, this is probably the culprit.
-				unclobber(anchor, rdx_clobber);
-				unclobber(anchor, rax_clobber);
 			}
 	};
 }

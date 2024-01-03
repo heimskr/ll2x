@@ -55,6 +55,7 @@ test: $(OUTPUT)
 	@# clang++ -S -fno-exceptions -emit-llvm -O0 cpp/diriter.cpp -o ll/diriter0.ll && ./$(OUTPUT) ll/diriter0.ll > asm/diriter0.s && clang -g asm/diriter0.s -lstdc++ && ./a.out
 	@# clang++ -S -fno-exceptions -emit-llvm -O3 cpp/diriter.cpp -o ll/diriter3.ll && ./$(OUTPUT) ll/diriter3.ll > asm/diriter3.s && clang -g asm/diriter3.s -lstdc++ && ./a.out
 	clang++ -S -fno-exceptions -emit-llvm cpp/simpleshell.cpp -o ll/simpleshell.ll && ./$(OUTPUT) ll/simpleshell.ll > asm/simpleshell.s && clang -g asm/simpleshell.s -lstdc++ && ./a.out
+	@# clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith3.cpp 2>/dev/null -o ll/csmith3.ll && ./$(OUTPUT) ll/csmith3.ll > asm/csmith3.s && clang -g asm/csmith3.s -lstdc++ && ./a.out
 	@# clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith4.cpp 2>/dev/null -o ll/csmith4.ll && ./$(OUTPUT) ll/csmith4.ll > asm/csmith4.s && clang -g asm/csmith4.s -lstdc++ && ./a.out
 	@# clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith5.cpp 2>/dev/null -o ll/csmith5.ll && ./$(OUTPUT) ll/csmith5.ll > asm/csmith5.s && clang -g asm/csmith5.s -lstdc++ && ./a.out
 	@# clang++ -Wno-c++11-narrowing -S -fno-exceptions -emit-llvm cpp/csmith6.cpp 2>/dev/null -o ll/csmith6.ll && ./$(OUTPUT) ll/csmith6.ll > asm/csmith6.s && clang -g asm/csmith6.s -lstdc++ && ./a.out
